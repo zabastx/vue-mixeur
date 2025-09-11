@@ -2,12 +2,11 @@
 	<div class="sidebar rounded grid grid-rows-(--side-rows) min-h-0">
 		<MOutliner />
 		<div ref="divider" class="h-1 cursor-row-resize"></div>
-		<ObjectSettings />
+		<DataProperties />
 	</div>
 </template>
 
 <script lang="ts" setup>
-import ObjectSettings from './ObjectSettings.vue'
 import { ref, useTemplateRef } from 'vue'
 import { useEventListener } from '@vueuse/core'
 import MOutliner from '../data/outliner/MOutliner.vue'

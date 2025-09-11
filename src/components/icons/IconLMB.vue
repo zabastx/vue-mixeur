@@ -5,6 +5,7 @@
 		height="1em"
 		viewBox="0 0 20 20"
 		xml:space="preserve"
+		class="inline-block"
 	>
 		<path
 			stroke="currentColor"

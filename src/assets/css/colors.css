@@ -1,0 +1,19 @@
+@theme {
+	--color-x-axis: #ff3352;
+	--window-bg: #303030;
+
+	--icon-colors-object: #e19658ff;
+	--icon-colors-object-data: #00d4a3ff;
+	--icon-colors-shading: #cc6670ff;
+
+	--color-properties-panel-header: #3d3d3dff;
+	--color-properties-panel-background: #3d3d3dff;
+
+	--color-ui-number-field-inner: #545454ff;
+	--color-ui-number-field-selected: #222222ff;
+	--color-ui-number-field-outline: #3d3d3dff;
+
+	--color-ui-text-inner: #1d1d1dff;
+	--color-ui-text-selected: #181818ff;
+	--color-ui-text-outline: #3d3d3dff;
+}

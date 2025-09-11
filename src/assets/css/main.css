@@ -1,10 +1,46 @@
 @import 'tailwindcss';
+@import './colors.css';
+
+@plugin 'tailwind-scrollbar';
 
 @theme {
 	--font-sans: InterVariable, sans-serif;
 	--font-sans--font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-	--color-x-axis: #ff3352;
-	--window-bg: #282828;
+
+	--animate-reka-slide-down: reka-slide-down 200ms ease-out;
+	--animate-reka-slide-up: reka-slide-up 200ms ease-out;
+
+	@keyframes reka-slide-down {
+		from {
+			height: 0;
+		}
+		to {
+			height: var(--reka-accordion-content-height);
+		}
+	}
+
+	@keyframes reka-slide-up {
+		from {
+			height: var(--reka-accordion-content-height);
+		}
+		to {
+			height: 0;
+		}
+	}
+}
+
+@utility bg-stripes {
+	background: repeating-linear-gradient(
+		180deg,
+		var(--window-bg),
+		var(--window-bg) 1em,
+		#181818b3 1em,
+		#181818b3 2em
+	);
+}
+
+@utility block-border {
+	@apply border border-gray-600 hover:border-gray-500;
 }
 
 #app {

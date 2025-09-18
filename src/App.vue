@@ -2,7 +2,9 @@
 	<div class="flex flex-col h-full bg-gray-900 text-gray-200 font-sans">
 		<TopBar />
 
-		<main class="flex-1 grid grid-cols-(--main-cols) p-1 min-h-0 bg-[#161616] select-none">
+		<main
+			class="flex-1 grid grid-cols-(--main-cols) p-1 min-h-0 bg-(--color-editor-border) select-none"
+		>
 			<MViewport class="block-border" />
 			<div ref="divider" class="divider w-1 cursor-col-resize"></div>
 			<MSidebar />

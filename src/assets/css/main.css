@@ -32,15 +32,15 @@
 @utility bg-stripes {
 	background: repeating-linear-gradient(
 		180deg,
-		var(--window-bg),
-		var(--window-bg) 1em,
+		var(--color-window-bg),
+		var(--color-window-bg) 1em,
 		#181818b3 1em,
 		#181818b3 2em
 	);
 }
 
 @utility block-border {
-	@apply border border-gray-600 hover:border-gray-500;
+	@apply border border-(--color-editor-outline) hover:border-(--color-active-editor-outline);
 }
 
 #app {

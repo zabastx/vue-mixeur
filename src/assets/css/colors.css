@@ -1,13 +1,22 @@
 @theme {
+	--color-window-bg: #303030;
 	--color-x-axis: #ff3352;
-	--window-bg: #303030;
+	--color-editor-border: #161616;
+	--color-editor-outline: #ffffff15;
+	--color-active-editor-outline: #ffffff2a;
+	--color-text-cursor: #71a8ff;
 
 	--icon-colors-object: #e19658ff;
 	--icon-colors-object-data: #00d4a3ff;
 	--icon-colors-shading: #cc6670ff;
 
-	--color-properties-panel-header: #3d3d3dff;
-	--color-properties-panel-background: #3d3d3dff;
+	--color-panel-header: #3d3d3dff;
+	--color-panel-background: #3d3d3dff;
+
+	--color-properties-panel-header: var(--color-panel-header);
+	--color-properties-panel-background: var(--color-panel-background);
+
+	--color-viewport-header-bg: #303030b3;
 
 	--color-ui-number-field-inner: #545454ff;
 	--color-ui-number-field-selected: #222222ff;

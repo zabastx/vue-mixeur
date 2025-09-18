@@ -1,5 +1,5 @@
 <template>
-	<div ref="css" class="rounded bg-(--window-bg) overflow-hidden block-border flex flex-col">
+	<div ref="css" class="rounded bg-(--color-window-bg) overflow-hidden block-border flex flex-col">
 		<h2 class="p-1">Properties</h2>
 		<TabsRoot
 			class="grid grid-cols-[min-content_1fr] grid-rows-1 w-full grow overflow-hidden"
@@ -12,7 +12,7 @@
 					v-for="item in tabsItems"
 					:key="item.value"
 					:value="item.value"
-					class="cursor-pointer p-1 data-[state='active']:bg-(--window-bg) rounded-l-sm text-lg hover:bg-[#30303088]"
+					class="cursor-pointer p-1 data-[state='active']:bg-(--color-window-bg) rounded-l-sm text-lg hover:bg-[#30303088]"
 					:title="item.title"
 				>
 					<component :is="item.icon" />

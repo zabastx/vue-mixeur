@@ -1,6 +1,6 @@
 import type { ViewportGizmo } from 'three-viewport-gizmo'
 import { defineStore } from 'pinia'
-import { computed, markRaw, ref, shallowRef, watch, type ShallowRef } from 'vue'
+import { markRaw, ref, shallowRef, toRaw, triggerRef, watch, type ShallowRef } from 'vue'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import THREE, { enableBVH } from '@/three'
 import { setGridHelper } from '@/three/utils/helpers/grid'
@@ -16,6 +16,8 @@ export const useThreeStore = defineStore('three', () => {
 	const { activeCamera, switchCamera } = cameraSetup()
 
 	const scene = markRaw(new THREE.Scene())
+	scene.background = new THREE.Color('#3D3D3D')
+
 	const controls = shallowRef<OrbitControls>()
 	const outlinePass = ref<OutlinePass>()
 
@@ -42,20 +44,15 @@ export const useThreeStore = defineStore('three', () => {
 		outlinePass.value = newComposer.outlinePass
 		const { renderer, composer, resizeRendererToDisplaySize } = newComposer
 
-		scene.background = new THREE.Color('#3D3D3D')
-
 		const grid = setGridHelper(scene)
 
 		const blenderControls = setupBlenderControls(activeCamera.value, renderer)
 		gizmo.value = blenderControls.gizmo
 		controls.value = blenderControls.controls
-
-		const cube = new THREE.Mesh(
-			new THREE.BoxGeometry(),
-			new THREE.MeshBasicMaterial({ color: 0x00ff00 })
-		)
-		cube.name = 'Companion Cube'
-		addObjectToScene(cube)
+		scene.add(blenderControls.transformControls.getHelper())
+		blenderControls.transformControls.addEventListener('objectChange', () => {
+			triggerRef(selectedObject)
+		})
 
 		const clock = new THREE.Clock()
 
@@ -85,13 +82,16 @@ export const useThreeStore = defineStore('three', () => {
 		useEventListener(canvasRef, 'click', () => {
 			if (!outlinePass.value) return
 			raycaster.setFromCamera(pointer, activeCamera.value)
-			const intersects = raycaster.intersectObjects(sceneObjects.value, true)
-			console.log('inter', intersects)
+			const intersects = raycaster.intersectObjects(toRaw(sceneObjects.value), true)
 			if (intersects[0]) {
 				const selected = intersects[0].object
+				blenderControls.transformControls.attach(selected)
 				outlinePass.value.selectedObjects = [selected]
+				selectedObject.value = selected
 			} else {
+				blenderControls.transformControls.detach()
 				outlinePass.value.selectedObjects = []
+				selectedObject.value = null
 			}
 		})
 	}
@@ -128,7 +128,7 @@ export const useThreeStore = defineStore('three', () => {
 	}
 	// _____________________________
 
-	const selectedObject = computed(() => outlinePass.value?.selectedObjects[0] || null)
+	const selectedObject = ref<THREE.Object3D<THREE.Object3DEventMap> | null>(null)
 
 	return {
 		initScene,
@@ -137,6 +137,8 @@ export const useThreeStore = defineStore('three', () => {
 		importModel,
 		outlinePass,
 		selectedObject,
-		controls
+		controls,
+		sceneObjects,
+		addObjectToScene
 	}
 })

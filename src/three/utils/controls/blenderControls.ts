@@ -1,5 +1,6 @@
 import THREE from '@/three'
 import { ViewportGizmo, type GizmoOptions } from 'three-viewport-gizmo'
+import { TransformControls } from 'three/examples/jsm/Addons.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 export function setupBlenderControls(
@@ -7,6 +8,8 @@ export function setupBlenderControls(
 	renderer: THREE.WebGLRenderer
 ) {
 	const controls = new OrbitControls(camera, renderer.domElement)
+	const transformControls = new TransformControls(camera, renderer.domElement)
+	transformControls.setMode('translate')
 
 	controls.enablePan = true
 	controls.screenSpacePanning = true
@@ -31,5 +34,5 @@ export function setupBlenderControls(
 	const gizmo = new ViewportGizmo(camera, renderer, gizmoConfig)
 	gizmo.attachControls(controls)
 
-	return { gizmo, controls }
+	return { gizmo, controls, transformControls }
 }

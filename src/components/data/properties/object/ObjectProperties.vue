@@ -19,12 +19,12 @@
 					</AccordionTrigger>
 				</AccordionHeader>
 				<AccordionContent
+					v-if="threeStore.selectedObject"
 					class="bg-(--color-properties-panel-background) p-1 overflow-hidden animation-slide pb-2.5"
 				>
-					<TransformLocation
-						v-if="threeStore.selectedObject"
-						v-model="threeStore.selectedObject.position"
-					/>
+					<TransformLocation />
+					<TransformRotation class="mt-2" />
+					<TransformScale class="mt-2" />
 				</AccordionContent>
 			</AccordionItem>
 		</AccordionRoot>

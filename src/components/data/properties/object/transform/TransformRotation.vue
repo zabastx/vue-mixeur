@@ -3,7 +3,7 @@
 		<NumberFieldRoot
 			v-for="item in items"
 			:key="'input_' + item.field"
-			v-model="store.selectedObject.position[item.field]"
+			v-model="store.selectedObject.rotation[item.field]"
 			:step="0.01"
 			as="label"
 			class="block text-sm"
@@ -29,7 +29,7 @@ const store = useThreeStore()
 
 const items = [
 	{
-		label: 'Location X',
+		label: 'Rotation X',
 		field: 'x'
 	},
 	{

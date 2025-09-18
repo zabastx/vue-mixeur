@@ -46,7 +46,6 @@ declare module 'vue' {
     NumberFieldInput: typeof import('reka-ui')['NumberFieldInput']
     NumberFieldRoot: typeof import('reka-ui')['NumberFieldRoot']
     ObjectProperties: typeof import('./components/data/properties/object/ObjectProperties.vue')['default']
-    ObjectSettings: typeof import('./components/sidebar/ObjectSettings.vue')['default']
     OutlinerItem: typeof import('./components/data/outliner/OutlinerItem.vue')['default']
     SplashScreen: typeof import('./components/modals/SplashScreen.vue')['default']
     StatusBar: typeof import('./components/status/StatusBar.vue')['default']
@@ -56,6 +55,9 @@ declare module 'vue' {
     TabsTrigger: typeof import('reka-ui')['TabsTrigger']
     TopBar: typeof import('./components/header/TopBar.vue')['default']
     TransformLocation: typeof import('./components/data/properties/object/transform/TransformLocation.vue')['default']
+    TransformRotation: typeof import('./components/data/properties/object/transform/TransformRotation.vue')['default']
+    TransformScale: typeof import('./components/data/properties/object/transform/TransformScale.vue')['default']
     ViewNavigationWidget: typeof import('./components/viewport/ViewNavigationWidget.vue')['default']
+    ViewportHeader: typeof import('./components/viewport/ViewportHeader.vue')['default']
   }
 }

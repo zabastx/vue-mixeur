@@ -1,9 +1,9 @@
 <template>
 	<details v-if="hasChildren" class="pl-5">
-		<summary>{{ item.type }}</summary>
+		<summary>{{ item.name || item.type }}</summary>
 		<OutlinerItem v-for="child in item.children" :key="child.id" class="pl-5" :item="child" />
 	</details>
-	<div v-else class="pl-5">{{ item.type }}</div>
+	<div v-else class="pl-5">{{ item.name || item.type }}</div>
 </template>
 
 <script lang="ts" setup>
@@ -16,5 +16,3 @@ const { item } = defineProps<{
 
 const hasChildren = computed(() => item.children.length > 0)
 </script>
-
-<style scoped></style>

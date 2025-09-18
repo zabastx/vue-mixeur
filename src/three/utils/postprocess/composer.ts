@@ -28,7 +28,7 @@ export function createComposer(
 	outlinePass.edgeStrength = 3
 	outlinePass.edgeThickness = 1
 	outlinePass.visibleEdgeColor.set('#ffaa00')
-	outlinePass.hiddenEdgeColor.set('#000000')
+	outlinePass.hiddenEdgeColor.set('#ffaa00')
 	composer.addPass(outlinePass)
 
 	const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader)
@@ -42,7 +42,7 @@ export function createComposer(
 		if (needResize) {
 			renderer.setSize(clientWidth, clientHeight, false)
 			composer.setSize(clientWidth, clientHeight)
-			outlinePass.resolution.set(clientWidth, clientHeight)
+			composer.setPixelRatio(window.devicePixelRatio)
 		}
 		return needResize
 	}

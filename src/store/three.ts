@@ -1,6 +1,6 @@
 import type { ViewportGizmo } from 'three-viewport-gizmo'
 import { defineStore } from 'pinia'
-import { markRaw, ref, shallowRef, toRaw, triggerRef, watch, type ShallowRef } from 'vue'
+import { ref, shallowRef, toRaw, triggerRef, watch, type ShallowRef } from 'vue'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import THREE, { enableBVH } from '@/three'
 import { setGridHelper } from '@/three/utils/helpers/grid'
@@ -15,7 +15,7 @@ import type { OutlinePass } from 'three/examples/jsm/Addons.js'
 export const useThreeStore = defineStore('three', () => {
 	const { activeCamera, switchCamera } = cameraSetup()
 
-	const scene = markRaw(new THREE.Scene())
+	const scene = new THREE.Scene()
 	scene.background = new THREE.Color('#3D3D3D')
 
 	const controls = shallowRef<OrbitControls>()
@@ -56,10 +56,13 @@ export const useThreeStore = defineStore('three', () => {
 
 		const clock = new THREE.Clock()
 
-		scene.add(new THREE.AmbientLight(0xffffff, 0.2))
-		const dirLight = new THREE.DirectionalLight(0xffffff, 1)
-		dirLight.position.set(5, 10, 5)
-		scene.add(dirLight)
+		const pointLight = new THREE.PointLight(0xffffff, 1)
+		pointLight.position.set(0, 5, 0)
+		const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.5)
+		// scene.add(pointLightHelper)
+		// scene.add(pointLight)
+		addObjectToScene(pointLightHelper)
+		addObjectToScene(pointLight)
 
 		renderer.setAnimationLoop(render)
 
@@ -98,6 +101,12 @@ export const useThreeStore = defineStore('three', () => {
 
 	function addObjectToScene(object: THREE.Object3D) {
 		enableBVH(object)
+		object.traverse((obj) => {
+			if (obj instanceof THREE.Mesh) {
+				obj.castShadow = true
+				obj.receiveShadow = true
+			}
+		})
 		scene.add(object)
 		sceneObjects.value.push(object)
 	}
@@ -121,9 +130,7 @@ export const useThreeStore = defineStore('three', () => {
 	async function importModel(...params: Parameters<typeof loadModel>): Promise<void> {
 		const model = await loadModel(...params)
 		if (!model) return
-		// enableBVH(model)
 		model.name = model.name || 'Imported Model'
-		// scene.add(model)
 		addObjectToScene(model)
 	}
 	// _____________________________

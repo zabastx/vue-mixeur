@@ -1,5 +1,5 @@
 <template>
-	<header class="bg-[#181818B3] px-2 p-1">
+	<header class="bg-(--color-topbar-background) px-2 p-1">
 		<MenuBar />
 	</header>
 </template>

@@ -50,3 +50,7 @@
 body {
 	@apply h-dvh;
 }
+
+.selection-box {
+	@apply border border-white border-dashed bg-[#ffffff10] absolute z-100 pointer-events-none;
+}

@@ -1,5 +1,5 @@
 <template>
-	<MenubarRoot class="text-sm flex z-10 relative">
+	<MenubarRoot class="text-sm flex z-100 relative">
 		<MenubarMenu>
 			<MenubarTrigger class="menubar-group">
 				<IconMixeur />

@@ -1,11 +1,5 @@
 <template>
-	<svg
-		xmlns="http://www.w3.org/2000/svg"
-		width="1em"
-		height="1em"
-		viewBox="0 0 24 24"
-		class="inline-block"
-	>
+	<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
 		<!-- Icon from Material Symbols Light by Google - https://github.com/google/material-design-icons/blob/master/LICENSE -->
 		<path
 			fill="currentColor"

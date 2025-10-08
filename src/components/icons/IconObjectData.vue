@@ -1,11 +1,5 @@
 <template>
-	<svg
-		height="1em"
-		viewBox="0 0 1600 1600"
-		width="1em"
-		xmlns="http://www.w3.org/2000/svg"
-		class="inline-block"
-	>
+	<svg height="1em" viewBox="0 0 1600 1600" width="1em" xmlns="http://www.w3.org/2000/svg">
 		<g stroke="var(--icon-colors-object)" fill="var(--icon-colors-object)">
 			<g enable-background="new" transform="matrix(100 0 0 100 -2600 -34600)">
 				<path

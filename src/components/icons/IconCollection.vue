@@ -1,11 +1,5 @@
 <template>
-	<svg
-		xmlns="http://www.w3.org/2000/svg"
-		class="inline-block"
-		width="1em"
-		height="1em"
-		viewBox="0 0 16 16"
-	>
+	<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16">
 		<!-- Icon from Qlementine Icons by Olivier Cléro - https://github.com/oclero/qlementine-icons/blob/master/LICENSE -->
 		<path fill="currentColor" d="M6.5 7a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1z" />
 		<path

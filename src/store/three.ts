@@ -11,6 +11,7 @@ import { useEventListener } from '@vueuse/core'
 import { createComposer } from '@/three/utils/postprocess/composer'
 import { cameraSetup } from '@/three/utils/camera/setup'
 import type { OutlinePass } from 'three/examples/jsm/Addons.js'
+import { useShadingControls } from '@/three/utils/renderer/shading'
 
 export const useThreeStore = defineStore('three', () => {
 	const { activeCamera, switchCamera } = cameraSetup()
@@ -24,6 +25,8 @@ export const useThreeStore = defineStore('three', () => {
 	const gizmo = shallowRef<ViewportGizmo>()
 
 	const sceneObjects = ref<THREE.Object3D[]>([])
+
+	const shadingControls = useShadingControls(scene)
 
 	watch(activeCamera, (newCamera) => {
 		if (!controls.value || !gizmo.value) return
@@ -49,7 +52,8 @@ export const useThreeStore = defineStore('three', () => {
 		const blenderControls = setupBlenderControls(activeCamera.value, renderer)
 		gizmo.value = blenderControls.gizmo
 		controls.value = blenderControls.controls
-		scene.add(blenderControls.transformControls.getHelper())
+		const transformHelper = blenderControls.transformControls.getHelper()
+		scene.add(transformHelper)
 		blenderControls.transformControls.addEventListener('objectChange', () => {
 			triggerRef(selectedObject)
 		})
@@ -59,10 +63,11 @@ export const useThreeStore = defineStore('three', () => {
 		const pointLight = new THREE.PointLight(0xffffff, 1)
 		pointLight.position.set(0, 5, 0)
 		const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.5)
-		// scene.add(pointLightHelper)
-		// scene.add(pointLight)
+		// addObjectToScene(pointLight)
+		scene.add(pointLight)
 		addObjectToScene(pointLightHelper)
-		addObjectToScene(pointLight)
+
+		shadingControls.init()
 
 		renderer.setAnimationLoop(render)
 
@@ -105,10 +110,13 @@ export const useThreeStore = defineStore('three', () => {
 			if (obj instanceof THREE.Mesh) {
 				obj.castShadow = true
 				obj.receiveShadow = true
+				obj.userData.isShadable = true
 			}
 		})
 		scene.add(object)
 		sceneObjects.value.push(object)
+
+		shadingControls.cacheNewObjectMaterials(object)
 	}
 
 	/**
@@ -146,6 +154,7 @@ export const useThreeStore = defineStore('three', () => {
 		selectedObject,
 		controls,
 		sceneObjects,
-		addObjectToScene
+		addObjectToScene,
+		currentShadingMode: shadingControls.currentMode
 	}
 })

@@ -1,6 +1,6 @@
 <template>
-	<div class="text-xs p-1">
-		<MenubarRoot class="relative z-10">
+	<div class="p-0.5 flex items-center">
+		<MenubarRoot class="relative z-10 text-xs">
 			<MenubarMenu>
 				<MenubarTrigger class="menubar-group"> Add </MenubarTrigger>
 				<MenubarContent class="bg-[#181818FF] p-1">
@@ -10,6 +10,7 @@
 				</MenubarContent>
 			</MenubarMenu>
 		</MenubarRoot>
+		<ViewportShadingControls class="ml-auto" />
 	</div>
 </template>
 

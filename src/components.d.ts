@@ -25,6 +25,10 @@ declare module 'vue' {
     IconMixeur: typeof import('./components/icons/IconMixeur.vue')['default']
     IconMMB: typeof import('./components/icons/IconMMB.vue')['default']
     IconObjectData: typeof import('./components/icons/IconObjectData.vue')['default']
+    IconShadingRendered: typeof import('./components/icons/shading/IconShadingRendered.vue')['default']
+    IconShadingSolid: typeof import('./components/icons/shading/IconShadingSolid.vue')['default']
+    IconShadingTexture: typeof import('./components/icons/shading/IconShadingTexture.vue')['default']
+    IconShadingWireframe: typeof import('./components/icons/shading/IconShadingWireframe.vue')['default']
     IconViewOrtho: typeof import('./components/icons/view/IconViewOrtho.vue')['default']
     IconViewPerspective: typeof import('./components/icons/view/IconViewPerspective.vue')['default']
     KeymapInformation: typeof import('./components/status/KeymapInformation.vue')['default']
@@ -59,5 +63,6 @@ declare module 'vue' {
     TransformScale: typeof import('./components/data/properties/object/transform/TransformScale.vue')['default']
     ViewNavigationWidget: typeof import('./components/viewport/ViewNavigationWidget.vue')['default']
     ViewportHeader: typeof import('./components/viewport/ViewportHeader.vue')['default']
+    ViewportShadingControls: typeof import('./components/viewport/ViewportShadingControls.vue')['default']
   }
 }

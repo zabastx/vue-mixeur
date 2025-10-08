@@ -9,12 +9,12 @@
 			class="block text-sm"
 		>
 			<span class="mr-2">{{ item.label }}</span>
-			<div class="inline-block bg-(--color-ui-number-field-inner) rounded-sm">
-				<NumberFieldDecrement>
+			<div class="flex bg-(--color-ui-number-field-inner) rounded-sm overflow-hidden">
+				<NumberFieldDecrement class="px-0.5 cursor-pointer bg-(--color-ui-number-field-inner)">
 					<IconChevronRight class="rotate-180" />
 				</NumberFieldDecrement>
 				<NumberFieldInput class="outline-none text-center w-40" />
-				<NumberFieldIncrement>
+				<NumberFieldIncrement class="px-0.5 cursor-pointer bg-(--color-ui-number-field-inner)">
 					<IconChevronRight />
 				</NumberFieldIncrement>
 			</div>

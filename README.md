@@ -1,33 +1,31 @@
-# vue-mixeur
+# Vue Mixeur
 
-This template should help get you started developing with Vue 3 in Vite.
+A web-based 3D editor and visualization tool built with Vue.js and Three.js. Vue Mixeur provides an intuitive interface for 3D modeling, object manipulation, and scene management directly in the browser.
 
-## Recommended IDE Setup
+## Demo
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Try the live demo at [mixeur.zabastx.ru](https://mixeur.zabastx.ru)
 
-## Type Support for `.vue` Imports in TS
+## Features
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+- **3D Viewport**: Interactive 3D scene with multiple camera perspectives (perspective/orthographic)
+- **Object Selection & Transformation**: Click to select objects, with transform gizmos for position, rotation, and scale
+- **Shading Modes**: Switch between rendered, solid, wireframe, and texture shading views
+- **Model Import**: Load 3D models in various formats (GLTF, OBJ, etc.)
+- **Scene Management**: Outliner panel for hierarchical object organization
+- **Properties Panel**: Inspect and modify object properties, materials, and transforms
+- **Blender-style Controls**: Familiar navigation and interaction patterns
+- **Real-time Rendering**: Hardware-accelerated rendering with post-processing effects
 
-## Customize configuration
+## Tech Stack
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+- **Frontend**: Vue 3 with Composition API
+- **3D Engine**: Three.js with BVH acceleration for fast raycasting
+- **State Management**: Pinia
+- **Styling**: Tailwind CSS
+- **Build Tool**: Vite
+- **TypeScript**: Full type safety
 
-## Project Setup
+## License
 
-```sh
-bun install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-bun dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-bun run build
-```
+MIT License - Copyright (c) 2025 Danil Popov

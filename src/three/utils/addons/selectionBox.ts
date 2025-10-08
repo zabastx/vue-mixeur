@@ -8,18 +8,15 @@ export function setSelectionBox({ camera, renderer, scene, canvas, controls }: S
 
 	const selectedObjects = ref<THREE.Mesh[]>([])
 
-	// Функция для перевода координат мыши в NDC относительно контейнера
 	function getNormalizedPointer(event: PointerEvent, target: HTMLElement) {
 		const rect = target.getBoundingClientRect()
-		const { width, height, clientHeight, clientWidth } = target
-		console.log('x y', event.clientX, event.clientY)
+		// const { width, height, clientHeight, clientWidth } = target
 		return {
 			x: (event.clientX - rect.left) / rect.width,
 			y: -((event.clientY - rect.top) / rect.height)
 		}
 	}
 
-	// Обработчики SelectionHelper
 	helper.onSelectStart = (event: PointerEvent) => {
 		if (event.button !== 0) return
 		controls.enabled = false
@@ -32,7 +29,7 @@ export function setSelectionBox({ camera, renderer, scene, canvas, controls }: S
 		selectionBox.endPoint.set(x, y, 0)
 	}
 
-	helper.onSelectOver = (event: PointerEvent) => {
+	helper.onSelectOver = () => {
 		controls.enabled = true
 		selectedObjects.value = selectionBox.select()
 	}

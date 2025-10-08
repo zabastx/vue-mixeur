@@ -1,7 +1,7 @@
 import THREE from '@/three'
 import { ViewportGizmo, type GizmoOptions } from 'three-viewport-gizmo'
-import { TransformControls } from 'three/examples/jsm/Addons.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { TransformControls } from 'three/examples/jsm/Addons.js'
 
 export function setupBlenderControls(
 	camera: THREE.PerspectiveCamera | THREE.OrthographicCamera,

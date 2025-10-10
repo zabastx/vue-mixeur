@@ -9,6 +9,7 @@
 			<div v-show="isError" ref="webglErrorRef" class="webgl-error"></div>
 			<canvas v-show="!isError" ref="canvasRef" class="w-full h-full block"></canvas>
 		</div>
+		<ViewportToolbar />
 	</div>
 </template>
 

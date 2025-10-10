@@ -9,7 +9,6 @@ export function setupBlenderControls(
 ) {
 	const controls = new OrbitControls(camera, renderer.domElement)
 	const transformControls = new TransformControls(camera, renderer.domElement)
-	transformControls.setMode('translate')
 
 	controls.enablePan = true
 	controls.screenSpacePanning = true

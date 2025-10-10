@@ -30,4 +30,8 @@
 	--color-ui-text-inner: #1d1d1dff;
 	--color-ui-text-selected: #181818ff;
 	--color-ui-text-outline: #3d3d3dff;
+
+	--color-ui-toolbar-inner: #282828ff;
+	--color-ui-toolbar-selected: #4772b3ff;
+	--color-ui-toolbar-outline: #3d3d3dff;
 }

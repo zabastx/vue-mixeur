@@ -10,29 +10,42 @@ import { setRaycaster } from '@/three/utils/core/raycaster'
 import { useEventListener } from '@vueuse/core'
 import { createComposer } from '@/three/utils/postprocess/composer'
 import { cameraSetup } from '@/three/utils/camera/setup'
-import type { OutlinePass } from 'three/examples/jsm/Addons.js'
+import type {
+	OutlinePass,
+	TransformControls,
+	TransformControlsMode
+} from 'three/examples/jsm/Addons.js'
 import { useShadingControls } from '@/three/utils/renderer/shading'
 
 export const useThreeStore = defineStore('three', () => {
-	const { activeCamera, switchCamera } = cameraSetup()
-
 	const scene = new THREE.Scene()
 	scene.background = new THREE.Color('#3D3D3D')
 
+	// Camera controls
+	const { activeCamera, switchCamera } = cameraSetup()
 	const controls = shallowRef<OrbitControls>()
-	const outlinePass = ref<OutlinePass>()
-
 	const gizmo = shallowRef<ViewportGizmo>()
-
-	const sceneObjects = ref<THREE.Object3D[]>([])
-
-	const shadingControls = useShadingControls(scene)
 
 	watch(activeCamera, (newCamera) => {
 		if (!controls.value || !gizmo.value) return
 		controls.value.object = newCamera
 		gizmo.value.camera = newCamera
 	})
+	// _____________________________
+
+	const outlinePass = ref<OutlinePass>()
+	const sceneObjects = ref<THREE.Object3D[]>([])
+	const shadingControls = useShadingControls(scene)
+
+	// Transform controls
+	const transformControls = shallowRef<TransformControls>()
+	const currentTransformMode = ref<TransformControlsMode>('translate')
+
+	function setTransformMode(mode: TransformControlsMode) {
+		transformControls.value?.setMode(mode)
+		currentTransformMode.value = mode
+	}
+	// ___________________________
 
 	async function initScene(canvasRef: ShallowRef<HTMLCanvasElement | null>) {
 		if (!canvasRef.value) return
@@ -52,6 +65,7 @@ export const useThreeStore = defineStore('three', () => {
 		const blenderControls = setupBlenderControls(activeCamera.value, renderer)
 		gizmo.value = blenderControls.gizmo
 		controls.value = blenderControls.controls
+		transformControls.value = blenderControls.transformControls
 		const transformHelper = blenderControls.transformControls.getHelper()
 		scene.add(transformHelper)
 		blenderControls.transformControls.addEventListener('objectChange', () => {
@@ -155,6 +169,8 @@ export const useThreeStore = defineStore('three', () => {
 		controls,
 		sceneObjects,
 		addObjectToScene,
-		currentShadingMode: shadingControls.currentMode
+		currentShadingMode: shadingControls.currentMode,
+		setTransformMode,
+		currentTransformMode
 	}
 })

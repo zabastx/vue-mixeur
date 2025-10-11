@@ -49,6 +49,7 @@ export async function loadModel({ url, format, onProgress }: ModelLoaderParamete
 
 export interface ModelLoaderParameters {
 	url: string
+	filename?: string
 	format: 'gltf' | 'glb' | 'obj' | 'fbx' | (string & {})
 	onProgress?: (e: ProgressEvent) => void
 }

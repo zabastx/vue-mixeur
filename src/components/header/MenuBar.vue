@@ -108,11 +108,7 @@ function getFile(format: Parameters<typeof sceneStore.importModel>[0]['format'])
 		sceneStore.importModel({
 			url: fileUrl,
 			format: format.toLowerCase(),
-			onProgress(e) {
-				if (e.lengthComputable) {
-					// console.log('Progress:', (e.loaded / e.total) * 100)
-				}
-			}
+			filename: file.name
 		})
 	})
 	input.showPicker()

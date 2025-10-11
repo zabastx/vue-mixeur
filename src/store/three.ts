@@ -16,6 +16,7 @@ import type {
 	TransformControlsMode
 } from 'three/examples/jsm/Addons.js'
 import { useShadingControls } from '@/three/utils/renderer/shading'
+import { useProgressStore, type LoadingProgress } from './progress'
 
 export const useThreeStore = defineStore('three', () => {
 	const scene = new THREE.Scene()
@@ -150,10 +151,36 @@ export const useThreeStore = defineStore('three', () => {
 	 * 5. Adds the model to the global THREE.Scene instance
 	 */
 	async function importModel(...params: Parameters<typeof loadModel>): Promise<void> {
-		const model = await loadModel(...params)
-		if (!model) return
-		model.name = model.name || 'Imported Model'
-		addObjectToScene(model)
+		const progressStore = useProgressStore()
+		const [loadParams] = params
+		const loadingId = `model-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`
+
+		// Extract model name and filename from URL
+		const urlParts = loadParams.url.split('/')
+		const fullFilename = loadParams.filename || urlParts[urlParts.length - 1] || 'model'
+		const modelName = fullFilename.split('.')[0] || 'Model'
+
+		// Wrap the onProgress callback to track progress
+		const originalOnProgress = loadParams.onProgress
+		loadParams.onProgress = (e: ProgressEvent) => {
+			if (e.lengthComputable) {
+				if (progressStore.loadingItems.find((p: LoadingProgress) => p.id === loadingId)) {
+					progressStore.updateProgress(loadingId, e.loaded)
+				} else {
+					progressStore.startLoading(loadingId, modelName, fullFilename, e.total)
+				}
+			}
+			originalOnProgress?.(e)
+		}
+
+		try {
+			const model = await loadModel(...params)
+			if (!model) return
+			model.name = model.name || modelName
+			addObjectToScene(model)
+		} finally {
+			progressStore.finishLoading(loadingId)
+		}
 	}
 	// _____________________________
 

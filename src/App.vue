@@ -11,6 +11,8 @@
 		</main>
 
 		<StatusBar />
+
+		<ModelLoadingProgress />
 	</div>
 </template>
 
@@ -21,6 +23,7 @@ import { useEventListener } from '@vueuse/core'
 import MViewport from './components/viewport/MViewport.vue'
 import StatusBar from './components/status/StatusBar.vue'
 import TopBar from './components/header/TopBar.vue'
+import ModelLoadingProgress from './components/utils/ModelLoadingProgress.vue'
 
 const divider = useTemplateRef('divider')
 const rightWidth = ref(window.innerWidth * 0.3)

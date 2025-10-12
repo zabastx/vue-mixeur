@@ -1,19 +1,21 @@
 <template>
-	<div class="flex flex-col h-full bg-gray-900 text-gray-200 font-sans">
-		<TopBar />
+	<TooltipProvider :delay-duration="300" disable-hoverable-content>
+		<div class="flex flex-col h-full bg-gray-900 text-gray-200 font-sans">
+			<TopBar />
 
-		<main
-			class="flex-1 grid grid-cols-(--main-cols) p-1 min-h-0 bg-(--color-editor-border) select-none"
-		>
-			<MViewport class="block-border" />
-			<div ref="divider" class="divider w-1 cursor-col-resize"></div>
-			<MSidebar />
-		</main>
+			<main
+				class="flex-1 grid grid-cols-(--main-cols) p-1 min-h-0 bg-(--color-editor-border) select-none"
+			>
+				<MViewport class="block-border" />
+				<div ref="divider" class="divider w-1 cursor-col-resize"></div>
+				<MSidebar />
+			</main>
 
-		<StatusBar />
+			<StatusBar />
 
-		<ModelLoadingProgress />
-	</div>
+			<ModelLoadingProgress />
+		</div>
+	</TooltipProvider>
 </template>
 
 <script lang="ts" setup>
@@ -24,6 +26,7 @@ import MViewport from './components/viewport/MViewport.vue'
 import StatusBar from './components/status/StatusBar.vue'
 import TopBar from './components/header/TopBar.vue'
 import ModelLoadingProgress from './components/utils/ModelLoadingProgress.vue'
+import { TooltipProvider } from 'reka-ui'
 
 const divider = useTemplateRef('divider')
 const rightWidth = ref(window.innerWidth * 0.3)

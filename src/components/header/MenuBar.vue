@@ -4,14 +4,16 @@
 			<MenubarTrigger class="menubar-group">
 				<IconMixeur />
 			</MenubarTrigger>
-			<MenubarContent class="bg-[#181818FF] p-1">
+			<MenubarContent
+				class="bg-(--color-ui-menu-bg-inner) p-1 outline-(--color-ui-menu-bg-outline) rounded"
+			>
 				<MenubarItem class="menubar-item"><span class="min-w-5"></span>Splash Screen</MenubarItem>
 				<MenubarItem class="menubar-item"><span class="min-w-5"></span>About Mixeur</MenubarItem>
 			</MenubarContent>
 		</MenubarMenu>
 		<MenubarMenu v-for="menuItem in menu" :key="menuItem.label">
 			<MenubarTrigger class="menubar-group">{{ menuItem.label }}</MenubarTrigger>
-			<MenubarContent class="bg-[#181818FF] p-1">
+			<MenubarContent class="bg-(--color-ui-menu-bg-inner) p-1 rounded">
 				<template v-for="item in menuItem.items" :key="item.label">
 					<MenubarItem v-if="!item.children" class="menubar-item" @click="item.onClick">
 						<span class="min-w-5"><component :is="item.icon" /></span>
@@ -25,7 +27,7 @@
 								<IconArrowRight />
 							</span>
 						</MenubarSubTrigger>
-						<MenubarSubContent class="bg-[#181818FF] p-1">
+						<MenubarSubContent class="bg-(--color-ui-menu-bg-inner) p-1 rounded">
 							<MenubarItem
 								v-for="subItem in item.children"
 								:key="subItem.label"
@@ -120,10 +122,10 @@ function getFile(format: Parameters<typeof sceneStore.importModel>[0]['format'])
 @reference 'tailwindcss/theme';
 
 .menubar-group {
-	@apply cursor-pointer rounded px-1 py-0.5 bg-[#181818FF] hover:bg-[#3D3D3DFF];
+	@apply cursor-pointer rounded px-1 py-0.5 bg-(--color-ui-menu-bg-inner) hover:bg-[#3D3D3DFF];
 }
 
 .menubar-item {
-	@apply cursor-pointer rounded px-1 py-0.5 bg-[#181818FF] hover:bg-[#3D3D3DFF] flex flex-nowrap items-center min-w-40 gap-1;
+	@apply cursor-pointer rounded px-1 py-0.5 bg-(--color-ui-menu-bg-inner) hover:bg-[#3D3D3DFF] flex flex-nowrap items-center min-w-40 gap-1;
 }
 </style>

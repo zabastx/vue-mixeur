@@ -1,20 +1,30 @@
 <template>
 	<div class="flex">
-		<button
+		<MTooltip
 			v-for="(btn, index) in buttons"
 			:key="btn.name"
-			class="shading-btn"
-			:class="{
-				selected: btn.name === threeStore.currentShadingMode,
-				'rounded-l': index === 0,
-				'rounded-r': index === buttons.length - 1
-			}"
-			type="button"
-			:title="btn.title"
-			@click="setShadingMode(btn.name)"
+			:content="{ align: 'start', side: 'bottom', alignOffset: -10, sideOffset: 10 }"
 		>
-			<component :is="btn.icon" />
-		</button>
+			<button
+				class="shading-btn"
+				:class="{
+					selected: btn.name === threeStore.currentShadingMode,
+					'rounded-l': index === 0,
+					'rounded-r': index === buttons.length - 1
+				}"
+				type="button"
+				@click="setShadingMode(btn.name)"
+			>
+				<component :is="btn.icon" />
+			</button>
+			<template #content>
+				<!-- eslint-disable vue/no-v-html -->
+				<span v-html="btn.tooltip.title"></span>
+				<!-- eslint-enable -->
+				<p class="mt-1">Method to display/shade objects in the 3D View</p>
+				<span class="opacity-50 text-[.9em]">{{ btn.tooltip.footer }}</span>
+			</template>
+		</MTooltip>
 	</div>
 </template>
 
@@ -26,6 +36,7 @@ import type { Component } from 'vue'
 import IconShadingSolid from '../icons/shading/IconShadingSolid.vue'
 import IconShadingTexture from '../icons/shading/IconShadingTexture.vue'
 import IconShadingRendered from '../icons/shading/IconShadingRendered.vue'
+import MTooltip, { type MTooltipContent } from '../utils/MTooltip.vue'
 
 const threeStore = useThreeStore()
 
@@ -37,29 +48,41 @@ const buttons: ShadingControlsElement[] = [
 	{
 		name: 'wireframe',
 		icon: IconShadingWireframe,
-		title: 'Viewport Shading: Wireframe'
+		tooltip: {
+			title: 'Viewport Shading: <em>Wireframe</em>',
+			footer: 'Display only edges of geometry without surface shading'
+		}
 	},
 	{
 		name: 'solid',
 		icon: IconShadingSolid,
-		title: 'Viewport Shading: Solid'
+		tooltip: {
+			title: 'Viewport Shading: <em>Solid</em>',
+			footer: 'Display objects with flat lighting and basic surface shading'
+		}
 	},
 	{
 		name: 'materialPreview',
 		icon: IconShadingTexture,
-		title: 'Viewport Shading: Material Preview'
+		tooltip: {
+			title: 'Viewport Shading: <em>Material Preview</em>',
+			footer: 'Preview materials using predefined environment lights'
+		}
 	},
 	{
 		name: 'rendered',
 		icon: IconShadingRendered,
-		title: 'Viewport Shading: Rendered'
+		tooltip: {
+			title: 'Viewport Shading: <em>Rendered</em>',
+			footer: 'Preview the final scene using the active render engine'
+		}
 	}
 ]
 
 interface ShadingControlsElement {
 	name: ShadingMode
-	title: string
 	icon: Component
+	tooltip: Partial<MTooltipContent>
 }
 </script>
 
@@ -71,5 +94,9 @@ interface ShadingControlsElement {
 	&.selected {
 		@apply bg-(--color-ui-radio-button-selected);
 	}
+}
+
+:deep(em) {
+	@apply not-italic text-[#4772B3];
 }
 </style>

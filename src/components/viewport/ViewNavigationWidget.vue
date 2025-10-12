@@ -1,12 +1,28 @@
 <template>
-	<button
-		type="button"
-		class="text-white text-xl bg-black opacity-50 cursor-pointer p-1.5 rounded-full hover:bg-gray-500"
-		@click="sceneStore.switchCamera"
+	<MTooltip
+		:tooltip="{
+			text: 'Switch the current view from perspective/orthographic projection',
+			footer: 'Shortcut: Numpad 5'
+		}"
+		:options="{
+			content: {
+				align: 'start',
+				alignOffset: -10,
+				side: 'bottom',
+				sideOffset: 5
+			}
+		}"
 	>
-		<IconViewPerspective v-if="sceneStore.activeCamera.type === 'PerspectiveCamera'" />
-		<IconViewOrtho v-else />
-	</button>
+		<button
+			type="button"
+			class="text-white text-xl bg-black opacity-50 cursor-pointer p-1.5 rounded-full hover:bg-gray-500"
+			v-bind="$attrs"
+			@click="sceneStore.switchCamera"
+		>
+			<IconViewPerspective v-if="sceneStore.activeCamera.type === 'PerspectiveCamera'" />
+			<IconViewOrtho v-else />
+		</button>
+	</MTooltip>
 </template>
 
 <script lang="ts" setup>

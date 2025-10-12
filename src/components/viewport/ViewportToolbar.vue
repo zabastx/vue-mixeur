@@ -1,15 +1,22 @@
 <template>
 	<div class="toolbar">
-		<button
+		<MTooltip
 			v-for="item in toolbarItems"
 			:key="'toolbar_' + item.name"
-			type="button"
-			:class="{ selected: item.name === threeStore.currentTransformMode }"
-			:title="item.title"
-			@click="item.onClick"
+			:tooltip="{ title: item.title, text: item.tooltip, footer: `Shortcut: ${item.footer}` }"
+			:options="{
+				content: { align: 'start', side: 'right', sideOffset: 5 }
+			}"
 		>
-			<component :is="item.icon" />
-		</button>
+			<button
+				type="button"
+				:class="{ selected: item.name === threeStore.currentTransformMode }"
+				:title="item.title"
+				@click="item.onClick"
+			>
+				<component :is="item.icon" />
+			</button>
+		</MTooltip>
 	</div>
 </template>
 
@@ -18,6 +25,7 @@ import { useThreeStore } from '@/store/three'
 import IconToolMove from '../icons/toolbar/IconToolMove.vue'
 import IconToolRotate from '../icons/toolbar/IconToolRotate.vue'
 import IconToolScale from '../icons/toolbar/IconToolScale.vue'
+import MTooltip from '../utils/MTooltip.vue'
 
 const threeStore = useThreeStore()
 
@@ -28,7 +36,9 @@ const toolbarItems = [
 		onClick: () => {
 			threeStore.setTransformMode('translate')
 		},
-		title: 'Translate'
+		title: 'Move',
+		tooltip: 'Move selected items',
+		footer: 'G'
 	},
 	{
 		name: 'rotate',
@@ -36,7 +46,9 @@ const toolbarItems = [
 		onClick: () => {
 			threeStore.setTransformMode('rotate')
 		},
-		title: 'Rotate'
+		title: 'Rotate',
+		tooltip: 'Rotate selected items',
+		footer: 'R'
 	},
 	{
 		name: 'scale',
@@ -44,7 +56,9 @@ const toolbarItems = [
 		onClick: () => {
 			threeStore.setTransformMode('scale')
 		},
-		title: 'Scale'
+		title: 'Scale',
+		tooltip: 'Scale (resize) selected items',
+		footer: 'S'
 	}
 ] as const
 </script>

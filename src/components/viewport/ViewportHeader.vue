@@ -1,12 +1,12 @@
 <template>
-	<div class="p-0.5 flex items-center">
-		<MenubarRoot class="relative z-10 text-xs">
+	<div class="p-1 flex items-center">
+		<MenubarRoot class="relative text-xs">
 			<MenubarMenu>
 				<MenubarTrigger class="menubar-group"> Add </MenubarTrigger>
-				<MenubarContent class="bg-[#181818FF] p-1">
+				<MenubarContent class="bg-(--color-ui-menu-bg-inner) p-1 z-10 rounded rounded-tl-none">
 					<MenubarItem class="menubar-item" @click="addCube">
-						<span class="min-w-5"></span>Cube</MenubarItem
-					>
+						<span class="min-w-5"></span>Cube
+					</MenubarItem>
 				</MenubarContent>
 			</MenubarMenu>
 		</MenubarRoot>
@@ -31,9 +31,12 @@ function addCube() {
 
 .menubar-group {
 	@apply cursor-pointer rounded px-1 py-0.5 hover:bg-[#303030B3];
+	&[data-state='open'] {
+		@apply bg-[#303030B3] brightness-125 rounded-b-none;
+	}
 }
 
 .menubar-item {
-	@apply cursor-pointer rounded px-1 py-0.5 bg-[#181818FF] hover:bg-[#3D3D3DFF] flex flex-nowrap items-center min-w-32 gap-1;
+	@apply cursor-pointer rounded px-1 py-0.5 bg-(--color-ui-menu-bg-inner) hover:bg-[#3D3D3DFF] flex flex-nowrap items-center min-w-32 gap-1;
 }
 </style>

@@ -7,14 +7,14 @@ export function cameraSetup() {
 		type: 'Perspective',
 		fov: 39.6,
 		near: 0.1,
-		far: 1000,
+		far: 10000,
 		name: 'Default Perspective Camera'
 	})
 
 	const orthographicCamera = createCamera({
 		type: 'Orthographic',
 		near: 0.1,
-		far: 1000,
+		far: 10000,
 		name: 'Default Orthographic Camera'
 	})
 

@@ -12,6 +12,7 @@ export function setupBlenderControls(
 
 	controls.enablePan = true
 	controls.screenSpacePanning = true
+	controls.enableZoom = false
 	controls.mouseButtons = {
 		LEFT: null,
 		MIDDLE: THREE.MOUSE.ROTATE,

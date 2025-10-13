@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import './colors.css';
+@import './utils.css';
 
 @plugin 'tailwind-scrollbar';
 
@@ -29,20 +30,6 @@
 	}
 }
 
-@utility bg-stripes {
-	background: repeating-linear-gradient(
-		180deg,
-		var(--color-window-bg),
-		var(--color-window-bg) 1em,
-		#181818b3 1em,
-		#181818b3 2em
-	);
-}
-
-@utility block-border {
-	@apply border border-(--color-editor-outline) hover:border-(--color-active-editor-outline);
-}
-
 #app {
 	@apply contents;
 }
@@ -52,7 +39,7 @@ body {
 }
 
 .selection-box {
-	@apply border border-white border-dashed bg-[#ffffff10] absolute z-100 pointer-events-none;
+	@apply pointer-events-none absolute z-100 border border-dashed border-white bg-[#ffffff10];
 }
 
 button:hover {

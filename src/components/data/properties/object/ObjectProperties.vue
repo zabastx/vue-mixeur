@@ -1,26 +1,26 @@
 <template>
 	<div ref="css" class="p-1.5">
-		<label v-if="threeStore.selectedObject" class="text-sm mb-2.5 block">
+		<label v-if="threeStore.selectedObject" class="mb-2.5 block text-sm">
 			Name:
 			<input
 				v-model="threeStore.selectedObject.name"
 				type="text"
-				class="bg-(--color-ui-text-inner) outline-none p-0.5 rounded"
+				class="rounded bg-(--color-ui-text-inner) p-0.5 outline-none"
 			/>
 		</label>
 		<AccordionRoot default-value="transform" collapsible type="multiple" class="mt-1">
-			<AccordionItem value="transform" class="rounded overflow-hidden">
+			<AccordionItem value="transform" class="overflow-hidden rounded">
 				<AccordionHeader class="bg-(--color-properties-panel-header) p-0.5">
-					<AccordionTrigger class="cursor-pointer group flex items-center w-full">
+					<AccordionTrigger class="group flex w-full cursor-pointer items-center">
 						<IconChevronRight
-							class="inline-block group-data-[state='open']:rotate-90 transition-rotate duration-200"
+							class="transition-rotate inline-block duration-200 group-data-[state='open']:rotate-90"
 						/>
 						<span>Transform</span>
 					</AccordionTrigger>
 				</AccordionHeader>
 				<AccordionContent
 					v-if="threeStore.selectedObject"
-					class="bg-(--color-properties-panel-background) p-1 overflow-hidden animation-slide pb-2.5"
+					class="animation-slide overflow-hidden bg-(--color-properties-panel-background) p-1 pb-2.5"
 				>
 					<TransformLocation />
 					<TransformRotation class="mt-2" />

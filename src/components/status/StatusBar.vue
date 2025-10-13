@@ -1,6 +1,6 @@
 <template>
 	<footer
-		class="bg-[#181818B3] px-2 py-1 text-xs text-[#888888] flex justify-end items-center gap-1 h-6"
+		class="flex h-6 items-center justify-end gap-1 bg-[#181818B3] px-2 py-1 text-xs text-[#888888]"
 	>
 		<KeymapInformation class="mr-auto" />
 		<!-- <div class="divider w-[1px] h-full bg-[#888888]"></div> -->

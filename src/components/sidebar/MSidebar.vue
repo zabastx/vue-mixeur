@@ -1,5 +1,5 @@
 <template>
-	<div class="sidebar rounded grid grid-rows-(--side-rows) min-h-0">
+	<div class="sidebar grid min-h-0 grid-rows-(--side-rows) rounded">
 		<MOutliner />
 		<div ref="divider" class="h-1 cursor-row-resize"></div>
 		<DataProperties />

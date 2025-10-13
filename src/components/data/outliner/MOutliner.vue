@@ -1,9 +1,9 @@
 <template>
-	<div class="text-xl rounded block-border flex flex-col bg-(--color-window-bg)">
-		<div class="text-sm flex items-center p-1">
+	<div class="block-border flex flex-col rounded bg-(--color-window-bg) text-xl">
+		<div class="flex items-center p-1 text-sm">
 			<IconCollection class="text-xl" /> Scene Collection
 		</div>
-		<div class="bg-stripes overflow-auto grow">
+		<div class="bg-stripes grow overflow-auto">
 			<OutlinerItem
 				v-for="item in sceneStore.sceneObjects"
 				:key="item.id"

@@ -7,12 +7,12 @@
 			<TooltipContent
 				align="start"
 				v-bind="options?.content"
-				class="bg-(--color-ui-tooltip-inner) text-(--color-ui-tooltip-text) p-2 rounded border-(--color-ui-tooltip-outline) border text-xs max-w-xs flex flex-col gap-1"
+				class="flex max-w-xs flex-col gap-1 rounded border border-(--color-ui-tooltip-outline) bg-(--color-ui-tooltip-inner) p-2 text-xs text-(--color-ui-tooltip-text)"
 			>
 				<slot name="content">
 					<span v-if="tooltip?.title">{{ tooltip.title }}</span>
 					<p v-if="tooltip?.text">{{ tooltip?.text }}</p>
-					<span v-if="tooltip?.footer" class="opacity-50 text-[0.9em]">{{ tooltip?.footer }}</span>
+					<span v-if="tooltip?.footer" class="text-[0.9em] opacity-50">{{ tooltip?.footer }}</span>
 				</slot>
 			</TooltipContent>
 		</TooltipPortal>

@@ -1,13 +1,13 @@
 <template>
 	<div
 		ref="wrapper"
-		class="relative rounded overflow-hidden h-full w-full grid grid-rows-[min-content_1fr]"
+		class="relative grid h-full w-full grid-rows-[min-content_1fr] overflow-hidden rounded"
 	>
 		<ViewportHeader class="top-0 left-0 w-full bg-(--color-viewport-header-bg)" />
 		<div class="canvas-wrapper relative">
 			<ViewNavigationWidget class="absolute top-32 right-2.5" />
 			<div v-show="isError" ref="webglErrorRef" class="webgl-error"></div>
-			<canvas v-show="!isError" ref="canvasRef" class="w-full h-full block"></canvas>
+			<canvas v-show="!isError" ref="canvasRef" class="block h-full w-full"></canvas>
 		</div>
 		<ViewportToolbar />
 	</div>
@@ -44,7 +44,7 @@ onMounted(() => {
 @reference 'tailwindcss/theme';
 
 .webgl-error {
-	@apply w-full h-full flex items-center justify-center text-black;
+	@apply flex h-full w-full items-center justify-center text-black;
 	div {
 		@apply bg-white p-2.5;
 	}

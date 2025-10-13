@@ -1,6 +1,6 @@
 <template>
-	<div v-show="appStore.pointerOnCanvas" class="text-xl flex items-center gap-1 select-none">
-		<div v-for="item in activeHints" :key="item.text" class="flex align-center">
+	<div v-show="appStore.pointerOnCanvas" class="flex items-center gap-1 text-xl select-none">
+		<div v-for="item in activeHints" :key="item.text" class="align-center flex">
 			<component :is="item.icon" />
 			<span class="text-xs">{{ item.text }}</span>
 		</div>

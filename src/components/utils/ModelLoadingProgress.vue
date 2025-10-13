@@ -1,18 +1,18 @@
 <template>
-	<div v-if="activeLoadings.length > 0" class="fixed bottom-16 left-4 z-50 space-y-2 w-sm">
+	<div v-if="activeLoadings.length > 0" class="fixed bottom-16 left-4 z-50 w-sm space-y-2">
 		<div
 			v-for="loading in activeLoadings"
 			:key="loading.id"
-			class="bg-[var(--color-panel-background)] text-white p-4 rounded-lg shadow-lg border border-[var(--color-editor-border)]"
+			class="rounded-lg border border-[var(--color-editor-border)] bg-[var(--color-panel-background)] p-4 text-white shadow-lg"
 		>
-			<div class="flex items-center justify-between mb-2">
-				<h3 class="text-sm font-medium truncate">{{ loading.filename }}</h3>
+			<div class="mb-2 flex items-center justify-between">
+				<h3 class="truncate text-sm font-medium">{{ loading.filename }}</h3>
 				<span class="text-xs opacity-70">{{ Math.round(loading.percentage) }}%</span>
 			</div>
 
-			<div class="w-full bg-[var(--color-ui-number-field-inner)] rounded-full h-2 mb-2">
+			<div class="mb-2 h-2 w-full rounded-full bg-[var(--color-ui-number-field-inner)]">
 				<div
-					class="bg-[var(--color-ui-radio-button-selected)] h-2 rounded-full transition-all duration-300 ease-out"
+					class="h-2 rounded-full bg-[var(--color-ui-radio-button-selected)] transition-all duration-300 ease-out"
 					:style="{ width: `${loading.percentage}%` }"
 				></div>
 			</div>

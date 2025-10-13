@@ -1,5 +1,5 @@
 <template>
-	<div v-if="store.selectedObject" class="flex flex-col gap-1 items-end mr-[20%]">
+	<div v-if="store.selectedObject" class="mr-[20%] flex flex-col items-end gap-1">
 		<NumberFieldRoot
 			v-for="item in items"
 			:key="'input_' + item.field"
@@ -9,11 +9,11 @@
 			class="block text-sm"
 		>
 			<span class="mr-2">{{ item.label }}</span>
-			<div class="inline-block bg-(--color-ui-number-field-inner) rounded-sm">
+			<div class="inline-block rounded-sm bg-(--color-ui-number-field-inner)">
 				<NumberFieldDecrement>
 					<IconChevronRight class="rotate-180" />
 				</NumberFieldDecrement>
-				<NumberFieldInput class="outline-none text-center w-40" />
+				<NumberFieldInput class="w-40 text-center outline-none" />
 				<NumberFieldIncrement>
 					<IconChevronRight />
 				</NumberFieldIncrement>

@@ -67,9 +67,9 @@ const toolbarItems = [
 @reference 'tailwindcss/theme';
 
 .toolbar {
-	@apply absolute left-2.5 top-10 flex flex-col text-3xl;
+	@apply absolute top-10 left-2.5 flex flex-col text-3xl;
 	& > button {
-		@apply bg-(--color-ui-toolbar-inner) cursor-pointer p-1 border-[0.5px] border-(--color-ui-toolbar-outline) first:rounded-t-md last:rounded-b-md;
+		@apply cursor-pointer border-[0.5px] border-(--color-ui-toolbar-outline) bg-(--color-ui-toolbar-inner) p-1 first:rounded-t-md last:rounded-b-md;
 	}
 	.selected {
 		@apply bg-(--color-ui-toolbar-selected);

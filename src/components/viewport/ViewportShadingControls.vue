@@ -22,7 +22,7 @@
 				<span v-html="btn.tooltip.title"></span>
 				<!-- eslint-enable -->
 				<p class="mt-1">Method to display/shade objects in the 3D View</p>
-				<span class="opacity-50 text-[.9em]">{{ btn.tooltip.footer }}</span>
+				<span class="text-[.9em] opacity-50">{{ btn.tooltip.footer }}</span>
 			</template>
 		</MTooltip>
 	</div>
@@ -90,13 +90,13 @@ interface ShadingControlsElement {
 @reference 'tailwindcss/theme';
 
 .shading-btn {
-	@apply bg-(--color-ui-radio-button-inner) p-0.5 cursor-pointer;
+	@apply cursor-pointer bg-(--color-ui-radio-button-inner) p-0.5;
 	&.selected {
 		@apply bg-(--color-ui-radio-button-selected);
 	}
 }
 
 :deep(em) {
-	@apply not-italic text-[#4772B3];
+	@apply text-[#4772B3] not-italic;
 }
 </style>

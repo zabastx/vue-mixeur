@@ -17,6 +17,7 @@ import type {
 } from 'three/examples/jsm/Addons.js'
 import { useShadingControls } from '@/three/utils/renderer/shading'
 import { useProgressStore, type LoadingProgress } from './progress'
+import { disposeModel } from '@/three/utils/core/dispose'
 
 export const useThreeStore = defineStore('three', () => {
 	const scene = new THREE.Scene()
@@ -184,6 +185,29 @@ export const useThreeStore = defineStore('three', () => {
 	}
 	// _____________________________
 
+	function deleteFromScene(object: THREE.Object3D) {
+		transformControls.value?.detach()
+
+		scene.remove(object)
+
+		const index = sceneObjects.value.indexOf(object)
+		if (index !== -1) {
+			sceneObjects.value.splice(index, 1)
+		}
+
+		if (selectedObject.value === object) {
+			selectedObject.value = null
+		}
+
+		if (outlinePass.value) {
+			outlinePass.value.selectedObjects = outlinePass.value.selectedObjects.filter(
+				(selected) => selected !== object
+			)
+		}
+
+		disposeModel(object)
+	}
+
 	const selectedObject = ref<THREE.Object3D<THREE.Object3DEventMap> | null>(null)
 
 	return {
@@ -198,6 +222,7 @@ export const useThreeStore = defineStore('three', () => {
 		addObjectToScene,
 		currentShadingMode: shadingControls.currentMode,
 		setTransformMode,
-		currentTransformMode
+		currentTransformMode,
+		deleteFromScene
 	}
 })

@@ -44,6 +44,22 @@ export const useAppStore = defineStore('app', () => {
 				case 'Numpad9': // Bottom view
 					setView(0, 1, 0, !e.ctrlKey)
 					break
+
+				case 'KeyG':
+					sceneStore.setTransformMode('translate')
+					break
+				case 'KeyR':
+					sceneStore.setTransformMode('rotate')
+					break
+				case 'KeyS':
+					sceneStore.setTransformMode('scale')
+					break
+
+				case 'Delete':
+					if (sceneStore.selectedObject) {
+						sceneStore.deleteFromScene(sceneStore.selectedObject)
+					}
+					break
 			}
 		})
 

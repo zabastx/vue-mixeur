@@ -29,7 +29,7 @@
 							{{ item.label }}
 							<IconTriangle class="ml-auto text-xs" />
 						</MenubarSubTrigger>
-						<MenubarSubContent :side-offset="5" :align-offset="-5" class="menubar-content">
+						<MenubarSubContent :align-offset="-3" class="menubar-content">
 							<MenubarItem
 								v-for="subitem in item.items"
 								:key="subitem.key"
@@ -55,7 +55,7 @@
 
 <script lang="ts" setup>
 import { MenubarCheckboxItem, MenubarSeparator } from 'reka-ui'
-import type { Component, Ref } from 'vue'
+import type { Component, ComputedRef, Ref } from 'vue'
 
 const { items } = defineProps<{
 	items: IMenubarMenu[]
@@ -75,7 +75,7 @@ interface IMenubarItem extends IMenubarCommon {
 
 interface IMenubarCheckbox extends IMenubarCommon {
 	type: 'checkbox'
-	model: Ref<boolean>
+	model: Ref<boolean> | ComputedRef<boolean>
 }
 
 interface IMenubarSub extends IMenubarCommon {

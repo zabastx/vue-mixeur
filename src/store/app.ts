@@ -32,16 +32,16 @@ export const useAppStore = defineStore('app', () => {
 					sceneStore.switchCamera()
 					break
 
-				case 'Numpad1': // Front / Back view
+				case 'Numpad1': // Front view
 					setView(0, 0, 1, e.ctrlKey)
 					break
-				case 'Numpad3': // Right / Left view
+				case 'Numpad3': // Right view
 					setView(1, 0, 0, e.ctrlKey)
 					break
-				case 'Numpad7': // Top / Bottom view
+				case 'Numpad7': // Top view
 					setView(0, 1, 0, e.ctrlKey)
 					break
-				case 'Numpad9': // Top / Bottom view
+				case 'Numpad9': // Bottom view
 					setView(0, 1, 0, !e.ctrlKey)
 					break
 			}
@@ -82,5 +82,7 @@ export const useAppStore = defineStore('app', () => {
 		}
 	}
 
-	return { pointerOnCanvas, isCtrlDown, isShiftDown, useHotKeys }
+	const showStatusBar = ref(true)
+
+	return { pointerOnCanvas, isCtrlDown, isShiftDown, useHotKeys, showStatusBar }
 })

@@ -1,32 +1,49 @@
 <template>
-	<TooltipProvider :delay-duration="300" disable-hoverable-content>
-		<div class="flex h-full flex-col bg-gray-900 font-sans text-gray-200">
-			<TopBar />
+	<ToastProvider>
+		<TooltipProvider :delay-duration="300" disable-hoverable-content>
+			<div class="flex h-full flex-col bg-gray-900 font-sans text-gray-200">
+				<TopBar />
 
-			<main
-				class="grid min-h-0 flex-1 grid-cols-(--main-cols) bg-(--color-editor-border) p-1 select-none"
-			>
-				<MViewport class="block-border" />
-				<div ref="divider" class="divider w-1 cursor-col-resize"></div>
-				<MSidebar />
-			</main>
+				<main
+					class="grid min-h-0 flex-1 grid-cols-(--main-cols) bg-(--color-editor-border) p-1 select-none"
+				>
+					<MViewport class="block-border" />
+					<div ref="divider" class="divider w-1 cursor-col-resize"></div>
+					<MSidebar />
+				</main>
 
-			<StatusBar />
+				<StatusBar v-show="appStore.showStatusBar" />
 
-			<ModelLoadingProgress />
-		</div>
-	</TooltipProvider>
+				<ModelLoadingProgress />
+				<MToast ref="toastRef" />
+			</div>
+		</TooltipProvider>
+	</ToastProvider>
 </template>
 
 <script lang="ts" setup>
-import { ref, useTemplateRef } from 'vue'
+import { ref, useTemplateRef, onMounted } from 'vue'
 import MSidebar from './components/sidebar/MSidebar.vue'
 import { useEventListener } from '@vueuse/core'
 import MViewport from './components/viewport/MViewport.vue'
 import StatusBar from './components/status/StatusBar.vue'
 import TopBar from './components/header/TopBar.vue'
 import ModelLoadingProgress from './components/utils/ModelLoadingProgress.vue'
-import { TooltipProvider } from 'reka-ui'
+import MToast from './components/utils/MToast.vue'
+import { ToastProvider, TooltipProvider } from 'reka-ui'
+import { useAppStore } from './store/app'
+import { useToast } from './composables/useToast'
+
+const appStore = useAppStore()
+
+const { setToastInstance } = useToast()
+const toastRef = useTemplateRef('toastRef')
+
+onMounted(() => {
+	if (toastRef.value) {
+		setToastInstance(toastRef.value)
+	}
+})
 
 const divider = useTemplateRef('divider')
 const rightWidth = ref(window.innerWidth * 0.3)

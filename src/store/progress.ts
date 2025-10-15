@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export interface LoadingProgress {
@@ -61,3 +61,7 @@ export const useProgressStore = defineStore('progress', () => {
 		getActiveLoadings
 	}
 })
+
+if (import.meta.hot) {
+	import.meta.hot.accept(acceptHMRUpdate(useProgressStore, import.meta.hot))
+}

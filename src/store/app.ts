@@ -1,5 +1,5 @@
 import { useEventListener } from '@vueuse/core'
-import { defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 import { ref, type ShallowRef } from 'vue'
 import { useThreeStore } from './three'
 import THREE from '@/three'
@@ -102,3 +102,7 @@ export const useAppStore = defineStore('app', () => {
 
 	return { pointerOnCanvas, isCtrlDown, isShiftDown, useHotKeys, showStatusBar }
 })
+
+if (import.meta.hot) {
+	import.meta.hot.accept(acceptHMRUpdate(useAppStore, import.meta.hot))
+}

@@ -1,5 +1,5 @@
 import type { ViewportGizmo } from 'three-viewport-gizmo'
-import { defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 import { ref, shallowRef, toRaw, triggerRef, watch, type ShallowRef } from 'vue'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import THREE, { enableBVH } from '@/three'
@@ -226,3 +226,7 @@ export const useThreeStore = defineStore('three', () => {
 		deleteFromScene
 	}
 })
+
+if (import.meta.hot) {
+	import.meta.hot.accept(acceptHMRUpdate(useThreeStore, import.meta.hot))
+}

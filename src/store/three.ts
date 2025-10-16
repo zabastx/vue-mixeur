@@ -10,14 +10,17 @@ import { setRaycaster } from '@/three/utils/core/raycaster'
 import { useEventListener } from '@vueuse/core'
 import { createComposer } from '@/three/utils/postprocess/composer'
 import { cameraSetup } from '@/three/utils/camera/setup'
-import type {
-	OutlinePass,
-	TransformControls,
-	TransformControlsMode
+import {
+	RectAreaLightHelper,
+	type OutlinePass,
+	type TransformControls,
+	type TransformControlsMode
 } from 'three/examples/jsm/Addons.js'
 import { useShadingControls } from '@/three/utils/renderer/shading'
 import { useProgressStore, type LoadingProgress } from './progress'
 import { disposeModel } from '@/three/utils/core/dispose'
+import { createLight, type LightHelper } from '@/three/utils/light'
+import Stats from 'three/examples/jsm/libs/stats.module.js'
 
 export const useThreeStore = defineStore('three', () => {
 	const scene = new THREE.Scene()
@@ -36,8 +39,11 @@ export const useThreeStore = defineStore('three', () => {
 	// _____________________________
 
 	const outlinePass = ref<OutlinePass>()
-	const sceneObjects = ref<THREE.Object3D[]>([])
 	const shadingControls = useShadingControls(scene)
+
+	const sceneObjects = ref<THREE.Object3D[]>([])
+	const helperObjects = ref<THREE.Object3D[]>([])
+	const raycasterObjects = ref<THREE.Object3D[]>([])
 
 	// Transform controls
 	const transformControls = shallowRef<TransformControls>()
@@ -49,9 +55,16 @@ export const useThreeStore = defineStore('three', () => {
 	}
 	// ___________________________
 
+	const stats = new Stats()
+	stats.dom.style.position = 'absolute'
+	stats.dom.style.top = 'initial'
+	stats.dom.style.bottom = '0px'
+
 	async function initScene(canvasRef: ShallowRef<HTMLCanvasElement | null>) {
 		if (!canvasRef.value) return
 		const canvas = canvasRef.value
+
+		if (import.meta.env.DEV) canvas.parentElement?.appendChild(stats.dom)
 
 		if (!(activeCamera.value instanceof THREE.PerspectiveCamera)) return
 		activeCamera.value.aspect = canvas.clientWidth / canvas.clientHeight
@@ -60,6 +73,7 @@ export const useThreeStore = defineStore('three', () => {
 
 		const newComposer = createComposer(canvas, scene, activeCamera)
 		outlinePass.value = newComposer.outlinePass
+
 		const { renderer, composer, resizeRendererToDisplaySize } = newComposer
 
 		const grid = setGridHelper(scene)
@@ -76,12 +90,27 @@ export const useThreeStore = defineStore('three', () => {
 
 		const clock = new THREE.Clock()
 
-		const pointLight = new THREE.PointLight(0xffffff, 1)
-		pointLight.position.set(0, 5, 0)
-		const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.5)
-		// addObjectToScene(pointLight)
-		scene.add(pointLight)
-		addObjectToScene(pointLightHelper)
+		const pointLightHelper = createLight({ type: 'point' })
+		pointLightHelper.light.position.set(4, 5, 1)
+		addLightHelperToScene(pointLightHelper)
+
+		blenderControls.transformControls.addEventListener('object-changed', (e) => {
+			const object = e.target.object as unknown as THREE.Object3D | LightHelper | undefined
+			if (e.target.object && outlinePass.value) {
+				outlinePass.value.enabled = false
+			} else if (outlinePass.value) {
+				outlinePass.value.enabled = true
+			}
+			if (!object) return
+
+			if ('light' in object) {
+				blenderControls.transformControls.attach(object.light)
+			}
+
+			if (object.userData.skipRaycast && object.parent) {
+				blenderControls.transformControls.attach(object.parent)
+			}
+		})
 
 		shadingControls.init()
 
@@ -99,6 +128,7 @@ export const useThreeStore = defineStore('three', () => {
 
 			grid.update(activeCamera.value)
 			controls.value?.update(delta)
+			stats.update()
 			composer.render(delta)
 			gizmo.value?.render()
 		}
@@ -115,7 +145,7 @@ export const useThreeStore = defineStore('three', () => {
 			if (wasDragging) return (wasDragging = false)
 
 			raycaster.setFromCamera(pointer, activeCamera.value)
-			const intersects = raycaster.intersectObjects(toRaw(sceneObjects.value), true)
+			const intersects = raycaster.intersectObjects(toRaw(raycasterObjects.value), true)
 			if (intersects[0]) {
 				const selected = intersects[0].object
 				blenderControls.transformControls.attach(selected)
@@ -129,19 +159,37 @@ export const useThreeStore = defineStore('three', () => {
 		})
 	}
 
-	function addObjectToScene(object: THREE.Object3D) {
+	function addModelToScene(object: THREE.Object3D) {
 		enableBVH(object)
 		object.traverse((obj) => {
 			if (obj instanceof THREE.Mesh) {
 				obj.castShadow = true
 				obj.receiveShadow = true
 				obj.userData.isShadable = true
+				;(obj.material as THREE.Material).dithering = true
 			}
 		})
 		scene.add(object)
 		sceneObjects.value.push(object)
+		raycasterObjects.value.push(object)
 
 		shadingControls.cacheNewObjectMaterials(object)
+		selectedObject.value = object
+		transformControls.value?.attach(object)
+	}
+
+	function addLightHelperToScene(helper: LightHelper) {
+		scene.add(helper.light)
+		scene.add(helper)
+
+		if (shadingControls.currentMode.value !== 'rendered') {
+			helper.light.visible = false
+		}
+
+		raycasterObjects.value.push(helper)
+		helperObjects.value.push(helper)
+		selectedObject.value = helper
+		transformControls.value?.attach(helper.light)
 	}
 
 	/**
@@ -187,7 +235,7 @@ export const useThreeStore = defineStore('three', () => {
 			const model = await loadModel(...params)
 			if (!model) return
 			model.name = model.name || modelName
-			addObjectToScene(model)
+			addModelToScene(model)
 		} finally {
 			progressStore.finishLoading(loadingId)
 		}
@@ -197,11 +245,31 @@ export const useThreeStore = defineStore('three', () => {
 	function deleteFromScene(object: THREE.Object3D) {
 		transformControls.value?.detach()
 
-		scene.remove(object)
+		if (
+			object instanceof THREE.PointLightHelper ||
+			object instanceof THREE.SpotLightHelper ||
+			object instanceof THREE.DirectionalLightHelper ||
+			object instanceof RectAreaLightHelper
+		) {
+			if (object.light) {
+				scene.remove(object.light)
+				disposeModel(object.light)
+			}
+		}
 
-		const index = sceneObjects.value.indexOf(object)
-		if (index !== -1) {
-			sceneObjects.value.splice(index, 1)
+		const sceneObjIdx = sceneObjects.value.indexOf(object)
+		if (sceneObjIdx !== -1) {
+			sceneObjects.value.splice(sceneObjIdx, 1)
+		}
+
+		const helperObjIdx = helperObjects.value.indexOf(object)
+		if (helperObjIdx !== -1) {
+			helperObjects.value.splice(helperObjIdx, 1)
+		}
+
+		const raycasterObjIdx = raycasterObjects.value.indexOf(object)
+		if (raycasterObjIdx !== -1) {
+			raycasterObjects.value.splice(raycasterObjIdx, 1)
 		}
 
 		if (selectedObject.value === object) {
@@ -228,11 +296,13 @@ export const useThreeStore = defineStore('three', () => {
 		selectedObject,
 		controls,
 		sceneObjects,
-		addObjectToScene,
+		addModelToScene,
 		currentShadingMode: shadingControls.currentMode,
 		setTransformMode,
 		currentTransformMode,
-		deleteFromScene
+		deleteFromScene,
+		transformControls,
+		addLightHelperToScene
 	}
 })
 

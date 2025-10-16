@@ -20,6 +20,14 @@ import {
 	IconMeshSphere,
 	IconMeshTorus
 } from '../icons/mesh'
+import { createLight } from '@/three/utils/light'
+import {
+	IconLight,
+	IconLightArea,
+	IconLightPoint,
+	IconLightSpot,
+	IconLightSun
+} from '../icons/light'
 
 const menuItems: IMenubarMenu[] = [
 	{
@@ -104,6 +112,54 @@ const menuItems: IMenubarMenu[] = [
 						}
 					}
 				]
+			},
+			{
+				type: 'separator',
+				key: 'sep1'
+			},
+			{
+				type: 'sub',
+				key: 'light',
+				label: 'Light',
+				icon: IconLight,
+				items: [
+					{
+						type: 'item',
+						key: 'light_point',
+						label: 'Point',
+						icon: IconLightPoint,
+						onClick() {
+							addLight('point')
+						}
+					},
+					{
+						type: 'item',
+						key: 'light_spot',
+						label: 'Spot',
+						icon: IconLightSpot,
+						onClick() {
+							addLight('spot')
+						}
+					},
+					{
+						type: 'item',
+						key: 'light_directional',
+						label: 'Directional',
+						icon: IconLightSun,
+						onClick() {
+							addLight('directional')
+						}
+					},
+					{
+						type: 'item',
+						key: 'light_area',
+						label: 'Area',
+						icon: IconLightArea,
+						onClick() {
+							addLight('area')
+						}
+					}
+				]
 			}
 		]
 	}
@@ -113,7 +169,12 @@ const threeStore = useThreeStore()
 
 function addMesh(type: Parameters<typeof createMesh>[0]) {
 	const mesh = createMesh(type)
-	threeStore.addObjectToScene(mesh)
+	threeStore.addModelToScene(mesh)
+}
+
+function addLight(type: Parameters<typeof createLight>['0']['type']) {
+	const light = createLight({ type })
+	threeStore.addLightHelperToScene(light)
 }
 </script>
 

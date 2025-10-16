@@ -47,19 +47,33 @@ import { RectAreaLightHelper } from 'three/examples/jsm/Addons.js'
  * ```
  */
 export function createLight({ type, parameters }: CreateLightParams) {
+	let helper
+
 	switch (type) {
 		case 'point':
-			return createPointLight(parameters)
+			helper = createPointLight(parameters)
+			break
 
 		case 'directional':
-			return createDirectionalLight(parameters)
+			helper = createDirectionalLight(parameters)
+			break
 
 		case 'spot':
-			return createSpotLight(parameters)
+			helper = createSpotLight(parameters)
+			break
 
 		case 'area':
-			return createAreaLight(parameters)
+			helper = createAreaLight(parameters)
+			break
 	}
+
+	helper.light.name = `${type}Light`
+	helper.name = `${type}LightHelper`
+	helper.userData.isSceneLight = true
+	helper.children.forEach((child) => {
+		child.userData.skipRaycast = true
+	})
+	return helper
 }
 
 function createPointLight(parameters: PointLightOptions['parameters']) {
@@ -69,21 +83,17 @@ function createPointLight(parameters: PointLightOptions['parameters']) {
 		parameters?.distance,
 		parameters?.decay
 	)
+	light.shadow.bias = -0.0001
 	light.castShadow = true
-	light.name = 'pointLight'
 	const helper = new THREE.PointLightHelper(light, 0.5)
-	helper.name = 'pointLightHelper'
-	helper.userData.isSceneLight = true
 	return helper
 }
 
 function createDirectionalLight(parameters: DirectionalLightOptions['parameters']) {
 	const light = new THREE.DirectionalLight(parameters?.color, parameters?.intensity)
+	light.shadow.bias = -0.0001
 	light.castShadow = true
-	light.name = 'directionalLight'
-	const helper = new THREE.DirectionalLightHelper(light, 0.5)
-	helper.name = 'directionalLightHelper'
-	helper.userData.isSceneLight = true
+	const helper = new THREE.DirectionalLightHelper(light, 1)
 	return helper
 }
 
@@ -95,10 +105,7 @@ function createSpotLight(parameters: SpotLightOptions['parameters']) {
 		parameters?.angle
 	)
 	light.castShadow = true
-	light.name = 'spotLight'
 	const helper = new THREE.SpotLightHelper(light)
-	helper.name = 'spotLightHelper'
-	helper.userData.isSceneLight = true
 	return helper
 }
 
@@ -109,10 +116,7 @@ function createAreaLight(parameters: AreaLightOptions['parameters']) {
 		parameters?.width,
 		parameters?.height
 	)
-	light.name = 'areaLight'
 	const helper = new RectAreaLightHelper(light)
-	helper.name = 'areaLightHelper'
-	helper.userData.isSceneLight = true
 	return helper
 }
 

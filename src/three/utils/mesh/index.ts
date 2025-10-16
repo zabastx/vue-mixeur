@@ -43,7 +43,8 @@ export function createMesh(type: GeometryTypes) {
 	}
 	const material = new THREE.MeshPhysicalMaterial()
 	const mesh = new THREE.Mesh(geometry, material)
-	const count = (meshCountMap.get(type) ?? 0) + 1
+	meshCountMap.set(type, (meshCountMap.get(type) ?? 0) + 1)
+	const count = meshCountMap.get(type) ?? 0
 	mesh.name = `${type}.${count.toString().padStart(3, '0')}`
 	return mesh
 }

@@ -9,6 +9,7 @@ export function setGridHelper(scene: THREE.Scene) {
 
 	const axes = new THREE.AxesHelper(1000)
 	axes.renderOrder = 3
+	axes.name = 'AxesHelper'
 	scene.add(axes)
 	return grid
 }

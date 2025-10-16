@@ -103,8 +103,17 @@ export const useThreeStore = defineStore('three', () => {
 			gizmo.value?.render()
 		}
 
+		let wasDragging = false
+
+		blenderControls.transformControls.addEventListener('dragging-changed', (e) => {
+			wasDragging = !e.value // Set flag when dragging ends
+		})
+
 		useEventListener(canvasRef, 'click', () => {
 			if (!outlinePass.value) return
+
+			if (wasDragging) return (wasDragging = false)
+
 			raycaster.setFromCamera(pointer, activeCamera.value)
 			const intersects = raycaster.intersectObjects(toRaw(sceneObjects.value), true)
 			if (intersects[0]) {

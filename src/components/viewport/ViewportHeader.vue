@@ -7,10 +7,19 @@
 
 <script lang="ts" setup>
 import { useThreeStore } from '@/store/three'
-import { createCube } from '@/three/utils/mesh/cube'
 import MenuBar, { type IMenubarMenu } from '../utils/MenuBar.vue'
-import IconMesh from '../icons/mesh/IconMesh.vue'
-import IconMeshCube from '../icons/mesh/IconMeshCube.vue'
+import { createMesh } from '@/three/utils/mesh'
+import {
+	IconMeshPlane,
+	IconMesh,
+	IconMeshCircle,
+	IconMeshCone,
+	IconMeshCube,
+	IconMeshCylinder,
+	IconMeshIcosphere,
+	IconMeshSphere,
+	IconMeshTorus
+} from '../icons/mesh'
 
 const menuItems: IMenubarMenu[] = [
 	{
@@ -24,10 +33,75 @@ const menuItems: IMenubarMenu[] = [
 				items: [
 					{
 						type: 'item',
+						key: 'mesh_plane',
+						label: 'Plane',
+						icon: IconMeshPlane,
+						onClick() {
+							addMesh('plane')
+						}
+					},
+					{
+						type: 'item',
 						key: 'mesh_cube',
 						label: 'Cube',
 						icon: IconMeshCube,
-						onClick: addCube
+						onClick() {
+							addMesh('cube')
+						}
+					},
+					{
+						type: 'item',
+						key: 'mesh_circle',
+						label: 'Circle',
+						icon: IconMeshCircle,
+						onClick() {
+							addMesh('circle')
+						}
+					},
+					{
+						type: 'item',
+						key: 'mesh_sphere',
+						label: 'UV Sphere',
+						icon: IconMeshSphere,
+						onClick() {
+							addMesh('sphere')
+						}
+					},
+					{
+						type: 'item',
+						key: 'mesh_icosphere',
+						label: 'Ico Sphere',
+						icon: IconMeshIcosphere,
+						onClick() {
+							addMesh('icosphere')
+						}
+					},
+					{
+						type: 'item',
+						key: 'mesh_cylinder',
+						label: 'Cylinder',
+						icon: IconMeshCylinder,
+						onClick() {
+							addMesh('cylinder')
+						}
+					},
+					{
+						type: 'item',
+						key: 'mesh_cone',
+						label: 'Cone',
+						icon: IconMeshCone,
+						onClick() {
+							addMesh('cone')
+						}
+					},
+					{
+						type: 'item',
+						key: 'mesh_torus',
+						label: 'Torus',
+						icon: IconMeshTorus,
+						onClick() {
+							addMesh('torus')
+						}
 					}
 				]
 			}
@@ -37,9 +111,9 @@ const menuItems: IMenubarMenu[] = [
 
 const threeStore = useThreeStore()
 
-function addCube() {
-	const cube = createCube()
-	threeStore.addObjectToScene(cube)
+function addMesh(type: Parameters<typeof createMesh>[0]) {
+	const mesh = createMesh(type)
+	threeStore.addObjectToScene(mesh)
 }
 </script>
 

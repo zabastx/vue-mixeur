@@ -108,5 +108,8 @@ interface IMenubarCommon {
 	&[data-highlighted] {
 		@apply text-(--color-ui-menu-item-selected) data-[highlighted]:bg-gray-500;
 	}
+	& > :first-child {
+		@apply text-sm;
+	}
 }
 </style>

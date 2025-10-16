@@ -1,0 +1,5 @@
+export { default as IconLight } from './IconLight.vue'
+export { default as IconLightPoint } from './IconLightPoint.vue'
+export { default as IconLightSun } from './IconLightSun.vue'
+export { default as IconLightSpot } from './IconLightSpot.vue'
+export { default as IconLightArea } from './IconLightArea.vue'

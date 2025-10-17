@@ -51,6 +51,7 @@ declare module 'vue' {
     IconTriangle: typeof import('./components/icons/base/IconTriangle.vue')['default']
     IconViewOrtho: typeof import('./components/icons/view/IconViewOrtho.vue')['default']
     IconViewPerspective: typeof import('./components/icons/view/IconViewPerspective.vue')['default']
+    InputNumber: typeof import('./components/input/InputNumber.vue')['default']
     KeymapInformation: typeof import('./components/status/KeymapInformation.vue')['default']
     MaterialProperties: typeof import('./components/data/properties/MaterialProperties.vue')['default']
     MenuBar: typeof import('./components/utils/MenuBar.vue')['default']

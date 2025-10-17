@@ -87,7 +87,7 @@ src/
 ├── composables/        # Vue composables
 ├── store/              # Pinia stores
 ├── three/              # Three.js utilities
-│   ├── utils/          # Scene management, loaders, etc.
+│   ├── modules/          # Scene management, loaders, etc.
 │   └── index.ts        # Three.js setup with BVH
 └── assets/             # Static assets
 ```

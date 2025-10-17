@@ -1,4 +1,4 @@
-import type { loadModel } from '@/three/utils/loaders/modelLoader'
+import type { loadModel } from '@/three/modules/loaders/modelLoader'
 
 export async function getFile(format: Parameters<typeof loadModel>[0]['format']) {
 	return new Promise<{

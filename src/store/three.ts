@@ -3,23 +3,23 @@ import { acceptHMRUpdate, defineStore } from 'pinia'
 import { ref, shallowRef, toRaw, triggerRef, watch, type ShallowRef } from 'vue'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import THREE, { enableBVH } from '@/three'
-import { setGridHelper } from '@/three/utils/helpers/grid'
-import { setupBlenderControls } from '@/three/utils/controls/blenderControls'
-import { loadModel } from '@/three/utils/loaders/modelLoader'
-import { setRaycaster } from '@/three/utils/core/raycaster'
+import { setGridHelper } from '@/three/modules/helpers/grid'
+import { setupBlenderControls } from '@/three/modules/controls/blenderControls'
+import { loadModel } from '@/three/modules/loaders/modelLoader'
+import { setRaycaster } from '@/three/modules/core/raycaster'
 import { useEventListener } from '@vueuse/core'
-import { createComposer } from '@/three/utils/postprocess/composer'
-import { cameraSetup } from '@/three/utils/camera/setup'
+import { createComposer } from '@/three/modules/postprocess/composer'
+import { cameraSetup } from '@/three/modules/camera/setup'
 import {
 	RectAreaLightHelper,
 	type OutlinePass,
 	type TransformControls,
 	type TransformControlsMode
 } from 'three/examples/jsm/Addons.js'
-import { useShadingControls } from '@/three/utils/renderer/shading'
+import { useShadingControls } from '@/three/modules/renderer/shading'
 import { useProgressStore, type LoadingProgress } from './progress'
-import { disposeModel } from '@/three/utils/core/dispose'
-import { createLight, type LightHelper } from '@/three/utils/light'
+import { disposeModel } from '@/three/modules/core/dispose'
+import { createLight, type LightHelper } from '@/three/modules/light'
 import Stats from 'three/examples/jsm/libs/stats.module.js'
 
 export const useThreeStore = defineStore('three', () => {

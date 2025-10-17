@@ -8,7 +8,7 @@
 <script lang="ts" setup>
 import { useThreeStore } from '@/store/three'
 import MenuBar, { type IMenubarMenu } from '../utils/MenuBar.vue'
-import { createMesh } from '@/three/utils/mesh'
+import { createMesh } from '@/three/modules/mesh'
 import {
 	IconMeshPlane,
 	IconMesh,
@@ -20,7 +20,7 @@ import {
 	IconMeshSphere,
 	IconMeshTorus
 } from '../icons/mesh'
-import { createLight } from '@/three/utils/light'
+import { createLight } from '@/three/modules/light'
 import {
 	IconLight,
 	IconLightArea,

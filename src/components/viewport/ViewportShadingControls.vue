@@ -30,7 +30,7 @@
 
 <script lang="ts" setup>
 import { useThreeStore } from '@/store/three'
-import type { ShadingMode } from '@/three/utils/renderer/ShadingControls'
+import type { ShadingMode } from '@/three/modules/renderer/ShadingControls'
 import IconShadingWireframe from '../icons/shading/IconShadingWireframe.vue'
 import type { Component } from 'vue'
 import IconShadingSolid from '../icons/shading/IconShadingSolid.vue'

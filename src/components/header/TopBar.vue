@@ -14,7 +14,7 @@ import { computed } from 'vue'
 import { useThreeStore } from '@/store/three'
 import { getFile } from '@/composables/getfile'
 import { useToast } from '@/composables/useToast'
-import type { loadModel } from '@/three/utils/loaders/modelLoader'
+import type { loadModel } from '@/three/modules/loaders/modelLoader'
 
 const appStore = useAppStore()
 

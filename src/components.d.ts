@@ -21,8 +21,6 @@ declare module 'vue' {
     IconCollection: typeof import('./components/icons/IconCollection.vue')['default']
     IconFullScreen: typeof import('./components/icons/misc/IconFullScreen.vue')['default']
     IconGithub: typeof import('./components/icons/misc/IconGithub.vue')['default']
-    IconGridOrthographic: typeof import('./components/icons/IconGridOrthographic.vue')['default']
-    IconGridPerspective: typeof import('./components/icons/IconGridPerspective.vue')['default']
     IconImport: typeof import('./components/icons/IconImport.vue')['default']
     IconLight: typeof import('./components/icons/light/IconLight.vue')['default']
     IconLightArea: typeof import('./components/icons/light/IconLightArea.vue')['default']

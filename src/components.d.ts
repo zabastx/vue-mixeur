@@ -8,6 +8,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AboutModal: typeof import('./components/modals/AboutModal.vue')['default']
     AccordionContent: typeof import('reka-ui')['AccordionContent']
     AccordionHeader: typeof import('reka-ui')['AccordionHeader']
     AccordionItem: typeof import('reka-ui')['AccordionItem']
@@ -50,6 +51,7 @@ declare module 'vue' {
     IconToolRotate: typeof import('./components/icons/toolbar/IconToolRotate.vue')['default']
     IconToolScale: typeof import('./components/icons/toolbar/IconToolScale.vue')['default']
     IconTriangle: typeof import('./components/icons/base/IconTriangle.vue')['default']
+    IconUrl: typeof import('./components/icons/misc/IconUrl.vue')['default']
     IconViewOrtho: typeof import('./components/icons/view/IconViewOrtho.vue')['default']
     IconViewPerspective: typeof import('./components/icons/view/IconViewPerspective.vue')['default']
     InputNumber: typeof import('./components/input/InputNumber.vue')['default']

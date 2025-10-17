@@ -6,7 +6,7 @@
 [![Vite](https://img.shields.io/badge/Vite-7.1.10-646CFF.svg)](https://vitejs.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6.svg)](https://www.typescriptlang.org/)
 
-A Blender-like web-based 3D editor and visualization tool built with Vue.js and Three.js. Vue Mixeur provides an intuitive interface for 3D modeling, object manipulation, and scene management directly in the browser.
+A Blender-like web-based 3D editor built with Vue.js and Three.js. Vue Mixeur provides an interface for 3D modeling, object manipulation, and scene management directly in the browser.
 
 ## Demo
 

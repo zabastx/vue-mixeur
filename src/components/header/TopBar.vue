@@ -1,6 +1,7 @@
 <template>
 	<header class="flex items-center bg-(--color-topbar-background) p-1 px-2">
 		<MenuBar :items="menuItems" />
+		<AboutModal v-model:open="aboutModalOpen" />
 		<a
 			href="https://github.com/zabastx/vue-mixeur"
 			class="ml-auto text-xl"
@@ -18,13 +19,15 @@ import IconImport from '../icons/IconImport.vue'
 import IconMixeur from '../icons/IconMixeur.vue'
 import IconFullScreen from '../icons/misc/IconFullScreen.vue'
 import MenuBar, { type IMenubarMenu } from '../utils/MenuBar.vue'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useThreeStore } from '@/store/three'
 import { getFile } from '@/composables/getfile'
 import { useToast } from '@/composables/useToast'
 import type { loadModel } from '@/three/modules/loaders/modelLoader'
+import AboutModal from '../modals/AboutModal.vue'
 
 const appStore = useAppStore()
+const aboutModalOpen = ref(false)
 
 const showStatusBar = computed({
 	get() {
@@ -40,17 +43,19 @@ const menuItems: IMenubarMenu[] = [
 		label: 'mixuer',
 		icon: IconMixeur,
 		items: [
-			{
-				type: 'item',
-				key: 'splash',
-				label: 'Splash Screen',
-				onClick() {}
-			},
+			// {
+			// 	type: 'item',
+			// 	key: 'splash',
+			// 	label: 'Splash Screen',
+			// 	onClick() {}
+			// },
 			{
 				type: 'item',
 				key: 'about',
 				label: 'About Mixeur',
-				onClick() {}
+				onClick() {
+					aboutModalOpen.value = true
+				}
 			}
 		]
 	},

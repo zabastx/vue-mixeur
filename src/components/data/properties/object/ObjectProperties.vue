@@ -20,11 +20,11 @@
 				</AccordionHeader>
 				<AccordionContent
 					v-if="threeStore.selectedObject"
-					class="animation-slide overflow-hidden bg-(--color-properties-panel-background) p-1 pb-2.5"
+					class="animation-slide overflow-hidden bg-(--color-properties-panel-background) p-1 pb-2.5 text-xs"
 				>
 					<TransformLocation />
-					<TransformRotation class="mt-2" />
-					<TransformScale class="mt-2" />
+					<TransformRotation class="mt-1" />
+					<TransformScale class="mt-1" />
 				</AccordionContent>
 			</AccordionItem>
 		</AccordionRoot>

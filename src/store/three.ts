@@ -44,6 +44,7 @@ export const useThreeStore = defineStore('three', () => {
 	const sceneObjects = ref<THREE.Object3D[]>([])
 	const helperObjects = ref<THREE.Object3D[]>([])
 	const raycasterObjects = ref<THREE.Object3D[]>([])
+	const selectedObject = ref<THREE.Object3D<THREE.Object3DEventMap> | null>(null)
 
 	// Transform controls
 	const transformControls = shallowRef<TransformControls>()
@@ -83,24 +84,20 @@ export const useThreeStore = defineStore('three', () => {
 		controls.value = blenderControls.controls
 		transformControls.value = blenderControls.transformControls
 		const transformHelper = blenderControls.transformControls.getHelper()
+		transformHelper.name = 'TransformHelper'
 		scene.add(transformHelper)
+
 		blenderControls.transformControls.addEventListener('objectChange', () => {
 			triggerRef(selectedObject)
 		})
 
-		const clock = new THREE.Clock()
-
-		const pointLightHelper = createLight({ type: 'point' })
-		pointLightHelper.light.position.set(4, 5, 1)
-		addLightHelperToScene(pointLightHelper)
-
 		blenderControls.transformControls.addEventListener('object-changed', (e) => {
 			const object = e.target.object as unknown as THREE.Object3D | LightHelper | undefined
-			if (e.target.object && outlinePass.value) {
-				outlinePass.value.enabled = false
-			} else if (outlinePass.value) {
-				outlinePass.value.enabled = true
-			}
+			// if (e.target.object && outlinePass.value) {
+			// 	outlinePass.value.enabled = false
+			// } else if (outlinePass.value) {
+			// 	outlinePass.value.enabled = true
+			// }
 			if (!object) return
 
 			if ('light' in object) {
@@ -112,8 +109,11 @@ export const useThreeStore = defineStore('three', () => {
 			}
 		})
 
-		shadingControls.init()
+		const pointLightHelper = createLight({ type: 'point' })
+		pointLightHelper.light.position.set(4, 5, 1)
+		addLightHelperToScene(pointLightHelper)
 
+		const clock = new THREE.Clock()
 		renderer.setAnimationLoop(render)
 
 		function render() {
@@ -153,8 +153,8 @@ export const useThreeStore = defineStore('three', () => {
 				selectedObject.value = selected
 			} else {
 				blenderControls.transformControls.detach()
-				outlinePass.value.selectedObjects = []
-				selectedObject.value = null
+				// outlinePass.value.selectedObjects = []
+				// selectedObject.value = null
 			}
 		})
 	}
@@ -176,6 +176,7 @@ export const useThreeStore = defineStore('three', () => {
 		shadingControls.cacheNewObjectMaterials(object)
 		selectedObject.value = object
 		transformControls.value?.attach(object)
+		if (outlinePass.value) outlinePass.value.selectedObjects = [object]
 	}
 
 	function addLightHelperToScene(helper: LightHelper) {
@@ -190,6 +191,8 @@ export const useThreeStore = defineStore('three', () => {
 		helperObjects.value.push(helper)
 		selectedObject.value = helper
 		transformControls.value?.attach(helper.light)
+
+		if (outlinePass.value) outlinePass.value.selectedObjects = [helper]
 	}
 
 	/**
@@ -285,7 +288,7 @@ export const useThreeStore = defineStore('three', () => {
 		disposeModel(object)
 	}
 
-	const selectedObject = ref<THREE.Object3D<THREE.Object3DEventMap> | null>(null)
+	shadingControls.init()
 
 	return {
 		initScene,

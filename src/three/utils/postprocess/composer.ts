@@ -25,8 +25,9 @@ export function createComposer(
 	composer.addPass(taaPass)
 
 	const outlinePass = new OutlinePass(new THREE.Vector2(width, height), scene, camera.value)
-	outlinePass.edgeStrength = 3
+	outlinePass.edgeStrength = 10
 	outlinePass.edgeThickness = 1
+	outlinePass.edgeGlow = 0
 	outlinePass.visibleEdgeColor.set('#ffaa00')
 	outlinePass.hiddenEdgeColor.set('#ffaa00')
 	composer.addPass(outlinePass)

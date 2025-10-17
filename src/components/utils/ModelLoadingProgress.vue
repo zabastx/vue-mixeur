@@ -3,16 +3,16 @@
 		<div
 			v-for="loading in activeLoadings"
 			:key="loading.id"
-			class="rounded-lg border border-[var(--color-editor-border)] bg-[var(--color-panel-background)] p-4 text-white shadow-lg"
+			class="rounded-lg border border-(--color-ui-menu-bg-outline) bg-(--color-panel-background) p-4 text-white shadow-lg"
 		>
 			<div class="mb-2 flex items-center justify-between">
 				<h3 class="truncate text-sm font-medium">{{ loading.filename }}</h3>
 				<span class="text-xs opacity-70">{{ Math.round(loading.percentage) }}%</span>
 			</div>
 
-			<div class="mb-2 h-2 w-full rounded-full bg-[var(--color-ui-number-field-inner)]">
+			<div class="mb-2 h-2 w-full rounded-full bg-(--color-ui-number-field-inner)">
 				<div
-					class="h-2 rounded-full bg-[var(--color-ui-radio-button-selected)] transition-all duration-300 ease-out"
+					class="h-2 rounded-full bg-(--color-ui-radio-button-selected) transition-all duration-300 ease-out"
 					:style="{ width: `${loading.percentage}%` }"
 				></div>
 			</div>

@@ -1,6 +1,14 @@
 <template>
-	<header class="bg-(--color-topbar-background) p-1 px-2">
+	<header class="flex items-center bg-(--color-topbar-background) p-1 px-2">
 		<MenuBar :items="menuItems" />
+		<a
+			href="https://github.com/zabastx/vue-mixeur"
+			class="ml-auto text-xl"
+			target="_blank"
+			title="GitHub repository"
+		>
+			<IconGithub />
+		</a>
 	</header>
 </template>
 

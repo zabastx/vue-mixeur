@@ -83,15 +83,15 @@ const menuItems: IMenubarMenu[] = [
 						onClick: () => {
 							importFile('obj')
 						}
-					},
-					{
-						type: 'item',
-						key: 'import_fbx',
-						label: 'FBX (.fbx)',
-						onClick: () => {
-							importFile('fbx')
-						}
 					}
+					// {
+					// 	type: 'item',
+					// 	key: 'import_fbx',
+					// 	label: 'FBX (.fbx)',
+					// 	onClick: () => {
+					// 		importFile('fbx')
+					// 	}
+					// }
 				]
 			}
 		]

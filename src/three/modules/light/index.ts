@@ -83,7 +83,7 @@ function createPointLight(parameters: PointLightOptions['parameters']) {
 		parameters?.distance,
 		parameters?.decay
 	)
-	light.shadow.bias = -0.0001
+	light.shadow.bias = -0.001
 	light.castShadow = true
 	const helper = new THREE.PointLightHelper(light, 0.5)
 	return helper

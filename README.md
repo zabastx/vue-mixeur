@@ -46,7 +46,6 @@ Try the live demo at [mixeur.zabastx.ru](https://mixeur.zabastx.ru)
 
 - GLTF/GLB
 - OBJ
-- FBX
 
 ## API Documentation
 

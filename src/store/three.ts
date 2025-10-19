@@ -125,11 +125,11 @@ export const useThreeStore = defineStore('three', () => {
 
 		blenderControls.transformControls.addEventListener('object-changed', (e) => {
 			const object = e.target.object as unknown as THREE.Object3D | LightHelper | undefined
-			// if (e.target.object && outlinePass.value) {
-			// 	outlinePass.value.enabled = false
-			// } else if (outlinePass.value) {
-			// 	outlinePass.value.enabled = true
-			// }
+			if (e.target.object && outlinePass.value) {
+				outlinePass.value.enabled = false
+			} else if (outlinePass.value) {
+				outlinePass.value.enabled = true
+			}
 			if (!object) return
 
 			if ('light' in object) {
@@ -142,7 +142,7 @@ export const useThreeStore = defineStore('three', () => {
 		})
 		// ______________________
 
-		const pointLightHelper = createLight({ type: 'point' })
+		const pointLightHelper = createLight({ type: 'point', parameters: { intensity: 10 } })
 		pointLightHelper.light.position.set(4, 5, 1)
 		addLightHelperToScene(pointLightHelper)
 
@@ -196,7 +196,6 @@ export const useThreeStore = defineStore('three', () => {
 	}
 
 	function addModelToScene(object: THREE.Object3D) {
-		enableBVH(object)
 		object.traverse((obj) => {
 			if (obj instanceof THREE.Mesh) {
 				obj.castShadow = true
@@ -205,6 +204,7 @@ export const useThreeStore = defineStore('three', () => {
 				;(obj.material as THREE.Material).dithering = true
 			}
 		})
+		enableBVH(object)
 		scene.add(object)
 		sceneObjects.value.push(object)
 		raycasterObjects.value.push(object)

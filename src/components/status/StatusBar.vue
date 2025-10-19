@@ -1,6 +1,6 @@
 <template>
 	<footer
-		class="flex h-6 items-center justify-end gap-1 bg-[#181818B3] px-2 py-1 text-xs text-(--color-header-text)"
+		class="flex h-6 items-center justify-end gap-1 bg-(--color-status-background) px-2 py-1 text-xs text-(--color-header-text)"
 	>
 		<KeymapInformation class="mr-auto" />
 		<template v-if="store.monitor.memory">

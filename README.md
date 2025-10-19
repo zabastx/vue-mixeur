@@ -151,6 +151,7 @@ See [LICENSE](LICENSE) for more details.
 - [Blender](https://www.blender.org/) - Inspiration for UI/UX patterns
 - [three-mesh-bvh](https://github.com/gkjohnson/three-mesh-bvh) - BVH acceleration
 - [three-viewport-gizmo](https://github.com/JamesLMilner/three-viewport-gizmo) - Camera gizmo
+- [ui.blender.org/icons](https://ui.blender.org/icons) - Blender Icons
 
 ## Contact
 

@@ -60,6 +60,23 @@ export const useThreeStore = defineStore('three', () => {
 	stats.dom.style.position = 'absolute'
 	stats.dom.style.top = 'initial'
 	stats.dom.style.bottom = '0px'
+	const monitor = ref({
+		memory: '',
+		geometries: 0,
+		textures: 0
+	})
+
+	function updateMonitor(renderer: THREE.WebGLRenderer) {
+		if ('memory' in performance) {
+			// @ts-expect-error Performance.memory is only available in Chrome
+			const used = (performance.memory.usedJSHeapSize / 1048576).toFixed(2)
+			monitor.value.memory = used
+		}
+
+		const gpu = renderer.info.memory
+		monitor.value.geometries = gpu.geometries
+		monitor.value.textures = gpu.textures
+	}
 
 	async function initScene(canvasRef: ShallowRef<HTMLCanvasElement | null>) {
 		if (!canvasRef.value) return
@@ -116,8 +133,11 @@ export const useThreeStore = defineStore('three', () => {
 		const clock = new THREE.Clock()
 		renderer.setAnimationLoop(render)
 
+		let passedTime = 0
+
 		function render() {
 			const delta = clock.getDelta()
+			passedTime += delta
 			if (resizeRendererToDisplaySize()) {
 				if (activeCamera.value instanceof THREE.PerspectiveCamera) {
 					activeCamera.value.aspect = canvas.clientWidth / canvas.clientHeight
@@ -131,6 +151,11 @@ export const useThreeStore = defineStore('three', () => {
 			stats.update()
 			composer.render(delta)
 			gizmo.value?.render()
+
+			if (passedTime > 1) {
+				passedTime = 0
+				updateMonitor(renderer)
+			}
 		}
 
 		let wasDragging = false
@@ -305,7 +330,8 @@ export const useThreeStore = defineStore('three', () => {
 		currentTransformMode,
 		deleteFromScene,
 		transformControls,
-		addLightHelperToScene
+		addLightHelperToScene,
+		monitor
 	}
 })
 

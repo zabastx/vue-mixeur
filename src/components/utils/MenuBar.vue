@@ -1,36 +1,36 @@
 <template>
-	<MenubarRoot loop>
-		<MenubarMenu v-for="menu in items" :key="menu.label">
-			<MenubarTrigger class="trigger">
+	<Menubar.Root loop>
+		<Menubar.Menu v-for="menu in items" :key="menu.label">
+			<Menubar.Trigger class="trigger">
 				<component :is="menu.icon" v-if="menu.icon" />
 				<span v-else>{{ menu.label }}</span>
-			</MenubarTrigger>
-			<MenubarContent class="menubar-content">
+			</Menubar.Trigger>
+			<Menubar.Content class="menubar-content">
 				<template v-for="item in menu.items" :key="item.key">
-					<MenubarItem v-if="item.type === 'item'" class="item" @click="item.onClick">
+					<Menubar.Item v-if="item.type === 'item'" class="item" @click="item.onClick">
 						<span class="w-[1em]">
 							<component :is="item.icon" v-if="item.icon" />
 						</span>
 						{{ item.label }}
-					</MenubarItem>
-					<MenubarCheckboxItem
+					</Menubar.Item>
+					<Menubar.CheckboxItem
 						v-else-if="item.type === 'checkbox'"
 						v-model="item.model.value"
 						class="item"
 					>
 						<IconCheckbox :checked="item.model.value" />
 						{{ item.label }}
-					</MenubarCheckboxItem>
-					<MenubarSub v-else-if="item.type === 'sub'">
-						<MenubarSubTrigger class="item">
+					</Menubar.CheckboxItem>
+					<Menubar.Sub v-else-if="item.type === 'sub'">
+						<Menubar.SubTrigger class="item">
 							<span class="w-[1em]">
 								<component :is="item.icon" v-if="item.icon" />
 							</span>
 							{{ item.label }}
-							<IconTriangle class="ml-auto text-xs" />
-						</MenubarSubTrigger>
-						<MenubarSubContent :align-offset="-3" class="menubar-content">
-							<MenubarItem
+							<IconTriangle class="ml-auto text-[0.7em]" />
+						</Menubar.SubTrigger>
+						<Menubar.SubContent :align-offset="-3" class="menubar-content">
+							<Menubar.Item
 								v-for="subitem in item.items"
 								:key="subitem.key"
 								class="item"
@@ -40,21 +40,21 @@
 									<component :is="subitem.icon" v-if="item.icon" />
 								</span>
 								{{ subitem.label }}
-							</MenubarItem>
-						</MenubarSubContent>
-					</MenubarSub>
-					<MenubarSeparator
+							</Menubar.Item>
+						</Menubar.SubContent>
+					</Menubar.Sub>
+					<Menubar.Separator
 						v-else-if="item.type === 'separator'"
 						class="h-[1px] bg-(--color-ui-menu-bg-outline)"
 					/>
 				</template>
-			</MenubarContent>
-		</MenubarMenu>
-	</MenubarRoot>
+			</Menubar.Content>
+		</Menubar.Menu>
+	</Menubar.Root>
 </template>
 
 <script lang="ts" setup>
-import { MenubarCheckboxItem, MenubarSeparator } from 'reka-ui'
+import { Menubar } from 'reka-ui/namespaced'
 import type { Component, ComputedRef, Ref } from 'vue'
 
 const { items } = defineProps<{

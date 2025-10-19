@@ -1,13 +1,13 @@
 <template>
-	<DialogRoot v-model:open="isOpen">
-		<DialogPortal>
-			<DialogOverlay class="fixed inset-0" />
-			<DialogContent
+	<Dialog.Root v-model:open="isOpen">
+		<Dialog.Portal>
+			<Dialog.Overlay class="fixed inset-0" />
+			<Dialog.Content
 				:aria-describedby="undefined"
 				class="fixed top-1/2 left-1/2 w-full max-w-xl -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded bg-(--color-editor-border) p-0"
 			>
 				<VisuallyHidden as-child>
-					<DialogTitle>About Mixuer</DialogTitle>
+					<Dialog.Title>About Mixuer</Dialog.Title>
 				</VisuallyHidden>
 				<div class="flex flex-col text-(--color-menu-bg-text)">
 					<!-- Header -->
@@ -58,22 +58,14 @@
 						</div>
 					</div>
 				</div>
-			</DialogContent>
-		</DialogPortal>
-	</DialogRoot>
+			</Dialog.Content>
+		</Dialog.Portal>
+	</Dialog.Root>
 </template>
 
 <script lang="ts" setup>
-import {
-	DialogRoot,
-	DialogPortal,
-	DialogOverlay,
-	DialogContent,
-	DialogTitle,
-	VisuallyHidden
-} from 'reka-ui'
-import IconMixeur from '../icons/IconMixeur.vue'
 import { version } from '../../../package.json'
+import { Dialog } from 'reka-ui/namespaced'
 
 const isOpen = defineModel<boolean>({ default: false })
 

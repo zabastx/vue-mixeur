@@ -129,7 +129,7 @@ const menuItems: IMenubarMenu[] = [
 						label: 'Point',
 						icon: IconLightPoint,
 						onClick() {
-							addLight('point')
+							addLight('PointLight')
 						}
 					},
 					{
@@ -138,7 +138,7 @@ const menuItems: IMenubarMenu[] = [
 						label: 'Spot',
 						icon: IconLightSpot,
 						onClick() {
-							addLight('spot')
+							addLight('SpotLight')
 						}
 					},
 					{
@@ -147,7 +147,7 @@ const menuItems: IMenubarMenu[] = [
 						label: 'Directional',
 						icon: IconLightSun,
 						onClick() {
-							addLight('directional')
+							addLight('DirectionalLight')
 						}
 					},
 					{
@@ -156,7 +156,7 @@ const menuItems: IMenubarMenu[] = [
 						label: 'Area',
 						icon: IconLightArea,
 						onClick() {
-							addLight('area')
+							addLight('RectAreaLight')
 						}
 					}
 				]

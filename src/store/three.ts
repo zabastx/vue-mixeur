@@ -24,6 +24,7 @@ import Stats from 'three/examples/jsm/libs/stats.module.js'
 
 export const useThreeStore = defineStore('three', () => {
 	const scene = new THREE.Scene()
+	const helperScene = new THREE.Scene()
 	scene.background = new THREE.Color('#3D3D3D')
 
 	// Camera controls
@@ -103,8 +104,7 @@ export const useThreeStore = defineStore('three', () => {
 		controls.value = blenderControls.controls
 		transformControls.value = blenderControls.transformControls
 		const transformHelper = blenderControls.transformControls.getHelper()
-		transformHelper.name = 'TransformHelper'
-		scene.add(transformHelper)
+		helperScene.add(transformHelper)
 
 		// Object selection
 		selectObject.value = (uuid?: string) => {
@@ -125,11 +125,6 @@ export const useThreeStore = defineStore('three', () => {
 
 		blenderControls.transformControls.addEventListener('object-changed', (e) => {
 			const object = e.target.object as unknown as THREE.Object3D | LightHelper | undefined
-			if (e.target.object && outlinePass.value) {
-				outlinePass.value.enabled = false
-			} else if (outlinePass.value) {
-				outlinePass.value.enabled = true
-			}
 			if (!object) return
 
 			if ('light' in object) {
@@ -167,6 +162,8 @@ export const useThreeStore = defineStore('three', () => {
 			stats.update()
 			composer.render(delta)
 			gizmo.value?.render()
+			renderer.clearDepth()
+			renderer.render(helperScene, activeCamera.value)
 
 			if (passedTime > 1) {
 				passedTime = 0

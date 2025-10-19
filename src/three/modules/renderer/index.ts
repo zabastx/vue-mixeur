@@ -13,7 +13,6 @@ export function createBlenderRenderer({
 }) {
 	const renderer = new THREE.WebGLRenderer({
 		canvas,
-		// antialias: true,
 		alpha: true,
 		precision: 'highp',
 		powerPreference: 'high-performance'
@@ -29,6 +28,7 @@ export function createBlenderRenderer({
 	renderer.toneMappingExposure = 1.0
 	renderer.shadowMap.enabled = true
 	renderer.shadowMap.type = THREE.PCFSoftShadowMap
+	renderer.autoClear = false
 
 	// HDRI evnironment
 	// if (hdriPath) {

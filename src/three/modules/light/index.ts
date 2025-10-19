@@ -50,25 +50,51 @@ export function createLight({ type, parameters }: CreateLightParams) {
 	let helper
 
 	switch (type) {
-		case 'point':
+		case 'PointLight':
 			helper = createPointLight(parameters)
 			break
 
-		case 'directional':
+		case 'DirectionalLight':
 			helper = createDirectionalLight(parameters)
 			break
 
-		case 'spot':
+		case 'SpotLight':
 			helper = createSpotLight(parameters)
 			break
 
-		case 'area':
+		case 'RectAreaLight':
 			helper = createAreaLight(parameters)
 			break
 	}
 
-	helper.light.name = `${type}Light`
-	helper.name = `${type}LightHelper`
+	helper.light.name = type
+	helper.name = `${type}Helper`
+	helper.userData.isSceneLight = true
+	helper.children.forEach((child) => {
+		child.userData.skipRaycast = true
+	})
+	return helper
+}
+
+export function getLightHelper(light: THREE.Light) {
+	let helper
+	switch (true) {
+		case light instanceof THREE.PointLight:
+			helper = new THREE.PointLightHelper(light, 0.5)
+			break
+		case light instanceof THREE.DirectionalLight:
+			helper = new THREE.DirectionalLightHelper(light, 1)
+			break
+		case light instanceof THREE.SpotLight:
+			helper = new THREE.SpotLightHelper(light)
+			break
+		case light instanceof THREE.RectAreaLight:
+			helper = new RectAreaLightHelper(light)
+			break
+	}
+	if (!helper) return
+	helper.light.name = light.type
+	helper.name = `${light.type}Helper`
 	helper.userData.isSceneLight = true
 	helper.children.forEach((child) => {
 		child.userData.skipRaycast = true
@@ -127,7 +153,7 @@ export type CreateLightParams =
 	| AreaLightOptions
 
 export interface PointLightOptions {
-	type: 'point'
+	type: 'PointLight'
 	parameters?: {
 		color?: ConstructorParameters<typeof THREE.PointLight>[0]
 		intensity?: ConstructorParameters<typeof THREE.PointLight>[1]
@@ -137,7 +163,7 @@ export interface PointLightOptions {
 }
 
 export interface DirectionalLightOptions {
-	type: 'directional'
+	type: 'DirectionalLight'
 	parameters?: {
 		color?: ConstructorParameters<typeof THREE.DirectionalLight>[0]
 		intensity?: ConstructorParameters<typeof THREE.DirectionalLight>[1]
@@ -145,7 +171,7 @@ export interface DirectionalLightOptions {
 }
 
 export interface SpotLightOptions {
-	type: 'spot'
+	type: 'SpotLight'
 	parameters?: {
 		color?: ConstructorParameters<typeof THREE.SpotLight>[0]
 		intensity?: ConstructorParameters<typeof THREE.SpotLight>[1]
@@ -155,7 +181,7 @@ export interface SpotLightOptions {
 }
 
 export interface AreaLightOptions {
-	type: 'area'
+	type: 'RectAreaLight'
 	parameters?: {
 		color?: ConstructorParameters<typeof THREE.RectAreaLight>[0]
 		intensity?: ConstructorParameters<typeof THREE.RectAreaLight>[1]

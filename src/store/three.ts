@@ -19,7 +19,7 @@ import {
 import { useShadingControls } from '@/three/modules/renderer/shading'
 import { useProgressStore, type LoadingProgress } from './progress'
 import { disposeModel } from '@/three/modules/core/dispose'
-import { createLight, type LightHelper } from '@/three/modules/light'
+import { createLight, getLightHelper, type LightHelper } from '@/three/modules/light'
 import Stats from 'three/examples/jsm/libs/stats.module.js'
 
 export const useThreeStore = defineStore('three', () => {
@@ -137,7 +137,7 @@ export const useThreeStore = defineStore('three', () => {
 		})
 		// ______________________
 
-		const pointLightHelper = createLight({ type: 'point', parameters: { intensity: 10 } })
+		const pointLightHelper = createLight({ type: 'PointLight', parameters: { intensity: 10 } })
 		pointLightHelper.light.position.set(4, 5, 1)
 		addLightHelperToScene(pointLightHelper)
 
@@ -200,6 +200,16 @@ export const useThreeStore = defineStore('three', () => {
 				obj.userData.isShadable = true
 				;(obj.material as THREE.Material).dithering = true
 			}
+			if (obj instanceof THREE.Light) {
+				const helper = getLightHelper(obj)
+				if (!helper) return
+
+				object.add(helper)
+
+				if (shadingControls.currentMode.value !== 'rendered') {
+					helper.light.visible = false
+				}
+			}
 		})
 		enableBVH(object)
 		scene.add(object)
@@ -210,6 +220,8 @@ export const useThreeStore = defineStore('three', () => {
 		selectedObject.value = object
 		transformControls.value?.attach(object)
 		if (outlinePass.value) outlinePass.value.selectedObjects = [object]
+		sceneObjects.value.filter((item) => !(item instanceof THREE.Light))
+		raycasterObjects.value.filter((item) => !(item instanceof THREE.Light))
 	}
 
 	function addLightHelperToScene(helper: LightHelper) {
@@ -270,7 +282,7 @@ export const useThreeStore = defineStore('three', () => {
 		try {
 			const model = await loadModel(...params)
 			if (!model) return
-			model.name = model.name || modelName
+			model.name = modelName
 			addModelToScene(model)
 		} finally {
 			progressStore.finishLoading(loadingId)

@@ -44,7 +44,7 @@ export const useThreeStore = defineStore('three', () => {
 	const sceneObjects = ref<THREE.Object3D[]>([])
 	const helperObjects = ref<THREE.Object3D[]>([])
 	const raycasterObjects = ref<THREE.Object3D[]>([])
-	const selectedObject = ref<THREE.Object3D<THREE.Object3DEventMap> | null>(null)
+	const selectedObject = shallowRef<THREE.Object3D<THREE.Object3DEventMap> | null>(null)
 
 	// Transform controls
 	const transformControls = shallowRef<TransformControls>()
@@ -55,6 +55,8 @@ export const useThreeStore = defineStore('three', () => {
 		currentTransformMode.value = mode
 	}
 	// ___________________________
+
+	const selectObject = shallowRef<(uuid?: string) => void>()
 
 	const stats = new Stats()
 	stats.dom.style.position = 'absolute'
@@ -104,6 +106,19 @@ export const useThreeStore = defineStore('three', () => {
 		transformHelper.name = 'TransformHelper'
 		scene.add(transformHelper)
 
+		// Object selection
+		selectObject.value = (uuid?: string) => {
+			if (!outlinePass.value || !uuid) return
+
+			const object = scene.getObjectByProperty('uuid', uuid)
+
+			if (!object) return
+
+			blenderControls.transformControls.attach(object)
+			outlinePass.value.selectedObjects = [object]
+			selectedObject.value = object
+		}
+
 		blenderControls.transformControls.addEventListener('objectChange', () => {
 			triggerRef(selectedObject)
 		})
@@ -125,6 +140,7 @@ export const useThreeStore = defineStore('three', () => {
 				blenderControls.transformControls.attach(object.parent)
 			}
 		})
+		// ______________________
 
 		const pointLightHelper = createLight({ type: 'point' })
 		pointLightHelper.light.position.set(4, 5, 1)
@@ -172,14 +188,9 @@ export const useThreeStore = defineStore('three', () => {
 			raycaster.setFromCamera(pointer, activeCamera.value)
 			const intersects = raycaster.intersectObjects(toRaw(raycasterObjects.value), true)
 			if (intersects[0]) {
-				const selected = intersects[0].object
-				blenderControls.transformControls.attach(selected)
-				outlinePass.value.selectedObjects = [selected]
-				selectedObject.value = selected
+				selectObject.value?.(intersects[0].object.uuid)
 			} else {
 				blenderControls.transformControls.detach()
-				// outlinePass.value.selectedObjects = []
-				// selectedObject.value = null
 			}
 		})
 	}
@@ -331,7 +342,9 @@ export const useThreeStore = defineStore('three', () => {
 		deleteFromScene,
 		transformControls,
 		addLightHelperToScene,
-		monitor
+		monitor,
+		selectObject,
+		raycasterObjects
 	}
 })
 

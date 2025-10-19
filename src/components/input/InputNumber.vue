@@ -7,7 +7,7 @@
 			<NumberFieldDecrement
 				class="cursor-pointer bg-(--color-ui-number-field-inner) px-0.5 opacity-0 group-hover:opacity-100"
 			>
-				<IconChevronRight class="rotate-180" />
+				<IconArrowRight class="rotate-180 text-[0.75em]" />
 			</NumberFieldDecrement>
 			<NumberFieldInput
 				class="w-full bg-(--color-ui-number-field-inner) text-center outline-none group-hover:brightness-110"
@@ -15,7 +15,7 @@
 			<NumberFieldIncrement
 				class="cursor-pointer bg-(--color-ui-number-field-inner) px-0.5 opacity-0 group-hover:opacity-100"
 			>
-				<IconChevronRight />
+				<IconArrowRight class="text-[0.75em]" />
 			</NumberFieldIncrement>
 		</div>
 	</NumberFieldRoot>

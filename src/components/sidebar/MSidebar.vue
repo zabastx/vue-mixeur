@@ -1,6 +1,6 @@
 <template>
 	<div class="sidebar grid min-h-0 grid-rows-(--side-rows) rounded">
-		<MOutliner />
+		<DataOutliner />
 		<div ref="divider" class="h-1 cursor-row-resize"></div>
 		<DataProperties />
 	</div>
@@ -9,7 +9,6 @@
 <script lang="ts" setup>
 import { ref, useTemplateRef } from 'vue'
 import { useEventListener } from '@vueuse/core'
-import MOutliner from '../data/outliner/MOutliner.vue'
 
 const divider = useTemplateRef('divider')
 const rowHeight = ref(500)

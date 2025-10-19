@@ -6,6 +6,7 @@
 	--color-active-editor-outline: #ffffff2a;
 	--color-text-cursor: #71a8ff;
 	--color-menu-bg-text: #999999;
+	--color-header-text: #888888;
 
 	--icon-colors-object: #e19658ff;
 	--icon-colors-object-data: #00d4a3ff;
@@ -20,6 +21,8 @@
 	--color-properties-panel-background: var(--color-panel-background);
 
 	--color-viewport-header-bg: #303030b3;
+
+	--color-ui-scrollbar: #545454ff;
 
 	--color-ui-number-field-inner: #545454ff;
 	--color-ui-number-field-selected: #222222ff;
@@ -47,4 +50,7 @@
 
 	--color-ui-menu-item-selected: #ffffff;
 	--color-ui-menu-item-text: #dddddd;
+
+	--color-outliner-active-highlight: #334d80;
+	--color-outliner-active-object: #ffaf29;
 }

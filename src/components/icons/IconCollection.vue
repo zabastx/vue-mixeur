@@ -1,18 +1,10 @@
 <template>
-	<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16">
-		<!-- Icon from Qlementine Icons by Olivier Cléro - https://github.com/oclero/qlementine-icons/blob/master/LICENSE -->
-		<path fill="currentColor" d="M6.5 7a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1z" />
-		<path
-			fill="currentColor"
-			fillRule="evenodd"
-			d="M1.5 2a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5H2v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5h.5a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5zM3 12.5V5h10v7.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5M14 4V3H2v1z"
-			clipRule="evenodd"
-		/>
+	<svg height="0.9375em" viewBox="0 0 1600 1500" width="1em" xmlns="http://www.w3.org/2000/svg">
+		<g fill="#fff">
+			<path
+				d="m1456 538v7.5c0 .27613.2239.49997.5.5h11c.2761-.00003.5-.22387.5-.5v-7.5zm5 1h2a1.0001 1.0001 0 1 1 0 2h-2a1.0001 1.0001 0 1 1 0-2zm-5.5-6c-.2761.00003-.5.22387-.5.5v3c0 .27613.2239.49997.5.5h13c.2761-.00003.5-.22387.5-.5v-3c0-.27613-.2239-.49997-.5-.5z"
+				transform="matrix(100 0 0 100 -145400.005 -53200)"
+			/>
+		</g>
 	</svg>
 </template>
-
-<script lang="ts">
-export default {
-	name: 'QlementineIconsArchive16'
-}
-</script>

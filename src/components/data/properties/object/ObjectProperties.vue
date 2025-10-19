@@ -10,17 +10,17 @@
 		</label>
 		<AccordionRoot default-value="transform" collapsible type="multiple" class="mt-1">
 			<AccordionItem value="transform" class="overflow-hidden rounded">
-				<AccordionHeader class="bg-(--color-properties-panel-header) p-0.5">
-					<AccordionTrigger class="group flex w-full cursor-pointer items-center">
-						<IconChevronRight
-							class="transition-rotate inline-block duration-200 group-data-[state='open']:rotate-90"
+				<AccordionHeader class="bg-(--color-properties-panel-header) px-2 py-0.5">
+					<AccordionTrigger class="group flex w-full cursor-pointer items-center gap-1">
+						<IconArrowRight
+							class="transition-rotate inline-block size-[1em] text-xs duration-200 group-data-[state='open']:rotate-90"
 						/>
 						<span>Transform</span>
 					</AccordionTrigger>
 				</AccordionHeader>
 				<AccordionContent
 					v-if="threeStore.selectedObject"
-					class="animation-slide overflow-hidden bg-(--color-properties-panel-background) p-1 pb-2.5 text-xs"
+					class="animation-slide overflow-hidden bg-(--color-properties-panel-background) p-1 pr-3 pb-2.5 text-xs"
 				>
 					<TransformLocation />
 					<TransformRotation class="mt-1" />
@@ -32,7 +32,6 @@
 </template>
 
 <script lang="ts" setup>
-import IconChevronRight from '@/components/icons/IconChevronRight.vue'
 import { useThreeStore } from '@/store/three'
 import TransformLocation from './transform/TransformLocation.vue'
 

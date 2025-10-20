@@ -1,11 +1,12 @@
 <template>
 	<div
 		ref="wrapper"
-		class="relative grid h-full w-full grid-rows-[min-content_1fr] overflow-hidden rounded"
+		class="relative grid h-full w-full grid-rows-[1fr_min_content] overflow-hidden rounded"
 	>
-		<ViewportHeader class="top-0 left-0 w-full bg-(--color-viewport-header-bg)" />
-		<div class="canvas-wrapper relative overflow-hidden">
-			<ViewNavigationWidget class="absolute top-32 right-2.5" />
+		<ViewportHeader class="absolute top-0 left-0 z-1 w-full bg-(--color-viewport-header-bg)" />
+		<div class="relative overflow-hidden">
+			<div class="gizmo-wrapper absolute top-10 right-0"></div>
+			<ViewNavigationWidget class="absolute top-40 right-2.5" />
 			<div v-show="isError" ref="webglErrorRef" class="webgl-error"></div>
 			<canvas v-show="!isError" ref="canvasRef" class="block h-full w-full"></canvas>
 		</div>

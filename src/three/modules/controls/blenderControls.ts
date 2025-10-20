@@ -25,7 +25,7 @@ export function setupBlenderControls(
 	}
 
 	const gizmoConfig: GizmoOptions = {
-		container: '.canvas-wrapper',
+		container: '.gizmo-wrapper',
 		className: 'gizmo',
 		size: 100,
 		animated: true,

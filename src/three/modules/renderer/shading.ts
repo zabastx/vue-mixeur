@@ -2,6 +2,7 @@ import { ref, watch } from 'vue'
 import THREE from '@/three'
 import { ShadingControls, type ShadingMode } from './ShadingControls'
 import type { LightHelper } from '../light'
+import { loadWorldTexture } from '../loaders/environment'
 
 export function useShadingControls(scene: THREE.Scene) {
 	let shadingControls: ShadingControls | null = null
@@ -31,6 +32,11 @@ export function useShadingControls(scene: THREE.Scene) {
 	function init() {
 		shadingControls = new ShadingControls(scene)
 		shadingControls.setMode(currentMode.value)
+
+		loadWorldTexture('forest').then((map) => {
+			if (!map) return
+			shadingControls?.setEnvironmentMap(map)
+		})
 	}
 
 	function cacheNewObjectMaterials(object: THREE.Object3D) {

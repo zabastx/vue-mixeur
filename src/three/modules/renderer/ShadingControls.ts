@@ -30,6 +30,7 @@ export class ShadingControls {
 	private scene: THREE.Scene
 	private materialCache = new Map<THREE.Mesh, MaterialCache>()
 	private currentMode: ShadingMode = 'solid'
+	private environmentMap: THREE.Texture | null = null
 
 	/**
 	 * Creates a new ShadingControls instance for the given scene.
@@ -109,23 +110,26 @@ export class ShadingControls {
 	 * Sets the shading mode for all meshes in the scene.
 	 *
 	 * @param mode - The shading mode to apply ('wireframe', 'solid', 'materialPreview', or 'rendered')
-	 *
-	 * @example
-	 * ```typescript
-	 * shadingModes.setMode('wireframe')  // Show wireframe
-	 * shadingModes.setMode('solid')      // Show solid shading
-	 * shadingModes.setMode('rendered')   // Show full rendering
-	 * ```
 	 */
 	setMode(mode: ShadingMode) {
 		if (this.currentMode === mode) return
 		this.currentMode = mode
+
+		if (mode === 'materialPreview') {
+			this.scene.environment = this.environmentMap
+		} else {
+			this.scene.environment = null
+		}
 
 		this.scene.traverse((object) => {
 			if (object instanceof THREE.Mesh) {
 				this.applyModeToMesh(object, mode)
 			}
 		})
+	}
+
+	setEnvironmentMap(map: THREE.Texture) {
+		this.environmentMap = map
 	}
 
 	/**

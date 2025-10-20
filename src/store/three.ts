@@ -259,7 +259,7 @@ export const useThreeStore = defineStore('three', () => {
 	async function importModel(...params: Parameters<typeof loadModel>): Promise<void> {
 		const progressStore = useProgressStore()
 		const [loadParams] = params
-		const loadingId = `model-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`
+		const loadingId = `model-${Date.now()}-${Math.random().toString(36).slice(2)}`
 
 		// Extract model name and filename from URL
 		const urlParts = loadParams.url.split('/')

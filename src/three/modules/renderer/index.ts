@@ -1,16 +1,11 @@
 import THREE from '@/three'
+import { initPMREMGenerator } from '../extras/pmremGenerator'
 
 /**
  * Creates WebGLRenderer with settings similar to Blender Eevee (Filmic)
  * @param canvas HTMLCanvasElement
  */
-export function createBlenderRenderer({
-	canvas
-}: {
-	canvas: HTMLCanvasElement
-	// hdriPath?: string
-	// scene: THREE.Scene
-}) {
+export function createBlenderRenderer({ canvas }: { canvas: HTMLCanvasElement }) {
 	const renderer = new THREE.WebGLRenderer({
 		canvas,
 		alpha: true,
@@ -30,13 +25,7 @@ export function createBlenderRenderer({
 	renderer.shadowMap.type = THREE.PCFSoftShadowMap
 	renderer.autoClear = false
 
-	// HDRI evnironment
-	// if (hdriPath) {
-	// 	const hdrEquirect = await new RGBELoader().loadAsync(hdriPath)
-	// 	hdrEquirect.mapping = THREE.EquirectangularReflectionMapping
-	// 	scene.environment = hdrEquirect
-	// 	scene.background = hdrEquirect
-	// }
+	initPMREMGenerator(renderer)
 
 	return renderer
 }

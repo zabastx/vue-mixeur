@@ -13,7 +13,7 @@
 				selection-behavior="replace"
 			>
 				<Tree.Item
-					v-for="item in flattenItems"
+					v-for="item in flattenItems.filter((item) => !item.value.userData.isHelper)"
 					v-bind="item.bind"
 					:key="item._id"
 					v-slot="{ isExpanded }"
@@ -66,7 +66,7 @@ watch(
 )
 
 const outlinerItems = computed(() => {
-	return store.sceneChildren.filter((item) => !item.userData.isHelper).map(parseObject)
+	return store.sceneChildren.map(parseObject)
 })
 
 function parseObject(obj: THREE.Object3D): OutlinerItem {
@@ -74,6 +74,7 @@ function parseObject(obj: THREE.Object3D): OutlinerItem {
 		uuid: obj.uuid,
 		type: obj.type,
 		name: obj.name || obj.type,
+		userData: obj.userData,
 		children: obj.children.length > 0 ? obj.children.map(parseObject) : undefined
 	}
 }
@@ -86,6 +87,7 @@ interface OutlinerItem {
 	uuid: string
 	type: string
 	name: string
+	userData: Record<string, unknown>
 	children?: OutlinerItem[]
 }
 

@@ -47,29 +47,7 @@ Try the live demo at [mixeur.zabastx.ru](https://mixeur.zabastx.ru)
 - GLTF/GLB
 - OBJ
 
-## API Documentation
-
-Vue Mixeur uses a composable-based architecture with Pinia for state management. Key stores and composables:
-
-### Stores
-
-- `useThreeStore`: Main Three.js scene management
-- `useAppStore`: Application state and UI controls
-- `useProgressStore`: Loading progress tracking
-
-## Development
-
-### Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run type-check` - Run TypeScript type checking
-- `npm run lint` - Run ESLint
-- `npm run lint:fix` - Fix ESLint issues
-- `npm run format` - Format code with Prettier
-
-### Project Structure
+## Project Structure
 
 ```
 src/
@@ -91,15 +69,6 @@ src/
 └── assets/             # Static assets
 ```
 
-### Code Style
-
-This project uses:
-
-- **ESLint** for code linting
-- **Prettier** for code formatting
-- **Husky** for pre-commit hooks
-- **lint-staged** for running linters on staged files
-
 ## Tech Stack
 
 - **Frontend**: Vue 3 with Composition API
@@ -111,9 +80,7 @@ This project uses:
 - **UI Components**: Reka UI
 - **Icons**: Custom SVG icon system
 
-## Dependencies
-
-### Core Dependencies
+## Core Dependencies
 
 - `three`: 3D graphics library
 - `three-mesh-bvh`: Bounding Volume Hierarchy for fast raycasting
@@ -121,28 +88,6 @@ This project uses:
 - `vue`: Progressive JavaScript framework
 - `pinia`: State management for Vue
 - `@vueuse/core`: Collection of Vue composition utilities
-
-### Development Dependencies
-
-- `vite`: Fast build tool and dev server
-- `typescript`: TypeScript compiler
-- `eslint`: Code linting
-- `prettier`: Code formatting
-- `husky`: Git hooks
-- `lint-staged`: Run linters on staged files
-
-## Browser Support
-
-- Chrome 90+
-- Firefox 88+
-- Safari 14+
-- Edge 90+
-
-## License
-
-MIT License - Copyright (c) 2025 Danil Popov
-
-See [LICENSE](LICENSE) for more details.
 
 ## Acknowledgments
 
@@ -153,8 +98,8 @@ See [LICENSE](LICENSE) for more details.
 - [three-viewport-gizmo](https://github.com/JamesLMilner/three-viewport-gizmo) - Camera gizmo
 - [ui.blender.org/icons](https://ui.blender.org/icons) - Blender Icons
 
-## Contact
+## License
 
-- **Author**: Danil Popov
-- **Website**: [zabastx.ru](https://zabastx.ru)
-- **GitHub**: [zabastx](https://github.com/zabastx)
+MIT License - Copyright (c) 2025 Danil Popov
+
+See [LICENSE](LICENSE) for more details.

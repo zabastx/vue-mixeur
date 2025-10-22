@@ -69,13 +69,15 @@ export const useAppStore = defineStore('app', () => {
 
 		// Moves perspective camera on scroll instead of zoom
 		useEventListener(canvas, 'wheel', (event) => {
+			if (event.ctrlKey) event.preventDefault()
 			const { activeCamera, controls } = sceneStore
 			if (!controls) return
 			const delta = event.deltaY * -0.01
 			if (activeCamera instanceof THREE.PerspectiveCamera) {
 				const direction = new THREE.Vector3()
 				direction.subVectors(controls.target, activeCamera.position).normalize()
-				activeCamera.position.addScaledVector(direction, delta)
+				const adjustedDelta = event.shiftKey ? delta : event.ctrlKey ? delta * 100 : delta * 10
+				activeCamera.position.addScaledVector(direction, adjustedDelta)
 			} else if (activeCamera instanceof THREE.OrthographicCamera) {
 				const zoomFactor = 1 + delta * 0.1
 				activeCamera.zoom *= zoomFactor

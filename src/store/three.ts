@@ -1,17 +1,16 @@
 import type { ViewportGizmo } from 'three-viewport-gizmo'
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { ref, shallowRef, toRaw, triggerRef, watch, type ShallowRef } from 'vue'
+import { computed, ref, shallowRef, triggerRef, watch, type ShallowRef } from 'vue'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import THREE, { enableBVH } from '@/three'
 import { setGridHelper } from '@/three/modules/helpers/grid'
 import { setupBlenderControls } from '@/three/modules/controls/blenderControls'
-import { loadModel } from '@/three/modules/loaders/modelLoader'
+import { loadModel, type ModelLoaderParameters } from '@/three/modules/loaders/modelLoader'
 import { setRaycaster } from '@/three/modules/core/raycaster'
 import { useEventListener } from '@vueuse/core'
 import { createComposer } from '@/three/modules/postprocess/composer'
 import { cameraSetup } from '@/three/modules/camera/setup'
 import {
-	RectAreaLightHelper,
 	type OutlinePass,
 	type TransformControls,
 	type TransformControlsMode
@@ -27,6 +26,16 @@ export const useThreeStore = defineStore('three', () => {
 	const helperScene = new THREE.Scene()
 	scene.background = new THREE.Color('#3D3D3D')
 
+	const raycasterObjects: THREE.Object3D[] = []
+
+	const sceneChildren = computed(() => scene.children)
+	scene.addEventListener('childadded', () => {
+		triggerRef(sceneChildren)
+	})
+	scene.addEventListener('childremoved', () => {
+		triggerRef(sceneChildren)
+	})
+
 	// Camera controls
 	const { activeCamera, switchCamera } = cameraSetup()
 	const controls = shallowRef<OrbitControls>()
@@ -39,13 +48,10 @@ export const useThreeStore = defineStore('three', () => {
 	})
 	// _____________________________
 
-	const outlinePass = ref<OutlinePass>()
+	const outlinePass = shallowRef<OutlinePass>()
 	const shadingControls = useShadingControls(scene)
 
-	const sceneObjects = ref<THREE.Object3D[]>([])
-	const helperObjects = ref<THREE.Object3D[]>([])
-	const raycasterObjects = ref<THREE.Object3D[]>([])
-	const selectedObject = shallowRef<THREE.Object3D<THREE.Object3DEventMap> | null>(null)
+	const selectedObject = ref<THREE.Object3D<THREE.Object3DEventMap> | null>(null)
 
 	// Transform controls
 	const transformControls = shallowRef<TransformControls>()
@@ -114,14 +120,28 @@ export const useThreeStore = defineStore('three', () => {
 
 			if (!object) return
 
+			if (object instanceof THREE.Light) {
+				blenderControls.transformControls.attach(object)
+				selectedObject.value = object
+				const helper = scene.getObjectByProperty('light', object)
+				if (helper) {
+					outlinePass.value.selectedObjects = [helper]
+				}
+				return
+			}
+
+			if ('light' in object) {
+				const light = object.light as THREE.Light
+				blenderControls.transformControls.attach(light)
+				outlinePass.value.selectedObjects = [object]
+				selectedObject.value = light
+				return
+			}
+
 			blenderControls.transformControls.attach(object)
 			outlinePass.value.selectedObjects = [object]
 			selectedObject.value = object
 		}
-
-		blenderControls.transformControls.addEventListener('objectChange', () => {
-			triggerRef(selectedObject)
-		})
 
 		blenderControls.transformControls.addEventListener('object-changed', (e) => {
 			const object = e.target.object as unknown as THREE.Object3D | LightHelper | undefined
@@ -129,6 +149,7 @@ export const useThreeStore = defineStore('three', () => {
 
 			if ('light' in object) {
 				blenderControls.transformControls.attach(object.light)
+				return
 			}
 
 			if (object.userData.skipRaycast && object.parent) {
@@ -183,7 +204,7 @@ export const useThreeStore = defineStore('three', () => {
 			if (wasDragging) return (wasDragging = false)
 
 			raycaster.setFromCamera(pointer, activeCamera.value)
-			const intersects = raycaster.intersectObjects(toRaw(raycasterObjects.value), true)
+			const intersects = raycaster.intersectObjects(raycasterObjects, true)
 			if (intersects[0]) {
 				selectObject.value?.(intersects[0].object.uuid)
 			} else {
@@ -213,15 +234,12 @@ export const useThreeStore = defineStore('three', () => {
 		})
 		enableBVH(object)
 		scene.add(object)
-		sceneObjects.value.push(object)
-		raycasterObjects.value.push(object)
+		raycasterObjects.push(object)
 
 		shadingControls.cacheNewObjectMaterials(object)
 		selectedObject.value = object
 		transformControls.value?.attach(object)
 		if (outlinePass.value) outlinePass.value.selectedObjects = [object]
-		sceneObjects.value.filter((item) => !(item instanceof THREE.Light))
-		raycasterObjects.value.filter((item) => !(item instanceof THREE.Light))
 	}
 
 	function addLightHelperToScene(helper: LightHelper) {
@@ -232,9 +250,8 @@ export const useThreeStore = defineStore('three', () => {
 			helper.light.visible = false
 		}
 
-		raycasterObjects.value.push(helper)
-		helperObjects.value.push(helper)
-		selectedObject.value = helper
+		raycasterObjects.push(helper)
+		selectedObject.value = helper.light
 		transformControls.value?.attach(helper.light)
 
 		if (outlinePass.value) outlinePass.value.selectedObjects = [helper]
@@ -248,27 +265,19 @@ export const useThreeStore = defineStore('three', () => {
 	 * and adds the model to the active Three.js scene.
 	 *
 	 * @param params - Parameters passed directly to the loadModel function
-	 *
-	 * Processing steps:
-	 * 1. Loads the model asynchronously
-	 * 2. Validates the loaded model existence
-	 * 3. Enables BVH optimization for physics/animation
-	 * 4. Sets a default name if none exists
-	 * 5. Adds the model to the global THREE.Scene instance
 	 */
-	async function importModel(...params: Parameters<typeof loadModel>): Promise<void> {
+	async function importModel(params: ModelLoaderParameters): Promise<void> {
 		const progressStore = useProgressStore()
-		const [loadParams] = params
 		const loadingId = `model-${Date.now()}-${Math.random().toString(36).slice(2)}`
 
 		// Extract model name and filename from URL
-		const urlParts = loadParams.url.split('/')
-		const fullFilename = loadParams.filename || urlParts[urlParts.length - 1] || 'model'
+		const urlParts = params.url.split('/')
+		const fullFilename = params.filename || urlParts[urlParts.length - 1] || 'model'
 		const modelName = fullFilename.split('.')[0] || 'Model'
 
 		// Wrap the onProgress callback to track progress
-		const originalOnProgress = loadParams.onProgress
-		loadParams.onProgress = (e: ProgressEvent) => {
+		const originalOnProgress = params.onProgress
+		params.onProgress = (e: ProgressEvent) => {
 			if (e.lengthComputable) {
 				if (progressStore.loadingItems.find((p: LoadingProgress) => p.id === loadingId)) {
 					progressStore.updateProgress(loadingId, e.loaded)
@@ -280,9 +289,9 @@ export const useThreeStore = defineStore('three', () => {
 		}
 
 		try {
-			const model = await loadModel(...params)
+			const model = await loadModel(params)
 			if (!model) return
-			model.name = modelName
+			model.name = model.name || modelName
 			addModelToScene(model)
 		} finally {
 			progressStore.finishLoading(loadingId)
@@ -293,31 +302,16 @@ export const useThreeStore = defineStore('three', () => {
 	function deleteFromScene(object: THREE.Object3D) {
 		transformControls.value?.detach()
 
-		if (
-			object instanceof THREE.PointLightHelper ||
-			object instanceof THREE.SpotLightHelper ||
-			object instanceof THREE.DirectionalLightHelper ||
-			object instanceof RectAreaLightHelper
-		) {
-			if (object.light) {
-				scene.remove(object.light)
-				disposeModel(object.light)
-			}
-		}
-
-		const sceneObjIdx = sceneObjects.value.indexOf(object)
-		if (sceneObjIdx !== -1) {
-			sceneObjects.value.splice(sceneObjIdx, 1)
-		}
-
-		const helperObjIdx = helperObjects.value.indexOf(object)
-		if (helperObjIdx !== -1) {
-			helperObjects.value.splice(helperObjIdx, 1)
-		}
-
-		const raycasterObjIdx = raycasterObjects.value.indexOf(object)
-		if (raycasterObjIdx !== -1) {
-			raycasterObjects.value.splice(raycasterObjIdx, 1)
+		if (object instanceof THREE.Light) {
+			const objectsForRemoval: THREE.Object3D[] = [object]
+			scene.traverse((child) => {
+				if ('light' in child && child.light === object) {
+					objectsForRemoval.push(child)
+				}
+			})
+			objectsForRemoval.forEach((obj) => {
+				scene.remove(obj)
+			})
 		}
 
 		if (selectedObject.value === object) {
@@ -343,7 +337,6 @@ export const useThreeStore = defineStore('three', () => {
 		outlinePass,
 		selectedObject,
 		controls,
-		sceneObjects,
 		addModelToScene,
 		currentShadingMode: shadingControls.currentMode,
 		setTransformMode,
@@ -353,7 +346,8 @@ export const useThreeStore = defineStore('three', () => {
 		addLightHelperToScene,
 		monitor,
 		selectObject,
-		raycasterObjects
+		raycasterObjects,
+		sceneChildren
 	}
 })
 

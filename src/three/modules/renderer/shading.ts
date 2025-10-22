@@ -67,7 +67,16 @@ function getSolidShadingLights() {
 	fillLight.name = 'SolidModeFillLight'
 	fillLight.position.set(-5, -5, -5)
 
-	return [ambient, mainLight, fillLight]
+	const lights = [ambient, mainLight, fillLight]
+
+	lights.forEach((item) => {
+		item.userData = {
+			isSceneLight: true,
+			isHelper: true
+		}
+	})
+
+	return lights
 }
 
 function setSceneLightsVisibility(scene: THREE.Scene, val: boolean) {

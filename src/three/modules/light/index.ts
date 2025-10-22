@@ -69,7 +69,10 @@ export function createLight({ type, parameters }: CreateLightParams) {
 
 	helper.light.name = type
 	helper.name = `${type}Helper`
-	helper.userData.isSceneLight = true
+	helper.userData = {
+		isSceneLight: true,
+		isHelper: true
+	}
 	helper.children.forEach((child) => {
 		child.userData.skipRaycast = true
 	})

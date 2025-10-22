@@ -18,14 +18,11 @@
 					<component :is="item.icon" />
 				</Tabs.Trigger>
 			</Tabs.List>
-			<Tabs.Content
-				v-for="item in tabsItems"
-				:key="item.value"
-				:value="item.value"
-				class="scrollbar-thin overflow-auto"
-			>
-				<component :is="item.content" />
-			</Tabs.Content>
+			<ScrollContainer>
+				<Tabs.Content v-for="item in tabsItems" :key="item.value" :value="item.value" class="p-1">
+					<component :is="item.content" />
+				</Tabs.Content>
+			</ScrollContainer>
 		</Tabs.Root>
 	</div>
 </template>

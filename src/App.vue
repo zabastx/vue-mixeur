@@ -46,7 +46,7 @@ onMounted(() => {
 })
 
 const divider = useTemplateRef('divider')
-const rightWidth = ref(window.innerWidth * 0.3)
+const rightWidth = ref(window.innerWidth * 0.25)
 
 useEventListener(divider, 'pointerdown', (e: PointerEvent) => {
 	const startX = e.clientX

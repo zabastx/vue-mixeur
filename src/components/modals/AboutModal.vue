@@ -12,7 +12,7 @@
 				<div class="flex flex-col text-(--color-menu-bg-text)">
 					<!-- Header -->
 					<div class="flex items-center gap-4 p-4">
-						<IconMixeur class="size-12" />
+						<IconMixeur class="text-5xl" />
 						<div>
 							<h1 class="text-2xl font-bold text-white">Vue Mixeur</h1>
 							<p class="text-sm">Version {{ version }}</p>

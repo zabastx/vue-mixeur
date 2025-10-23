@@ -9,6 +9,8 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AboutModal: typeof import('./components/modals/AboutModal.vue')['default']
+    CheckboxIndicator: typeof import('reka-ui')['CheckboxIndicator']
+    CheckboxRoot: typeof import('reka-ui')['CheckboxRoot']
     DataOutliner: typeof import('./components/data/outliner/DataOutliner.vue')['default']
     DataProperties: typeof import('./components/data/properties/DataProperties.vue')['default']
     IconArrowRight: typeof import('./components/icons/base/IconArrowRight.vue')['default']
@@ -55,6 +57,7 @@ declare module 'vue' {
     IconUrl: typeof import('./components/icons/misc/IconUrl.vue')['default']
     IconViewOrtho: typeof import('./components/icons/view/IconViewOrtho.vue')['default']
     IconViewPerspective: typeof import('./components/icons/view/IconViewPerspective.vue')['default']
+    IconVisibility: typeof import('./components/icons/misc/IconVisibility.vue')['default']
     InputNumber: typeof import('./components/input/InputNumber.vue')['default']
     KeymapInformation: typeof import('./components/status/KeymapInformation.vue')['default']
     MAccordionItem: typeof import('./components/utils/Accordion/MAccordionItem.vue')['default']

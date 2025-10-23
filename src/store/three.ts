@@ -143,6 +143,10 @@ export const useThreeStore = defineStore('three', () => {
 			selectedObject.value = object
 		}
 
+		blenderControls.transformControls.addEventListener('objectChange', () => {
+			triggerRef(selectedObject)
+		})
+
 		blenderControls.transformControls.addEventListener('object-changed', (e) => {
 			const object = e.target.object as unknown as THREE.Object3D | LightHelper | undefined
 			if (!object) return
@@ -327,6 +331,14 @@ export const useThreeStore = defineStore('three', () => {
 		disposeModel(object)
 	}
 
+	function objectVisibilityUpdate(uuid: string, val: boolean) {
+		const obj = scene.getObjectByProperty('uuid', uuid)
+		if (obj) {
+			obj.visible = val
+			triggerRef(sceneChildren)
+		}
+	}
+
 	shadingControls.init()
 
 	return {
@@ -347,7 +359,8 @@ export const useThreeStore = defineStore('three', () => {
 		monitor,
 		selectObject,
 		raycasterObjects,
-		sceneChildren
+		sceneChildren,
+		objectVisibilityUpdate
 	}
 })
 

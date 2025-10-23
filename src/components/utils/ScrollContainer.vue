@@ -8,7 +8,7 @@
 			class="flex touch-none p-0.5 transition-colors duration-[160ms] ease-out select-none data-[orientation=horizontal]:h-2.5 data-[orientation=horizontal]:flex-col data-[orientation=vertical]:w-2.5"
 		>
 			<ScrollArea.Thumb
-				class="relative flex-1 rounded-[10px] bg-(--color-ui-scrollbar) before:absolute before:top-1/2 before:left-1/2 before:h-full before:min-h-[44px] before:w-full before:min-w-[44px] before:-translate-x-1/2 before:-translate-y-1/2 before:content-['']"
+				class="relative flex-1 rounded bg-(--color-ui-scrollbar) before:absolute before:top-1/2 before:left-1/2 before:h-full before:min-h-[44px] before:w-full before:min-w-5 before:-translate-x-1/2 before:-translate-y-1/2 before:content-['']"
 			/>
 		</ScrollArea.Scrollbar>
 	</ScrollArea.Root>

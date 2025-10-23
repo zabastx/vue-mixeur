@@ -18,7 +18,7 @@
 					:key="item._id"
 					v-slot="{ isExpanded }"
 					:style="{ paddingLeft: getPadding(item.level) }"
-					class="relative flex snap-start items-center gap-1 hover:bg-(--color-outliner-active-highlight)"
+					class="relative flex snap-start items-center gap-1 pr-5 hover:bg-(--color-outliner-active-highlight)"
 					:class="{
 						'bg-(--color-outliner-active-highlight) text-(--color-outliner-active-object)':
 							item.value.uuid === selectedItem?.uuid
@@ -28,10 +28,27 @@
 					<IconArrowRight
 						v-if="item.hasChildren"
 						:class="{ 'rotate-90': isExpanded }"
-						class="size-[1em] text-xs"
+						class="size-[1em] shrink-0 text-xs"
 					/>
-					<component :is="iconMap.get(item.value.type)" v-if="iconMap.get(item.value.type)" />
-					{{ item.value.name }}
+					<component
+						:is="iconMap.get(item.value.type)"
+						v-if="iconMap.get(item.value.type)"
+						class="shrink-0"
+					/>
+					<span class="overflow-hidden text-ellipsis whitespace-nowrap">
+						{{ item.value.name }}
+					</span>
+					<div class="contents" @click.stop>
+						<CheckboxRoot
+							class="ml-auto"
+							:model-value="item.value.visible"
+							@update:model-value="
+								store.objectVisibilityUpdate(item.value.uuid, !item.value.visible)
+							"
+						>
+							<IconVisibility :visible="item.value.visible" />
+						</CheckboxRoot>
+					</div>
 				</Tree.Item>
 			</Tree.Root>
 		</ScrollContainer>
@@ -66,7 +83,7 @@ watch(
 )
 
 const outlinerItems = computed(() => {
-	return store.sceneChildren.map(parseObject)
+	return store.sceneChildren.filter((item) => !item.userData.isHelper).map(parseObject)
 })
 
 function parseObject(obj: THREE.Object3D): OutlinerItem {
@@ -74,6 +91,7 @@ function parseObject(obj: THREE.Object3D): OutlinerItem {
 		uuid: obj.uuid,
 		type: obj.type,
 		name: obj.name || obj.type,
+		visible: obj.visible,
 		userData: obj.userData,
 		children: obj.children.length > 0 ? obj.children.map(parseObject) : undefined
 	}
@@ -87,6 +105,7 @@ interface OutlinerItem {
 	uuid: string
 	type: string
 	name: string
+	visible: boolean
 	userData: Record<string, unknown>
 	children?: OutlinerItem[]
 }

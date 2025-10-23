@@ -1,5 +1,5 @@
 <template>
-	<NumberFieldRoot v-model="modelValue" :step="step" class="flex w-fit justify-end">
+	<NumberFieldRoot v-model="model" :step="step" class="flex w-fit justify-end">
 		<span v-if="label" class="mr-2 overflow-hidden overflow-ellipsis whitespace-nowrap">
 			{{ label }}
 		</span>
@@ -22,12 +22,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-
 const { step = 0.01, label = undefined } = defineProps<{
 	label?: string
 	step?: number
 }>()
 
-const modelValue = ref(0)
+const model = defineModel<number>({ default: 0 })
 </script>

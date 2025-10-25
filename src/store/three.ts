@@ -286,7 +286,7 @@ export const useThreeStore = defineStore('three', () => {
 				if (progressStore.loadingItems.find((p: LoadingProgress) => p.id === loadingId)) {
 					progressStore.updateProgress(loadingId, e.loaded)
 				} else {
-					progressStore.startLoading(loadingId, modelName, fullFilename, e.total)
+					progressStore.startLoading(loadingId, fullFilename, e.total)
 				}
 			}
 			originalOnProgress?.(e)

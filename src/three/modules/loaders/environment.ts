@@ -29,7 +29,7 @@ export async function loadWorldTexture(name: WorldTextureName): Promise<THREE.Te
 			if (progressStore.loadingItems.find((p: LoadingProgress) => p.id === loadingId)) {
 				progressStore.updateProgress(loadingId, e.loaded)
 			} else {
-				progressStore.startLoading(loadingId, name, `${name}.exr`, e.total)
+				progressStore.startLoading(loadingId, `${name}.exr`, e.total)
 			}
 		}
 	}

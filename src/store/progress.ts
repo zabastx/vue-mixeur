@@ -3,7 +3,6 @@ import { ref } from 'vue'
 
 export interface LoadingProgress {
 	id: string
-	modelName: string
 	filename: string
 	percentage: number
 	loaded: number
@@ -15,10 +14,9 @@ export interface LoadingProgress {
 export const useProgressStore = defineStore('progress', () => {
 	const loadingItems = ref<LoadingProgress[]>([])
 
-	function startLoading(id: string, modelName: string, filename: string, total: number) {
+	function startLoading(id: string, filename: string, total: number) {
 		const progress: LoadingProgress = {
 			id,
-			modelName,
 			filename,
 			percentage: 0,
 			loaded: 0,

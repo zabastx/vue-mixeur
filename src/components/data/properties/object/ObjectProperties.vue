@@ -1,18 +1,10 @@
 <template>
-	<label v-if="threeStore.selectedObject" class="mb-2.5 block text-sm">
-		Name:
-		<input
-			v-model="threeStore.selectedObject.name"
-			type="text"
-			class="rounded bg-(--color-ui-text-inner) p-0.5 outline-none"
-		/>
-	</label>
+	<h1 class="mb-1">Object Properties</h1>
+	<InputField v-if="store.selectedObject" label="Name" class="mb-2.5 text-sm">
+		<input v-model="store.selectedObject.name" type="text" class="input" />
+	</InputField>
 	<MAccordionRoot collapsible type="multiple">
-		<MAccordionItem
-			v-if="threeStore.selectedObject"
-			label="Transform"
-			:item="{ value: 'transform' }"
-		>
+		<MAccordionItem v-if="store.selectedObject" label="Transform" :item="{ value: 'transform' }">
 			<TransformLocation />
 			<TransformRotation class="mt-1" />
 			<TransformScale class="mt-1" />
@@ -23,5 +15,5 @@
 <script lang="ts" setup>
 import { useThreeStore } from '@/store/three'
 
-const threeStore = useThreeStore()
+const store = useThreeStore()
 </script>

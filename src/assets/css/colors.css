@@ -5,12 +5,17 @@
 	--color-editor-outline: #ffffff15;
 	--color-active-editor-outline: #ffffff2a;
 	--color-text-cursor: #71a8ff;
-	--color-menu-bg-text: #999999;
 	--color-header-text: #888888;
 
-	--icon-colors-object: #e19658ff;
-	--icon-colors-object-data: #00d4a3ff;
-	--icon-colors-shading: #cc6670ff;
+	--color-menu-inner: #282828ff;
+	--color-menu-outline: #3d3d3dff;
+	--color-menu-text: #e6e6e6;
+	--color-menu-bg-inner: #181818ff;
+	--color-menu-bg-text: #999999;
+
+	--color-icon-object: #e19658ff;
+	--color-icon-object-data: #00d4a3ff;
+	--color-icon-shading: #cc6670ff;
 
 	--color-topbar-background: #161616;
 	--color-status-background: #161616;
@@ -35,6 +40,9 @@
 	--color-ui-text-inner: #1d1d1dff;
 	--color-ui-text-selected: #181818ff;
 	--color-ui-text-outline: #3d3d3dff;
+	--color-ui-text-text: #e6e6e6;
+	--color-ui-text-text-selected: #ffffff;
+	--color-ui-text-text-item: #ffffff33;
 
 	--color-ui-toolbar-inner: #282828ff;
 	--color-ui-toolbar-selected: #4772b3ff;
@@ -45,13 +53,22 @@
 	--color-ui-tooltip-text: #d9d9d9;
 
 	--color-ui-menu-text: #e6e6e6;
+	--color-ui-menu-inner: #282828ff;
+	--color-ui-menu-outline: #3d3d3dff;
+	--color-ui-menu-text: #e6e6e6;
 
+	--color-ui-menu-bg-text: #999999;
 	--color-ui-menu-bg-inner: #181818ff;
 	--color-ui-menu-bg-outline: #242424ff;
 
 	--color-ui-menu-item-selected: #ffffff;
 	--color-ui-menu-item-text: #dddddd;
+	--color-ui-menu-item-inner-selected: #4772b3ff;
+
+	--color-ui-tab-inner: #1d1d1dff;
+	--color-ui-tab-inner-selected: #303030ff;
 
 	--color-outliner-active-highlight: #334d80;
 	--color-outliner-active-object: #ffaf29;
+	--color-outliner-alternate-rows: #ffffff04;
 }

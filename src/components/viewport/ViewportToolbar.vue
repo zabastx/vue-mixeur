@@ -1,5 +1,5 @@
 <template>
-	<div class="toolbar">
+	<div class="absolute top-10 left-2.5 flex flex-col text-3xl">
 		<MTooltip
 			v-for="item in toolbarItems"
 			:key="'toolbar_' + item.name"
@@ -10,7 +10,11 @@
 		>
 			<button
 				type="button"
-				:class="{ selected: item.name === threeStore.currentTransformMode }"
+				class="cursor-pointer border-[0.5px] border-ui-toolbar-outline bg-ui-toolbar-inner p-1
+					first:rounded-t last:rounded-b last:border-t-0 first:border-b-0"
+				:class="{
+					'bg-ui-toolbar-selected': item.name === threeStore.currentTransformMode
+				}"
 				:title="item.title"
 				@click="item.onClick"
 			>
@@ -62,17 +66,3 @@ const toolbarItems = [
 	}
 ] as const
 </script>
-
-<style scoped>
-@reference 'tailwindcss/theme';
-
-.toolbar {
-	@apply absolute top-10 left-2.5 flex flex-col text-3xl;
-	& > button {
-		@apply cursor-pointer border-[0.5px] border-(--color-ui-toolbar-outline) bg-(--color-ui-toolbar-inner) p-1 first:rounded-t-md last:rounded-b-md;
-	}
-	.selected {
-		@apply bg-(--color-ui-toolbar-selected);
-	}
-}
-</style>

@@ -1,17 +1,17 @@
 @utility menubar-content {
-	@apply z-10 flex min-w-[200px] flex-col gap-1 rounded border border-(--color-ui-menu-bg-outline) bg-(--color-ui-menu-bg-inner) p-0.5 text-xs text-(--color-ui-menu-item-text) data-[state=open]:rounded-tl-none;
-}
-
-@utility bg-stripes {
-	background: repeating-linear-gradient(
-		180deg,
-		var(--color-window-bg),
-		var(--color-window-bg) 1em,
-		#181818b3 1em,
-		#181818b3 2em
-	);
+	@apply text-ui-menu-item-text border-ui-menu-bg-outline bg-ui-menu-bg-inner z-10 flex min-w-[200px] flex-col gap-1 rounded border p-0.5 text-xs data-[state=open]:rounded-tl-none;
 }
 
 @utility block-border {
-	@apply border border-(--color-editor-outline) hover:border-(--color-active-editor-outline);
+	@apply border-editor-outline hover:border-active-editor-outline border;
+}
+
+@utility alternate-rows {
+	background-image: repeating-linear-gradient(
+		to bottom,
+		var(--color-window-bg) 0em,
+		var(--color-window-bg) 1.5rem,
+		var(--color-outliner-alternate-rows) 1.5rem,
+		var(--color-outliner-alternate-rows) 3rem
+	);
 }

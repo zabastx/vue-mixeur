@@ -54,7 +54,7 @@ export function useShadingControls(scene: THREE.Scene) {
 
 function getSolidShadingLights() {
 	// Ambient light for overall illumination
-	const ambient = new THREE.AmbientLight(0xffffff, 0.5)
+	const ambient = new THREE.AmbientLight(0xffffff, 1)
 	ambient.name = 'SolidModeAmbientLight'
 
 	// Main directional light (key light)

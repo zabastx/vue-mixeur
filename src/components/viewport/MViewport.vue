@@ -3,7 +3,7 @@
 		ref="wrapper"
 		class="relative grid h-full w-full grid-rows-[1fr_min_content] overflow-hidden rounded"
 	>
-		<ViewportHeader class="absolute top-0 left-0 z-1 w-full bg-(--color-viewport-header-bg)" />
+		<ViewportHeader class="absolute top-0 left-0 z-1 w-full bg-viewport-header-bg" />
 		<div class="relative overflow-hidden">
 			<div class="gizmo-wrapper absolute top-10 right-0"></div>
 			<ViewNavigationWidget class="absolute top-40 right-2.5" />

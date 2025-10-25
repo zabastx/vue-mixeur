@@ -1,6 +1,6 @@
 <template>
 	<svg height="1em" viewBox="0 0 1600 1600" width="1em" xmlns="http://www.w3.org/2000/svg">
-		<g stroke="var(--icon-colors-object)" fill="var(--icon-colors-object)">
+		<g stroke="var(--color-icon-object)" fill="var(--color-icon-object)">
 			<g enable-background="new" transform="matrix(100 0 0 100 -2600 -34600)">
 				<path
 					d="m27.5 347a.50005.50005 0 0 0 -.5.5v3.5h1v-3h3v-1zm9.5 0v1h3v3h1v-3.5a.50005.50005 0 0 0 -.5-.5zm-10 10v3.5a.50005.50005 0 0 0 .5.5h3.5v-1h-3v-3zm13 0v3h-3v1h3.5a.50005.50005 0 0 0 .5-.5v-3.5z"

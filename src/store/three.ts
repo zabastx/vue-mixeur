@@ -51,7 +51,7 @@ export const useThreeStore = defineStore('three', () => {
 	const outlinePass = shallowRef<OutlinePass>()
 	const shadingControls = useShadingControls(scene)
 
-	const selectedObject = ref<THREE.Object3D<THREE.Object3DEventMap> | null>(null)
+	const selectedObject = ref<THREE.Object3D | THREE.Light | THREE.Mesh | null>(null)
 
 	// Transform controls
 	const transformControls = shallowRef<TransformControls>()

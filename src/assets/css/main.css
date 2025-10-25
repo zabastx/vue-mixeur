@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import './colors.css';
+@import './components.css';
 @import './utils.css';
 
 @plugin 'tailwind-scrollbar';

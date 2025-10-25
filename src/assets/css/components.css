@@ -1,0 +1,11 @@
+@layer components {
+	.input {
+		@apply inline-block w-full max-w-full;
+		@apply rounded border border-(--color-ui-text-outline) bg-(--color-ui-text-inner) px-1 py-0.5;
+		@apply text-(--color-ui-text-text) outline-none focus:brightness-125;
+	}
+
+	.btn {
+		@apply cursor-pointer rounded border border-[#3d3d3dff] bg-[#545454ff] px-1 py-0.5 font-[inherit];
+	}
+}

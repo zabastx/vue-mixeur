@@ -1,10 +1,11 @@
 <template>
 	<div
-		class="block-border flex flex-col overflow-hidden rounded bg-(--color-window-bg) bg-[repeating-linear-gradient(to_bottom,var(--color-window-bg)_0rem,var(--color-window-bg)_1.5rem,#FFFFFF04_1.5rem,#FFFFFF04_3rem)]"
+		class="block-border text-sm leading-6 flex flex-col overflow-hidden rounded bg-window-bg
+			alternate-rows relative"
 	>
-		<h2 class="flex items-center gap-1 p-1 leading-0"><IconOutliner /> Outliner</h2>
+		<h2 class="flex items-center gap-1 px-1"><IconOutliner /> Outliner</h2>
 		<ScrollContainer>
-			<h3 class="flex items-center gap-1 p-1 leading-0"><IconCollection /> Scene Collection</h3>
+			<h3 class="flex items-center gap-1 px-1"><IconCollection /> Scene Collection</h3>
 			<Tree.Root
 				v-slot="{ flattenItems }"
 				v-model="selectedItem"
@@ -18,24 +19,23 @@
 					:key="item._id"
 					v-slot="{ isExpanded }"
 					:style="{ paddingLeft: getPadding(item.level) }"
-					class="relative flex snap-start items-center gap-1 pr-5 hover:bg-(--color-outliner-active-highlight)"
+					class="relative flex snap-start items-center gap-1 pr-5
+						hover:bg-outliner-active-highlight"
 					:class="{
-						'bg-(--color-outliner-active-highlight) text-(--color-outliner-active-object)':
+						'bg-outliner-active-highlight text-outliner-active-object':
 							item.value.uuid === selectedItem?.uuid
 					}"
 					@select="onSelect"
+					@toggle="onToggle"
 				>
 					<IconArrowRight
 						v-if="item.hasChildren"
 						:class="{ 'rotate-90': isExpanded }"
-						class="size-[1em] shrink-0 text-xs"
+						class="size-[1.5em] p-0.5 shrink-0 text-xs"
+						data-toggle
 					/>
-					<component
-						:is="iconMap.get(item.value.type)"
-						v-if="iconMap.get(item.value.type)"
-						class="shrink-0"
-					/>
-					<span class="overflow-hidden text-ellipsis whitespace-nowrap">
+					<component :is="iconMap.get(item.value.type) || IconEmpty" class="shrink-0" />
+					<span class="overflow-hidden text-ellipsis whitespace-nowrap grow">
 						{{ item.value.name }}
 					</span>
 					<div class="contents" @click.stop>
@@ -68,7 +68,7 @@ import { useThreeStore } from '@/store/three'
 import type THREE from '@/three'
 import { Tree } from 'reka-ui/namespaced'
 import { computed, shallowRef, watch } from 'vue'
-import { type SelectItemSelectEvent } from 'reka-ui'
+import { type SelectItemSelectEvent, type TreeItemToggleEvent } from 'reka-ui'
 import IconEmpty from '@/components/icons/outliner/IconEmpty.vue'
 
 const store = useThreeStore()
@@ -101,18 +101,15 @@ function onSelect(e: SelectItemSelectEvent<OutlinerItem>) {
 	store.selectObject?.(e.detail.value?.uuid)
 }
 
-interface OutlinerItem {
-	uuid: string
-	type: string
-	name: string
-	visible: boolean
-	userData: Record<string, unknown>
-	children?: OutlinerItem[]
+function onToggle(e: TreeItemToggleEvent<OutlinerItem>) {
+	const target = e.target as HTMLElement
+	if ('toggle' in target.dataset) return
+	e.preventDefault()
 }
 
 function getPadding(level: number) {
 	if (level === 0) return '0'
-	return `${level}em`
+	return `${level * 1.5}em`
 }
 
 const iconMap = new Map([
@@ -121,7 +118,15 @@ const iconMap = new Map([
 	['DirectionalLight', IconLightSun],
 	['RectAreaLight', IconLightArea],
 	['Mesh', IconMesh],
-	['Group', IconGroup],
-	['Object3D', IconEmpty]
+	['Group', IconGroup]
 ])
+
+interface OutlinerItem {
+	uuid: string
+	type: string
+	name: string
+	visible: boolean
+	userData: Record<string, unknown>
+	children?: OutlinerItem[]
+}
 </script>

@@ -28,6 +28,8 @@ import {
 	IconLightSpot,
 	IconLightSun
 } from '../icons/light'
+import IconText from '../icons/misc/IconText.vue'
+import { createText } from '@/three/modules/text'
 
 const menuItems: IMenubarMenu[] = [
 	{
@@ -112,6 +114,19 @@ const menuItems: IMenubarMenu[] = [
 						}
 					}
 				]
+			},
+			{
+				type: 'item',
+				key: 'text',
+				label: 'Text',
+				icon: IconText,
+				onClick() {
+					createText().then((text) => {
+						if (text) {
+							threeStore.addModelToScene(text)
+						}
+					})
+				}
 			},
 			{
 				type: 'separator',

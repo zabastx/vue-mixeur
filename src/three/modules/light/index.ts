@@ -67,13 +67,17 @@ export function createLight({ type, parameters }: CreateLightParams) {
 			break
 	}
 
+	if (helper.light.shadow) {
+		helper.light.shadow.bias = -0.001
+	}
+
 	helper.light.name = type
 	helper.name = `${type}Helper`
 	helper.userData = {
 		isSceneLight: true,
 		isHelper: true
 	}
-	helper.children.forEach((child) => {
+	helper.traverse((child) => {
 		child.userData.skipRaycast = true
 	})
 	return helper
@@ -98,8 +102,11 @@ export function getLightHelper(light: THREE.Light) {
 	if (!helper) return
 	helper.light.name = light.type
 	helper.name = `${light.type}Helper`
-	helper.userData.isSceneLight = true
-	helper.children.forEach((child) => {
+	helper.userData = {
+		isSceneLight: true,
+		isHelper: true
+	}
+	helper.traverse((child) => {
 		child.userData.skipRaycast = true
 	})
 	return helper
@@ -112,7 +119,6 @@ function createPointLight(parameters: PointLightOptions['parameters']) {
 		parameters?.distance,
 		parameters?.decay
 	)
-	light.shadow.bias = -0.001
 	light.castShadow = true
 	const helper = new THREE.PointLightHelper(light, 0.5)
 	return helper
@@ -120,9 +126,11 @@ function createPointLight(parameters: PointLightOptions['parameters']) {
 
 function createDirectionalLight(parameters: DirectionalLightOptions['parameters']) {
 	const light = new THREE.DirectionalLight(parameters?.color, parameters?.intensity)
-	light.shadow.bias = -0.0001
+	light.shadow.bias = -0.001
 	light.castShadow = true
-	const helper = new THREE.DirectionalLightHelper(light, 1)
+	light.target.name = 'DirectionalLightTarget'
+	light.add(light.target)
+	const helper = new THREE.DirectionalLightHelper(light, Math.PI)
 	return helper
 }
 
@@ -135,6 +143,8 @@ function createSpotLight(parameters: SpotLightOptions['parameters']) {
 	)
 	light.castShadow = true
 	const helper = new THREE.SpotLightHelper(light)
+	light.target.name = 'SpotLightTarget'
+	light.add(light.target)
 	return helper
 }
 

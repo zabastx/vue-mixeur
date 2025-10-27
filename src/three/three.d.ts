@@ -5,9 +5,13 @@ import {
 	disposeBatchedBoundsTree,
 	acceleratedRaycast
 } from 'three-mesh-bvh'
+import type THREE from '.'
 
 interface Object3DUserData {
 	isShadable?: boolean
+	isHelper?: boolean
+	isSceneLight?: boolean
+	skipRaycast?: boolean
 	[key: string]: unknown
 }
 
@@ -19,6 +23,10 @@ declare module 'three' {
 
 	interface Mesh {
 		raycast: typeof acceleratedRaycast
+		userData: {
+			[key: string]: unknown
+			originalMaterial?: THREE.Material | THREE.Material[]
+		} & Object3DUserData
 	}
 
 	interface BatchedMesh {

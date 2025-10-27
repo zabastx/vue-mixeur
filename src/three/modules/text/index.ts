@@ -3,7 +3,7 @@ import { loadFont } from '../loaders/font'
 import THREE from '@/three'
 
 export async function createText() {
-	const font = await loadFont('helvetiker_regular')
+	const font = await loadFont('helvetiker-regular')
 	if (!font) return
 	const geometry = createTextGeometry({
 		text: 'Text',
@@ -23,7 +23,7 @@ export function createTextGeometry(data: TextGeometryData) {
 	return geometry
 }
 
-interface TextGeometryData {
+export interface TextGeometryData {
 	text: string
 	params: TextGeometryParameters
 }

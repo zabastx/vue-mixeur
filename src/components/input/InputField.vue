@@ -1,12 +1,20 @@
 <template>
-	<Label class="inline-flex items-center gap-2.5 whitespace-nowrap">
+	<Label
+		class="grid grid-cols-[min-content_1fr] items-center gap-2.5 whitespace-nowrap"
+		:style="{ gridTemplateColumns: gridCols }"
+	>
 		{{ label }}
 		<slot></slot>
 	</Label>
 </template>
 
 <script lang="ts" setup>
-defineProps<{
+import { computed } from 'vue'
+
+const { inputWidth = 'fit-content' } = defineProps<{
 	label: string
+	inputWidth?: string
 }>()
+
+const gridCols = computed(() => `1fr ${inputWidth}`)
 </script>

@@ -47,7 +47,22 @@ export function createMesh(type: GeometryTypes) {
 	meshCountMap.set(type, (meshCountMap.get(type) ?? 0) + 1)
 	const count = meshCountMap.get(type) ?? 0
 	mesh.name = `${type}.${count.toString().padStart(3, '0')}`
+	mesh.castShadow = true
+	mesh.receiveShadow = true
 	return mesh
+}
+
+export function isThreeGeometry(geometry: THREE.BufferGeometry) {
+	return (
+		geometry instanceof THREE.BoxGeometry ||
+		geometry instanceof THREE.PlaneGeometry ||
+		geometry instanceof THREE.CircleGeometry ||
+		geometry instanceof THREE.SphereGeometry ||
+		geometry instanceof THREE.IcosahedronGeometry ||
+		geometry instanceof THREE.CylinderGeometry ||
+		geometry instanceof THREE.ConeGeometry ||
+		geometry instanceof THREE.TorusGeometry
+	)
 }
 
 export type GeometryTypes =

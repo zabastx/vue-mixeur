@@ -1,8 +1,14 @@
 <template>
 	<div v-if="store.selectedObject" class="flex flex-col items-end gap-0.5">
-		<InputNumber v-model="store.selectedObject.position.x" label="Location X" />
-		<InputNumber v-model="store.selectedObject.position.y" label="Y" />
-		<InputNumber v-model="store.selectedObject.position.z" label="Z" />
+		<InputField label="Location X">
+			<InputNumber v-model="store.selectedObject.position.x" :step="0.01" label="Location X" />
+		</InputField>
+		<InputField label="Y">
+			<InputNumber v-model="store.selectedObject.position.y" :step="0.01" label="Y" />
+		</InputField>
+		<InputField label="Z">
+			<InputNumber v-model="store.selectedObject.position.z" :step="0.01" label="Z" />
+		</InputField>
 	</div>
 </template>
 

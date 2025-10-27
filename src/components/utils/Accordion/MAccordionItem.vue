@@ -1,18 +1,19 @@
 <template>
 	<Accordion.Item v-slot="{ open }" class="overflow-hidden rounded" v-bind="item">
-		<Accordion.Header class="bg-(--color-properties-panel-header) px-2 py-0.5" v-bind="header">
+		<Accordion.Header class="bg-properties-panel-header px-2 py-0.5" v-bind="header">
 			<Accordion.Trigger
 				class="group flex w-full cursor-pointer items-center gap-1"
 				v-bind="trigger"
 			>
 				<IconArrowRight
-					class="transition-rotate inline-block size-[1em] text-xs duration-200 group-data-[state='open']:rotate-90"
+					class="transition-rotate inline-block size-[1em] text-xs duration-200
+						group-data-[state='open']:rotate-90"
 				/>
 				<span>{{ label }}</span>
 			</Accordion.Trigger>
 		</Accordion.Header>
 		<Accordion.Content
-			class="animation-slide overflow-hidden bg-(--color-properties-panel-background) text-xs"
+			class="animation-slide overflow-hidden bg-properties-panel-background text-xs"
 			v-bind="content"
 		>
 			<div class="p-1 pr-3 pb-2.5">
@@ -41,12 +42,17 @@ defineProps<{
 </script>
 
 <style scoped>
-.animation-slide[data-state='open'] {
-	animation: slide-down 200ms ease-out;
-}
+.animation-slide {
+	animation-duration: 200ms;
+	animation-timing-function: ease-out;
 
-.animation-slide[data-state='closed'] {
-	animation: slide-up 200ms ease-out;
+	&[data-state='open'] {
+		animation-name: slide-down;
+	}
+
+	&[data-state='closed'] {
+		animation-name: slide-up;
+	}
 }
 
 @keyframes slide-down {

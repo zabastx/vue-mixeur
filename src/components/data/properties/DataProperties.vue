@@ -8,7 +8,7 @@
 			default-value="object"
 			:unmount-on-hide="false"
 		>
-			<Tabs.List class="relative flex flex-col gap-0.5 bg-(--color-ui-tab-inner) pt-1 pl-1">
+			<Tabs.List class="relative flex flex-col gap-0.5 bg-ui-tab-inner pt-1 pl-1">
 				<Tabs.Trigger
 					v-for="item in tabs"
 					:key="item.value"
@@ -32,23 +32,28 @@
 <script lang="ts" setup>
 import IconObjectData from '@/components/icons/IconObjectData.vue'
 import ObjectProperties from './object/ObjectProperties.vue'
-import MaterialProperties from './material/MaterialProperties.vue'
-import IconMaterialData from '@/components/icons/IconMaterialData.vue'
 import { Tabs } from 'reka-ui/namespaced'
-import { computed, ref, type Component } from 'vue'
+import { computed, ref, watch, type Component } from 'vue'
 import { useThreeStore } from '@/store/three'
 import THREE from '@/three'
 import LightDataProperties from './data/LightDataProperties.vue'
-import GeometryProperties from './data/GeometryProperties.vue'
 import IconLightProperties from '@/components/icons/properties/IconLightProperties.vue'
-import IconGeometryProperties from '@/components/icons/properties/IconGeometryProperties.vue'
 import { TextGeometry } from 'three/examples/jsm/Addons.js'
 import IconTextProperties from '@/components/icons/properties/IconTextProperties.vue'
 import TextDataProperties from './data/TextDataProperties.vue'
 
 const store = useThreeStore()
 
-const activetab = ref()
+const activetab = ref('object')
+
+watch(
+	() => store.selectedObject,
+	() => {
+		if (store.selectedObject) {
+			activetab.value = 'object'
+		}
+	}
+)
 
 const tabs = computed<DataTabItem[]>(() => {
 	const obj = store.selectedObject
@@ -77,21 +82,25 @@ const tabs = computed<DataTabItem[]>(() => {
 				content: TextDataProperties,
 				title: 'Text Properties'
 			})
-		} else {
-			list.push({
-				icon: IconGeometryProperties,
-				value: 'geometry',
-				content: GeometryProperties,
-				title: 'Geometry Properties'
-			})
 		}
 
-		list.push({
-			icon: IconMaterialData,
-			value: 'material',
-			content: MaterialProperties,
-			title: 'Material Properties'
-		})
+		// if (isThreeGeometry(obj.geometry)) {
+		// 	list.push({
+		// 		icon: IconGeometryProperties,
+		// 		value: 'geometry',
+		// 		content: GeometryProperties,
+		// 		title: 'Geometry Properties'
+		// 	})
+		// }
+
+		// if ('material' in obj) {
+		// 	list.push({
+		// 		icon: IconMaterialData,
+		// 		value: 'material',
+		// 		content: MaterialProperties,
+		// 		title: 'Material Properties'
+		// 	})
+		// }
 	}
 	return list
 })

@@ -3,7 +3,7 @@
 		class="block-border text-sm leading-6 flex flex-col overflow-hidden rounded bg-window-bg
 			alternate-rows relative"
 	>
-		<h2 class="flex items-center gap-1 px-1"><IconOutliner /> Outliner</h2>
+		<h2 class="flex items-center gap-1 px-1 text-[1rem]"><IconOutliner /> Outliner</h2>
 		<ScrollContainer>
 			<h3 class="flex items-center gap-1 px-1"><IconCollection /> Scene Collection</h3>
 			<Tree.Root
@@ -98,6 +98,8 @@ function parseObject(obj: THREE.Object3D): OutlinerItem {
 }
 
 function onSelect(e: SelectItemSelectEvent<OutlinerItem>) {
+	const target = e.target as HTMLElement
+	if ('toggle' in target.dataset) return e.preventDefault()
 	store.selectObject?.(e.detail.value?.uuid)
 }
 

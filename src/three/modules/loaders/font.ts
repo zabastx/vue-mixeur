@@ -1,15 +1,15 @@
 import { useProgressStore, type LoadingProgress } from '@/store/progress'
 import { useToast } from '@/composables/useToast'
 
-export async function loadFont(fontName: StdFontName) {
+export async function loadFont(font: StdFontName | (string & {})) {
 	const progressStore = useProgressStore()
 	const loadingId = `font-${Date.now()}-${Math.random().toString(36).slice(2)}`
 	const { FontLoader } = await import('three/examples/jsm/Addons.js')
 	const fontLoader = new FontLoader()
-	fontLoader.setPath('/fonts/')
 
 	try {
-		const res = await fontLoader.loadAsync(`${fontName}.typeface.json`, onProgress)
+		const url = defaultFontUrls.get(font) || font
+		const res = await fontLoader.loadAsync(url, onProgress)
 		return res
 	} catch (err) {
 		const error = err as Error
@@ -25,16 +25,57 @@ export async function loadFont(fontName: StdFontName) {
 			if (progressStore.loadingItems.find((p: LoadingProgress) => p.id === loadingId)) {
 				progressStore.updateProgress(loadingId, e.loaded)
 			} else {
-				progressStore.startLoading(loadingId, `${fontName}.typeface.json`, e.total)
+				progressStore.startLoading(loadingId, font, e.total)
 			}
 		}
 	}
 }
 
+const defaultFontUrls = new Map<string, string>([
+	['gentilis-bold', '/fonts/gentilis_bold.typeface.json'],
+	['gentilis-regular', '/fonts/gentilis_regular.typeface.json'],
+	['helvetiker-regular', '/fonts/helvetiker_regular.typeface.json'],
+	['helvetiker-bold', '/fonts/helvetiker_bold.typeface.json'],
+	['optimer-regular', '/fonts/optimer_regular.typeface.json'],
+	['optimer-bold', '/fonts/optimer_bold.typeface.json']
+])
+
+export const defaultFontsList: FontsListOption[] = [
+	{
+		value: 'helvetiker-regular',
+		label: 'Helvetiker Regular'
+	},
+	{
+		value: 'optimer-regular',
+		label: 'Optimer Regular'
+	},
+	{
+		value: 'gentilis-regular',
+		label: 'Gentilis Regular'
+	},
+	{
+		value: 'helvetiker-bold',
+		label: 'Helvetiker Bold'
+	},
+	{
+		value: 'optimer-bold',
+		label: 'Optimer Bold'
+	},
+	{
+		value: 'gentilis-bold',
+		label: 'Gentilis Bold'
+	}
+] as const
+
 export type StdFontName =
-	| 'helvetiker_regular'
-	| 'helvetiker_bold'
-	| 'optimer_regular'
-	| 'optimer_bold'
-	| 'gentilis_regular'
-	| 'gentilis_bold'
+	| 'helvetiker-regular'
+	| 'helvetiker-bold'
+	| 'optimer-regular'
+	| 'optimer-bold'
+	| 'gentilis-regular'
+	| 'gentilis-bold'
+
+export interface FontsListOption {
+	value: StdFontName
+	label: string
+}

@@ -1,6 +1,6 @@
 <template>
-	<MDialog v-model="isOpen" title="About Mixeur" class="max-w-xl bg-(--color-editor-border)">
-		<div class="flex max-w-xl flex-col text-(--color-menu-bg-text)">
+	<MDialog v-model="isOpen" title="About Mixeur" class="max-w-xl bg-editor-border">
+		<div class="flex max-w-xl flex-col text-menu-bg-text">
 			<!-- Header -->
 			<div class="flex items-center gap-4 p-4">
 				<IconMixeur class="text-5xl" />

@@ -4,9 +4,7 @@
 			<div class="flex h-full flex-col bg-gray-900 font-sans text-gray-200">
 				<TopBar />
 
-				<main
-					class="grid min-h-0 flex-1 grid-cols-(--main-cols) bg-(--color-editor-border) p-1 select-none"
-				>
+				<main class="grid min-h-0 flex-1 grid-cols-(--main-cols) bg-editor-border p-1 select-none">
 					<MViewport class="block-border" />
 					<div ref="divider" class="divider w-1 cursor-col-resize"></div>
 					<MSidebar />

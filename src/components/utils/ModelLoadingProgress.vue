@@ -3,25 +3,26 @@
 		<div
 			v-for="loading in activeLoadings"
 			:key="loading.id"
-			class="rounded-lg border border-(--color-ui-menu-bg-outline) bg-(--color-panel-background) p-4 text-white shadow-lg"
+			class="rounded-lg border border-ui-menu-bg-outline bg-panel-background p-4 text-white
+				shadow-lg"
 		>
 			<div class="mb-2 flex items-center justify-between">
 				<h3 class="truncate text-sm font-medium">{{ loading.filename }}</h3>
 				<span class="text-xs opacity-70">{{ Math.round(loading.percentage) }}%</span>
 			</div>
 
-			<div class="mb-2 h-2 w-full rounded-full bg-(--color-ui-number-field-inner)">
+			<div class="mb-2 h-2 w-full rounded-full bg-ui-number-field-inner">
 				<div
-					class="h-2 rounded-full bg-(--color-ui-radio-button-selected) transition-all duration-300 ease-out"
+					class="h-2 rounded-full bg-ui-radio-button-selected transition-all duration-300 ease-out"
 					:style="{ width: `${loading.percentage}%` }"
 				></div>
 			</div>
 
 			<div class="flex justify-between text-xs opacity-70">
 				<span>{{ formatBytes(loading.loaded) }} / {{ formatBytes(loading.total) }}</span>
-				<span v-if="loading.estimatedTimeRemaining">{{
-					formatTime(loading.estimatedTimeRemaining)
-				}}</span>
+				<span v-if="loading.estimatedTimeRemaining">
+					{{ formatTime(loading.estimatedTimeRemaining) }}
+				</span>
 			</div>
 		</div>
 	</div>

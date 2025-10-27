@@ -45,7 +45,7 @@
 					</Menubar.Sub>
 					<Menubar.Separator
 						v-else-if="item.type === 'separator'"
-						class="h-[1px] bg-(--color-ui-menu-bg-outline)"
+						class="h-px bg-ui-menu-bg-outline"
 					/>
 				</template>
 			</Menubar.Content>
@@ -106,7 +106,7 @@ interface IMenubarCommon {
 .item {
 	@apply flex cursor-default items-center gap-1 rounded p-1 pl-2.5 leading-none;
 	&[data-highlighted] {
-		@apply text-(--color-ui-menu-item-selected) data-[highlighted]:bg-gray-500;
+		@apply text-(--color-ui-menu-item-selected) data-highlighted:bg-gray-500;
 	}
 	& > :first-child {
 		@apply text-sm;

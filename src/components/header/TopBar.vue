@@ -1,5 +1,5 @@
 <template>
-	<header class="flex items-center bg-(--color-topbar-background) p-1 px-2">
+	<header class="flex items-center bg-topbar-background p-1 px-2">
 		<MenuBar :items="menuItems" />
 		<AboutModal v-model:open="aboutModalOpen" />
 		<a

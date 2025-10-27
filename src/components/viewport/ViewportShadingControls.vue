@@ -6,9 +6,9 @@
 			:content="{ align: 'start', side: 'bottom', alignOffset: -10, sideOffset: 10 }"
 		>
 			<button
-				class="shading-btn"
+				class="cursor-pointer bg-ui-radio-button-inner p-0.5"
 				:class="{
-					selected: btn.name === threeStore.currentShadingMode,
+					'bg-ui-radio-button-selected': btn.name === threeStore.currentShadingMode,
 					'rounded-l': index === 0,
 					'rounded-r': index === buttons.length - 1
 				}"
@@ -88,13 +88,6 @@ interface ShadingControlsElement {
 
 <style scoped>
 @reference 'tailwindcss/theme';
-
-.shading-btn {
-	@apply cursor-pointer bg-(--color-ui-radio-button-inner) p-0.5;
-	&.selected {
-		@apply bg-(--color-ui-radio-button-selected);
-	}
-}
 
 :deep(em) {
 	@apply text-[#4772B3] not-italic;

@@ -21,5 +21,8 @@ function getAxes() {
 	axesGroup.add(axes, axesMirror)
 	axesGroup.name = 'AxesHelper'
 	axesGroup.userData.isHelper = true
+	axesGroup.children.forEach((child) => {
+		child.scale.y = 0
+	})
 	return axesGroup
 }

@@ -12,12 +12,14 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AboutModal: typeof import('./components/modals/AboutModal.vue')['default']
+    CheckboxIndicator: typeof import('reka-ui')['CheckboxIndicator']
     CheckboxRoot: typeof import('reka-ui')['CheckboxRoot']
     DataOutliner: typeof import('./components/data/outliner/DataOutliner.vue')['default']
     DataProperties: typeof import('./components/data/properties/DataProperties.vue')['default']
     GeometryProperties: typeof import('./components/data/properties/data/GeometryProperties.vue')['default']
     IconArrowRight: typeof import('./components/icons/base/IconArrowRight.vue')['default']
     IconCheckbox: typeof import('./components/icons/IconCheckbox.vue')['default']
+    IconCheckmark: typeof import('./components/icons/misc/IconCheckmark.vue')['default']
     IconChevronRight: typeof import('./components/icons/IconChevronRight.vue')['default']
     IconCollection: typeof import('./components/icons/IconCollection.vue')['default']
     IconDataProperties: typeof import('./components/icons/properties/IconDataProperties.vue')['default']
@@ -64,6 +66,7 @@ declare module 'vue' {
     IconViewOrtho: typeof import('./components/icons/view/IconViewOrtho.vue')['default']
     IconViewPerspective: typeof import('./components/icons/view/IconViewPerspective.vue')['default']
     IconVisibility: typeof import('./components/icons/misc/IconVisibility.vue')['default']
+    InputCheckbox: typeof import('./components/input/InputCheckbox.vue')['default']
     InputField: typeof import('./components/input/InputField.vue')['default']
     InputNumber: typeof import('./components/input/InputNumber.vue')['default']
     InputSelect: typeof import('./components/input/InputSelect.vue')['default']

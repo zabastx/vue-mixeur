@@ -68,6 +68,11 @@
 	--color-ui-tab-inner: #1d1d1dff;
 	--color-ui-tab-inner-selected: #303030ff;
 
+	--color-ui-option-inner: #545454ff;
+	--color-ui-option-inner-selected: #4772b3ff;
+	--color-ui-option-outline: #3d3d3dff;
+	--color-ui-option-item: #ffffffff;
+
 	--color-outliner-active-highlight: #334d80;
 	--color-outliner-active-object: #ffaf29;
 	--color-outliner-alternate-rows: #ffffff04;

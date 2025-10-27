@@ -19,11 +19,12 @@ Try the live demo at [mixeur.zabastx.ru](https://mixeur.zabastx.ru)
 - **Shading Modes**: Switch between rendered, solid, wireframe, and texture shading views
 - **Model Import**: Load 3D models in various formats (GLTF, OBJ, etc.)
 - **Scene Management**: Outliner panel for hierarchical object organization
-- **Properties Panel**: Inspect and modify object properties, materials, and transforms
+- **Properties Panel**: Inspect and modify object properties, materials, transforms, geometry, lights, and text
+- **Text Objects**: Create and edit 3D text with customizable fonts and properties
 - **Blender-style Controls**: Familiar navigation and interaction patterns
 - **Real-time Rendering**: Hardware-accelerated rendering with post-processing effects
 - **BVH Acceleration**: Fast raycasting and collision detection using Bounding Volume Hierarchy
-- **Light Management**: Built-in lighting system with helper visualization
+- **Light Management**: Built-in lighting system with helper visualization and property editing
 - **Performance Monitoring**: Real-time stats display in development mode
 
 ## Usage

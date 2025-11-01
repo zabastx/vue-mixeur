@@ -8,12 +8,12 @@
 			<button
 				class="cursor-pointer bg-ui-radio-button-inner p-0.5"
 				:class="{
-					'bg-ui-radio-button-selected': btn.name === threeStore.currentShadingMode,
+					'bg-ui-radio-button-selected': btn.name === shadingStore.currentMode,
 					'rounded-l': index === 0,
 					'rounded-r': index === buttons.length - 1
 				}"
 				type="button"
-				@click="setShadingMode(btn.name)"
+				@click="shadingStore.setMode(btn.name)"
 			>
 				<component :is="btn.icon" />
 			</button>
@@ -29,8 +29,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useThreeStore } from '@/store/three'
-import type { ShadingMode } from '@/three/modules/renderer/ShadingControls'
+import { useShadingStore } from '@/store/shading'
+import type { ShadingMode } from '@/store/shading'
 import IconShadingWireframe from '../icons/shading/IconShadingWireframe.vue'
 import type { Component } from 'vue'
 import IconShadingSolid from '../icons/shading/IconShadingSolid.vue'
@@ -38,11 +38,7 @@ import IconShadingTexture from '../icons/shading/IconShadingTexture.vue'
 import IconShadingRendered from '../icons/shading/IconShadingRendered.vue'
 import MTooltip, { type MTooltipContent } from '../utils/MTooltip.vue'
 
-const threeStore = useThreeStore()
-
-function setShadingMode(mode: ShadingMode) {
-	threeStore.currentShadingMode = mode
-}
+const shadingStore = useShadingStore()
 
 const buttons: ShadingControlsElement[] = [
 	{

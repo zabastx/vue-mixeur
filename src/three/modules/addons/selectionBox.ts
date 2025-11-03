@@ -6,7 +6,7 @@ export function setSelectionBox({ camera, renderer, scene, canvas, controls }: S
 	const selectionBox = new SelectionBox(camera.value, scene)
 	const helper = new SelectionHelper(renderer, 'selection-box')
 
-	const selectedObjects = ref<THREE.Mesh[]>([])
+	const selectedObjects = ref<THREE.Object3D[]>([])
 
 	function getNormalizedPointer(event: PointerEvent, target: HTMLElement) {
 		const rect = target.getBoundingClientRect()

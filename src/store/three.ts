@@ -15,16 +15,18 @@ import {
 	type TransformControls,
 	type TransformControlsMode
 } from 'three/examples/jsm/Addons.js'
-import { useShadingControls } from '@/three/modules/renderer/shading'
 import { useProgressStore, type LoadingProgress } from './progress'
 import { disposeModel } from '@/three/modules/core/dispose'
 import { createLight, getLightHelper, type LightHelper } from '@/three/modules/light'
 import { useStats } from '@/three/modules/extras/stats'
+import { useShadingStore } from './shading'
 
 export const useThreeStore = defineStore('three', () => {
 	const scene = new THREE.Scene()
 	const helperScene = new THREE.Scene()
 	scene.background = new THREE.Color('#3D3D3D')
+
+	const shadingStore = useShadingStore()
 
 	const grid = setGridHelper(scene)
 
@@ -58,7 +60,6 @@ export const useThreeStore = defineStore('three', () => {
 	// --------------------------------------
 
 	const outlinePass = shallowRef<OutlinePass>()
-	const shadingControls = useShadingControls(scene)
 
 	const selectObject = shallowRef<(uuid?: string) => void>()
 	const selectedObject = ref<THREE.Object3D | THREE.Light | THREE.Mesh | null>(null)
@@ -90,7 +91,7 @@ export const useThreeStore = defineStore('three', () => {
 	async function initScene(canvasRef: ShallowRef<HTMLCanvasElement | null>) {
 		if (!canvasRef.value) return
 		const canvas = canvasRef.value
-		shadingControls.init()
+		shadingStore.init(scene)
 		addLightHelperToScene(pointLightHelper)
 
 		if (import.meta.env.DEV) initStats(canvas.parentElement)
@@ -234,7 +235,7 @@ export const useThreeStore = defineStore('three', () => {
 
 				object.add(helper)
 
-				if (shadingControls.currentMode.value !== 'rendered') {
+				if (shadingStore.shadingMode !== 'rendered') {
 					helper.light.visible = false
 				}
 			}
@@ -243,7 +244,7 @@ export const useThreeStore = defineStore('three', () => {
 		scene.add(object)
 		raycasterObjects.push(object)
 
-		shadingControls.cacheNewObjectMaterials(object)
+		shadingStore.cacheNewObjectMaterials(object)
 		selectedObject.value = object
 		transformControls.value?.attach(object)
 		if (outlinePass.value) outlinePass.value.selectedObjects = [object]
@@ -253,7 +254,7 @@ export const useThreeStore = defineStore('three', () => {
 		scene.add(helper.light)
 		scene.add(helper)
 
-		if (shadingControls.currentMode.value !== 'rendered') {
+		if (shadingStore.shadingMode !== 'rendered') {
 			helper.light.visible = false
 		}
 
@@ -355,7 +356,6 @@ export const useThreeStore = defineStore('three', () => {
 		selectedObject,
 		controls,
 		addModelToScene,
-		currentShadingMode: shadingControls.currentMode,
 		setTransformMode,
 		currentTransformMode,
 		deleteFromScene,

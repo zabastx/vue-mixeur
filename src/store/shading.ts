@@ -1,46 +1,16 @@
 import THREE from '@/three'
+import type { LightHelper } from '@/three/modules/light'
+import { loadWorldTexture } from '@/three/modules/loaders/environment'
+import { acceptHMRUpdate, defineStore } from 'pinia'
+import { computed, ref, shallowRef } from 'vue'
 
-/**
- * Represents the different shading modes available, replicating Blender's viewport shading options.
- */
-export type ShadingMode = 'wireframe' | 'solid' | 'materialPreview' | 'rendered'
-
-/**
- * Internal cache for storing original and current materials for each mesh.
- */
-interface MaterialCache {
-	original: THREE.Material | THREE.Material[]
-	current: THREE.Material | THREE.Material[]
-}
-
-/**
- * A utility class for managing different shading modes in a Three.js scene,
- * replicating Blender's viewport shading functionality.
- *
- * This class allows switching between wireframe, solid, material preview, and rendered modes
- * by dynamically changing mesh materials while preserving the original materials for restoration.
- *
- * @example
- * ```typescript
- * const shadingModes = new ShadingControls(scene)
- * shadingModes.setMode('wireframe')
- * ```
- */
-export class ShadingControls {
-	private scene: THREE.Scene
-	private materialCache = new Map<THREE.Mesh, MaterialCache>()
-	private currentMode: ShadingMode = 'solid'
-	private environmentMap: THREE.Texture | null = null
-
-	/**
-	 * Creates a new ShadingControls instance for the given scene.
-	 *
-	 * @param scene - The Three.js scene containing meshes to manage shading for
-	 */
-	constructor(scene: THREE.Scene) {
-		this.scene = scene
-		this.cacheOriginalMaterials()
-	}
+export const useShadingStore = defineStore('shading', () => {
+	let scene: THREE.Scene | null = null
+	const solidModeLights = getSolidShadingLights()
+	const currentMode = ref<ShadingMode>('solid')
+	const environmentMap = shallowRef<THREE.Texture | null>(null)
+	const materialCache = new Map<THREE.Mesh, MaterialCache>()
+	const shadingMode = computed(() => currentMode.value)
 
 	/**
 	 * Determines if an object should be affected by shading modes.
@@ -50,7 +20,7 @@ export class ShadingControls {
 	 * @param object - The object to check
 	 * @returns True if the object should be shaded, false otherwise
 	 */
-	private shouldShadeObject(object: THREE.Object3D): boolean {
+	function shouldShadeObject(object: THREE.Object3D): boolean {
 		// Only objects explicitly marked as shadable will be affected
 		return !!object.userData.isShadable
 	}
@@ -60,10 +30,11 @@ export class ShadingControls {
 	 * This allows restoring the original materials when switching back to 'rendered' mode.
 	 * Only caches materials for objects marked as shadable.
 	 */
-	private cacheOriginalMaterials() {
-		this.scene.traverse((object) => {
-			if (object instanceof THREE.Mesh && object.material && this.shouldShadeObject(object)) {
-				this.cacheMeshMaterials(object)
+	function cacheOriginalMaterials() {
+		if (!scene) return
+		scene.traverse((object) => {
+			if (object instanceof THREE.Mesh && object.material && shouldShadeObject(object)) {
+				cacheMeshMaterials(object)
 			}
 		})
 	}
@@ -75,17 +46,17 @@ export class ShadingControls {
 	 *
 	 * @param object - The mesh object to cache materials for
 	 */
-	public cacheNewObjectMaterials(object: THREE.Object3D) {
+	function cacheNewObjectMaterials(object: THREE.Object3D) {
 		object.traverse((child) => {
 			if (
 				child instanceof THREE.Mesh &&
 				child.material &&
-				!this.materialCache.has(child) &&
-				this.shouldShadeObject(child)
+				!materialCache.has(child) &&
+				shouldShadeObject(child)
 			) {
-				this.cacheMeshMaterials(child)
+				cacheMeshMaterials(child)
 				// Apply current shading mode to the new mesh
-				this.applyModeToMesh(child, this.currentMode)
+				applyModeToMesh(child, currentMode.value)
 			}
 		})
 	}
@@ -95,12 +66,12 @@ export class ShadingControls {
 	 *
 	 * @param mesh - The mesh to cache materials for
 	 */
-	private cacheMeshMaterials(mesh: THREE.Mesh) {
+	function cacheMeshMaterials(mesh: THREE.Mesh) {
 		if (!mesh.material) return
 
 		const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
 		const originalMaterials = materials.map((mat) => mat.clone())
-		this.materialCache.set(mesh, {
+		materialCache.set(mesh, {
 			original: Array.isArray(mesh.material) ? originalMaterials : originalMaterials[0]!,
 			current: mesh.material
 		})
@@ -111,25 +82,37 @@ export class ShadingControls {
 	 *
 	 * @param mode - The shading mode to apply ('wireframe', 'solid', 'materialPreview', or 'rendered')
 	 */
-	setMode(mode: ShadingMode) {
-		if (this.currentMode === mode) return
-		this.currentMode = mode
+	function setMode(mode: ShadingMode) {
+		if (!scene || mode === shadingMode.value) return
+		currentMode.value = mode
 
-		if (mode === 'materialPreview') {
-			this.scene.environment = this.environmentMap
+		if (mode === 'solid') {
+			solidModeLights.forEach((item) => scene?.add(item))
 		} else {
-			this.scene.environment = null
+			solidModeLights.forEach((item) => scene?.remove(item))
 		}
 
-		this.scene.traverse((object) => {
+		if (mode === 'materialPreview') {
+			scene.environment = environmentMap.value
+		} else {
+			scene.environment = null
+		}
+
+		if (mode === 'rendered') {
+			setSceneLightsVisibility(true)
+		} else {
+			setSceneLightsVisibility(false)
+		}
+
+		scene.traverse((object) => {
 			if (object instanceof THREE.Mesh) {
-				this.applyModeToMesh(object, mode)
+				applyModeToMesh(object, mode)
 			}
 		})
 	}
 
-	setEnvironmentMap(map: THREE.Texture) {
-		this.environmentMap = map
+	function setEnvironmentMap(map: THREE.Texture) {
+		environmentMap.value = map
 	}
 
 	/**
@@ -138,21 +121,21 @@ export class ShadingControls {
 	 * @param mesh - The mesh to apply the shading mode to
 	 * @param mode - The shading mode to apply
 	 */
-	private applyModeToMesh(mesh: THREE.Mesh, mode: ShadingMode) {
-		const cache = this.materialCache.get(mesh)
+	function applyModeToMesh(mesh: THREE.Mesh, mode: ShadingMode) {
+		const cache = materialCache.get(mesh)
 		if (!cache) return
 
 		let newMaterial: THREE.Material | THREE.Material[]
 
 		switch (mode) {
 			case 'wireframe':
-				newMaterial = this.createWireframeMaterial(cache.original)
+				newMaterial = createWireframeMaterial(cache.original)
 				break
 			case 'solid':
-				newMaterial = this.createSolidMaterial(cache.original)
+				newMaterial = createSolidMaterial(cache.original)
 				break
 			case 'materialPreview':
-				newMaterial = this.createMaterialPreviewMaterial(cache.original)
+				newMaterial = createMaterialPreviewMaterial(cache.original)
 				break
 			case 'rendered':
 				newMaterial = cache.original
@@ -172,13 +155,13 @@ export class ShadingControls {
 	 * @param original - The original material(s) to base the wireframe on
 	 * @returns Wireframe material(s) with the same color and transparency
 	 */
-	private createWireframeMaterial(
+	function createWireframeMaterial(
 		original: THREE.Material | THREE.Material[]
 	): THREE.Material | THREE.Material[] {
 		if (Array.isArray(original)) {
-			return original.map((mat) => this.createSingleWireframeMaterial(mat))
+			return original.map((mat) => createSingleWireframeMaterial(mat))
 		}
-		return this.createSingleWireframeMaterial(original)
+		return createSingleWireframeMaterial(original)
 	}
 
 	/**
@@ -188,7 +171,7 @@ export class ShadingControls {
 	 * @param original - The original material
 	 * @returns A new MeshBasicMaterial with wireframe enabled
 	 */
-	private createSingleWireframeMaterial(original: THREE.Material): THREE.Material {
+	function createSingleWireframeMaterial(original: THREE.Material): THREE.Material {
 		const wireframeMat = new THREE.MeshBasicMaterial({
 			color: (original as THREE.MeshBasicMaterial).color || 0x00ff00,
 			wireframe: true,
@@ -205,13 +188,13 @@ export class ShadingControls {
 	 * @param original - The original material(s) to base the solid materials on
 	 * @returns Solid material(s) with flat shading
 	 */
-	private createSolidMaterial(
+	function createSolidMaterial(
 		original: THREE.Material | THREE.Material[]
 	): THREE.Material | THREE.Material[] {
 		if (Array.isArray(original)) {
-			return original.map((mat) => this.createSingleSolidMaterial(mat))
+			return original.map((mat) => createSingleSolidMaterial(mat))
 		}
-		return this.createSingleSolidMaterial(original)
+		return createSingleSolidMaterial(original)
 	}
 
 	/**
@@ -221,7 +204,7 @@ export class ShadingControls {
 	 * @param original - The original material
 	 * @returns A new MeshLambertMaterial with flat shading
 	 */
-	private createSingleSolidMaterial(original: THREE.Material): THREE.Material {
+	function createSingleSolidMaterial(original: THREE.Material): THREE.Material {
 		const solidMat = new THREE.MeshLambertMaterial({
 			color:
 				original instanceof THREE.MeshBasicMaterial || original instanceof THREE.MeshLambertMaterial
@@ -241,13 +224,13 @@ export class ShadingControls {
 	 * @param original - The original material(s) to convert to PBR materials
 	 * @returns PBR material(s) suitable for material preview
 	 */
-	private createMaterialPreviewMaterial(
+	function createMaterialPreviewMaterial(
 		original: THREE.Material | THREE.Material[]
 	): THREE.Material | THREE.Material[] {
 		if (Array.isArray(original)) {
-			return original.map((mat) => this.createSingleMaterialPreviewMaterial(mat))
+			return original.map((mat) => createSingleMaterialPreviewMaterial(mat))
 		}
-		return this.createSingleMaterialPreviewMaterial(original)
+		return createSingleMaterialPreviewMaterial(original)
 	}
 
 	/**
@@ -257,7 +240,7 @@ export class ShadingControls {
 	 * @param original - The original material
 	 * @returns A MeshStandardMaterial for PBR preview
 	 */
-	private createSingleMaterialPreviewMaterial(original: THREE.Material): THREE.Material {
+	function createSingleMaterialPreviewMaterial(original: THREE.Material): THREE.Material {
 		if (
 			original instanceof THREE.MeshStandardMaterial ||
 			original instanceof THREE.MeshPhysicalMaterial
@@ -278,12 +261,70 @@ export class ShadingControls {
 		}
 	}
 
-	/**
-	 * Gets the currently active shading mode.
-	 *
-	 * @returns The current shading mode
-	 */
-	getCurrentMode(): ShadingMode {
-		return this.currentMode
+	function init(newScene: THREE.Scene) {
+		scene = newScene
+		solidModeLights.forEach((item) => scene?.add(item))
+		cacheOriginalMaterials()
+
+		loadWorldTexture('forest').then((map) => {
+			if (!map) return
+			setEnvironmentMap(map)
+			setMode(currentMode.value)
+		})
 	}
+
+	function setSceneLightsVisibility(val: boolean) {
+		if (!scene) return
+		scene.traverse((obj: LightHelper | THREE.Object3D) => {
+			if ('light' in obj && obj.userData.isSceneLight) {
+				obj.light.visible = val
+			}
+		})
+	}
+
+	return { init, cacheNewObjectMaterials, setEnvironmentMap, setMode, shadingMode }
+})
+
+function getSolidShadingLights() {
+	// Ambient light for overall illumination
+	const ambient = new THREE.AmbientLight(0xffffff, 1)
+	ambient.name = 'SolidModeAmbientLight'
+
+	// Main directional light (key light)
+	const mainLight = new THREE.DirectionalLight(0xffffff, 0.8)
+	mainLight.name = 'SolidModeMainLight'
+	mainLight.position.set(5, 5, 5)
+
+	// Fill directional light for softer lighting
+	const fillLight = new THREE.DirectionalLight(0xffffff, 0.3)
+	fillLight.name = 'SolidModeFillLight'
+	fillLight.position.set(-5, -5, -5)
+
+	const lights = [ambient, mainLight, fillLight]
+
+	lights.forEach((item) => {
+		item.userData = {
+			isSceneLight: true,
+			isHelper: true
+		}
+	})
+
+	return lights
+}
+
+if (import.meta.hot) {
+	import.meta.hot.accept(acceptHMRUpdate(useShadingStore, import.meta.hot))
+}
+
+/**
+ * Represents the different shading modes available, replicating Blender's viewport shading options.
+ */
+export type ShadingMode = 'wireframe' | 'solid' | 'materialPreview' | 'rendered'
+
+/**
+ * Internal cache for storing original and current materials for each mesh.
+ */
+interface MaterialCache {
+	original: THREE.Material | THREE.Material[]
+	current: THREE.Material | THREE.Material[]
 }

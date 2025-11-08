@@ -1,3 +1,5 @@
+import { useToast } from '@/composables/useToast'
+
 export async function loadModel({ url, format, onProgress }: ModelLoaderParameters) {
 	const ext = (format || url.split('.').pop() || '').toLowerCase()
 
@@ -39,6 +41,10 @@ export async function loadModel({ url, format, onProgress }: ModelLoaderParamete
 	} catch (e) {
 		const error = e as Error
 		console.error(`Error loading a model (${url}):`, error.name, error.message)
+		useToast().toast.error('', {
+			title: `Error loading a model`,
+			message: error.message
+		})
 		return null
 	} finally {
 		if (url.startsWith('blob:')) {

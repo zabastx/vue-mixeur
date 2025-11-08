@@ -5,7 +5,7 @@
 		</ScrollArea.Viewport>
 		<ScrollArea.Scrollbar
 			orientation="vertical"
-			class="flex touch-none p-0.5 transition-colors duration-160 ease-out select-none
+			class="flex touch-none p-0.5 transition-colors duration-160 ease-out
 				data-[orientation=horizontal]:h-2.5 data-[orientation=horizontal]:flex-col
 				data-[orientation=vertical]:w-2.5"
 		>

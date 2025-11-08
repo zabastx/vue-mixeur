@@ -21,7 +21,7 @@
 				</Tabs.Trigger>
 			</Tabs.List>
 			<ScrollContainer>
-				<Tabs.Content v-for="item in tabs" :key="item.value" :value="item.value" class="p-1">
+				<Tabs.Content v-for="item in tabs" :key="item.value" :value="item.value" class="p-2 pr-3">
 					<component :is="item.content" />
 				</Tabs.Content>
 			</ScrollContainer>
@@ -41,6 +41,8 @@ import IconLightProperties from '@/components/icons/properties/IconLightProperti
 import { TextGeometry } from 'three/examples/jsm/Addons.js'
 import IconTextProperties from '@/components/icons/properties/IconTextProperties.vue'
 import TextDataProperties from './data/TextDataProperties.vue'
+import IconMaterialData from '@/components/icons/IconMaterialData.vue'
+import MaterialProperties from './material/MaterialProperties.vue'
 
 const store = useThreeStore()
 
@@ -93,14 +95,14 @@ const tabs = computed<DataTabItem[]>(() => {
 		// 	})
 		// }
 
-		// if ('material' in obj) {
-		// 	list.push({
-		// 		icon: IconMaterialData,
-		// 		value: 'material',
-		// 		content: MaterialProperties,
-		// 		title: 'Material Properties'
-		// 	})
-		// }
+		if ('material' in obj) {
+			list.push({
+				icon: IconMaterialData,
+				value: 'material',
+				content: MaterialProperties,
+				title: 'Material Properties'
+			})
+		}
 	}
 	return list
 })

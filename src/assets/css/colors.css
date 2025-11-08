@@ -22,9 +22,11 @@
 
 	--color-panel-header: #3d3d3dff;
 	--color-panel-background: #3d3d3dff;
+	--color-panel-sub-background: #0000001f;
 
 	--color-properties-panel-header: var(--color-panel-header);
 	--color-properties-panel-background: var(--color-panel-background);
+	--color-properties-panel-sub-background: var(--color-panel-sub-background);
 
 	--color-viewport-header-bg: #303030b3;
 

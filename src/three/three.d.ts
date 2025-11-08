@@ -38,4 +38,8 @@ declare module 'three' {
 	interface Object3D {
 		userData: Object3DUserData
 	}
+
+	interface Light {
+		userData: Object3DUserData
+	}
 }

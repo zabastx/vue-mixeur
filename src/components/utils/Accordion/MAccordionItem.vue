@@ -16,7 +16,7 @@
 			class="animation-slide overflow-hidden bg-properties-panel-background text-xs"
 			v-bind="content"
 		>
-			<div class="p-1 pr-3 pb-2.5">
+			<div class="pb-2.5 pt-1 pr-3" :class="{ 'pr-0!': nested }">
 				<slot :open="open"></slot>
 			</div>
 		</Accordion.Content>
@@ -38,6 +38,7 @@ defineProps<{
 	trigger?: AccordionTriggerProps
 	content?: AccordionContentProps
 	label: string
+	nested?: boolean
 }>()
 </script>
 

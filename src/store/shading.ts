@@ -9,7 +9,7 @@ export const useShadingStore = defineStore('shading', () => {
 	const solidModeLights = getSolidShadingLights()
 	const currentMode = ref<ShadingMode>('solid')
 	const environmentMap = shallowRef<THREE.Texture | null>(null)
-	const materialCache = new Map<THREE.Mesh, MaterialCache>()
+	const materialCache = new Map<string, MaterialCache>()
 	const shadingMode = computed(() => currentMode.value)
 
 	/**
@@ -51,7 +51,7 @@ export const useShadingStore = defineStore('shading', () => {
 			if (
 				child instanceof THREE.Mesh &&
 				child.material &&
-				!materialCache.has(child) &&
+				!materialCache.has(child.uuid) &&
 				shouldShadeObject(child)
 			) {
 				cacheMeshMaterials(child)
@@ -71,7 +71,7 @@ export const useShadingStore = defineStore('shading', () => {
 
 		const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
 		const originalMaterials = materials.map((mat) => mat.clone())
-		materialCache.set(mesh, {
+		materialCache.set(mesh.uuid, {
 			original: Array.isArray(mesh.material) ? originalMaterials : originalMaterials[0]!,
 			current: mesh.material
 		})
@@ -122,7 +122,7 @@ export const useShadingStore = defineStore('shading', () => {
 	 * @param mode - The shading mode to apply
 	 */
 	function applyModeToMesh(mesh: THREE.Mesh, mode: ShadingMode) {
-		const cache = materialCache.get(mesh)
+		const cache = materialCache.get(mesh.uuid)
 		if (!cache) return
 
 		let newMaterial: THREE.Material | THREE.Material[]
@@ -282,7 +282,37 @@ export const useShadingStore = defineStore('shading', () => {
 		})
 	}
 
-	return { init, cacheNewObjectMaterials, setEnvironmentMap, setMode, shadingMode }
+	function getMaterial(mesh: THREE.Mesh) {
+		const cache = materialCache.get(mesh.uuid)
+		return cache
+	}
+
+	function updateMaterial(mesh: THREE.Mesh, data: { prop: string; value: unknown }) {
+		const cache = materialCache.get(mesh.uuid)
+		if (!cache) return
+		if (Array.isArray(cache.original)) return
+		const material = cache.original as unknown as Record<string, unknown>
+		material[data.prop] = data.value
+	}
+
+	function changeMaterial(mesh: THREE.Mesh, newMaterial: THREE.Material) {
+		const cache = materialCache.get(mesh.uuid)
+		if (!cache) return
+		cache.current = newMaterial
+		cache.original = newMaterial
+		applyModeToMesh(mesh, currentMode.value)
+	}
+
+	return {
+		init,
+		cacheNewObjectMaterials,
+		setEnvironmentMap,
+		setMode,
+		shadingMode,
+		getMaterial,
+		updateMaterial,
+		changeMaterial
+	}
 })
 
 function getSolidShadingLights() {

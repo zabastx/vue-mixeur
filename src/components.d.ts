@@ -92,6 +92,7 @@ declare module 'vue' {
     NumberFieldInput: typeof import('reka-ui')['NumberFieldInput']
     NumberFieldRoot: typeof import('reka-ui')['NumberFieldRoot']
     ObjectProperties: typeof import('./components/data/properties/object/ObjectProperties.vue')['default']
+    ObjectVisibility: typeof import('./components/data/properties/object/ObjectVisibility.vue')['default']
     ScrollContainer: typeof import('./components/utils/ScrollContainer.vue')['default']
     SplashScreen: typeof import('./components/modals/SplashScreen.vue')['default']
     StatusBar: typeof import('./components/status/StatusBar.vue')['default']

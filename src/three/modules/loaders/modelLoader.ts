@@ -1,6 +1,7 @@
+import { LoadingManager } from 'three'
 import { useToast } from '@/composables/useToast'
 
-export async function loadModel({ url, format, onProgress }: ModelLoaderParameters) {
+export async function loadModel({ url, format, onProgress, textureUrlMap }: ModelLoaderParameters) {
 	const ext = (format || url.split('.').pop() || '').toLowerCase()
 
 	try {
@@ -11,7 +12,22 @@ export async function loadModel({ url, format, onProgress }: ModelLoaderParamete
 				const { DRACOLoader } = await import('three/examples/jsm/loaders/DRACOLoader.js')
 				const { MeshoptDecoder } = await import('three/examples/jsm/libs/meshopt_decoder.module.js')
 
-				const loader = new GLTFLoader()
+				// Create a custom loading manager if we have a texture URL map
+				let manager: LoadingManager | undefined
+				if (textureUrlMap) {
+					manager = new LoadingManager()
+					manager.setURLModifier((resourceUrl) => {
+						// Check if this URL needs to be remapped
+						for (const [pattern, actualUrl] of Object.entries(textureUrlMap)) {
+							if (resourceUrl.includes(pattern) || resourceUrl.endsWith(pattern)) {
+								return actualUrl
+							}
+						}
+						return resourceUrl
+					})
+				}
+
+				const loader = new GLTFLoader(manager)
 				const dracoLoader = new DRACOLoader()
 
 				dracoLoader.setDecoderPath('/draco/')
@@ -58,4 +74,6 @@ export interface ModelLoaderParameters {
 	filename?: string
 	format: 'gltf' | 'glb' | 'obj' | 'fbx' | (string & {})
 	onProgress?: (e: ProgressEvent) => void
+	/** Map of texture filenames to their actual URLs (for PolyHaven models) */
+	textureUrlMap?: Record<string, string>
 }

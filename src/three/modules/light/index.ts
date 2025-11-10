@@ -119,7 +119,6 @@ function createPointLight(parameters: PointLightOptions['parameters']) {
 		parameters?.distance,
 		parameters?.decay
 	)
-	light.castShadow = true
 	const helper = new THREE.PointLightHelper(light, 0.5)
 	return helper
 }
@@ -127,7 +126,6 @@ function createPointLight(parameters: PointLightOptions['parameters']) {
 function createDirectionalLight(parameters: DirectionalLightOptions['parameters']) {
 	const light = new THREE.DirectionalLight(parameters?.color, parameters?.intensity)
 	light.shadow.bias = -0.001
-	light.castShadow = true
 	light.target.name = 'DirectionalLightTarget'
 	light.add(light.target)
 	const helper = new THREE.DirectionalLightHelper(light, Math.PI)
@@ -141,7 +139,6 @@ function createSpotLight(parameters: SpotLightOptions['parameters']) {
 		parameters?.distance,
 		parameters?.angle
 	)
-	light.castShadow = true
 	const helper = new THREE.SpotLightHelper(light)
 	light.target.name = 'SpotLightTarget'
 	light.add(light.target)

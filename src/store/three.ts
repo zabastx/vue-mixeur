@@ -225,6 +225,8 @@ export const useThreeStore = defineStore('three', () => {
 
 	function addModelToScene(object: THREE.Object3D) {
 		object.traverse((obj) => {
+			obj.castShadow = true
+			obj.receiveShadow = true
 			if (obj instanceof THREE.Mesh) {
 				obj.userData.isShadable = true
 				;(obj.material as THREE.Material).dithering = true
@@ -251,6 +253,7 @@ export const useThreeStore = defineStore('three', () => {
 	}
 
 	function addLightHelperToScene(helper: LightHelper) {
+		helper.light.castShadow = true
 		scene.add(helper.light)
 		scene.add(helper)
 

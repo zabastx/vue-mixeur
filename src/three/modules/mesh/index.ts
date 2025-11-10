@@ -47,8 +47,6 @@ export function createMesh(type: GeometryTypes) {
 	meshCountMap.set(type, (meshCountMap.get(type) ?? 0) + 1)
 	const count = meshCountMap.get(type) ?? 0
 	mesh.name = `${type}.${count.toString().padStart(3, '0')}`
-	mesh.castShadow = true
-	mesh.receiveShadow = true
 	return mesh
 }
 

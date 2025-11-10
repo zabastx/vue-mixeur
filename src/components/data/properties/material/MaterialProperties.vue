@@ -71,6 +71,9 @@ function getInitialType() {
 		case 'MeshPhysicalMaterial':
 			value = 'principled_bsdf'
 			break
+		case 'MeshStandardMaterial':
+			value = 'principled_bsdf'
+			break
 		case 'MeshLambertMaterial':
 			value = 'diffuse_bsdf'
 			break

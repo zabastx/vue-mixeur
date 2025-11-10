@@ -281,6 +281,9 @@ export const useThreeStore = defineStore('three', () => {
 			})
 			objectsForRemoval.forEach((obj) => {
 				scene.remove(obj)
+				if (obj instanceof THREE.Light && obj.shadow.map) {
+					obj.shadow.map.dispose()
+				}
 			})
 		}
 

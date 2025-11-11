@@ -6,6 +6,8 @@
 	--color-active-editor-outline: #ffffff2a;
 	--color-text-cursor: #71a8ff;
 	--color-header-text: #888888;
+	--color-header-background: #303030b3;
+	--color-region-background: #30303000;
 
 	--color-menu-inner: #282828ff;
 	--color-menu-outline: #3d3d3dff;
@@ -28,9 +30,11 @@
 	--color-properties-panel-background: var(--color-panel-background);
 	--color-properties-panel-sub-background: var(--color-panel-sub-background);
 
-	--color-viewport-header-bg: #303030b3;
+	--color-viewport-header-bg: var(--color-header-background);
 
 	--color-ui-scrollbar: #545454ff;
+
+	--color-ui-box-inner: #1d1d1d80;
 
 	--color-ui-number-field-inner: #545454ff;
 	--color-ui-number-field-selected: #222222ff;
@@ -78,4 +82,6 @@
 	--color-outliner-active-highlight: #334d80;
 	--color-outliner-active-object: #ffaf29;
 	--color-outliner-alternate-rows: #ffffff04;
+
+	--color-browser-selected: #4772b3;
 }

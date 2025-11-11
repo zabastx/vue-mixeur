@@ -6,7 +6,7 @@
 				border-ui-menu-outline bg-ui-menu-inner px-1 py-0.5 text-[1em] text-ui-menu-text"
 			:class="$attrs.class"
 		>
-			<Select.Value :placeholder />
+			<Select.Value :placeholder class="h-[1.5em]" />
 			<IconChevronRight class="rotate-90" />
 		</Select.Trigger>
 

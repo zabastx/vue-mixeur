@@ -1,6 +1,6 @@
 <template>
 	<ScrollArea.Root class="relative gap-1 overflow-hidden h-full" type="auto">
-		<ScrollArea.Viewport class="snap h-full w-full snap-y snap-proximity">
+		<ScrollArea.Viewport class="snap h-full w-full snap-y snap-proximity select-none">
 			<slot></slot>
 		</ScrollArea.Viewport>
 		<ScrollArea.Scrollbar

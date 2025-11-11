@@ -173,7 +173,7 @@ export const useShadingStore = defineStore('shading', () => {
 	 */
 	function createSingleWireframeMaterial(original: THREE.Material): THREE.Material {
 		const wireframeMat = new THREE.MeshBasicMaterial({
-			color: (original as THREE.MeshBasicMaterial).color || 0x00ff00,
+			color: 0x000000,
 			wireframe: true,
 			transparent: (original as THREE.MeshBasicMaterial).transparent,
 			opacity: (original as THREE.MeshBasicMaterial).opacity
@@ -199,17 +199,15 @@ export const useShadingStore = defineStore('shading', () => {
 
 	/**
 	 * Creates a single solid material from an original material.
-	 * Uses MeshLambertMaterial with flat shading for geometric clarity.
+	 * Uses MeshLambertMaterial with flat shading and uniform grey color.
+	 * Matches Blender's solid mode behavior where all objects appear grey.
 	 *
 	 * @param original - The original material
-	 * @returns A new MeshLambertMaterial with flat shading
+	 * @returns A new MeshLambertMaterial with flat shading and grey color
 	 */
 	function createSingleSolidMaterial(original: THREE.Material): THREE.Material {
 		const solidMat = new THREE.MeshLambertMaterial({
-			color:
-				original instanceof THREE.MeshBasicMaterial || original instanceof THREE.MeshLambertMaterial
-					? (original as THREE.MeshBasicMaterial).color
-					: 0xcccccc,
+			color: 0xcccccc,
 			flatShading: true,
 			transparent: (original as THREE.MeshBasicMaterial).transparent,
 			opacity: (original as THREE.MeshBasicMaterial).opacity

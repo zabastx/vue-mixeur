@@ -18,7 +18,6 @@ const threeStore = useThreeStore()
 const material = computed(() => {
 	const obj = threeStore.selectedObject as THREE.Mesh | null
 	if (!obj) return null
-	obj.castShadow = true
 	const mat = shadingStore.getMaterial(obj)?.original
 	if (mat instanceof THREE.MeshLambertMaterial) {
 		return mat
@@ -28,8 +27,9 @@ const material = computed(() => {
 
 const color = computed({
 	set(v: string) {
-		if (!material.value) return
-		material.value.color.set(new THREE.Color(v))
+		const obj = threeStore.selectedObject
+		if (!(obj instanceof THREE.Mesh)) return
+		shadingStore.updateMaterial(obj, { prop: 'color', value: new THREE.Color(v) })
 	},
 	get() {
 		return `#${material.value?.color.getHexString()}`

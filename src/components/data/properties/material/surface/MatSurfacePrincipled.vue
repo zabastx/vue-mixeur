@@ -96,8 +96,10 @@ watch(
 
 const color = computed({
 	set(v: string) {
-		if (!material.value) return
-		material.value.color.set(new THREE.Color(v))
+		const obj = threeStore.selectedObject
+		if (!(obj instanceof THREE.Mesh)) return
+		shadingStore.updateMaterial(obj, { prop: 'color', value: new THREE.Color(v) })
+		manualTrigger.value++
 	},
 	get() {
 		return `#${material.value?.color.getHexString()}`
@@ -202,8 +204,10 @@ const clearcoatRoughness = computed({
 
 const emissive = computed({
 	set(v: string) {
-		if (!material.value) return
-		material.value.emissive.set(new THREE.Color(v))
+		const obj = threeStore.selectedObject
+		if (!(obj instanceof THREE.Mesh)) return
+		shadingStore.updateMaterial(obj, { prop: 'emissive', value: new THREE.Color(v) })
+		manualTrigger.value++
 	},
 	get() {
 		return `#${material.value?.emissive.getHexString()}`

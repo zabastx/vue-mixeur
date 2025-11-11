@@ -6,7 +6,6 @@
 			class="grid w-full grow grid-cols-[min-content_1fr] grid-rows-1 overflow-hidden"
 			orientation="vertical"
 			default-value="object"
-			:unmount-on-hide="false"
 		>
 			<Tabs.List class="relative flex flex-col gap-0.5 bg-ui-tab-inner pt-1 pl-1">
 				<Tabs.Trigger

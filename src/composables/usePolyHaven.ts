@@ -1,35 +1,25 @@
-import { ref, computed, watch } from 'vue'
 import { createFetch } from '@vueuse/core'
+import { computed, ref, shallowRef } from 'vue'
 import { useToast } from './useToast'
 import type {
-	AssetType,
 	Asset,
-	AssetsResponse,
-	AssetWithId,
+	AssetAuthorInfo,
+	AssetCategory,
 	AssetFiles,
+	AssetsResponse,
+	AssetType,
+	AssetWithId,
 	CategoryResponse,
+	FileInfo,
+	FileWithIncludes,
 	HDRIAsset,
-	TextureAsset,
-	ModelAsset
+	ModelAsset,
+	ModelFiles,
+	TextureAsset
 } from './types/polyhaven'
 
-/**
- * Options for configuring the PolyHaven composable
- */
-export interface UsePolyHavenOptions {
-	/** Filter by asset type (default: 'all') */
-	type?: AssetType | 'all'
-	/** Filter by categories */
-	categories?: string[]
-	/** Automatically fetch assets on initialization (default: true) */
-	autoFetch?: boolean
-	/** Number of items per page (default: 20) */
-	pageSize?: number
-}
+const { toast } = useToast()
 
-/**
- * Create a pre-configured fetch instance for PolyHaven API
- */
 const usePolyHavenFetch = createFetch({
 	baseUrl: 'https://api.polyhaven.com',
 	options: {
@@ -46,308 +36,172 @@ const usePolyHavenFetch = createFetch({
 	}
 })
 
-/**
- * Vue composable for interacting with the PolyHaven API
- *
- * @example
- * ```typescript
- * const {
- *   paginatedAssets,
- *   isLoading,
- *   error,
- *   currentPage,
- *   totalPages,
- *   nextPage,
- *   prevPage,
- *   fetchAssetInfo,
- *   fetchAssetFiles
- * } = usePolyHaven({
- *   type: 'textures',
- *   categories: ['brick'],
- *   pageSize: 20
- * })
- * ```
- */
-export function usePolyHaven(options: UsePolyHavenOptions = {}) {
-	const {
-		type: initialType = 'all',
-		categories: initialCategories = [],
-		autoFetch = true,
-		pageSize: initialPageSize = 20
-	} = options
+export function usePolyHaven() {
+	const assets = ref<AssetWithId[]>([])
+	const categories = shallowRef<AssetCategory[]>([])
 
-	const toast = useToast().toast
+	const search = ref('')
+	const categoriesFilter = ref<string[]>([])
 
-	// Reactive state
-	const assets = ref<AssetsResponse | null>(null)
-	const isLoading = ref(false)
-	const error = ref<Error | null>(null)
-	const typeFilter = ref<AssetType | 'all'>(initialType)
-	const categoryFilter = ref<string[]>(initialCategories)
-	const currentPage = ref(1)
-	const pageSize = ref(initialPageSize)
-
-	// Loading states for individual operations
+	const isLoadingAssets = ref(false)
 	const isLoadingInfo = ref(false)
 	const isLoadingFiles = ref(false)
 	const isLoadingCategories = ref(false)
 
-	/**
-	 * Build query parameters for the assets endpoint
-	 */
-	const buildAssetsQuery = (): string => {
-		const params = new URLSearchParams()
+	const assetsTags = computed(() => {
+		const tagsSet = new Set(assets.value.flatMap((asset) => asset.tags))
+		return Array.from(tagsSet)
+			.map((item) => item.trim())
+			.sort()
+	})
 
-		if (typeFilter.value !== 'all') {
-			params.append('type', typeFilter.value)
+	const filteredAssets = computed(() => {
+		return assets.value.filter((asset) => {
+			const name = asset.name.toLowerCase().includes(search.value.toLowerCase())
+			const cat =
+				categoriesFilter.value.length > 0
+					? categoriesFilter.value.some((item) => asset.categories.includes(item))
+					: true
+			return name && cat
+		})
+	})
+
+	async function fetchAssets(type: AssetType | 'all') {
+		isLoadingAssets.value = true
+
+		const params = new URLSearchParams({ type })
+
+		const { data, error } = await usePolyHavenFetch(
+			`/assets?${params.toString()}`
+		).json<AssetsResponse>()
+
+		if (data.value) {
+			assets.value = Object.entries<Asset>(data.value).map(([id, asset]) => ({
+				...asset,
+				id
+			}))
 		}
 
-		if (categoryFilter.value.length > 0) {
-			params.append('categories', categoryFilter.value.join(','))
-		}
-
-		const query = params.toString()
-		return query ? `?${query}` : ''
-	}
-
-	/**
-	 * Fetch assets from the API
-	 */
-	const fetchAssets = async () => {
-		isLoading.value = true
-		error.value = null
-
-		try {
-			const query = buildAssetsQuery()
-			const { data, error: fetchError } = await usePolyHavenFetch<AssetsResponse>(
-				`/assets${query}`
-			).json()
-
-			if (fetchError.value) {
-				throw new Error(fetchError.value)
-			}
-
-			if (data.value) {
-				assets.value = data.value
-				// Reset to first page when new data is loaded
-				currentPage.value = 1
-			}
-		} catch (err) {
-			const errorMessage = err instanceof Error ? err.message : 'Failed to fetch assets'
-			error.value = new Error(errorMessage)
-			toast.error('Failed to load assets', {
+		if (error.value) {
+			toast.error('', {
 				title: 'API Error',
-				message: errorMessage
+				message: 'Failed to load assets'
 			})
-		} finally {
-			isLoading.value = false
-		}
-	}
-
-	/**
-	 * Convert assets object to array with IDs
-	 */
-	const assetArray = computed<AssetWithId[]>(() => {
-		if (!assets.value) return []
-		return Object.entries(assets.value).map(([id, asset]) => ({
-			...asset,
-			id
-		}))
-	})
-
-	/**
-	 * Filter assets based on current filters
-	 */
-	const filteredAssets = computed<AssetWithId[]>(() => {
-		let filtered = assetArray.value
-
-		// Type filter
-		if (typeFilter.value !== 'all') {
-			const typeMap: Record<AssetType, 0 | 1 | 2> = {
-				hdris: 0,
-				textures: 1,
-				models: 2
-			}
-			const targetType = typeMap[typeFilter.value]
-			filtered = filtered.filter((asset) => asset.type === targetType)
 		}
 
-		// Category filter
-		if (categoryFilter.value.length > 0) {
-			filtered = filtered.filter((asset) =>
-				categoryFilter.value.every((cat) => asset.categories.includes(cat))
-			)
-		}
-
-		return filtered
-	})
-
-	/**
-	 * Total number of pages
-	 */
-	const totalPages = computed(() => {
-		return Math.ceil(filteredAssets.value.length / pageSize.value)
-	})
-
-	/**
-	 * Get paginated assets for current page
-	 */
-	const paginatedAssets = computed<AssetWithId[]>(() => {
-		const start = (currentPage.value - 1) * pageSize.value
-		const end = start + pageSize.value
-		return filteredAssets.value.slice(start, end)
-	})
-
-	/**
-	 * Check if there's a next page
-	 */
-	const hasNextPage = computed(() => {
-		return currentPage.value < totalPages.value
-	})
-
-	/**
-	 * Check if there's a previous page
-	 */
-	const hasPrevPage = computed(() => {
-		return currentPage.value > 1
-	})
-
-	/**
-	 * Navigate to next page
-	 */
-	const nextPage = () => {
-		if (hasNextPage.value) {
-			currentPage.value++
-		}
+		isLoadingAssets.value = false
 	}
 
-	/**
-	 * Navigate to previous page
-	 */
-	const prevPage = () => {
-		if (hasPrevPage.value) {
-			currentPage.value--
-		}
-	}
-
-	/**
-	 * Go to a specific page
-	 */
-	const goToPage = (page: number) => {
-		if (page >= 1 && page <= totalPages.value) {
-			currentPage.value = page
-		}
-	}
-
-	/**
-	 * Set type filter and refetch
-	 */
-	const setTypeFilter = (type: AssetType | 'all') => {
-		typeFilter.value = type
-		currentPage.value = 1
-	}
-
-	/**
-	 * Set category filter and refetch
-	 */
-	const setCategoryFilter = (categories: string[]) => {
-		categoryFilter.value = categories
-		currentPage.value = 1
-	}
-
-	/**
-	 * Clear all filters
-	 */
-	const clearFilters = () => {
-		typeFilter.value = 'all'
-		categoryFilter.value = []
-		currentPage.value = 1
-	}
-
-	/**
-	 * Refetch assets with current filters
-	 */
-	const refetch = async () => {
-		await fetchAssets()
-	}
-
-	/**
-	 * Fetch detailed information about a specific asset
-	 */
-	const fetchAssetInfo = async <T extends Asset = Asset>(id: string): Promise<T | null> => {
+	async function fetchAssetInfo<T extends Asset = Asset>(id: string): Promise<T | null> {
 		isLoadingInfo.value = true
 
-		try {
-			const { data, error: fetchError } = await usePolyHavenFetch<T>(`/info/${id}`).json()
+		const { data, error } = await usePolyHavenFetch(`/info/${id}`).get().json<T>()
 
-			if (fetchError.value) {
-				throw new Error(fetchError.value)
-			}
-
-			return data.value
-		} catch (err) {
-			const errorMessage = err instanceof Error ? err.message : 'Failed to fetch asset info'
-			toast.error('Failed to load asset details', {
+		if (error.value) {
+			toast.error('', {
 				title: 'API Error',
-				message: errorMessage
+				message: 'Failed to load asset details'
 			})
-			return null
-		} finally {
-			isLoadingInfo.value = false
 		}
+
+		isLoadingInfo.value = false
+		return data.value
 	}
 
-	/**
-	 * Fetch file URLs for a specific asset
-	 */
-	const fetchAssetFiles = async (id: string): Promise<AssetFiles | null> => {
-		isLoadingFiles.value = true
+	async function fetchAssetAuthor(authorId: string) {
+		const { data, error } = await usePolyHavenFetch(`/author/${authorId}`)
+			.get()
+			.json<AssetAuthorInfo>()
 
-		try {
-			const { data, error: fetchError } = await usePolyHavenFetch<AssetFiles>(`/files/${id}`).json()
-
-			if (fetchError.value) {
-				throw new Error(fetchError.value)
-			}
-
-			return data.value
-		} catch (err) {
-			const errorMessage = err instanceof Error ? err.message : 'Failed to fetch asset files'
-			toast.error('Failed to load asset files', {
+		if (error.value) {
+			toast.error('', {
 				title: 'API Error',
-				message: errorMessage
+				message: 'Failed to load author info'
 			})
-			return null
-		} finally {
-			isLoadingFiles.value = false
 		}
+
+		return data.value
 	}
 
-	/**
-	 * Fetch available categories for a specific asset type
-	 */
-	const fetchCategories = async (type: AssetType): Promise<CategoryResponse | null> => {
+	async function fetchCategories(type: AssetType) {
 		isLoadingCategories.value = true
 
-		try {
-			const { data, error: fetchError } = await usePolyHavenFetch<CategoryResponse>(
-				`/categories/${type}`
-			).json()
+		const { data, error } = await usePolyHavenFetch(`/categories/${type}`)
+			.get()
+			.json<CategoryResponse>()
 
-			if (fetchError.value) {
-				throw new Error(fetchError.value)
-			}
+		if (data.value) {
+			categories.value = Object.entries<number>(data.value)
+				.map(([key, value]) => ({
+					title: key,
+					count: value
+				}))
+				.filter((item) => item.title !== 'all')
+				.sort((a, b) => a.title.localeCompare(b.title))
+		}
 
-			return data.value
-		} catch (err) {
-			const errorMessage = err instanceof Error ? err.message : 'Failed to fetch categories'
-			toast.error('Failed to load categories', {
+		if (error.value) {
+			toast.error('', {
 				title: 'API Error',
-				message: errorMessage
+				message: 'Failed to fetch categories'
 			})
-			return null
-		} finally {
-			isLoadingCategories.value = false
+		}
+		isLoadingCategories.value = false
+	}
+
+	async function fetchAssetFiles(id: string) {
+		isLoadingFiles.value = true
+
+		const { data, error } = await usePolyHavenFetch(`/files/${id}`).get().json<AssetFiles>()
+
+		if (error.value) {
+			toast.error('', {
+				title: 'API Error',
+				message: 'Failed to load asset files'
+			})
+		}
+
+		isLoadingFiles.value = false
+
+		return data.value
+	}
+
+	function getModelData({
+		files,
+		format,
+		resolution
+	}: {
+		files: ModelFiles[keyof ModelFiles]
+		format: 'gltf' | 'blend' | 'fbx' | 'usd'
+		resolution: string
+	}) {
+		if (!files || typeof files !== 'object') return null
+
+		// Access the resolution
+		const resolutionFiles = files[resolution]
+		if (!resolutionFiles || typeof resolutionFiles !== 'object') return null
+
+		// Get the file info
+		const fileInfo = resolutionFiles[format] as FileWithIncludes
+		if (!fileInfo || typeof fileInfo !== 'object') return null
+
+		// Build texture URL map from the include property
+		const textureUrlMap: Record<string, string> = {}
+		if (fileInfo.include) {
+			for (const [texturePath, textureInfo] of Object.entries<FileInfo>(fileInfo.include)) {
+				// Extract just the filename from the path (e.g., "textures/Camera_01_body_diff_1k.jpg" -> "Camera_01_body_diff_1k.jpg")
+				const filename = texturePath.split('/').pop()
+				if (filename && textureInfo.url) {
+					textureUrlMap[filename] = textureInfo.url
+					// Also map the full path
+					textureUrlMap[texturePath] = textureInfo.url
+				}
+			}
+		}
+
+		return {
+			url: fileInfo.url,
+			textureUrlMap
 		}
 	}
 
@@ -363,201 +217,38 @@ export function usePolyHaven(options: UsePolyHavenOptions = {}) {
 		return typeMap[typeNum]
 	}
 
-	/**
-	 * Type guard for HDRI assets
-	 */
 	const isHDRI = (asset: Asset): asset is HDRIAsset => {
 		return asset.type === 0
 	}
 
-	/**
-	 * Type guard for Texture assets
-	 */
 	const isTexture = (asset: Asset): asset is TextureAsset => {
 		return asset.type === 1
 	}
 
-	/**
-	 * Type guard for Model assets
-	 */
 	const isModel = (asset: Asset): asset is ModelAsset => {
 		return asset.type === 2
 	}
 
-	// Auto-fetch on initialization if enabled
-	if (autoFetch) {
-		fetchAssets()
-	}
-
-	// Watch for filter changes and refetch
-	watch([typeFilter, categoryFilter], () => {
-		if (assets.value) {
-			// Only refetch if we need to (filters changed that require new API call)
-			// For now, we do client-side filtering, so no need to refetch
-			currentPage.value = 1
-		}
-	})
-
-	/**
-	 * Get the glTF model URL for a specific asset and resolution
-	 * This returns the main glTF file URL that can be loaded directly
-	 * The modelLoader will handle texture loading via the base path
-	 */
-	const getModelUrl = async (
-		assetId: string,
-		resolution: '1k' | '2k' | '4k' | '8k' = '1k',
-		format: 'gltf' | 'blend' | 'fbx' | 'usd' = 'gltf'
-	): Promise<string | null> => {
-		try {
-			const files = await fetchAssetFiles(assetId)
-			if (!files) return null
-
-			// Access the format files - use type assertion for dynamic access
-			const formatFiles = files[format as keyof typeof files] as Record<
-				string,
-				Record<
-					string,
-					{ url: string; md5: string; size: number; include?: Record<string, unknown> }
-				>
-			>
-			if (!formatFiles || typeof formatFiles !== 'object') return null
-
-			// Access the resolution
-			const resolutionFiles = formatFiles[resolution]
-			if (!resolutionFiles || typeof resolutionFiles !== 'object') return null
-
-			// Get the file info
-			const fileInfo = resolutionFiles[format]
-			if (!fileInfo || typeof fileInfo !== 'object') return null
-
-			// Return the URL
-			return fileInfo.url || null
-		} catch (err) {
-			const errorMessage = err instanceof Error ? err.message : 'Failed to get model URL'
-			toast.error('Failed to get model URL', {
-				title: 'API Error',
-				message: errorMessage
-			})
-			return null
-		}
-	}
-
-	/**
-	 * Get model data with texture URL mapping for PolyHaven models
-	 * This is necessary because PolyHaven glTF files reference textures with relative paths
-	 * but the actual textures are at different URLs
-	 */
-	const getModelData = async (
-		assetId: string,
-		resolution: '1k' | '2k' | '4k' | '8k' = '1k',
-		format: 'gltf' | 'blend' | 'fbx' | 'usd' = 'gltf'
-	): Promise<{ url: string; textureUrlMap: Record<string, string> } | null> => {
-		try {
-			const files = await fetchAssetFiles(assetId)
-			if (!files) return null
-
-			// Access the format files
-			const formatFiles = files[format as keyof typeof files] as Record<
-				string,
-				Record<
-					string,
-					{
-						url: string
-						md5: string
-						size: number
-						include?: Record<string, { url: string; md5: string; size: number }>
-					}
-				>
-			>
-			if (!formatFiles || typeof formatFiles !== 'object') return null
-
-			// Access the resolution
-			const resolutionFiles = formatFiles[resolution]
-			if (!resolutionFiles || typeof resolutionFiles !== 'object') return null
-
-			// Get the file info
-			const fileInfo = resolutionFiles[format]
-			if (!fileInfo || typeof fileInfo !== 'object') return null
-
-			// Build texture URL map from the include property
-			const textureUrlMap: Record<string, string> = {}
-			if (fileInfo.include) {
-				for (const [texturePath, textureInfo] of Object.entries(fileInfo.include)) {
-					// Extract just the filename from the path (e.g., "textures/Camera_01_body_diff_1k.jpg" -> "Camera_01_body_diff_1k.jpg")
-					const filename = texturePath.split('/').pop()
-					if (filename && textureInfo.url) {
-						textureUrlMap[filename] = textureInfo.url
-						// Also map the full path
-						textureUrlMap[texturePath] = textureInfo.url
-					}
-				}
-			}
-
-			return {
-				url: fileInfo.url,
-				textureUrlMap
-			}
-		} catch (err) {
-			const errorMessage = err instanceof Error ? err.message : 'Failed to get model data'
-			toast.error('Failed to get model data', {
-				title: 'API Error',
-				message: errorMessage
-			})
-			return null
-		}
-	}
-
 	return {
-		// Data
 		assets,
-		assetArray,
-		filteredAssets,
-		paginatedAssets,
-
-		// Loading states
-		isLoading,
-		isLoadingInfo,
-		isLoadingFiles,
-		isLoadingCategories,
-
-		// Error state
-		error,
-
-		// Pagination
-		currentPage,
-		pageSize,
-		totalPages,
-		hasNextPage,
-		hasPrevPage,
-		nextPage,
-		prevPage,
-		goToPage,
-
-		// Filters
-		typeFilter,
-		categoryFilter,
-		setTypeFilter,
-		setCategoryFilter,
-		clearFilters,
-
-		// Actions
+		search,
+		categories,
+		assetsTags,
 		fetchAssets,
-		refetch,
-		fetchAssetInfo,
-		fetchAssetFiles,
 		fetchCategories,
-		getModelUrl,
+		fetchAssetInfo,
+		fetchAssetAuthor,
+		fetchAssetFiles,
 		getModelData,
-
-		// Utilities
-		getAssetTypeName,
+		filteredAssets,
+		categoriesFilter,
+		isLoadingAssets,
+		isLoadingCategories,
+		isLoadingFiles,
+		isLoadingInfo,
 		isHDRI,
 		isTexture,
-		isModel
+		isModel,
+		getAssetTypeName
 	}
 }
-
-/**
- * Type helper for extracting specific asset types
- */
-export type UsePolyHavenReturn = ReturnType<typeof usePolyHaven>

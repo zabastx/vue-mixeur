@@ -34,6 +34,7 @@ export interface BaseAsset {
 	max_resolution: [number, number]
 	/** The URL of the preview image thumbnail for this asset */
 	thumbnail_url: string
+	description?: string
 }
 
 /**
@@ -194,4 +195,22 @@ export interface PaginationOptions {
 	pageSize?: number
 	/** Current page number (1-based) */
 	currentPage?: number
+}
+
+export interface ModelDataParameters {
+	id: string
+	resolution: string
+	format: 'gltf' | 'blend' | 'fbx' | 'usd'
+}
+
+export interface AssetCategory {
+	title: string
+	count: number
+}
+
+export interface AssetAuthorInfo {
+	name: string
+	link: string | null
+	email: string | null
+	donate: string | null
 }

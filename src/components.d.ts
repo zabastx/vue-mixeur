@@ -79,7 +79,6 @@ declare module 'vue' {
     MAccordionRoot: typeof import('./components/utils/Accordion/MAccordionRoot.vue')['default']
     MaterialProperties: typeof import('./components/data/properties/material/MaterialProperties.vue')['default']
     MatSurfaceDiffuse: typeof import('./components/data/properties/material/surface/MatSurfaceDiffuse.vue')['default']
-    MatSurfacePhysical: typeof import('./components/data/properties/material/surface/MatSurfacePhysical.vue')['default']
     MatSurfacePrincipled: typeof import('./components/data/properties/material/surface/MatSurfacePrincipled.vue')['default']
     MDialog: typeof import('./components/modals/MDialog.vue')['default']
     MenuBar: typeof import('./components/utils/MenuBar.vue')['default']

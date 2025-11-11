@@ -20,6 +20,7 @@ import { disposeModel } from '@/three/modules/core/dispose'
 import { createLight, getLightHelper, type LightHelper } from '@/three/modules/light'
 import { useStats } from '@/three/modules/extras/stats'
 import { useShadingStore } from './shading'
+import { createMesh } from '@/three/modules/mesh'
 
 export const useThreeStore = defineStore('three', () => {
 	const scene = new THREE.Scene()
@@ -190,6 +191,9 @@ export const useThreeStore = defineStore('three', () => {
 		})
 		// -----------------------------
 
+		const companionCube = createMesh('cube')
+		addModelToScene(companionCube)
+
 		const clock = new THREE.Clock()
 		let passedTime = 0
 		renderer.setAnimationLoop(render)
@@ -337,7 +341,7 @@ export const useThreeStore = defineStore('three', () => {
 		try {
 			const model = await loadModel(params)
 			if (!model) return
-			model.name = model.name || modelName
+			model.name = params.filename || modelName
 			addModelToScene(model)
 		} finally {
 			progressStore.finishLoading(loadingId)

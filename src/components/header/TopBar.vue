@@ -1,7 +1,8 @@
 <template>
 	<header class="flex items-center bg-topbar-background p-1 px-2">
 		<MenuBar :items="menuItems" />
-		<AboutModal v-model:open="aboutModalOpen" />
+		<AboutModal v-model="aboutModalOpen" />
+		<ModelsLibraryModal v-model="modelLibraryOpen" />
 		<a
 			href="https://github.com/zabastx/vue-mixeur"
 			class="ml-auto text-xl"
@@ -28,6 +29,7 @@ import AboutModal from '../modals/AboutModal.vue'
 
 const appStore = useAppStore()
 const aboutModalOpen = ref(false)
+const modelLibraryOpen = ref(false)
 
 const showStatusBar = computed({
 	get() {
@@ -83,15 +85,15 @@ const menuItems: IMenubarMenu[] = [
 						onClick: () => {
 							importFile('obj')
 						}
+					},
+					{
+						type: 'item',
+						key: 'import_library',
+						label: 'Import from library',
+						onClick: () => {
+							modelLibraryOpen.value = true
+						}
 					}
-					// {
-					// 	type: 'item',
-					// 	key: 'import_fbx',
-					// 	label: 'FBX (.fbx)',
-					// 	onClick: () => {
-					// 		importFile('fbx')
-					// 	}
-					// }
 				]
 			}
 		]

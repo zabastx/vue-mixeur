@@ -18,6 +18,7 @@ Try the live demo at [mixeur.zabastx.ru](https://mixeur.zabastx.ru)
 - **Object Selection & Transformation**: Click to select objects, with transform gizmos for position, rotation, and scale
 - **Shading Modes**: Switch between rendered, solid, wireframe, and texture shading views
 - **Model Import**: Load 3D models in various formats (GLTF, OBJ, etc.)
+- **Models Library**: Browse and import high-quality 3D models from Poly Haven
 - **Scene Management**: Outliner panel for hierarchical object organization
 - **Properties Panel**: Inspect and modify object properties, materials, transforms, geometry, lights, and text
 - **Text Objects**: Create and edit 3D text with customizable fonts and properties
@@ -34,7 +35,8 @@ Try the live demo at [mixeur.zabastx.ru](https://mixeur.zabastx.ru)
 - **Navigation**: Use mouse to orbit, pan, and zoom in the 3D viewport
 - **Selection**: Click on objects in the viewport to select them
 - **Transformation**: Use the transform gizmos to move, rotate, or scale selected objects
-- **Import Models**: Import models from the menu (File > Import > file format)
+- **Import Models**: Import models from the menu (File > Import > file format) or browse the Models Library
+- **Models Library**: Access free CC0 3D models from Poly Haven with category filtering and search
 
 ### Keyboard Shortcuts
 
@@ -95,6 +97,7 @@ src/
 - [Three.js](https://threejs.org/) - 3D graphics library
 - [Vue.js](https://vuejs.org/) - Progressive JavaScript framework
 - [Blender](https://www.blender.org/) - Inspiration for UI/UX patterns
+- [Poly Haven](https://polyhaven.com/) - Free CC0 3D models, HDRIs, and textures
 - [three-mesh-bvh](https://github.com/gkjohnson/three-mesh-bvh) - BVH acceleration
 - [three-viewport-gizmo](https://github.com/JamesLMilner/three-viewport-gizmo) - Camera gizmo
 - [ui.blender.org/icons](https://ui.blender.org/icons) - Blender Icons

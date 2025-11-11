@@ -291,8 +291,46 @@ export const useShadingStore = defineStore('shading', () => {
 		const cache = materialCache.get(mesh.uuid)
 		if (!cache) return
 		if (Array.isArray(cache.original)) return
-		const material = cache.original as unknown as Record<string, unknown>
-		material[data.prop] = data.value
+
+		const originalMaterial = cache.original as unknown as Record<string, unknown>
+		updateMaterialProperty(originalMaterial, data.prop, data.value)
+
+		if (
+			currentMode.value === 'materialPreview' &&
+			cache.current !== cache.original &&
+			!Array.isArray(cache.current)
+		) {
+			const currentMaterial = cache.current as unknown as Record<string, unknown>
+
+			if (data.prop in currentMaterial) {
+				updateMaterialProperty(currentMaterial, data.prop, data.value)
+			}
+		}
+
+		// Trigger material update to ensure Three.js recognizes the change
+		if (cache.current instanceof THREE.Material) {
+			cache.current.needsUpdate = true
+		}
+	}
+
+	/**
+	 * Updates a material property, handling special cases like Color objects.
+	 * This ensures proper updates for all property types including Colors, Vectors, etc.
+	 */
+	function updateMaterialProperty(material: Record<string, unknown>, prop: string, value: unknown) {
+		const currentValue = material[prop]
+
+		if (currentValue instanceof THREE.Color && value instanceof THREE.Color) {
+			currentValue.copy(value)
+		} else if (currentValue instanceof THREE.Vector2 && value instanceof THREE.Vector2) {
+			currentValue.copy(value)
+		} else if (currentValue instanceof THREE.Vector3 && value instanceof THREE.Vector3) {
+			currentValue.copy(value)
+		} else if (currentValue instanceof THREE.Vector4 && value instanceof THREE.Vector4) {
+			currentValue.copy(value)
+		} else {
+			material[prop] = value
+		}
 	}
 
 	function changeMaterial(mesh: THREE.Mesh, newMaterial: THREE.Material) {

@@ -26,8 +26,10 @@ import { getFile } from '@/composables/getfile'
 import { useToast } from '@/composables/useToast'
 import type { loadModel } from '@/three/modules/loaders/modelLoader'
 import AboutModal from '../modals/AboutModal.vue'
+import IconExport from '../icons/misc/IconExport.vue'
 
 const appStore = useAppStore()
+const threeStore = useThreeStore()
 const aboutModalOpen = ref(false)
 const modelLibraryOpen = ref(false)
 
@@ -95,6 +97,15 @@ const menuItems: IMenubarMenu[] = [
 						}
 					}
 				]
+			},
+			{
+				type: 'item',
+				key: 'export',
+				label: 'Export',
+				icon: IconExport,
+				onClick() {
+					threeStore.exportScene()
+				}
 			}
 		]
 	},

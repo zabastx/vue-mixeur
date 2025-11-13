@@ -17,6 +17,7 @@ Try the live demo at [mixeur.zabastx.ru](https://mixeur.zabastx.ru)
 - **3D Viewport**: Interactive 3D scene with multiple camera perspectives (perspective/orthographic)
 - **Object Selection & Transformation**: Click to select objects, with transform gizmos for position, rotation, and scale
 - **Shading Modes**: Switch between rendered, solid, wireframe, and texture shading views
+- **Model Export**: Export your 3D scenes and models in GLTF format
 - **Model Import**: Load 3D models in various formats (GLTF, OBJ, etc.)
 - **Models Library**: Browse and import high-quality 3D models from Poly Haven
 - **Scene Management**: Outliner panel for hierarchical object organization
@@ -26,7 +27,6 @@ Try the live demo at [mixeur.zabastx.ru](https://mixeur.zabastx.ru)
 - **Real-time Rendering**: Hardware-accelerated rendering with post-processing effects
 - **BVH Acceleration**: Fast raycasting and collision detection using Bounding Volume Hierarchy
 - **Light Management**: Built-in lighting system with helper visualization and property editing
-- **Performance Monitoring**: Real-time stats display in development mode
 
 ## Usage
 

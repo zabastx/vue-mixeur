@@ -144,7 +144,7 @@ const menuItems: IMenubarMenu[] = [
 						label: 'Point',
 						icon: IconLightPoint,
 						onClick() {
-							addLight('PointLight')
+							addLight('point')
 						}
 					},
 					{
@@ -153,7 +153,7 @@ const menuItems: IMenubarMenu[] = [
 						label: 'Spot',
 						icon: IconLightSpot,
 						onClick() {
-							addLight('SpotLight')
+							addLight('spot')
 						}
 					},
 					{
@@ -162,7 +162,7 @@ const menuItems: IMenubarMenu[] = [
 						label: 'Directional',
 						icon: IconLightSun,
 						onClick() {
-							addLight('DirectionalLight')
+							addLight('sun')
 						}
 					},
 					{
@@ -171,7 +171,7 @@ const menuItems: IMenubarMenu[] = [
 						label: 'Area',
 						icon: IconLightArea,
 						onClick() {
-							addLight('RectAreaLight')
+							addLight('area')
 						}
 					}
 				]
@@ -189,6 +189,6 @@ function addMesh(type: Parameters<typeof createMesh>[0]) {
 
 function addLight(type: Parameters<typeof createLight>['0']['type']) {
 	const light = createLight({ type })
-	threeStore.addLightHelperToScene(light)
+	threeStore.addLightToScene(light)
 }
 </script>

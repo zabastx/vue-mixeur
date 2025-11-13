@@ -15,12 +15,12 @@ import {
 	type TransformControls,
 	type TransformControlsMode
 } from 'three/examples/jsm/Addons.js'
-import { useProgressStore, type LoadingProgress } from './progress'
 import { disposeModel } from '@/three/modules/core/dispose'
 import { createLight, getLightHelper, type LightHelper } from '@/three/modules/light'
 import { useStats } from '@/three/modules/extras/stats'
 import { useShadingStore } from './shading'
 import { createMesh } from '@/three/modules/mesh'
+import { exportModel } from '@/three/modules/addons/exporter'
 
 export const useThreeStore = defineStore('three', () => {
 	const scene = new THREE.Scene()
@@ -30,9 +30,6 @@ export const useThreeStore = defineStore('three', () => {
 	const shadingStore = useShadingStore()
 
 	const grid = setGridHelper(scene)
-
-	const pointLightHelper = createLight({ type: 'PointLight', parameters: { intensity: 10 } })
-	pointLightHelper.light.position.set(4, 5, 1)
 
 	const raycasterObjects: THREE.Object3D[] = []
 	const lightHelperObjects: LightHelper[] = []
@@ -62,7 +59,7 @@ export const useThreeStore = defineStore('three', () => {
 
 	const outlinePass = shallowRef<OutlinePass>()
 
-	const selectObject = shallowRef<(uuid?: string) => void>()
+	const selectObject = shallowRef<(uuid?: string, raycasted?: boolean) => void>()
 	const selectedObject = ref<THREE.Object3D | THREE.Light | THREE.Mesh | null>(null)
 
 	// Transform controls
@@ -89,11 +86,20 @@ export const useThreeStore = defineStore('three', () => {
 		monitor.value.textures = gpu.textures
 	}
 
+	function addInitialObjects() {
+		const pointLight = createLight({ type: 'point' })
+		pointLight.power = 1000
+		pointLight.position.set(4, 5, 1)
+		addLightToScene(pointLight)
+
+		const companionCube = createMesh('cube')
+		addModelToScene(companionCube)
+	}
+
 	async function initScene(canvasRef: ShallowRef<HTMLCanvasElement | null>) {
 		if (!canvasRef.value) return
 		const canvas = canvasRef.value
 		shadingStore.init(scene)
-		addLightHelperToScene(pointLightHelper)
 
 		if (import.meta.env.DEV) initStats(canvas.parentElement)
 
@@ -104,17 +110,19 @@ export const useThreeStore = defineStore('three', () => {
 
 		const { renderer, composer, resizeRendererToDisplaySize } = newComposer
 
-		const blenderControls = setupBlenderControls(activeCamera.value, renderer)
-		gizmo.value = blenderControls.gizmo
-		controls.value = blenderControls.controls
-		transformControls.value = blenderControls.transformControls
-		const transformHelper = blenderControls.transformControls.getHelper()
-		helperScene.add(transformHelper)
+		setupBlenderControls({
+			cameraRef: activeCamera,
+			transformControlsRef: transformControls,
+			controlsRef: controls,
+			gizmoRef: gizmo,
+			renderer,
+			helperScene
+		})
 
 		// Object selection
 		outlinePass.value = newComposer.outlinePass
 
-		selectObject.value = (uuid?: string) => {
+		selectObject.value = (uuid?: string, raycasted?: boolean) => {
 			if (!outlinePass.value || !uuid) return
 
 			const object = scene.getObjectByProperty('uuid', uuid)
@@ -122,7 +130,7 @@ export const useThreeStore = defineStore('three', () => {
 			if (!object) return
 
 			if (object instanceof THREE.Light) {
-				blenderControls.transformControls.attach(object)
+				transformControls.value?.attach(object)
 				selectedObject.value = object
 				const helper = scene.getObjectByProperty('light', object)
 				if (helper) {
@@ -133,33 +141,35 @@ export const useThreeStore = defineStore('three', () => {
 
 			if ('light' in object) {
 				const light = object.light as THREE.Light
-				blenderControls.transformControls.attach(light)
+				transformControls.value?.attach(light)
 				outlinePass.value.selectedObjects = [object]
 				selectedObject.value = light
 				return
 			}
 
-			blenderControls.transformControls.attach(object)
+			if (raycasted && !object.userData.isSelectable) return
+
+			transformControls.value?.attach(object)
 			outlinePass.value.selectedObjects = [object]
 			selectedObject.value = object
 		}
 
-		blenderControls.transformControls.addEventListener('objectChange', () => {
+		transformControls.value?.addEventListener('objectChange', () => {
 			triggerRef(selectedObject)
 		})
 
-		blenderControls.transformControls.addEventListener('object-changed', (e) => {
+		transformControls.value?.addEventListener('object-changed', (e) => {
 			const object = e.target.object as unknown as THREE.Object3D | LightHelper | undefined
 			if (!object) return
 
 			if ('light' in object) {
-				blenderControls.transformControls.attach(object.light)
+				transformControls.value?.attach(object.light)
 				selectedObject.value = object.light
 				return
 			}
 
 			if (object.userData.skipRaycast && object.parent) {
-				blenderControls.transformControls.attach(object.parent)
+				transformControls.value?.attach(object.parent)
 				selectedObject.value = object.parent
 			}
 		})
@@ -170,7 +180,7 @@ export const useThreeStore = defineStore('three', () => {
 
 		let wasDragging = false
 
-		blenderControls.transformControls.addEventListener('dragging-changed', (e) => {
+		transformControls.value?.addEventListener('dragging-changed', (e) => {
 			wasDragging = !e.value // Set flag when dragging ends
 		})
 
@@ -183,7 +193,7 @@ export const useThreeStore = defineStore('three', () => {
 			const intersects = raycaster.intersectObjects(raycasterObjects, true)
 
 			if (!intersects[0]) {
-				blenderControls.transformControls.detach()
+				transformControls.value?.detach()
 				return
 			}
 
@@ -191,8 +201,7 @@ export const useThreeStore = defineStore('three', () => {
 		})
 		// -----------------------------
 
-		const companionCube = createMesh('cube')
-		addModelToScene(companionCube)
+		addInitialObjects()
 
 		const clock = new THREE.Clock()
 		let passedTime = 0
@@ -231,6 +240,7 @@ export const useThreeStore = defineStore('three', () => {
 		object.traverse((obj) => {
 			obj.castShadow = true
 			obj.receiveShadow = true
+			obj.userData.isSelectable = true
 			if (obj instanceof THREE.Mesh) {
 				obj.userData.isShadable = true
 				;(obj.material as THREE.Material).dithering = true
@@ -256,19 +266,30 @@ export const useThreeStore = defineStore('three', () => {
 		if (outlinePass.value) outlinePass.value.selectedObjects = [object]
 	}
 
-	function addLightHelperToScene(helper: LightHelper) {
-		helper.light.castShadow = true
-		scene.add(helper.light)
+	function addLightToScene(light: THREE.Light) {
+		const helper = getLightHelper(light)
+		if (!helper) return
+
+		helper.userData.isSelectable = true
+		helper.userData.isSceneLight = true
+		light.userData.isSelectable = true
+		light.userData.isSceneLight = true
+
+		if (!(light instanceof THREE.RectAreaLight)) {
+			light.castShadow = true
+		}
+
+		scene.add(light)
 		scene.add(helper)
 
 		if (shadingStore.shadingMode !== 'rendered') {
-			helper.light.visible = false
+			light.visible = false
 		}
 
 		raycasterObjects.push(helper)
 		lightHelperObjects.push(helper)
-		selectedObject.value = helper.light
-		transformControls.value?.attach(helper.light)
+		selectedObject.value = light
+		transformControls.value?.attach(light)
 
 		if (outlinePass.value) outlinePass.value.selectedObjects = [helper]
 	}
@@ -317,35 +338,12 @@ export const useThreeStore = defineStore('three', () => {
 	 * @param params - Parameters passed directly to the loadModel function
 	 */
 	async function importModel(params: ModelLoaderParameters): Promise<void> {
-		const progressStore = useProgressStore()
-		const loadingId = `model-${Date.now()}-${Math.random().toString(36).slice(2)}`
+		const model = await loadModel(params)
+		if (!model) return
 
-		// Extract model name and filename from URL
-		const urlParts = params.url.split('/')
-		const fullFilename = params.filename || urlParts[urlParts.length - 1] || 'model'
-		const modelName = fullFilename.split('.')[0] || 'Model'
-
-		// Wrap the onProgress callback to track progress
-		const originalOnProgress = params.onProgress
-		params.onProgress = (e: ProgressEvent) => {
-			if (e.lengthComputable) {
-				if (progressStore.loadingItems.find((p: LoadingProgress) => p.id === loadingId)) {
-					progressStore.updateProgress(loadingId, e.loaded)
-				} else {
-					progressStore.startLoading(loadingId, fullFilename, e.total)
-				}
-			}
-			originalOnProgress?.(e)
-		}
-
-		try {
-			const model = await loadModel(params)
-			if (!model) return
-			model.name = params.filename || modelName
-			addModelToScene(model)
-		} finally {
-			progressStore.finishLoading(loadingId)
-		}
+		const modelName = params.filename.split('.')[0] || 'Model'
+		model.name = modelName
+		addModelToScene(model)
 	}
 	// -----------------------------
 
@@ -355,6 +353,13 @@ export const useThreeStore = defineStore('three', () => {
 			obj.visible = val
 			triggerRef(sceneChildren)
 		}
+	}
+
+	function exportScene() {
+		const mode = shadingStore.shadingMode
+		shadingStore.setMode('rendered')
+		exportModel(scene)
+		shadingStore.setMode(mode)
 	}
 
 	return {
@@ -370,13 +375,14 @@ export const useThreeStore = defineStore('three', () => {
 		currentTransformMode,
 		deleteFromScene,
 		transformControls,
-		addLightHelperToScene,
+		addLightToScene,
 		monitor,
 		selectObject,
 		raycasterObjects,
 		sceneChildren,
 		objectVisibilityUpdate,
-		updateScene
+		updateScene,
+		exportScene
 	}
 })
 

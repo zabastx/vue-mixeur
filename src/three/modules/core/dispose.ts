@@ -7,11 +7,15 @@ import THREE from '@/three'
  * - Geometry buffers
  * - Material resources (including textures)
  * - Removes the model from the scene graph
+ * - Shadow maps
  *
  * @param model - The THREE.Object3D containing the model hierarchy to be disposed
  */
 export function disposeModel(model: THREE.Object3D) {
 	model.traverse((child) => {
+		if (child instanceof THREE.Light && child.shadow.map) {
+			child.shadow.map.dispose()
+		}
 		if (child instanceof THREE.Mesh) {
 			if (child.geometry) {
 				child.geometry.dispose()

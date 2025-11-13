@@ -25,7 +25,7 @@ export function createComposer(
 	composer.addPass(taaPass)
 
 	const outlinePass = new OutlinePass(new THREE.Vector2(width, height), scene, camera.value)
-	outlinePass.edgeStrength = 10
+	outlinePass.edgeStrength = 5
 	outlinePass.edgeThickness = 1
 	outlinePass.edgeGlow = 0
 	outlinePass.visibleEdgeColor.set('#ffaa00')
@@ -43,7 +43,6 @@ export function createComposer(
 		if (needResize) {
 			renderer.setSize(clientWidth, clientHeight, false)
 			composer.setSize(clientWidth, clientHeight)
-			composer.setPixelRatio(window.devicePixelRatio)
 		}
 		return needResize
 	}

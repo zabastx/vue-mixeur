@@ -2,24 +2,32 @@ import THREE from '@/three'
 import { ViewportGizmo, type GizmoOptions } from 'three-viewport-gizmo'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { TransformControls } from 'three/examples/jsm/Addons.js'
+import { watch, type Ref, type ShallowRef } from 'vue'
 
-export function setupBlenderControls(
-	camera: THREE.PerspectiveCamera | THREE.OrthographicCamera,
-	renderer: THREE.WebGLRenderer
-) {
-	const controls = new OrbitControls(camera, renderer.domElement)
-	const transformControls = new TransformControls(camera, renderer.domElement)
-	transformControls.getHelper().name = 'TransformHelper'
+export function setupBlenderControls({
+	cameraRef,
+	controlsRef,
+	gizmoRef,
+	renderer,
+	transformControlsRef,
+	helperScene
+}: BlenderControlsParameters) {
+	controlsRef.value = new OrbitControls(cameraRef.value, renderer.domElement)
+	transformControlsRef.value = new TransformControls(cameraRef.value, renderer.domElement)
+	const transformHelper = transformControlsRef.value.getHelper()
+	transformHelper.name = 'TransformHelper'
 
-	controls.enablePan = true
-	controls.screenSpacePanning = true
-	controls.enableZoom = false
-	controls.mouseButtons = {
+	helperScene.add(transformHelper)
+
+	controlsRef.value.enablePan = true
+	controlsRef.value.screenSpacePanning = true
+	controlsRef.value.enableZoom = false
+	controlsRef.value.mouseButtons = {
 		LEFT: null,
 		MIDDLE: THREE.MOUSE.ROTATE,
 		RIGHT: null
 	}
-	controls.touches = {
+	controlsRef.value.touches = {
 		ONE: THREE.TOUCH.ROTATE,
 		TWO: THREE.TOUCH.PAN
 	}
@@ -32,8 +40,21 @@ export function setupBlenderControls(
 		placement: 'top-right'
 	}
 
-	const gizmo = new ViewportGizmo(camera, renderer, gizmoConfig)
-	gizmo.attachControls(controls)
+	gizmoRef.value = new ViewportGizmo(cameraRef.value, renderer, gizmoConfig)
+	gizmoRef.value.attachControls(controlsRef.value)
 
-	return { gizmo, controls, transformControls }
+	watch(cameraRef, (newCamera) => {
+		if (!controlsRef.value || !gizmoRef.value) return
+		controlsRef.value.object = newCamera
+		gizmoRef.value.camera = newCamera
+	})
+}
+
+interface BlenderControlsParameters {
+	cameraRef: Ref<THREE.PerspectiveCamera | THREE.OrthographicCamera>
+	renderer: THREE.WebGLRenderer
+	helperScene: THREE.Scene
+	gizmoRef: ShallowRef<ViewportGizmo | undefined>
+	controlsRef: ShallowRef<OrbitControls | undefined>
+	transformControlsRef: ShallowRef<TransformControls | undefined>
 }

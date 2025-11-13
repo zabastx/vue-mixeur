@@ -1,12 +1,18 @@
 <template>
 	<MAccordionRoot collapsible type="multiple">
 		<MAccordionItem v-if="light" label="Light" :item="{ value: 'light' }">
-			<div class="text-sm flex flex-col items-end gap-1 pr-2.5">
+			<div class="text-xs flex flex-col items-end gap-1 pr-2.5">
 				<InputField label="Color">
 					<input v-model="lightColor" type="color" class="h-full rounded w-[150px]" />
 				</InputField>
-				<InputField label="Intensity">
+				<InputField v-if="'power' in light" label="Power">
+					<InputNumber v-model="light.power" :min="0" :step="0.1" class="max-w-[150px]" />
+				</InputField>
+				<InputField v-else label="Strength">
 					<InputNumber v-model="light.intensity" :step="0.1" class="max-w-[150px]" />
+				</InputField>
+				<InputField v-if="'distance' in light" label="Distance">
+					<InputNumber v-model="light.distance" :min="0" :step="0.1" class="max-w-[150px]" />
 				</InputField>
 				<InputField v-if="light.shadow" label="Cast shadow">
 					<div class="w-[150px]">

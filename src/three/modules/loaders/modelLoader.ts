@@ -1,10 +1,32 @@
 import { LoadingManager } from 'three'
 import { useToast } from '@/composables/useToast'
+import { useProgressStore } from '@/store/progress'
 
-export async function loadModel({ url, format, onProgress, textureUrlMap }: ModelLoaderParameters) {
+export async function loadModel({
+	url,
+	format,
+	filename,
+	onProgress,
+	textureUrlMap
+}: ModelLoaderParameters) {
 	const ext = (format || url.split('.').pop() || '').toLowerCase()
+	const progressStore = useProgressStore()
+	const loadingId = `model-${Date.now()}-${Math.random().toString(36).slice(2)}`
 
 	try {
+		// Wrap the onProgress callback to track progress
+		const originalOnProgress = onProgress
+		const wrappedOnProgress = (e: ProgressEvent) => {
+			if (e.lengthComputable) {
+				if (progressStore.loadingItems.find((p) => p.id === loadingId)) {
+					progressStore.updateProgress(loadingId, e.loaded)
+				} else {
+					progressStore.startLoading(loadingId, filename, e.total)
+				}
+			}
+			originalOnProgress?.(e)
+		}
+
 		switch (ext) {
 			case 'gltf':
 			case 'glb': {
@@ -35,20 +57,20 @@ export async function loadModel({ url, format, onProgress, textureUrlMap }: Mode
 
 				loader.setMeshoptDecoder(MeshoptDecoder)
 
-				const gltf = await loader.loadAsync(url, onProgress)
+				const gltf = await loader.loadAsync(url, wrappedOnProgress)
 				return gltf.scene
 			}
 
 			case 'obj': {
 				const { OBJLoader } = await import('three/examples/jsm/loaders/OBJLoader.js')
 				const loader = new OBJLoader()
-				return await loader.loadAsync(url, onProgress)
+				return await loader.loadAsync(url, wrappedOnProgress)
 			}
 
 			case 'fbx': {
 				const { FBXLoader } = await import('three/examples/jsm/loaders/FBXLoader.js')
 				const loader = new FBXLoader()
-				return await loader.loadAsync(url, onProgress)
+				return await loader.loadAsync(url, wrappedOnProgress)
 			}
 
 			default:
@@ -63,6 +85,7 @@ export async function loadModel({ url, format, onProgress, textureUrlMap }: Mode
 		})
 		return null
 	} finally {
+		progressStore.finishLoading(loadingId)
 		if (url.startsWith('blob:')) {
 			URL.revokeObjectURL(url)
 		}
@@ -71,7 +94,7 @@ export async function loadModel({ url, format, onProgress, textureUrlMap }: Mode
 
 export interface ModelLoaderParameters {
 	url: string
-	filename?: string
+	filename: string
 	format: 'gltf' | 'glb' | 'obj' | 'fbx' | (string & {})
 	onProgress?: (e: ProgressEvent) => void
 	/** Map of texture filenames to their actual URLs (for PolyHaven models) */

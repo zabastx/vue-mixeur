@@ -110,8 +110,6 @@ declare module 'vue' {
     StatusBar: typeof import('./components/status/StatusBar.vue')['default']
     SurfaceOptionsWrapper: typeof import('./components/data/properties/material/surface/SurfaceOptionsWrapper.vue')['default']
     TextDataProperties: typeof import('./components/data/properties/data/TextDataProperties.vue')['default']
-    ToggleGroupItem: typeof import('reka-ui')['ToggleGroupItem']
-    ToggleGroupRoot: typeof import('reka-ui')['ToggleGroupRoot']
     TopBar: typeof import('./components/header/TopBar.vue')['default']
     TransformLocation: typeof import('./components/data/properties/object/transform/TransformLocation.vue')['default']
     TransformRotation: typeof import('./components/data/properties/object/transform/TransformRotation.vue')['default']

@@ -1,7 +1,7 @@
 <template>
 	<div v-if="material" class="flex flex-col items-end gap-1">
-		<InputField label="Base Color">
-			<InputColor v-model="color" class="w-[150px]" />
+		<InputField label="Base Color" input-width="150px">
+			<InputColor v-model:hex="color" />
 		</InputField>
 	</div>
 </template>

@@ -2,49 +2,47 @@
 	<MAccordionRoot collapsible type="multiple">
 		<MAccordionItem v-if="light" label="Light" :item="{ value: 'light' }">
 			<div class="text-xs flex flex-col items-end gap-1 pr-2.5">
-				<InputField label="Color">
-					<input v-model="lightColor" type="color" class="h-full rounded w-[150px]" />
+				<InputField label="Color" input-width="150px">
+					<InputColor v-model:hex="lightColor" />
 				</InputField>
-				<InputField v-if="'power' in light" label="Power">
-					<InputNumber v-model="light.power" :min="0" :step="0.1" class="max-w-[150px]" />
+				<InputField v-if="'power' in light" label="Power" input-width="150px">
+					<InputNumber v-model="light.power" :min="0" :step="0.1" />
 				</InputField>
-				<InputField v-else label="Strength">
-					<InputNumber v-model="light.intensity" :step="0.1" class="max-w-[150px]" />
+				<InputField v-else label="Strength" input-width="150px">
+					<InputNumber v-model="light.intensity" :step="0.1" />
 				</InputField>
-				<InputField v-if="'distance' in light" label="Distance">
-					<InputNumber v-model="light.distance" :min="0" :step="0.1" class="max-w-[150px]" />
+				<InputField v-if="'distance' in light" label="Distance" input-width="150px">
+					<InputNumber v-model="light.distance" :min="0" :step="0.1" />
 				</InputField>
 				<InputField v-if="light.shadow" label="Cast shadow">
 					<div class="w-[150px]">
 						<InputCheckbox v-model="light.castShadow" />
 					</div>
 				</InputField>
-				<InputField v-if="light.shadow" label="Shadow intensity">
+				<InputField v-if="light.shadow" label="Shadow intensity" input-width="150px">
 					<InputNumber
 						v-model="light.shadow.intensity"
 						:min="0"
 						:max="1"
 						:step="0.01"
-						class="max-w-[150px]"
 						:format-options="{ style: 'percent' }"
 					/>
 				</InputField>
 				<template v-if="light instanceof RectAreaLight">
-					<InputField label="Width">
-						<InputNumber v-model="light.width" :step="0.1" :min="0" class="max-w-[150px]" />
+					<InputField label="Width" input-width="150px">
+						<InputNumber v-model="light.width" :step="0.1" :min="0" />
 					</InputField>
-					<InputField label="Height">
-						<InputNumber v-model="light.height" :step="0.1" :min="0" class="max-w-[150px]" />
+					<InputField label="Height" input-width="150px">
+						<InputNumber v-model="light.height" :step="0.1" :min="0" />
 					</InputField>
 				</template>
 				<template v-if="light instanceof THREE.SpotLight">
-					<InputField label="Angle">
+					<InputField label="Angle" input-width="150px">
 						<InputNumber
 							v-model="spotLightAngle"
 							:step="0.1"
 							:min="0"
 							:max="MathUtils.radToDeg(Math.PI / 2)"
-							class="max-w-[150px]"
 							:format-options="{ unit: 'degree', unitDisplay: 'narrow', style: 'unit' }"
 						/>
 					</InputField>

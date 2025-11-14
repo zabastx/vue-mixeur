@@ -1,7 +1,7 @@
 <template>
 	<div v-if="material" class="flex flex-col items-end gap-1">
 		<InputField input-width="150px" label="Base Color">
-			<InputColor v-model="color" />
+			<InputColor v-model:hex="color" />
 		</InputField>
 		<InputField input-width="150px" label="Metallic">
 			<InputNumber v-model="metalness" :min="0" :max="1" :step="0.01" />
@@ -41,7 +41,7 @@
 			<MAccordionItem label="Emission" :item="{ value: 'emission' }" class="w-full" nested>
 				<div class="flex flex-col items-end gap-1">
 					<InputField input-width="150px" label="Color">
-						<InputColor v-model="emissive" />
+						<InputColor v-model:hex="emissive" />
 					</InputField>
 					<InputField input-width="150px" label="Strength">
 						<InputNumber v-model="emissiveIntensity" :min="0" :step="0.01" />

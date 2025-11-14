@@ -42,6 +42,13 @@
 
 	--color-ui-radio-button-inner: #545454ff;
 	--color-ui-radio-button-selected: #4772b3ff;
+	--color-ui-radio-button-text: #e6e6e6;
+	--color-ui-radio-button-text-selected: #ffffff;
+
+	--color-ui-slider-inner: #545454ff;
+	--color-ui-slider-item: #4772b3ff;
+	--color-ui-slider-text: #e6e6e6;
+	--color-ui-slider-outline: #3d3d3dff;
 
 	--color-ui-text-inner: #1d1d1dff;
 	--color-ui-text-selected: #181818ff;
@@ -84,4 +91,7 @@
 	--color-outliner-alternate-rows: #ffffff04;
 
 	--color-browser-selected: #4772b3;
+
+	--color-checkerboard-primary: #333333;
+	--color-checkerboard-secondary: #262626;
 }

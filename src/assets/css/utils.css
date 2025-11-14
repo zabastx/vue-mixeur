@@ -15,3 +15,15 @@
 		var(--color-outliner-alternate-rows) 3rem
 	);
 }
+
+@utility checkerboard {
+	background: conic-gradient(
+		var(--color-checkerboard-primary) 90deg,
+		var(--color-checkerboard-secondary) 90deg 180deg,
+		var(--color-checkerboard-primary) 180deg 270deg,
+		var(--color-checkerboard-secondary) 270deg
+	);
+	background-repeat: repeat;
+	background-size: 8px 8px;
+	background-position: top left;
+}

@@ -3,17 +3,12 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js'
 import THREE from '@/three'
 import { createBlenderRenderer } from '../renderer'
-import { watch, type Ref } from 'vue'
+import { watch, type Ref, type ShallowRef } from 'vue'
 import { GammaCorrectionShader, ShaderPass, TAARenderPass } from 'three/examples/jsm/Addons.js'
+import type { ViewportGizmo } from 'three-viewport-gizmo'
 
-export function createComposer(
-	canvas: HTMLCanvasElement,
-	scene: THREE.Scene,
-	camera: Ref<THREE.PerspectiveCamera | THREE.OrthographicCamera>
-) {
+export function createComposer({ camera, canvas, gizmo, scene }: ComposerParameters) {
 	const renderer = createBlenderRenderer({ canvas })
-
-	const { width, height } = getCanvasSize(canvas)
 	const composer = new EffectComposer(renderer)
 	composer.setPixelRatio(window.devicePixelRatio)
 
@@ -24,7 +19,11 @@ export function createComposer(
 	taaPass.sampleLevel = 2
 	composer.addPass(taaPass)
 
-	const outlinePass = new OutlinePass(new THREE.Vector2(width, height), scene, camera.value)
+	const outlinePass = new OutlinePass(
+		new THREE.Vector2(canvas.clientWidth, canvas.clientHeight),
+		scene,
+		camera.value
+	)
 	outlinePass.edgeStrength = 5
 	outlinePass.edgeThickness = 1
 	outlinePass.edgeGlow = 0
@@ -35,31 +34,35 @@ export function createComposer(
 	const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader)
 	composer.addPass(gammaCorrectionPass)
 
-	resizeRendererToDisplaySize()
-
-	function resizeRendererToDisplaySize() {
-		const { width, height, clientHeight, clientWidth } = canvas
-		const needResize = width !== clientWidth || height !== clientHeight
-		if (needResize) {
-			renderer.setSize(clientWidth, clientHeight, false)
-			composer.setSize(clientWidth, clientHeight)
-		}
-		return needResize
-	}
-
 	watch(camera, (newCamera) => {
 		renderPass.camera = newCamera
 		outlinePass.renderCamera = newCamera
 		taaPass.camera = newCamera
 	})
 
-	return { renderer, composer, outlinePass, resizeRendererToDisplaySize }
+	function handleResize() {
+		const { width, height } = renderer.getSize(new THREE.Vector2())
+		const { clientWidth, clientHeight } = canvas
+
+		if (width !== clientWidth || height !== clientHeight) {
+			renderer.setSize(clientWidth, clientHeight, false)
+			composer.setSize(clientWidth, clientHeight)
+
+			if (camera.value instanceof THREE.PerspectiveCamera) {
+				camera.value.aspect = clientWidth / clientHeight
+			}
+
+			camera.value.updateProjectionMatrix()
+			gizmo.value?.update()
+		}
+	}
+
+	return { renderer, composer, outlinePass, handleResize }
 }
 
-function getCanvasSize(canvas: HTMLCanvasElement) {
-	const { clientHeight, clientWidth } = canvas
-	return {
-		width: clientWidth,
-		height: clientHeight
-	}
+interface ComposerParameters {
+	canvas: HTMLCanvasElement
+	scene: THREE.Scene
+	camera: Ref<THREE.PerspectiveCamera | THREE.OrthographicCamera>
+	gizmo: ShallowRef<ViewportGizmo | undefined>
 }

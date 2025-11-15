@@ -11,7 +11,7 @@ import { useEventListener } from '@vueuse/core'
 import { createComposer } from '@/three/modules/postprocess/composer'
 import { cameraSetup } from '@/three/modules/camera/setup'
 import {
-	type OutlinePass,
+	OutlinePass,
 	type TransformControls,
 	type TransformControlsMode
 } from 'three/examples/jsm/Addons.js'
@@ -106,9 +106,12 @@ export const useThreeStore = defineStore('three', () => {
 		if (!(activeCamera.value instanceof THREE.PerspectiveCamera)) return
 		activeCamera.value.aspect = canvas.clientWidth / canvas.clientHeight
 
-		const newComposer = createComposer(canvas, scene, activeCamera)
-
-		const { renderer, composer, resizeRendererToDisplaySize } = newComposer
+		const { renderer, composer, handleResize } = createComposer({
+			canvas,
+			scene,
+			camera: activeCamera,
+			gizmo
+		})
 
 		setupBlenderControls({
 			cameraRef: activeCamera,
@@ -120,7 +123,7 @@ export const useThreeStore = defineStore('three', () => {
 		})
 
 		// Object selection
-		outlinePass.value = newComposer.outlinePass
+		outlinePass.value = composer.passes.find((pass) => pass instanceof OutlinePass) as OutlinePass
 
 		selectObject.value = (uuid?: string, raycasted?: boolean) => {
 			if (!outlinePass.value || !uuid) return
@@ -210,13 +213,8 @@ export const useThreeStore = defineStore('three', () => {
 		function render() {
 			const delta = clock.getDelta()
 			passedTime += delta
-			if (resizeRendererToDisplaySize()) {
-				if (activeCamera.value instanceof THREE.PerspectiveCamera) {
-					activeCamera.value.aspect = canvas.clientWidth / canvas.clientHeight
-				}
-				activeCamera.value.updateProjectionMatrix()
-				gizmo.value?.update()
-			}
+
+			handleResize()
 
 			grid.update(activeCamera.value)
 			controls.value?.update(delta)

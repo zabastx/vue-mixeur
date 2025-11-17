@@ -130,7 +130,7 @@ export const useThreeStore = defineStore('three', () => {
 
 			const object = scene.getObjectByProperty('uuid', uuid)
 
-			if (!object) return
+			if (!object || (raycasted && !object.userData.isSelectable)) return
 
 			if (object instanceof THREE.Light) {
 				transformControls.value?.attach(object)
@@ -150,8 +150,6 @@ export const useThreeStore = defineStore('three', () => {
 				return
 			}
 
-			if (raycasted && !object.userData.isSelectable) return
-
 			transformControls.value?.attach(object)
 			outlinePass.value.selectedObjects = [object]
 			selectedObject.value = object
@@ -163,7 +161,10 @@ export const useThreeStore = defineStore('three', () => {
 
 		transformControls.value?.addEventListener('object-changed', (e) => {
 			const object = e.target.object as unknown as THREE.Object3D | LightHelper | undefined
-			if (!object) return
+			if (!object) {
+				if (outlinePass.value) outlinePass.value.selectedObjects = []
+				return
+			}
 
 			if ('light' in object) {
 				transformControls.value?.attach(object.light)

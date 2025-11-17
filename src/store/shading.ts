@@ -370,7 +370,6 @@ function getSolidShadingLights() {
 
 	lights.forEach((item) => {
 		item.userData = {
-			isSceneLight: true,
 			isHelper: true
 		}
 	})

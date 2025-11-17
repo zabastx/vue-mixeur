@@ -47,6 +47,7 @@ export function createComposer({ camera, canvas, gizmo, scene }: ComposerParamet
 		if (width !== clientWidth || height !== clientHeight) {
 			renderer.setSize(clientWidth, clientHeight, false)
 			composer.setSize(clientWidth, clientHeight)
+			renderer.setPixelRatio(window.devicePixelRatio)
 
 			if (camera.value instanceof THREE.PerspectiveCamera) {
 				camera.value.aspect = clientWidth / clientHeight

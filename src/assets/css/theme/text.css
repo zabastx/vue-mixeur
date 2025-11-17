@@ -1,0 +1,13 @@
+@theme {
+	/* Panel Title */
+	--text-panel-title: 12px;
+	--font-weight-panel-title: 400;
+
+	/* Widget */
+	--text-widget: 12px;
+	--font-weight-widget: 400;
+
+	/* Tooltip */
+	--text-tooltip: 12px;
+	--font-weight-tooltip: 400;
+}

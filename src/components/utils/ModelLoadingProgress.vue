@@ -11,9 +11,9 @@
 				<span class="text-xs opacity-70">{{ Math.round(loading.percentage) }}%</span>
 			</div>
 
-			<div class="mb-2 h-2 w-full rounded-full bg-ui-number-field-inner">
+			<div class="mb-2 h-2 w-full rounded-full bg-ui-number-inner">
 				<div
-					class="h-2 rounded-full bg-ui-radio-button-selected transition-all duration-300 ease-out"
+					class="h-2 rounded-full bg-ui-radio-inner-selected transition-all duration-300 ease-out"
 					:style="{ width: `${loading.percentage}%` }"
 				></div>
 			</div>

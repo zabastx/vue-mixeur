@@ -9,7 +9,10 @@
 		</h1>
 		<div class="grid grid-cols-[20%_1fr_30%] h-[75dvh] gap-2 p-2">
 			<div class="bg-header-background flex flex-col gap-2">
-				<div class="h-[300px] bg-ui-box-inner rounded p-2 pr-0 text-sm flex flex-col gap-1">
+				<div
+					class="h-[300px] bg-ui-box-inner border border-ui-box-outline rounded-ui-box p-2 pr-0
+						text-sm flex flex-col gap-1"
+				>
 					<h2>Categories</h2>
 					<ScrollContainer>
 						<CheckboxGroupRoot v-model="categoriesFilter">

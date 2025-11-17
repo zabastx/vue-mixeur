@@ -13,7 +13,7 @@
 				class="cursor-pointer border-[0.5px] border-ui-toolbar-outline bg-ui-toolbar-inner p-1
 					first:rounded-t last:rounded-b last:border-t-0 first:border-b-0"
 				:class="{
-					'bg-ui-toolbar-selected': item.name === threeStore.currentTransformMode
+					'bg-ui-toolbar-inner-selected': item.name === threeStore.currentTransformMode
 				}"
 				:title="item.title"
 				@click="item.onClick"

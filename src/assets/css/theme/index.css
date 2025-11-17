@@ -1,0 +1,28 @@
+@theme {
+	--color-window-bg: #303030;
+	--color-header-text: #888888;
+	--color-header-background: #303030b3;
+	--color-region-background: #30303000;
+
+	--color-topbar-background: #161616;
+	--color-status-background: #161616;
+
+	--color-panel-header: #3d3d3dff;
+	--color-panel-background: #3d3d3dff;
+	--color-panel-sub-background: #0000001f;
+
+	--color-properties-panel-header: var(--color-panel-header);
+	--color-properties-panel-background: var(--color-panel-background);
+	--color-properties-panel-sub-background: var(--color-panel-sub-background);
+
+	--color-viewport-header-bg: var(--color-header-background);
+
+	--color-outliner-active-highlight: #334d80;
+	--color-outliner-active-object: #ffaf29;
+	--color-outliner-alternate-rows: #ffffff04;
+
+	--color-browser-selected: #4772b3;
+}
+
+@import './ui.css';
+@import './text.css';

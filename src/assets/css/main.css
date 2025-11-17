@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import './colors.css';
+@import './theme/index.css';
 @import './components.css';
 @import './utils.css';
 

@@ -1,0 +1,240 @@
+@theme {
+	/* Box */
+	--color-ui-box-text: #e6e6e6;
+	--color-ui-box-text-selected: #ffffff;
+	--color-ui-box-item: #191919ff;
+	--color-ui-box-inner: #1d1d1d80;
+	--color-ui-box-inner-selected: #545454ff;
+	--color-ui-box-outline: #3d3d3dff;
+	--ui-box-roundness: 0.4;
+	--radius-ui-box: calc(var(--ui-box-roundness) * 1rem);
+
+	/* List Item */
+	--color-ui-list-text: #cccccc;
+	--color-ui-list-text-selected: #ffffff;
+	--color-ui-list-item: #ffffff33;
+	--color-ui-list-inner: #ffffff00;
+	--color-ui-list-inner-selected: #4772b3ff;
+	--color-ui-list-outline: #2d2d2dff;
+	--ui-list-roundness: 0.4;
+	--radius-ui-list: calc(var(--ui-list-roundness) * 1rem);
+
+	/* Menu */
+	--color-ui-menu-text: #e6e6e6;
+	--color-ui-menu-text-selected: #ffffff;
+	--color-ui-menu-item: #d9d9d9ff;
+	--color-ui-menu-inner: #282828ff;
+	--color-ui-menu-inner-selected: #4772b3b3;
+	--color-ui-menu-outline: #3d3d3dff;
+	--ui-menu-roundness: 0.4;
+	--radius-ui-menu: calc(var(--ui-menu-roundness) * 1rem);
+
+	/* Menu Background */
+	--color-ui-menu-bg-text: #999999;
+	--color-ui-menu-bg-text-selected: #ffffff;
+	--color-ui-menu-bg-item: #d9d9d9ff;
+	--color-ui-menu-bg-inner: #181818ff;
+	--color-ui-menu-bg-inner-selected: #4772b3ff;
+	--color-ui-menu-bg-outline: #242424ff;
+	--ui-menu-bg-roundness: 0.4;
+	--radius-ui-menu-bg: calc(var(--ui-menu-bg-roundness) * 1rem);
+
+	/* Menu Item */
+	--color-ui-menu-item-text: #dddddd;
+	--color-ui-menu-item-text-selected: #ffffff;
+	--color-ui-menu-item-item: #ffffff8f;
+	--color-ui-menu-item-inner: #18181800;
+	--color-ui-menu-item-inner-selected: #4772b3ff;
+	--color-ui-menu-item-outline: #3d3d3d00;
+	--ui-menu-item-roundness: 0.4;
+	--radius-ui-menu-item: calc(var(--ui-menu-item-roundness) * 1rem);
+
+	/* Number Field */
+	--color-ui-number-text: #e6e6e6;
+	--color-ui-number-text-selected: #ffffff;
+	--color-ui-number-item: #4772b3ff;
+	--color-ui-number-inner: #545454ff;
+	--color-ui-number-inner-selected: #222222ff;
+	--color-ui-number-outline: #3d3d3dff;
+	--ui-number-roundness: 0.4;
+	--radius-ui-number: calc(var(--ui-number-roundness) * 1rem);
+
+	/* Option */
+	--color-ui-option-text: #e6e6e6;
+	--color-ui-option-text-selected: #ffffff;
+	--color-ui-option-item: #ffffffff;
+	--color-ui-option-inner: #545454ff;
+	--color-ui-option-inner-selected: #4772b3ff;
+	--color-ui-option-outline: #3d3d3dff;
+	--ui-option-roundness: 0.4;
+	--radius-ui-option: calc(var(--ui-option-roundness) * 1rem);
+
+	/* Pie Menu */
+	--color-ui-pie-text: #d9d9d9;
+	--color-ui-pie-text-selected: #ffffff;
+	--color-ui-pie-item: #545454ff;
+	--color-ui-pie-inner: #181818ff;
+	--color-ui-pie-inner-selected: #4772b3ff;
+	--color-ui-pie-outline: #242424ff;
+	--ui-pie-roundness: 0.4;
+	--radius-ui-pie: calc(var(--ui-pie-roundness) * 1rem);
+
+	/* Progress Bar */
+	--color-ui-progress-text: #e6e6e6;
+	--color-ui-progress-text-selected: #ffffff;
+	--color-ui-progress-item: #4772b3ff;
+	--color-ui-progress-inner: #222222ff;
+	--color-ui-progress-inner-selected: #4772b3ff;
+	--color-ui-progress-outline: #3d3d3dff;
+	--ui-progress-roundness: 0.4;
+	--radius-ui-progress: calc(var(--ui-progress-roundness) * 1rem);
+
+	/* Pulldown */
+	--color-ui-pulldown-text: #d9d9d9;
+	--color-ui-pulldown-text-selected: #ffffff;
+	--color-ui-pulldown-item: #ffffff8f;
+	--color-ui-pulldown-inner: #22222200;
+	--color-ui-pulldown-inner-selected: #ffffff1a;
+	--color-ui-pulldown-outline: #3d3d3d00;
+	--ui-pulldown-roundness: 0.4;
+	--radius-ui-pulldown: calc(var(--ui-pulldown-roundness) * 1rem);
+
+	/* Radio Buttons */
+	--color-ui-radio-text: #e6e6e6;
+	--color-ui-radio-text-selected: #ffffff;
+	--color-ui-radio-item: #252525ff;
+	--color-ui-radio-inner: #545454ff;
+	--color-ui-radio-inner-selected: #4772b3ff;
+	--color-ui-radio-outline: #3d3d3dff;
+	--ui-radio-roundness: 0.4;
+	--radius-ui-radio: calc(var(--ui-radio-roundness) * 1rem);
+
+	/* Regular */
+	--color-ui-regular-text: #e6e6e6;
+	--color-ui-regular-text-selected: #ffffff;
+	--color-ui-regular-item: #1d1d1d80;
+	--color-ui-regular-inner: #545454ff;
+	--color-ui-regular-inner-selected: #4772b3ff;
+	--color-ui-regular-outline: #3d3d3dff;
+	--ui-regular-roundness: 0.4;
+	--radius-ui-regular: calc(var(--ui-regular-roundness) * 1rem);
+
+	/* Scroll Bar */
+	--color-ui-scroll-text: #e6e6e6;
+	--color-ui-scroll-text-selected: #ffffff;
+	--color-ui-scroll-item: #545454ff;
+	--color-ui-scroll-inner: #22222200;
+	--color-ui-scroll-inner-selected: #ffffffff;
+	--color-ui-scroll-outline: #3d3d3dff;
+	--ui-scroll-roundness: 0.4;
+	--radius-ui-scroll: calc(var(--ui-scroll-roundness) * 1rem);
+
+	/* Tab */
+	--color-ui-tab-text: #989898;
+	--color-ui-tab-text-selected: #ffffff;
+	--color-ui-tab-item: #1d1d1dff;
+	--color-ui-tab-inner: #1d1d1dff;
+	--color-ui-tab-inner-selected: #303030ff;
+	--color-ui-tab-outline: #1d1d1dff;
+	--ui-tab-roundness: 0.4;
+	--radius-ui-tab: calc(var(--ui-tab-roundness) * 1rem);
+
+	/* Text */
+	--color-ui-text-text: #e6e6e6;
+	--color-ui-text-text-selected: #ffffff;
+	--color-ui-text-item: #ffffff33;
+	--color-ui-text-inner: #1d1d1dff;
+	--color-ui-text-inner-selected: #181818ff;
+	--color-ui-text-outline: #3d3d3dff;
+	--ui-text-roundness: 0.4;
+	--radius-ui-text: calc(var(--ui-text-roundness) * 1rem);
+
+	/* Toggle */
+	--color-ui-toggle-text: #e6e6e6;
+	--color-ui-toggle-text-selected: #ffffff;
+	--color-ui-toggle-item: #252525ff;
+	--color-ui-toggle-inner: #545454ff;
+	--color-ui-toggle-inner-selected: #4772b3ff;
+	--color-ui-toggle-outline: #3d3d3dff;
+	--ui-toggle-roundness: 0.4;
+	--radius-ui-toggle: calc(var(--ui-toggle-roundness) * 1rem);
+
+	/* Tool */
+	--color-ui-tool-text: #e6e6e6;
+	--color-ui-tool-text-selected: #ffffff;
+	--color-ui-tool-item: #ffffffff;
+	--color-ui-tool-inner: #545454ff;
+	--color-ui-tool-inner-selected: #4772b3ff;
+	--color-ui-tool-outline: #3d3d3dff;
+	--ui-tool-roundness: 0.4;
+	--radius-ui-tool: calc(var(--ui-tool-roundness) * 1rem);
+
+	/* Toolbar */
+	--color-ui-toolbar-text: #e6e6e6;
+	--color-ui-toolbar-text-selected: #ffffff;
+	--color-ui-toolbar-item: #ffffffb3;
+	--color-ui-toolbar-inner: #282828ff;
+	--color-ui-toolbar-inner-selected: #4772b3ff;
+	--color-ui-toolbar-outline: #3d3d3dff;
+	--ui-toolbar-roundness: 0.4;
+	--radius-ui-toolbar: calc(var(--ui-toolbar-roundness) * 1rem);
+
+	/* Tooltip */
+	--color-ui-tooltip-text: #d9d9d9;
+	--color-ui-tooltip-text-selected: #ffffff;
+	--color-ui-tooltip-item: #d9d9d9ff;
+	--color-ui-tooltip-inner: #1d1d1dff;
+	--color-ui-tooltip-inner-selected: #4772b3ff;
+	--color-ui-tooltip-outline: #242424ff;
+	--ui-tooltip-roundness: 0.4;
+	--radius-ui-tooltip: calc(var(--ui-tooltip-roundness) * 1rem);
+
+	/* Value Slider */
+	--color-ui-slider-text: #e6e6e6;
+	--color-ui-slider-text-selected: #ffffff;
+	--color-ui-slider-item: #4772b3ff;
+	--color-ui-slider-inner: #545454ff;
+	--color-ui-slider-inner-selected: #222222ff;
+	--color-ui-slider-outline: #3d3d3dff;
+	--ui-slider-roundness: 0.4;
+	--radius-ui-slider: calc(var(--ui-slider-roundness) * 1rem);
+
+	/* Axis & Gizmo Colors */
+	--color-axis-x: #ff3352;
+	--color-axis-y: #8bdc00;
+	--color-axis-z: #2890ff;
+	--color-gizmo-primary: #f5f14d;
+	--color-gizmo-secondary: #63ffff;
+	--color-gizmo-view-align: #ffffff;
+	--color-gizmo-view-a: #4da84d;
+	--color-gizmo-view-b: #a33535;
+
+	/* Icon Colors */
+	--color-icon-scene: #ccccccff;
+	--color-icon-collection: #ffffffff;
+	--color-icon-object: #e19658ff;
+	--color-icon-object-data: #00d4a3ff;
+	--color-icon-modifier: #74a2ffff;
+	--color-icon-shading: #cc6670ff;
+	--color-icon-folders: #ccad63ff;
+	--color-icon-key-indicator: #ab3c48ff;
+
+	/* State */
+	--color-state-error: #771111ff;
+	--color-state-warning: #ac8737ff;
+	--color-state-info: #28487dff;
+	--color-state-success: #188625ff;
+
+	/* Styles */
+	--color-editor-border: #161616;
+	--color-editor-outline: #ffffff15;
+	--color-active-editor-outline: #ffffff2a;
+	--color-text-cursor: #71a8ff;
+	--panel-roundness: 0.4;
+	--radius-panel: calc(var(--panel-roundness) * 1rem * 0.75);
+
+	/* Transparent Checkerboard */
+	--color-checkerboard-primary: #333333;
+	--color-checkerboard-secondary: #262626;
+	--checkerboard-size: 8px;
+}

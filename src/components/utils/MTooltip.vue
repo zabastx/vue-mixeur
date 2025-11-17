@@ -8,7 +8,7 @@
 				align="start"
 				v-bind="options?.content"
 				class="flex max-w-xs flex-col gap-1 rounded border border-ui-tooltip-outline
-					bg-ui-tooltip-inner p-2 text-xs text-ui-tooltip-text"
+					bg-ui-tooltip-inner p-2 text-tooltip text-ui-tooltip-text"
 			>
 				<slot name="content">
 					<span v-if="tooltip?.title">{{ tooltip.title }}</span>

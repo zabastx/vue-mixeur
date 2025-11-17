@@ -3,14 +3,14 @@
 		<div ref="pickerRef"></div>
 		<RadioGroupRoot
 			v-model="colorType"
-			class="rounded overflow-hidden grid grid-cols-2 text-xs text-ui-radio-button-text"
+			class="rounded overflow-hidden grid grid-cols-2 text-xs text-ui-radio-text"
 		>
 			<RadioGroupItem
 				v-for="item in ['RGB', 'HSV']"
 				:key="item"
 				:value="item"
-				class="bg-ui-radio-button-inner data-[state='checked']:bg-ui-radio-button-selected
-					data-[state='checked']:text-ui-radio-button-text-selected p-0.5"
+				class="bg-ui-radio-inner data-[state='checked']:bg-ui-radio-inner-selected
+					data-[state='checked']:text-ui-radio-text-selected p-0.5"
 			>
 				{{ item }}
 			</RadioGroupItem>

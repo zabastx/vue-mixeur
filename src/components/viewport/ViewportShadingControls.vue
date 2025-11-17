@@ -6,9 +6,9 @@
 			:content="{ align: 'start', side: 'bottom', alignOffset: -10, sideOffset: 10 }"
 		>
 			<button
-				class="cursor-pointer bg-ui-radio-button-inner p-0.5"
+				class="cursor-pointer bg-ui-radio-inner p-0.5"
 				:class="{
-					'bg-ui-radio-button-selected': btn.name === shadingStore.shadingMode,
+					'bg-ui-radio-inner-selected': btn.name === shadingStore.shadingMode,
 					'rounded-l': index === 0,
 					'rounded-r': index === buttons.length - 1
 				}"

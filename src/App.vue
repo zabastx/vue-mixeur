@@ -1,7 +1,7 @@
 <template>
 	<ToastProvider>
 		<TooltipProvider :delay-duration="300" disable-hoverable-content>
-			<div class="flex h-full flex-col bg-gray-900 font-sans text-gray-200">
+			<div class="flex h-full flex-col font-sans text-gray-200">
 				<TopBar />
 
 				<main class="grid min-h-0 flex-1 grid-cols-(--main-cols) bg-editor-border p-1 select-none">

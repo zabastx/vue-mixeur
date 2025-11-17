@@ -1,19 +1,19 @@
 <template>
-	<Accordion.Item v-slot="{ open }" class="overflow-hidden rounded" v-bind="item">
-		<Accordion.Header class="bg-properties-panel-header px-2 py-0.5" v-bind="header">
+	<Accordion.Item v-slot="{ open }" class="overflow-hidden rounded-panel text-xs" v-bind="item">
+		<Accordion.Header class="bg-properties-panel-header px-2 py-1" v-bind="header">
 			<Accordion.Trigger
 				class="group flex w-full cursor-pointer items-center gap-1"
 				v-bind="trigger"
 			>
 				<IconArrowRight
-					class="transition-rotate inline-block size-[1em] text-xs duration-200
+					class="transition-rotate inline-block size-[1em] duration-200
 						group-data-[state='open']:rotate-90"
 				/>
-				<span>{{ label }}</span>
+				<span class="text-panel-title font-panel-title">{{ label }}</span>
 			</Accordion.Trigger>
 		</Accordion.Header>
 		<Accordion.Content
-			class="animation-slide overflow-hidden bg-properties-panel-background text-xs"
+			class="animation-slide overflow-hidden bg-properties-panel-background"
 			v-bind="content"
 		>
 			<div class="pb-2.5 pt-1 pr-3" :class="{ 'pr-0!': nested }">

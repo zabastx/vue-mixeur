@@ -32,15 +32,7 @@ export function setupBlenderControls({
 		TWO: THREE.TOUCH.PAN
 	}
 
-	const gizmoConfig: GizmoOptions = {
-		container: '.gizmo-wrapper',
-		className: 'gizmo',
-		size: 100,
-		animated: true,
-		placement: 'top-right'
-	}
-
-	gizmoRef.value = new ViewportGizmo(cameraRef.value, renderer, gizmoConfig)
+	gizmoRef.value = new ViewportGizmo(cameraRef.value, renderer, getGizmoConfig())
 	gizmoRef.value.attachControls(controlsRef.value)
 
 	watch(cameraRef, (newCamera) => {
@@ -48,6 +40,43 @@ export function setupBlenderControls({
 		controlsRef.value.object = newCamera
 		gizmoRef.value.camera = newCamera
 	})
+}
+
+function getGizmoConfig(): GizmoOptions {
+	const rootStyle = getComputedStyle(document.documentElement)
+	const colorX = rootStyle.getPropertyValue('--color-axis-x')
+	const colorY = rootStyle.getPropertyValue('--color-axis-y')
+	const coloyZ = rootStyle.getPropertyValue('--color-axis-z')
+
+	return {
+		container: '.gizmo-wrapper',
+		className: 'gizmo',
+		size: 100,
+		placement: 'top-right',
+		lineWidth: 3,
+		resolution: 128,
+		x: {
+			color: colorX,
+			hover: {
+				labelColor: '#fff',
+				color: colorX
+			}
+		},
+		y: {
+			color: colorY,
+			hover: {
+				labelColor: '#fff',
+				color: colorY
+			}
+		},
+		z: {
+			color: coloyZ,
+			hover: {
+				labelColor: '#fff',
+				color: coloyZ
+			}
+		}
+	}
 }
 
 interface BlenderControlsParameters {

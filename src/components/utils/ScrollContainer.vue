@@ -10,7 +10,7 @@
 				data-[orientation=vertical]:w-2.5"
 		>
 			<ScrollArea.Thumb
-				class="relative flex-1 rounded bg-ui-scrollbar before:absolute before:top-1/2
+				class="relative flex-1 rounded bg-ui-scroll-item before:absolute before:top-1/2
 					before:left-1/2 before:h-full before:min-h-[44px] before:w-full before:min-w-5
 					before:-translate-x-1/2 before:-translate-y-1/2 before:content-['']"
 			/>

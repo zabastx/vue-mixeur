@@ -48,6 +48,9 @@ export function usePolyHaven() {
 	const isLoadingFiles = ref(false)
 	const isLoadingCategories = ref(false)
 
+	const selectedAsset = shallowRef<AssetWithId>()
+	const selectedAssetAuthor = shallowRef<AssetAuthorInfo>()
+
 	const assetsTags = computed(() => {
 		const tagsSet = new Set(assets.value.flatMap((asset) => asset.tags))
 		return Array.from(tagsSet)
@@ -58,11 +61,12 @@ export function usePolyHaven() {
 	const filteredAssets = computed(() => {
 		return assets.value.filter((asset) => {
 			const name = asset.name.toLowerCase().includes(search.value.toLowerCase())
+			const tag = asset.tags.join(' ').toLowerCase().includes(search.value.toLowerCase())
 			const cat =
 				categoriesFilter.value.length > 0
 					? categoriesFilter.value.some((item) => asset.categories.includes(item))
 					: true
-			return name && cat
+			return (name || tag) && cat
 		})
 	})
 
@@ -166,6 +170,33 @@ export function usePolyHaven() {
 		return data.value
 	}
 
+	function selectAsset<T extends Asset>(asset: AssetWithId, cb: (files: AssetFiles) => void) {
+		const authorId = Object.keys(asset.authors)[0]
+
+		if (authorId) {
+			fetchAssetAuthor(authorId)
+				.then((author) => {
+					if (!author) return
+					selectedAssetAuthor.value = author
+				})
+				.catch(() => {})
+		}
+
+		fetchAssetInfo<T>(asset.id)
+			.then((item) => {
+				if (!item) return
+				selectedAsset.value = { ...item, id: asset.id }
+			})
+			.catch(() => {})
+
+		fetchAssetFiles(asset.id)
+			.then((item) => {
+				if (!item) return
+				cb(item)
+			})
+			.catch(() => {})
+	}
+
 	function getModelData({
 		files,
 		format,
@@ -249,6 +280,9 @@ export function usePolyHaven() {
 		isHDRI,
 		isTexture,
 		isModel,
-		getAssetTypeName
+		getAssetTypeName,
+		selectedAsset,
+		selectedAssetAuthor,
+		selectAsset
 	}
 }

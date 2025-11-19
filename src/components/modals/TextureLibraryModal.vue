@@ -28,7 +28,7 @@
 						</CheckboxGroupRoot>
 					</ScrollContainer>
 				</div>
-				<input v-model="search" type="text" class="input" placeholder="Search models" />
+				<input v-model="search" type="text" class="input" placeholder="Search textures" />
 				<PolyhavenLicense class="mt-auto" />
 			</div>
 			<div class="overflow-hidden bg-ui-box-inner rounded grow">
@@ -39,7 +39,7 @@
 							:key="'asset_' + item.id"
 							class="w-32 rounded p-1 cursor-pointer hover:bg-gray-500"
 							:class="{ 'bg-browser-selected': selectedAsset?.name === item.name }"
-							@click="selectAsset(item, setFilesData)"
+							@click="selectAsset<TextureAsset>(item, setFilesData)"
 						>
 							<div class="w-full h-28 p-1">
 								<img
@@ -86,23 +86,40 @@
 							<b>Description:</b> {{ selectedAsset.description }}
 						</div>
 						<div><b>Categories:</b> {{ selectedAsset.categories.join(', ') }}</div>
-						<div><b>Tags:</b> {{ selectedAsset.tags.join(', ') }}</div>
-						<InputField label="Resolution" class="z-10">
-							<InputSelect v-model="selectedResOption" class="z-10" :items="fileResOptions" />
-						</InputField>
-						<div><b>Size: </b>{{ selectedOptionData?.size }}</div>
+						<div class="mb-2"><b>Tags:</b> {{ selectedAsset.tags.join(', ') }}</div>
+						<InputSelect
+							v-model="selectedMapType"
+							class="z-10"
+							:items="textureTypes"
+							placeholder="Map type"
+						/>
+						<InputSelect
+							v-if="selectedMapType"
+							v-model="selectedResOption"
+							class="z-10"
+							:items="fileResOptions"
+							placeholder="Resolution"
+						/>
+						<InputSelect
+							v-if="selectedResOption"
+							v-model="selectedFormatOption"
+							class="z-10"
+							:items="formatOptions"
+							placeholder="Format"
+						/>
+						<div v-if="selectedTexture"><b>Size: </b>{{ bytesToSize(selectedTexture.size) }}</div>
 					</div>
 				</ScrollContainer>
-				<button type="button" class="btn mt-auto" @click="importModel">Import model</button>
+				<button type="button" class="btn mt-auto" @click="importTexture">Import Texture</button>
 			</div>
 		</div>
 	</MDialog>
 </template>
 
 <script lang="ts" setup>
-import type { AssetFiles, ModelFiles } from '@/composables/types/polyhaven'
+import { textureLibraryCallback, textureLibraryModalOpen } from '@/composables/modals'
+import type { AssetFiles, TextureAsset, TextureFiles } from '@/composables/types/polyhaven'
 import { usePolyHaven } from '@/composables/usePolyHaven'
-import { useThreeStore } from '@/store/three'
 import { bytesToSize } from '@/utils/utils'
 import { CheckboxGroupRoot } from 'reka-ui'
 import { computed, ref, shallowRef, watch } from 'vue'
@@ -117,7 +134,6 @@ const {
 	fetchCategories,
 	filteredAssets,
 	categoriesFilter,
-	getModelData,
 	selectedAsset,
 	selectedAssetAuthor,
 	selectAsset
@@ -125,47 +141,103 @@ const {
 
 watch(isOpen, (val) => {
 	if (!val || assets.value.length > 0) return
-	fetchCategories('models')
-	fetchAssets('models')
+	fetchCategories('textures')
+	fetchAssets('textures')
 })
 
-const modelFilesData = ref<ModelFiles['gltf']>()
-const fileResOptions = shallowRef<{ value: string; label: string }[]>([])
-const selectedResOption = ref<{ value: string; label: string }>()
+function importTexture() {
+	if (!selectedTexture.value) return
+	textureLibraryCallback
+		.value?.(selectedTexture.value)
+		.then(() => {
+			textureLibraryModalOpen.value = false
+		})
+		.catch(() => {})
+}
 
-const selectedOptionData = computed(() => {
-	if (!selectedResOption.value || !modelFilesData.value) return null
-	const data = modelFilesData.value[selectedResOption.value.value]?.['gltf']
-	if (!data) return null
-	const includedFiles = data.include ? Object.values(data.include) : []
-	const sizeInBytes = data.size + includedFiles.reduce((prev, cur) => cur.size + prev, 0)
-	return {
-		size: bytesToSize(sizeInBytes)
-	}
+const mapTypesMap = new Map([
+	['AO', 'AO'],
+	['rough_ao', 'Rough AO'],
+	['arm', 'AO/Rough/Metal'],
+	['Diffuse', 'Diffuse'],
+	['Displacement', 'Displacement'],
+	['nor_dx', 'Normal (DX)'],
+	['nor_gl', 'Normal (GL)'],
+	['rough', 'Rough'],
+	['bump', 'Bump'],
+	['spec', 'Spec'],
+	['spec_ior', 'Spec Ior'],
+	['anisotropy_rotation', 'Anisotropy Rotation'],
+	['anisotropy_strength', 'Anisotropy Strength']
+])
+
+const textureFilesData = ref<TextureFiles>()
+
+const selectedMapType = ref<InputSelectOption>()
+const textureTypes = shallowRef<InputSelectOption[]>([])
+
+const selectedResOption = ref<InputSelectOption>()
+const fileResOptions = computed(() => {
+	if (!selectedMapType.value || !textureFilesData.value) return []
+	return Object.keys(textureFilesData.value[selectedMapType.value.value] ?? {}).map((item) => ({
+		label: item,
+		value: item
+	}))
+})
+
+const selectedFormatOption = ref<InputSelectOption>()
+const formatOptions = computed(() => {
+	if (
+		!selectedMapType.value ||
+		!selectedResOption.value ||
+		!textureFilesData.value ||
+		!textureFilesData.value[selectedMapType.value.value]?.[selectedResOption.value.value]
+	)
+		return []
+	return Object.keys(
+		textureFilesData.value?.[selectedMapType.value.value]?.[selectedResOption.value.value] ?? {}
+	).map((item) => ({
+		label: item,
+		value: item
+	}))
+})
+
+const selectedTexture = computed(() => {
+	if (
+		!selectedMapType.value ||
+		!selectedResOption.value ||
+		!selectedFormatOption.value ||
+		!textureFilesData.value
+	)
+		return
+
+	const mapType = selectedMapType.value.value
+	const res = selectedResOption.value.value
+	const format = selectedFormatOption.value.value
+
+	return textureFilesData.value[mapType]?.[res]?.[format]
 })
 
 function setFilesData(files: AssetFiles) {
-	if ('gltf' in files) {
-		const gtlfData = files['gltf']
-		if (!gtlfData) return
-		modelFilesData.value = gtlfData
-		fileResOptions.value = Object.keys(gtlfData).map((value) => ({ value, label: value }))
-		selectedResOption.value = fileResOptions.value[0]
-	}
+	textureFilesData.value = files as TextureFiles
+	textureTypes.value = Object.keys(files)
+		.map((item) => {
+			const skipArr = ['blend', 'gltf', 'mtlx']
+			if (skipArr.includes(item))
+				return {
+					value: '',
+					label: ''
+				}
+			return {
+				value: item,
+				label: mapTypesMap.get(item) || item
+			}
+		})
+		.filter((item) => !!item.value)
 }
 
-const threeStore = useThreeStore()
-
-function importModel() {
-	if (!selectedResOption.value || !selectedAsset.value || !modelFilesData.value) return
-	const data = getModelData({
-		format: 'gltf',
-		resolution: selectedResOption.value.value,
-		files: modelFilesData.value
-	})
-	if (data) {
-		threeStore.importModel({ ...data, format: 'gltf', filename: selectedAsset.value.name })
-	}
-	isOpen.value = false
+interface InputSelectOption {
+	label: string
+	value: string
 }
 </script>

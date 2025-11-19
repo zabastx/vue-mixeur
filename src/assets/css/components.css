@@ -6,6 +6,8 @@
 	}
 
 	.btn {
-		@apply cursor-pointer rounded border border-[#3d3d3dff] bg-[#545454ff] px-1 py-0.5 font-[inherit];
+		@apply border-ui-radio-outline bg-ui-radio-inner cursor-pointer rounded border px-1 py-0.5 font-[inherit];
+		@apply disabled:cursor-default disabled:opacity-50;
+		@apply hover:brightness-125;
 	}
 }

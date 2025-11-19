@@ -1,8 +1,6 @@
 <template>
 	<header class="flex items-center bg-topbar-background p-1 px-2">
 		<MenuBar :items="menuItems" />
-		<AboutModal v-model="aboutModalOpen" />
-		<ModelsLibraryModal v-model="modelLibraryOpen" />
 		<a
 			href="https://github.com/zabastx/vue-mixeur"
 			class="ml-auto text-xl"
@@ -20,18 +18,16 @@ import IconImport from '../icons/IconImport.vue'
 import IconMixeur from '../icons/IconMixeur.vue'
 import IconFullScreen from '../icons/misc/IconFullScreen.vue'
 import MenuBar, { type IMenubarMenu } from '../utils/MenuBar.vue'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useThreeStore } from '@/store/three'
 import { getFile } from '@/composables/getfile'
 import { useToast } from '@/composables/useToast'
 import type { loadModel } from '@/three/modules/loaders/modelLoader'
-import AboutModal from '../modals/AboutModal.vue'
 import IconExport from '../icons/misc/IconExport.vue'
+import { aboutModalOpen, modelLibraryModalOpen } from '@/composables/modals'
 
 const appStore = useAppStore()
 const threeStore = useThreeStore()
-const aboutModalOpen = ref(false)
-const modelLibraryOpen = ref(false)
 
 const showStatusBar = computed({
 	get() {
@@ -93,7 +89,7 @@ const menuItems: IMenubarMenu[] = [
 						key: 'import_library',
 						label: 'Import from library',
 						onClick: () => {
-							modelLibraryOpen.value = true
+							modelLibraryModalOpen.value = true
 						}
 					}
 				]

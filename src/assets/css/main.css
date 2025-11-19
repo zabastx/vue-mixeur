@@ -42,7 +42,3 @@ body {
 .selection-box {
 	@apply pointer-events-none absolute z-100 border border-dashed border-white bg-[#ffffff10];
 }
-
-button:hover {
-	@apply brightness-125;
-}

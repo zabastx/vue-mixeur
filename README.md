@@ -1,5 +1,6 @@
 # Vue Mixeur
 
+[![Version](https://img.shields.io/badge/Version-0.3.0-FF6B6B.svg)](https://github.com/your-username/vue-mixeur)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Vue](https://img.shields.io/badge/Vue-3.5.22-4FC08D.svg)](https://vuejs.org/)
 [![Three.js](https://img.shields.io/badge/Three.js-0.181.0-049EF4.svg)](https://threejs.org/)

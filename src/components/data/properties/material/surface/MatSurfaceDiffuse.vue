@@ -3,36 +3,26 @@
 		<InputField label="Base Color" input-width="150px">
 			<InputColor v-model:hex="color" />
 		</InputField>
+		<MAccordionItem label="Emission" :item="{ value: 'emission' }" class="w-full" nested>
+			<EmissionProperties />
+		</MAccordionItem>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { useShadingStore } from '@/store/shading'
-import { useThreeStore } from '@/store/three'
+import { useMeshMaterial } from '@/composables/material'
 import THREE from '@/three'
 import { computed } from 'vue'
 
-const shadingStore = useShadingStore()
-const threeStore = useThreeStore()
-
-const material = computed(() => {
-	const obj = threeStore.selectedObject as THREE.Mesh | null
-	if (!obj) return null
-	const mat = shadingStore.getMaterial(obj)?.original
-	if (mat instanceof THREE.MeshLambertMaterial) {
-		return mat
-	}
-	return null
-})
+const { material, updateMaterialProp, getMaterialProp } =
+	useMeshMaterial<THREE.MeshLambertMaterial>()
 
 const color = computed({
 	set(v: string) {
-		const obj = threeStore.selectedObject
-		if (!(obj instanceof THREE.Mesh)) return
-		shadingStore.updateMaterial(obj, { prop: 'color', value: new THREE.Color(v) })
+		updateMaterialProp({ prop: 'color', value: new THREE.Color(v) })
 	},
 	get() {
-		return `#${material.value?.color.getHexString()}`
+		return `#${getMaterialProp<THREE.Color>('color')?.getHexString()}`
 	}
 })
 </script>

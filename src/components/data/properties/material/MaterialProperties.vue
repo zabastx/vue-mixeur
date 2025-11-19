@@ -5,7 +5,7 @@
 				<InputField label="Surface" class="ml-auto w-fit mb-4">
 					<InputSelect v-model="matType" :items class="w-[150px]" />
 				</InputField>
-				<SurfaceOptionsWrapper v-if="matType" :type="matType.value" />
+				<component :is="getSurfaceComponent(matType.value)" v-if="matType" />
 			</MAccordionItem>
 		</MAccordionRoot>
 	</div>
@@ -17,6 +17,10 @@ import { useThreeStore } from '@/store/three'
 import THREE from '@/three'
 import type { AcceptableValue } from 'reka-ui'
 import { computed, ref, watch } from 'vue'
+import MatSurfaceDiffuse from './surface/MatSurfaceDiffuse.vue'
+import MatSurfacePrincipled from './surface/MatSurfacePrincipled.vue'
+import MatSurfaceToon from './surface/MatSurfaceToon.vue'
+import MatSurfaceGlossy from './surface/MatSurfaceGlossy.vue'
 
 const threeStore = useThreeStore()
 const shadingStore = useShadingStore()
@@ -38,6 +42,14 @@ const items = [
 	{
 		label: 'Diffuse BSDF',
 		value: 'diffuse_bsdf'
+	},
+	{
+		label: 'Glossy BSDF',
+		value: 'glossy_bsdf'
+	},
+	{
+		label: 'Toon BSDF',
+		value: 'toon_bsdf'
 	}
 ] as const satisfies AcceptableValue[]
 
@@ -60,6 +72,12 @@ watch(matType, (val) => {
 		case 'diffuse_bsdf':
 			shadingStore.changeMaterial(selectedObject.value, new THREE.MeshLambertMaterial())
 			break
+		case 'toon_bsdf':
+			shadingStore.changeMaterial(selectedObject.value, new THREE.MeshToonMaterial())
+			break
+		case 'glossy_bsdf':
+			shadingStore.changeMaterial(selectedObject.value, new THREE.MeshPhongMaterial())
+			break
 	}
 })
 
@@ -77,7 +95,26 @@ function getInitialType() {
 		case 'MeshLambertMaterial':
 			value = 'diffuse_bsdf'
 			break
+		case 'MeshToonMaterial':
+			value = 'toon_bsdf'
+			break
+		case 'MeshPhongMaterial':
+			value = 'glossy_bsdf'
+			break
 	}
 	return items.find((item) => item.value === value)
+}
+
+function getSurfaceComponent(value: (typeof items)[number]['value']) {
+	switch (value) {
+		case 'diffuse_bsdf':
+			return MatSurfaceDiffuse
+		case 'principled_bsdf':
+			return MatSurfacePrincipled
+		case 'toon_bsdf':
+			return MatSurfaceToon
+		case 'glossy_bsdf':
+			return MatSurfaceGlossy
+	}
 }
 </script>

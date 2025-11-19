@@ -3,11 +3,20 @@
 		<InputField input-width="150px" label="Base Color">
 			<InputColor v-model:hex="color" />
 		</InputField>
+		<InputField input-width="150px" label="Map">
+			<InputTexture v-model="map" />
+		</InputField>
 		<InputField input-width="150px" label="Metallic">
 			<InputNumber v-model="metalness" :min="0" :max="1" :step="0.01" />
 		</InputField>
+		<InputField input-width="150px" label="Metalness Map">
+			<InputTexture v-model="metalnessMap" />
+		</InputField>
 		<InputField input-width="150px" label="Roughness">
 			<InputNumber v-model="roughness" :min="0" :max="1" :step="0.01" />
+		</InputField>
+		<InputField input-width="150px" label="Roughness Map">
+			<InputTexture v-model="roughnessMap" />
 		</InputField>
 		<InputField input-width="150px" label="IOR">
 			<InputNumber v-model="ior" :min="1" :max="2.333" :step="0.01" />
@@ -21,59 +30,113 @@
 			<InputNumber v-model="opacity" :min="0" :max="1" :step="0.01" />
 		</InputField>
 		<MAccordionRoot collapsible type="multiple" class="w-full">
+			<MAccordionItem label="Specular" :item="{ value: 'specular' }" class="w-full" nested>
+				<SpecularProperties />
+			</MAccordionItem>
 			<MAccordionItem label="Transmission" :item="{ value: 'transmission' }" class="w-full" nested>
-				<div class="flex flex-col items-end gap-1">
-					<InputField input-width="150px" label="Weight">
-						<InputNumber v-model="transmission" :min="0" :max="1" :step="0.01" />
-					</InputField>
-				</div>
+				<TransmissionProperties />
 			</MAccordionItem>
 			<MAccordionItem label="Coat" :item="{ value: 'coat' }" class="w-full" nested>
-				<div class="flex flex-col items-end gap-1">
-					<InputField input-width="150px" label="Weight">
-						<InputNumber v-model="clearcoat" :min="0" :max="1" :step="0.01" />
-					</InputField>
-					<InputField input-width="150px" label="Roughness">
-						<InputNumber v-model="clearcoatRoughness" :min="0" :max="1" :step="0.01" />
-					</InputField>
-				</div>
+				<ClearcoatProperties />
+			</MAccordionItem>
+			<MAccordionItem label="Sheen" :item="{ value: 'sheen' }" class="w-full" nested>
+				<SheenProperties />
 			</MAccordionItem>
 			<MAccordionItem label="Emission" :item="{ value: 'emission' }" class="w-full" nested>
-				<div class="flex flex-col items-end gap-1">
-					<InputField input-width="150px" label="Color">
-						<InputColor v-model:hex="emissive" />
-					</InputField>
-					<InputField input-width="150px" label="Strength">
-						<InputNumber v-model="emissiveIntensity" :min="0" :step="0.01" />
-					</InputField>
-				</div>
+				<EmissionProperties />
 			</MAccordionItem>
 		</MAccordionRoot>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { useShadingStore } from '@/store/shading'
-import { useThreeStore } from '@/store/three'
+import { useMeshMaterial } from '@/composables/material'
 import THREE from '@/three'
-import { computed, ref, watch } from 'vue'
+import { computed, watch } from 'vue'
+import EmissionProperties from './utils/EmissionProperties.vue'
 
-const shadingStore = useShadingStore()
-const threeStore = useThreeStore()
+const { material, updateMaterialProp, getMaterialProp, selectedObject, changeMaterial } =
+	useMeshMaterial<THREE.MeshPhysicalMaterial>()
 
-const manualTrigger = ref(0)
-
-const material = computed(() => {
-	// oxlint-disable-next-line no-unused-expressions
-	// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-	manualTrigger.value
-	const obj = threeStore.selectedObject as THREE.Mesh | null
-	if (!obj) return null
-	const mat = shadingStore.getMaterial(obj)?.original
-	if (mat instanceof THREE.MeshPhysicalMaterial || mat instanceof THREE.MeshStandardMaterial) {
-		return mat
+const color = computed({
+	set(v: string) {
+		updateMaterialProp({ prop: 'color', value: new THREE.Color(v) })
+	},
+	get() {
+		return `#${getMaterialProp<THREE.Color>('color')?.getHexString()}`
 	}
-	return null
+})
+
+const map = computed({
+	set(v: THREE.Texture) {
+		updateMaterialProp({ prop: 'map', value: v })
+	},
+	get() {
+		return getMaterialProp<THREE.Texture>('map')
+	}
+})
+
+const metalness = computed({
+	set(v: number) {
+		updateMaterialProp({ prop: 'metalness', value: v })
+	},
+	get() {
+		return getMaterialProp<number>('metalness')
+	}
+})
+
+const metalnessMap = computed({
+	set(v: THREE.Texture) {
+		updateMaterialProp({ prop: 'metalnessMap', value: v })
+	},
+	get() {
+		return getMaterialProp<THREE.Texture>('metalnessMap')
+	}
+})
+
+const roughness = computed({
+	set(v: number) {
+		updateMaterialProp({ prop: 'roughness', value: v })
+	},
+	get() {
+		return getMaterialProp<number>('roughness')
+	}
+})
+
+const roughnessMap = computed({
+	set(v: THREE.Texture) {
+		updateMaterialProp({ prop: 'roughnessMap', value: v })
+	},
+	get() {
+		return getMaterialProp<THREE.Texture>('roughnessMap')
+	}
+})
+
+const ior = computed({
+	set(v: number) {
+		updateMaterialProp({ prop: 'ior', value: v })
+	},
+	get() {
+		return getMaterialProp<number>('ior')
+	}
+})
+
+const transparent = computed({
+	set(v: number) {
+		updateMaterialProp({ prop: 'transparent', value: v })
+	},
+	get() {
+		return getMaterialProp<boolean>('transparent')
+	}
+})
+
+const opacity = computed({
+	set(v: number) {
+		updateMaterialProp({ prop: 'opacity', value: v })
+	},
+	get() {
+		return getMaterialProp<number>('opacity')
+	}
 })
 
 // Automatically convert MeshStandardMaterial to MeshPhysicalMaterial on load
@@ -81,158 +144,16 @@ const material = computed(() => {
 watch(
 	material,
 	(mat) => {
-		if (!mat) return
-		const obj = threeStore.selectedObject
-		if (!(obj instanceof THREE.Mesh)) return
+		const obj = selectedObject.value
+		if (!obj || !mat) return
 
 		if (mat instanceof THREE.MeshStandardMaterial && !(mat instanceof THREE.MeshPhysicalMaterial)) {
 			const physicalMaterial = convertToPhysicalMaterial(mat)
-			shadingStore.changeMaterial(obj, physicalMaterial)
-			manualTrigger.value++
+			changeMaterial(physicalMaterial)
 		}
 	},
 	{ immediate: true }
 )
-
-const color = computed({
-	set(v: string) {
-		const obj = threeStore.selectedObject
-		if (!(obj instanceof THREE.Mesh)) return
-		shadingStore.updateMaterial(obj, { prop: 'color', value: new THREE.Color(v) })
-		manualTrigger.value++
-	},
-	get() {
-		return `#${material.value?.color.getHexString()}`
-	}
-})
-
-const metalness = computed({
-	set(v: number) {
-		const obj = threeStore.selectedObject
-		if (!(obj instanceof THREE.Mesh)) return
-		shadingStore.updateMaterial(obj, { prop: 'metalness', value: v })
-		manualTrigger.value++
-	},
-	get() {
-		return getMaterialProp('metalness') as number | undefined
-	}
-})
-
-const roughness = computed({
-	set(v: number) {
-		const obj = threeStore.selectedObject
-		if (!(obj instanceof THREE.Mesh)) return
-		shadingStore.updateMaterial(obj, { prop: 'roughness', value: v })
-		manualTrigger.value++
-	},
-	get() {
-		return getMaterialProp('roughness') as number | undefined
-	}
-})
-
-const ior = computed({
-	set(v: number) {
-		const obj = threeStore.selectedObject
-		if (!(obj instanceof THREE.Mesh)) return
-		shadingStore.updateMaterial(obj, { prop: 'ior', value: v })
-		manualTrigger.value++
-	},
-	get() {
-		return getMaterialProp('ior') as number | undefined
-	}
-})
-
-const transparent = computed({
-	set(v: number) {
-		const obj = threeStore.selectedObject
-		if (!(obj instanceof THREE.Mesh)) return
-		shadingStore.updateMaterial(obj, { prop: 'transparent', value: v })
-		manualTrigger.value++
-	},
-	get() {
-		return getMaterialProp('transparent') as boolean | undefined
-	}
-})
-
-const opacity = computed({
-	set(v: number) {
-		const obj = threeStore.selectedObject
-		if (!(obj instanceof THREE.Mesh)) return
-		shadingStore.updateMaterial(obj, { prop: 'opacity', value: v })
-		manualTrigger.value++
-	},
-	get() {
-		return getMaterialProp('opacity') as number | undefined
-	}
-})
-
-const transmission = computed({
-	set(v: number) {
-		const obj = threeStore.selectedObject
-		if (!(obj instanceof THREE.Mesh)) return
-		shadingStore.updateMaterial(obj, { prop: 'transmission', value: v })
-		manualTrigger.value++
-	},
-	get() {
-		return getMaterialProp('transmission') as number | undefined
-	}
-})
-
-const clearcoat = computed({
-	set(v: number) {
-		const obj = threeStore.selectedObject
-		if (!(obj instanceof THREE.Mesh)) return
-		shadingStore.updateMaterial(obj, { prop: 'clearcoat', value: v })
-		manualTrigger.value++
-	},
-	get() {
-		return getMaterialProp('clearcoat') as number | undefined
-	}
-})
-
-const clearcoatRoughness = computed({
-	set(v: number) {
-		const obj = threeStore.selectedObject
-		if (!(obj instanceof THREE.Mesh)) return
-		shadingStore.updateMaterial(obj, { prop: 'clearcoatRoughness', value: v })
-		manualTrigger.value++
-	},
-	get() {
-		return getMaterialProp('clearcoatRoughness') as number | undefined
-	}
-})
-
-const emissive = computed({
-	set(v: string) {
-		const obj = threeStore.selectedObject
-		if (!(obj instanceof THREE.Mesh)) return
-		shadingStore.updateMaterial(obj, { prop: 'emissive', value: new THREE.Color(v) })
-		manualTrigger.value++
-	},
-	get() {
-		return `#${material.value?.emissive.getHexString()}`
-	}
-})
-
-const emissiveIntensity = computed({
-	set(v: number) {
-		const obj = threeStore.selectedObject
-		if (!(obj instanceof THREE.Mesh)) return
-		shadingStore.updateMaterial(obj, { prop: 'emissiveIntensity', value: v })
-		manualTrigger.value++
-	},
-	get() {
-		return getMaterialProp('emissiveIntensity') as number | undefined
-	}
-})
-
-function getMaterialProp(prop: string) {
-	if (!material.value) return
-	// oxlint-disable-next-line no-unused-expressions
-	// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-	manualTrigger.value
-	return (material.value as unknown as Record<string, unknown>)[prop]
-}
 
 /**
  * Convert MeshStandardMaterial to MeshPhysicalMaterial

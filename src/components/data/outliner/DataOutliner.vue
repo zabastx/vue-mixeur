@@ -73,7 +73,7 @@ import IconEmpty from '@/components/icons/outliner/IconEmpty.vue'
 
 const store = useThreeStore()
 
-const selectedItem = shallowRef<THREE.Object3D>()
+const selectedItem = shallowRef<THREE.Object3D | THREE.Light>()
 
 watch(
 	() => store.selectedObject,

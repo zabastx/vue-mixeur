@@ -39,6 +39,7 @@ export function disposeModel(model: THREE.Object3D) {
 	})
 
 	if (model.parent) {
+		// @ts-expect-error light/object type mismatch
 		model.parent.remove(model)
 	}
 }

@@ -133,6 +133,7 @@ export const useThreeStore = defineStore('three', () => {
 			if (!object || (raycasted && !object.userData.isSelectable)) return
 
 			if (object instanceof THREE.Light) {
+				// @ts-expect-error light/object type mismatch
 				transformControls.value?.attach(object)
 				selectedObject.value = object
 				const helper = scene.getObjectByProperty('light', object)
@@ -144,6 +145,7 @@ export const useThreeStore = defineStore('three', () => {
 
 			if ('light' in object) {
 				const light = object.light as THREE.Light
+				// @ts-expect-error light/object type mismatch
 				transformControls.value?.attach(light)
 				outlinePass.value.selectedObjects = [object]
 				selectedObject.value = light
@@ -167,6 +169,7 @@ export const useThreeStore = defineStore('three', () => {
 			}
 
 			if ('light' in object) {
+				// @ts-expect-error light/object type mismatch
 				transformControls.value?.attach(object.light)
 				selectedObject.value = object.light
 				return
@@ -194,6 +197,7 @@ export const useThreeStore = defineStore('three', () => {
 			if (wasDragging) return (wasDragging = false)
 
 			raycaster.setFromCamera(pointer, activeCamera.value)
+			// @ts-expect-error light/object type mismatch
 			const intersects = raycaster.intersectObjects(raycasterObjects, true)
 
 			if (!intersects[0]) {
@@ -256,6 +260,7 @@ export const useThreeStore = defineStore('three', () => {
 			}
 		})
 		enableBVH(object)
+		// @ts-expect-error light/object type mismatch
 		scene.add(object)
 		raycasterObjects.push(object)
 
@@ -277,7 +282,7 @@ export const useThreeStore = defineStore('three', () => {
 		if (!(light instanceof THREE.RectAreaLight)) {
 			light.castShadow = true
 		}
-
+		// @ts-expect-error light/object type mismatch
 		scene.add(light)
 		scene.add(helper)
 
@@ -288,6 +293,7 @@ export const useThreeStore = defineStore('three', () => {
 		raycasterObjects.push(helper)
 		lightHelperObjects.push(helper)
 		selectedObject.value = light
+		// @ts-expect-error light/object type mismatch
 		transformControls.value?.attach(light)
 
 		if (outlinePass.value) outlinePass.value.selectedObjects = [helper]
@@ -307,6 +313,7 @@ export const useThreeStore = defineStore('three', () => {
 				}
 			})
 			objectsForRemoval.forEach((obj) => {
+				// @ts-expect-error light/object type mismatch
 				scene.remove(obj)
 				if (obj instanceof THREE.Light && obj.shadow.map) {
 					obj.shadow.map.dispose()

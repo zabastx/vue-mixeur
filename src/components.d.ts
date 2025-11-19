@@ -79,6 +79,7 @@ declare module 'vue' {
     InputTexture: typeof import('./components/input/InputTexture.vue')['default']
     KeymapInformation: typeof import('./components/status/KeymapInformation.vue')['default']
     Label: typeof import('reka-ui')['Label']
+    LibraryAssetDescription: typeof import('./components/utils/LibraryAssetDescription.vue')['default']
     LightDataProperties: typeof import('./components/data/properties/data/LightDataProperties.vue')['default']
     MAccordionItem: typeof import('./components/utils/Accordion/MAccordionItem.vue')['default']
     MAccordionRoot: typeof import('./components/utils/Accordion/MAccordionRoot.vue')['default']

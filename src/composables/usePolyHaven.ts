@@ -49,7 +49,7 @@ export function usePolyHaven() {
 	const isLoadingCategories = ref(false)
 
 	const selectedAsset = shallowRef<AssetWithId>()
-	const selectedAssetAuthor = shallowRef<AssetAuthorInfo>()
+	const selectedAssetAuthors = ref<(AssetAuthorInfo & { responsibility: string })[]>([])
 
 	const assetsTags = computed(() => {
 		const tagsSet = new Set(assets.value.flatMap((asset) => asset.tags))
@@ -171,16 +171,25 @@ export function usePolyHaven() {
 	}
 
 	function selectAsset<T extends Asset>(asset: AssetWithId, cb: (files: AssetFiles) => void) {
-		const authorId = Object.keys(asset.authors)[0]
+		const authors = Object.keys(asset.authors).map((id) => ({
+			id,
+			responsibility: asset.authors[id]
+		}))
 
-		if (authorId) {
-			fetchAssetAuthor(authorId)
+		selectedAssetAuthors.value = []
+
+		authors.forEach((item) => {
+			fetchAssetAuthor(item.id)
 				.then((author) => {
-					if (!author) return
-					selectedAssetAuthor.value = author
+					if (author) {
+						selectedAssetAuthors.value.push({
+							...author,
+							responsibility: item.responsibility || ''
+						})
+					}
 				})
 				.catch(() => {})
-		}
+		})
 
 		fetchAssetInfo<T>(asset.id)
 			.then((item) => {
@@ -282,7 +291,7 @@ export function usePolyHaven() {
 		isModel,
 		getAssetTypeName,
 		selectedAsset,
-		selectedAssetAuthor,
+		selectedAssetAuthors,
 		selectAsset
 	}
 }

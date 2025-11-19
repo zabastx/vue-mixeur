@@ -63,31 +63,8 @@
 			<div v-if="selectedAsset" class="bg-header-background flex flex-col basis-[25%] shrink-0">
 				<ScrollContainer>
 					<div class="flex flex-col gap-1 p-2 text-sm">
-						<img
-							:src="selectedAsset.thumbnail_url"
-							:alt="selectedAsset.name"
-							class="block mx-2 h-40 object-contain"
-						/>
-						<div>{{ selectedAsset.name }}</div>
-						<div v-if="selectedAssetAuthor">
-							<b>Author: </b>
-							<a
-								v-if="selectedAssetAuthor.link"
-								:href="selectedAssetAuthor.link"
-								class="hover:underline text-blue-500"
-								target="_blank"
-								rel="author external"
-							>
-								{{ selectedAssetAuthor.name }}
-							</a>
-							<template v-else>{{ selectedAssetAuthor.name }}</template>
-						</div>
-						<div v-if="selectedAsset.description">
-							<b>Description:</b> {{ selectedAsset.description }}
-						</div>
-						<div><b>Categories:</b> {{ selectedAsset.categories.join(', ') }}</div>
-						<div><b>Tags:</b> {{ selectedAsset.tags.join(', ') }}</div>
-						<InputField label="Resolution" class="z-10">
+						<LibraryAssetDescription :asset="selectedAsset" :authors="selectedAssetAuthors" />
+						<InputField label="Resolution" class="z-10 mt-2">
 							<InputSelect v-model="selectedResOption" class="z-10" :items="fileResOptions" />
 						</InputField>
 						<div><b>Size: </b>{{ selectedOptionData?.size }}</div>
@@ -119,7 +96,7 @@ const {
 	categoriesFilter,
 	getModelData,
 	selectedAsset,
-	selectedAssetAuthor,
+	selectedAssetAuthors,
 	selectAsset
 } = usePolyHaven()
 

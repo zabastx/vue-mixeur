@@ -2,7 +2,7 @@
 	<CheckboxRoot
 		v-bind="props"
 		v-model="model"
-		class="size-4 rounded border border-ui-option-outline bg-ui-option-inner"
+		class="size-5 rounded border border-ui-option-outline bg-ui-option-inner"
 	>
 		<CheckboxIndicator
 			class="h-full text-xs w-full rounded flex items-center justify-center

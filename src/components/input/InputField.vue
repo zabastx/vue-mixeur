@@ -1,17 +1,13 @@
 <template>
-	<Label
-		class="grid grid-cols-[min-content_1fr] items-center gap-2.5 whitespace-nowrap"
+	<div
+		class="grid grid-cols-[min-content_1fr] grid- items-start gap-2.5 whitespace-nowrap"
 		:style="{ gridTemplateColumns: gridCols }"
 	>
-		<template v-if="reverse">
-			<slot></slot>
+		<span class="px-1 py-0.5" :class="{ 'order-1': reverse }">
 			{{ label }}
-		</template>
-		<template v-else>
-			{{ label }}
-			<slot></slot>
-		</template>
-	</Label>
+		</span>
+		<slot></slot>
+	</div>
 </template>
 
 <script lang="ts" setup>

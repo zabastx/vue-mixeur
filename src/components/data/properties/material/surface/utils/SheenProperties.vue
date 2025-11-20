@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col items-end gap-1">
+	<div class="flex flex-col items-end gap-1 panel-content">
 		<InputField input-width="150px" label="Intensity">
 			<InputNumber v-model="sheen" :min="0" :max="1" :step="0.01" />
 		</InputField>

@@ -1,6 +1,6 @@
 <template>
-	<Accordion.Item v-slot="{ open }" class="overflow-hidden rounded-panel text-xs" v-bind="item">
-		<Accordion.Header class="bg-properties-panel-header px-2 py-1" v-bind="header">
+	<Accordion.Item v-slot="{ open }" class="overflow-hidden text-xs" v-bind="item">
+		<Accordion.Header class="bg-ui-panel-header px-2 py-1 text-ui-panel-title" v-bind="header">
 			<Accordion.Trigger
 				class="group flex w-full cursor-pointer items-center gap-1"
 				v-bind="trigger"
@@ -9,16 +9,15 @@
 					class="transition-rotate inline-block size-[1em] duration-200
 						group-data-[state='open']:rotate-90"
 				/>
-				<span class="text-panel-title font-panel-title">{{ label }}</span>
+				<span class="font-panel-title">{{ label }}</span>
 			</Accordion.Trigger>
 		</Accordion.Header>
 		<Accordion.Content
-			class="animation-slide overflow-hidden bg-properties-panel-background"
+			class="animation-slide overflow-hidden text-ui-panel-text"
 			v-bind="content"
+			:class="{ 'bg-ui-sub-panel': nested }"
 		>
-			<div class="pb-2.5 pt-1 pr-3" :class="{ 'pr-0!': nested }">
-				<slot :open="open"></slot>
-			</div>
+			<slot :open="open"></slot>
 		</Accordion.Content>
 	</Accordion.Item>
 </template>

@@ -2,9 +2,11 @@
 	<div v-if="meshMaterial">
 		<MAccordionRoot collapsible type="multiple">
 			<MAccordionItem label="Surface" :item="{ value: 'surface' }">
-				<InputField label="Surface" class="ml-auto w-fit mb-4">
-					<InputSelect v-model="matType" :items class="w-[150px]" />
-				</InputField>
+				<div class="pl-1 pt-1 pr-3">
+					<InputField label="Surface" class="ml-auto w-fit mb-4">
+						<InputSelect v-model="matType" :items class="w-[150px]" />
+					</InputField>
+				</div>
 				<component :is="getSurfaceComponent(matType.value)" v-if="matType" />
 			</MAccordionItem>
 		</MAccordionRoot>

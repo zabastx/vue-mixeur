@@ -27,3 +27,7 @@
 	background-size: var(--checkerboard-size) var(--checkerboard-size);
 	background-position: top left;
 }
+
+@utility panel-content {
+	@apply py-2 pr-3 pl-1;
+}

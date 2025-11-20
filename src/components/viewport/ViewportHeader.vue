@@ -1,5 +1,6 @@
 <template>
-	<div class="flex items-center p-1">
+	<div class="flex items-center p-1 gap-2">
+		<IconViewport />
 		<MenuBar :items="menuItems" />
 		<ViewportShadingControls class="ml-auto" />
 	</div>

@@ -1,5 +1,8 @@
 <template>
-	<Accordion.Root v-bind="$props">
+	<Accordion.Root
+		v-bind="$props"
+		class="border border-ui-box-outline rounded-ui-panel bg-ui-panel-background"
+	>
 		<slot></slot>
 	</Accordion.Root>
 </template>

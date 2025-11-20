@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col items-end gap-1">
+	<div class="flex flex-col items-end gap-1 panel-content">
 		<InputField input-width="150px" label="Color">
 			<InputColor v-model:hex="emissive" />
 		</InputField>

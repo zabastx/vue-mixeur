@@ -6,8 +6,9 @@
 	--color-ui-box-inner: #1d1d1d80;
 	--color-ui-box-inner-selected: #545454ff;
 	--color-ui-box-outline: #3d3d3dff;
+	--color-ui-box-outline-selected: #3d3d3dff;
 	--ui-box-roundness: 0.4;
-	--radius-ui-box: calc(var(--ui-box-roundness) * 1rem);
+	--radius-ui-box: calc(var(--ui-box-roundness) * 1rem * 0.75);
 
 	/* List Item */
 	--color-ui-list-text: #cccccc;
@@ -17,7 +18,7 @@
 	--color-ui-list-inner-selected: #4772b3ff;
 	--color-ui-list-outline: #2d2d2dff;
 	--ui-list-roundness: 0.4;
-	--radius-ui-list: calc(var(--ui-list-roundness) * 1rem);
+	--radius-ui-list: calc(var(--ui-list-roundness) * 1rem * 0.75);
 
 	/* Menu */
 	--color-ui-menu-text: #e6e6e6;
@@ -27,7 +28,7 @@
 	--color-ui-menu-inner-selected: #4772b3b3;
 	--color-ui-menu-outline: #3d3d3dff;
 	--ui-menu-roundness: 0.4;
-	--radius-ui-menu: calc(var(--ui-menu-roundness) * 1rem);
+	--radius-ui-menu: calc(var(--ui-menu-roundness) * 1rem * 0.75);
 
 	/* Menu Background */
 	--color-ui-menu-bg-text: #999999;
@@ -37,7 +38,7 @@
 	--color-ui-menu-bg-inner-selected: #4772b3ff;
 	--color-ui-menu-bg-outline: #242424ff;
 	--ui-menu-bg-roundness: 0.4;
-	--radius-ui-menu-bg: calc(var(--ui-menu-bg-roundness) * 1rem);
+	--radius-ui-menu-bg: calc(var(--ui-menu-bg-roundness) * 1rem * 0.75);
 
 	/* Menu Item */
 	--color-ui-menu-item-text: #dddddd;
@@ -47,7 +48,7 @@
 	--color-ui-menu-item-inner-selected: #4772b3ff;
 	--color-ui-menu-item-outline: #3d3d3d00;
 	--ui-menu-item-roundness: 0.4;
-	--radius-ui-menu-item: calc(var(--ui-menu-item-roundness) * 1rem);
+	--radius-ui-menu-item: calc(var(--ui-menu-item-roundness) * 1rem * 0.75);
 
 	/* Number Field */
 	--color-ui-number-text: #e6e6e6;
@@ -57,7 +58,7 @@
 	--color-ui-number-inner-selected: #222222ff;
 	--color-ui-number-outline: #3d3d3dff;
 	--ui-number-roundness: 0.4;
-	--radius-ui-number: calc(var(--ui-number-roundness) * 1rem);
+	--radius-ui-number: calc(var(--ui-number-roundness) * 1rem * 0.75);
 
 	/* Option */
 	--color-ui-option-text: #e6e6e6;
@@ -67,7 +68,7 @@
 	--color-ui-option-inner-selected: #4772b3ff;
 	--color-ui-option-outline: #3d3d3dff;
 	--ui-option-roundness: 0.4;
-	--radius-ui-option: calc(var(--ui-option-roundness) * 1rem);
+	--radius-ui-option: calc(var(--ui-option-roundness) * 1rem * 0.75);
 
 	/* Pie Menu */
 	--color-ui-pie-text: #d9d9d9;
@@ -77,7 +78,7 @@
 	--color-ui-pie-inner-selected: #4772b3ff;
 	--color-ui-pie-outline: #242424ff;
 	--ui-pie-roundness: 0.4;
-	--radius-ui-pie: calc(var(--ui-pie-roundness) * 1rem);
+	--radius-ui-pie: calc(var(--ui-pie-roundness) * 1rem * 0.75);
 
 	/* Progress Bar */
 	--color-ui-progress-text: #e6e6e6;
@@ -87,7 +88,7 @@
 	--color-ui-progress-inner-selected: #4772b3ff;
 	--color-ui-progress-outline: #3d3d3dff;
 	--ui-progress-roundness: 0.4;
-	--radius-ui-progress: calc(var(--ui-progress-roundness) * 1rem);
+	--radius-ui-progress: calc(var(--ui-progress-roundness) * 1rem * 0.75);
 
 	/* Pulldown */
 	--color-ui-pulldown-text: #d9d9d9;
@@ -97,7 +98,7 @@
 	--color-ui-pulldown-inner-selected: #ffffff1a;
 	--color-ui-pulldown-outline: #3d3d3d00;
 	--ui-pulldown-roundness: 0.4;
-	--radius-ui-pulldown: calc(var(--ui-pulldown-roundness) * 1rem);
+	--radius-ui-pulldown: calc(var(--ui-pulldown-roundness) * 1rem * 0.75);
 
 	/* Radio Buttons */
 	--color-ui-radio-text: #e6e6e6;
@@ -107,7 +108,7 @@
 	--color-ui-radio-inner-selected: #4772b3ff;
 	--color-ui-radio-outline: #3d3d3dff;
 	--ui-radio-roundness: 0.4;
-	--radius-ui-radio: calc(var(--ui-radio-roundness) * 1rem);
+	--radius-ui-radio: calc(var(--ui-radio-roundness) * 1rem * 0.75);
 
 	/* Regular */
 	--color-ui-regular-text: #e6e6e6;
@@ -117,7 +118,7 @@
 	--color-ui-regular-inner-selected: #4772b3ff;
 	--color-ui-regular-outline: #3d3d3dff;
 	--ui-regular-roundness: 0.4;
-	--radius-ui-regular: calc(var(--ui-regular-roundness) * 1rem);
+	--radius-ui-regular: calc(var(--ui-regular-roundness) * 1rem * 0.75);
 
 	/* Scroll Bar */
 	--color-ui-scroll-text: #e6e6e6;
@@ -127,7 +128,7 @@
 	--color-ui-scroll-inner-selected: #ffffffff;
 	--color-ui-scroll-outline: #3d3d3dff;
 	--ui-scroll-roundness: 0.4;
-	--radius-ui-scroll: calc(var(--ui-scroll-roundness) * 1rem);
+	--radius-ui-scroll: calc(var(--ui-scroll-roundness) * 1rem * 0.75);
 
 	/* Tab */
 	--color-ui-tab-text: #989898;
@@ -137,7 +138,7 @@
 	--color-ui-tab-inner-selected: #303030ff;
 	--color-ui-tab-outline: #1d1d1dff;
 	--ui-tab-roundness: 0.4;
-	--radius-ui-tab: calc(var(--ui-tab-roundness) * 1rem);
+	--radius-ui-tab: calc(var(--ui-tab-roundness) * 1rem * 0.75);
 
 	/* Text */
 	--color-ui-text-text: #e6e6e6;
@@ -147,7 +148,7 @@
 	--color-ui-text-inner-selected: #181818ff;
 	--color-ui-text-outline: #3d3d3dff;
 	--ui-text-roundness: 0.4;
-	--radius-ui-text: calc(var(--ui-text-roundness) * 1rem);
+	--radius-ui-text: calc(var(--ui-text-roundness) * 1rem * 0.75);
 
 	/* Toggle */
 	--color-ui-toggle-text: #e6e6e6;
@@ -157,7 +158,7 @@
 	--color-ui-toggle-inner-selected: #4772b3ff;
 	--color-ui-toggle-outline: #3d3d3dff;
 	--ui-toggle-roundness: 0.4;
-	--radius-ui-toggle: calc(var(--ui-toggle-roundness) * 1rem);
+	--radius-ui-toggle: calc(var(--ui-toggle-roundness) * 1rem * 0.75);
 
 	/* Tool */
 	--color-ui-tool-text: #e6e6e6;
@@ -167,7 +168,7 @@
 	--color-ui-tool-inner-selected: #4772b3ff;
 	--color-ui-tool-outline: #3d3d3dff;
 	--ui-tool-roundness: 0.4;
-	--radius-ui-tool: calc(var(--ui-tool-roundness) * 1rem);
+	--radius-ui-tool: calc(var(--ui-tool-roundness) * 1rem * 0.75);
 
 	/* Toolbar */
 	--color-ui-toolbar-text: #e6e6e6;
@@ -177,7 +178,7 @@
 	--color-ui-toolbar-inner-selected: #4772b3ff;
 	--color-ui-toolbar-outline: #3d3d3dff;
 	--ui-toolbar-roundness: 0.4;
-	--radius-ui-toolbar: calc(var(--ui-toolbar-roundness) * 1rem);
+	--radius-ui-toolbar: calc(var(--ui-toolbar-roundness) * 1rem * 0.75);
 
 	/* Tooltip */
 	--color-ui-tooltip-text: #d9d9d9;
@@ -187,7 +188,7 @@
 	--color-ui-tooltip-inner-selected: #4772b3ff;
 	--color-ui-tooltip-outline: #242424ff;
 	--ui-tooltip-roundness: 0.4;
-	--radius-ui-tooltip: calc(var(--ui-tooltip-roundness) * 1rem);
+	--radius-ui-tooltip: calc(var(--ui-tooltip-roundness) * 1rem * 0.75);
 
 	/* Value Slider */
 	--color-ui-slider-text: #e6e6e6;
@@ -197,7 +198,18 @@
 	--color-ui-slider-inner-selected: #222222ff;
 	--color-ui-slider-outline: #3d3d3dff;
 	--ui-slider-roundness: 0.4;
-	--radius-ui-slider: calc(var(--ui-slider-roundness) * 1rem);
+	--radius-ui-slider: calc(var(--ui-slider-roundness) * 1rem * 0.75);
+
+	/* Panel */
+	--color-ui-panel-header: #3d3d3dff;
+	--color-ui-panel-background: #3d3d3dff;
+	--color-ui-sub-panel: #0000001f;
+	--color-ui-active-panel-outline: #4772b3ff;
+	--color-ui-panel-title: #e6e6e6;
+	--color-ui-panel-text: #e6e6e6;
+	--color-ui-panel-outline: #ffffff11;
+	--ui-panel-roundness: 0.4;
+	--radius-ui-panel: calc(var(--ui-panel-roundness) * 1rem * 0.75);
 
 	/* Axis & Gizmo Colors */
 	--color-axis-x: #ff3352;

@@ -1,48 +1,50 @@
 <template>
-	<div v-if="material" class="flex flex-col items-end gap-1">
-		<InputField input-width="150px" label="Base Color">
-			<InputColor v-model:hex="color" />
-		</InputField>
-		<InputField input-width="150px" label="Map">
-			<InputTexture v-model="map" />
-		</InputField>
-		<InputField input-width="150px" label="Metallic">
-			<InputNumber v-model="metalness" :min="0" :max="1" :step="0.01" />
-		</InputField>
-		<InputField input-width="150px" label="Metalness Map">
-			<InputTexture v-model="metalnessMap" />
-		</InputField>
-		<InputField input-width="150px" label="Roughness">
-			<InputNumber v-model="roughness" :min="0" :max="1" :step="0.01" />
-		</InputField>
-		<InputField input-width="150px" label="Roughness Map">
-			<InputTexture v-model="roughnessMap" />
-		</InputField>
-		<InputField input-width="150px" label="IOR">
-			<InputNumber v-model="ior" :min="1" :max="2.333" :step="0.01" />
-		</InputField>
-		<InputField input-width="150px" label="Transparent">
-			<div>
-				<InputCheckbox v-model="transparent" />
-			</div>
-		</InputField>
-		<InputField v-if="transparent" input-width="150px" label="Alpha">
-			<InputNumber v-model="opacity" :min="0" :max="1" :step="0.01" />
-		</InputField>
-		<MAccordionRoot collapsible type="multiple" class="w-full">
-			<MAccordionItem label="Specular" :item="{ value: 'specular' }" class="w-full" nested>
+	<div v-if="material">
+		<div class="pl-1 py-1 pr-3 flex flex-col items-end gap-1">
+			<InputField input-width="150px" label="Base Color">
+				<InputColor v-model:hex="color" />
+			</InputField>
+			<InputField input-width="150px" label="Map">
+				<InputTexture v-model="map" />
+			</InputField>
+			<InputField input-width="150px" label="Metallic">
+				<InputNumber v-model="metalness" :min="0" :max="1" :step="0.01" />
+			</InputField>
+			<InputField input-width="150px" label="Metalness Map">
+				<InputTexture v-model="metalnessMap" />
+			</InputField>
+			<InputField input-width="150px" label="Roughness">
+				<InputNumber v-model="roughness" :min="0" :max="1" :step="0.01" />
+			</InputField>
+			<InputField input-width="150px" label="Roughness Map">
+				<InputTexture v-model="roughnessMap" />
+			</InputField>
+			<InputField input-width="150px" label="IOR">
+				<InputNumber v-model="ior" :min="1" :max="2.333" :step="0.01" />
+			</InputField>
+			<InputField input-width="150px" label="Transparent">
+				<div>
+					<InputCheckbox v-model="transparent" />
+				</div>
+			</InputField>
+			<InputField v-if="transparent" input-width="150px" label="Alpha">
+				<InputNumber v-model="opacity" :min="0" :max="1" :step="0.01" />
+			</InputField>
+		</div>
+		<MAccordionRoot collapsible type="multiple">
+			<MAccordionItem label="Specular" :item="{ value: 'specular' }" nested>
 				<SpecularProperties />
 			</MAccordionItem>
-			<MAccordionItem label="Transmission" :item="{ value: 'transmission' }" class="w-full" nested>
+			<MAccordionItem label="Transmission" :item="{ value: 'transmission' }" nested>
 				<TransmissionProperties />
 			</MAccordionItem>
-			<MAccordionItem label="Coat" :item="{ value: 'coat' }" class="w-full" nested>
+			<MAccordionItem label="Coat" :item="{ value: 'coat' }" nested>
 				<ClearcoatProperties />
 			</MAccordionItem>
-			<MAccordionItem label="Sheen" :item="{ value: 'sheen' }" class="w-full" nested>
+			<MAccordionItem label="Sheen" :item="{ value: 'sheen' }" nested>
 				<SheenProperties />
 			</MAccordionItem>
-			<MAccordionItem label="Emission" :item="{ value: 'emission' }" class="w-full" nested>
+			<MAccordionItem label="Emission" :item="{ value: 'emission' }" nested>
 				<EmissionProperties />
 			</MAccordionItem>
 		</MAccordionRoot>

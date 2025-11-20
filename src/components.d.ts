@@ -73,6 +73,7 @@ declare module 'vue' {
     IconUrl: typeof import('./components/icons/misc/IconUrl.vue')['default']
     IconViewOrtho: typeof import('./components/icons/view/IconViewOrtho.vue')['default']
     IconViewPerspective: typeof import('./components/icons/view/IconViewPerspective.vue')['default']
+    IconViewport: typeof import('./components/icons/IconViewport.vue')['default']
     IconVisibility: typeof import('./components/icons/misc/IconVisibility.vue')['default']
     InputCheckbox: typeof import('./components/input/InputCheckbox.vue')['default']
     InputColor: typeof import('./components/input/InputColor.vue')['default']

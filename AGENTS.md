@@ -21,19 +21,32 @@ This file contains guidelines and commands for agentic coding agents working in 
 
 ### Testing
 
-This project currently has no test framework configured. When adding tests, consider:
+This project uses Vitest for unit testing and Playwright for E2E testing.
 
-- Vitest for unit testing (Vue ecosystem standard) - `bun test` to run all tests, `bun test <file>` for single test
-- Cypress or Playwright for e2e testing
-- Testing library for component testing
+**Unit Tests (Vitest)**:
 
-### Testing
+- `bun run test` - Run tests in watch mode
+- `bun run test:unit` - Run tests once
 
-This project currently has no test framework configured. When adding tests, consider:
+**E2E Tests (Playwright)**:
 
-- Vitest for unit testing (Vue ecosystem standard)
-- Cypress or Playwright for e2e testing
-- Testing library for component testing
+- `bun run test:e2e` - Run all E2E tests
+- `bun run test:e2e:ui` - Run with UI mode
+- `bun run test:e2e:debug` - Run in debug mode
+
+**Test Configuration**:
+
+- Unit tests use `happy-dom` environment for DOM simulation
+- Test setup file: [`src/test/setup.ts`](src/test/setup.ts)
+- E2E tests located in [`e2e/`](e2e/) directory
+- Coverage reports generated in `coverage/` directory
+
+**Current Test Coverage**:
+
+- Store tests: [`src/store/__tests__/`](src/store/__tests__/)
+- Component tests: [`src/components/**/__tests__/`](src/components/)
+- Composable tests: [`src/composables/__tests__/`](src/composables/__tests__/)
+- E2E tests: [`e2e/`](e2e/)
 
 ## Code Style Guidelines
 
@@ -99,7 +112,7 @@ import { setGridHelper } from '@/three/modules/helpers/grid'
 
 ### File Naming
 
-- Use kebab-case for ts files: `model-loader.ts`
+- Use camelCase for ts files: `modelLoader.ts`
 - Use PascalCase for vue components: `ViewportHeader.vue`
 - Use PascalCase for component exports
 - Use descriptive names that reflect functionality
@@ -148,4 +161,3 @@ import { setGridHelper } from '@/three/modules/helpers/grid'
 - Follow Blender-inspired UI patterns for consistency
 - Test Three.js functionality in different browsers
 - Check WebGL compatibility before scene initialization
-- Use the devtools plugin for Vue debugging when needed

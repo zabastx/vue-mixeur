@@ -20,6 +20,7 @@ declare module 'three' {
 	interface BufferGeometry {
 		computeBoundsTree: typeof computeBoundsTree
 		disposeBoundsTree: typeof disposeBoundsTree
+		_hasBoundsTree: boolean
 	}
 
 	interface Mesh {

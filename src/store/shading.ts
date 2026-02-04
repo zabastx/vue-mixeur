@@ -87,10 +87,10 @@ export const useShadingStore = defineStore('shading', () => {
 		currentMode.value = mode
 
 		if (mode === 'solid') {
-			// @ts-expect-error light/object type mismatch
+			// @ts-ignore light/object type mismatch
 			solidModeLights.forEach((item) => scene?.add(item))
 		} else {
-			// @ts-expect-error light/object type mismatch
+			// @ts-ignore light/object type mismatch
 			solidModeLights.forEach((item) => scene?.remove(item))
 		}
 
@@ -263,7 +263,7 @@ export const useShadingStore = defineStore('shading', () => {
 
 	function init(newScene: THREE.Scene) {
 		scene = newScene
-		// @ts-expect-error light/object type mismatch
+		// @ts-ignore light/object type mismatch
 		solidModeLights.forEach((item) => scene?.add(item))
 		cacheOriginalMaterials()
 

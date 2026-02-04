@@ -17,7 +17,7 @@ export function setupBlenderControls({
 	const transformHelper = transformControlsRef.value.getHelper()
 	transformHelper.name = 'TransformHelper'
 
-	// @ts-expect-error light/object type mismatch
+	// @ts-ignore
 	helperScene.add(transformHelper)
 
 	controlsRef.value.enablePan = true

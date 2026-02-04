@@ -55,8 +55,7 @@ export const useAppStore = defineStore('app', () => {
 					break
 
 				case 'Delete':
-					if (sceneStore.selectedObject) {
-						// @ts-expect-error light/object type mismatch
+					if (sceneStore.selectedObject instanceof THREE.Object3D) {
 						sceneStore.deleteFromScene(sceneStore.selectedObject)
 					}
 					break

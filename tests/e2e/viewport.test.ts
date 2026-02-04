@@ -55,7 +55,9 @@ test.describe('3D Viewport', () => {
 		await expect(selectedItem).toBeAttached()
 	})
 
-	test('import model flow', async ({ page }) => {
+	test('import model flow', async ({ page, browserName }) => {
+		test.skip(browserName === 'webkit', 'WebKit file chooser behaves differently in CI')
+
 		await page.click('text=File')
 		await page.hover('text=Import')
 

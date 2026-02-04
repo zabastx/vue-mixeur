@@ -15,7 +15,8 @@
 	>
 		<button
 			type="button"
-			class="cursor-pointer rounded-full bg-black p-1.5 text-xl text-white opacity-50 hover:bg-gray-500"
+			class="cursor-pointer rounded-full bg-black p-1.5 text-xl text-white opacity-50
+				hover:bg-gray-500"
 			v-bind="$attrs"
 			@click="sceneStore.switchCamera"
 		>

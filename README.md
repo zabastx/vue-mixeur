@@ -1,10 +1,10 @@
 # Vue Mixeur
 
-[![Version](https://img.shields.io/badge/Version-0.3.0-FF6B6B.svg)](https://github.com/your-username/vue-mixeur)
+[![Version](https://img.shields.io/badge/Version-0.4.0-FF6B6B.svg)](https://github.com/your-username/vue-mixeur)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Vue](https://img.shields.io/badge/Vue-3.5.22-4FC08D.svg)](https://vuejs.org/)
-[![Three.js](https://img.shields.io/badge/Three.js-0.181.0-049EF4.svg)](https://threejs.org/)
-[![Vite](https://img.shields.io/badge/Vite-7.1.12-646CFF.svg)](https://vitejs.dev/)
+[![Vue](https://img.shields.io/badge/Vue-3.5.27-4FC08D.svg)](https://vuejs.org/)
+[![Three.js](https://img.shields.io/badge/Three.js-0.182.0-049EF4.svg)](https://threejs.org/)
+[![Vite](https://img.shields.io/badge/Vite-7.3.1-646CFF.svg)](https://vitejs.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6.svg)](https://www.typescriptlang.org/)
 
 A Blender-like web-based 3D editor built with Vue.js and Three.js. Vue Mixeur provides an interface for 3D modeling, object manipulation, and scene management directly in the browser.
@@ -92,6 +92,8 @@ src/
 - `vue`: Progressive JavaScript framework
 - `pinia`: State management for Vue
 - `@vueuse/core`: Collection of Vue composition utilities
+- `@jaames/iro`: Color picker library
+- `reka-ui`: Vue component primitives
 
 ## Acknowledgments
 

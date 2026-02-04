@@ -10,6 +10,7 @@
 			<NumberFieldInput
 				class="grow w-full bg-ui-number-inner text-center outline-none group-hover:brightness-110
 					py-0.5"
+				data-testid="number-input"
 			/>
 			<NumberFieldIncrement
 				class="shrink-0 grow-0 cursor-pointer bg-ui-number-inner px-0.5 opacity-0

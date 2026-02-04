@@ -1,5 +1,9 @@
 <template>
-	<div v-if="activeLoadings.length > 0" class="fixed bottom-16 left-4 z-50 w-sm space-y-2">
+	<div
+		v-if="activeLoadings.length > 0"
+		class="fixed bottom-16 left-4 z-50 w-sm space-y-2"
+		data-testid="loading-progress"
+	>
 		<div
 			v-for="loading in activeLoadings"
 			:key="loading.id"

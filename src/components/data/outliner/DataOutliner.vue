@@ -25,6 +25,7 @@
 						'bg-outliner-active-highlight text-outliner-active-object':
 							item.value.uuid === selectedItem?.uuid
 					}"
+					:data-testid="item.value.uuid === selectedItem?.uuid ? 'outliner-selected' : undefined"
 					@select="onSelect"
 					@toggle="onToggle"
 				>

@@ -16,6 +16,8 @@
 					'bg-ui-toolbar-inner-selected': item.name === threeStore.currentTransformMode
 				}"
 				:title="item.title"
+				:data-testid="`toolbar-btn-${item.name}`"
+				:data-active="item.name === threeStore.currentTransformMode"
 				@click="item.onClick"
 			>
 				<component :is="item.icon" />

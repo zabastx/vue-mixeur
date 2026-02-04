@@ -8,7 +8,12 @@
 			<div class="gizmo-wrapper absolute top-10 right-0"></div>
 			<ViewNavigationWidget class="absolute top-40 right-2.5" />
 			<div v-show="isError" ref="webglErrorRef" class="webgl-error"></div>
-			<canvas v-show="!isError" ref="canvasRef" class="block h-full w-full"></canvas>
+			<canvas
+				v-show="!isError"
+				ref="canvasRef"
+				class="block h-full w-full"
+				data-testid="viewport-canvas"
+			></canvas>
 		</div>
 		<ViewportToolbar />
 	</div>

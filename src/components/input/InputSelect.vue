@@ -13,7 +13,7 @@
 		<Select.Portal>
 			<Select.Content
 				v-bind="content"
-				class="z-auto rounded border border-ui-menu-bg-outline bg-ui-menu-bg-inner p-0.5 text-[1em]
+				class="z-50 rounded border border-ui-menu-bg-outline bg-ui-menu-bg-inner p-0.5 text-[1em]
 					text-ui-menu-text select-none"
 			>
 				<ScrollContainer>

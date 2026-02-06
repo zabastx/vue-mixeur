@@ -53,9 +53,6 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-      - name: Add .gitattributes for gh-pages
-        run: cp gh-pages.gitattributes dist/.gitattributes
-
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:

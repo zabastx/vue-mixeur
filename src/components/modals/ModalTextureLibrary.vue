@@ -95,7 +95,6 @@
 </template>
 
 <script lang="ts" setup>
-import { textureLibraryCallback, textureLibraryModalOpen } from '@/composables/modals'
 import type { AssetFiles, TextureAsset, TextureFiles } from '@/composables/types/polyhaven'
 import { usePolyHaven } from '@/composables/usePolyHaven'
 import { bytesToSize } from '@/utils/utils'
@@ -103,6 +102,10 @@ import { CheckboxGroupRoot } from 'reka-ui'
 import { computed, ref, shallowRef, watch } from 'vue'
 
 const isOpen = defineModel<boolean>({ default: false })
+
+const props = defineProps<{
+	callback?: ((args: unknown) => unknown) | null
+}>()
 
 const {
 	assets,
@@ -125,12 +128,8 @@ watch(isOpen, (val) => {
 
 function importTexture() {
 	if (!selectedTexture.value) return
-	textureLibraryCallback
-		.value?.(selectedTexture.value)
-		.then(() => {
-			textureLibraryModalOpen.value = false
-		})
-		.catch(() => {})
+	props.callback?.(selectedTexture.value)
+	isOpen.value = false
 }
 
 const mapTypesMap = new Map([

@@ -18,8 +18,10 @@
 </template>
 
 <script lang="ts" setup>
-import { textureLibraryCallback, textureLibraryModalOpen } from '@/composables/modals'
+import { useModals } from '@/composables/useModals'
 import THREE from '@/three'
+import { loadTexture } from '@/three/modules/loaders/textureLoader'
+import { isPolyHavenFileInfo } from '@/utils/utils'
 import { useFileDialog } from '@vueuse/core'
 
 const model = defineModel<THREE.Texture | null>()
@@ -42,15 +44,15 @@ onChange(async (files) => {
 	if (oldTexture) oldTexture.dispose()
 })
 
+const { open: openModal } = useModals()
+
 function openLibrary() {
-	textureLibraryCallback.value = async (file) => {
-		const name = file.url.match(/[^/]+$/)?.[0] ?? 'Texture'
-		const loader = new THREE.TextureLoader()
-		const texture = await loader.loadAsync(file.url)
-		texture.name = name
+	openModal('textureLibrary', async (file) => {
+		if (!isPolyHavenFileInfo(file)) return
+		const filename = file.url.match(/[^/]+$/)?.[0] ?? 'Texture'
+		const texture = await loadTexture({ url: file.url, filename, size: file.size })
 		model.value = texture
-	}
-	textureLibraryModalOpen.value = true
+	})
 }
 
 function removeMap() {

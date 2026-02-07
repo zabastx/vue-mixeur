@@ -14,7 +14,7 @@
 
 				<ModelLoadingProgress />
 				<MToast ref="toastRef" />
-				<ModalsCollection />
+				<ModalCollection />
 			</div>
 		</TooltipProvider>
 	</ToastProvider>

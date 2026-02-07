@@ -20,14 +20,15 @@ import IconFullScreen from '../icons/misc/IconFullScreen.vue'
 import MenuBar, { type IMenubarMenu } from '../utils/MenuBar.vue'
 import { computed } from 'vue'
 import { useThreeStore } from '@/store/three'
-import { getFile } from '@/composables/getfile'
 import { useToast } from '@/composables/useToast'
 import type { loadModel } from '@/three/modules/loaders/modelLoader'
 import IconExport from '../icons/misc/IconExport.vue'
-import { aboutModalOpen, modelLibraryModalOpen } from '@/composables/modals'
+import { useModals } from '@/composables/useModals'
+import { getFile } from '@/composables/getfile'
 
 const appStore = useAppStore()
 const threeStore = useThreeStore()
+const { open } = useModals()
 
 const showStatusBar = computed({
 	get() {
@@ -54,7 +55,7 @@ const menuItems: IMenubarMenu[] = [
 				key: 'about',
 				label: 'About Mixeur',
 				onClick() {
-					aboutModalOpen.value = true
+					open('about')
 				}
 			}
 		]
@@ -89,7 +90,7 @@ const menuItems: IMenubarMenu[] = [
 						key: 'import_library',
 						label: 'Import from library',
 						onClick: () => {
-							modelLibraryModalOpen.value = true
+							open('modelsLibrary')
 						}
 					}
 				]

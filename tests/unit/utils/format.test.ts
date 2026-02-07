@@ -1,4 +1,4 @@
-import { bytesToSize } from '@/utils/utils'
+import { bytesToSize } from '@/utils/format'
 import { describe, it, expect } from 'vitest'
 
 describe('bytesToSize', () => {

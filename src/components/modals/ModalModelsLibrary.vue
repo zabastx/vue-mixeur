@@ -81,7 +81,7 @@
 import type { AssetFiles, ModelFiles } from '@/composables/types/polyhaven'
 import { usePolyHaven } from '@/composables/usePolyHaven'
 import { useThreeStore } from '@/store/three'
-import { bytesToSize } from '@/utils/utils'
+import { bytesToSize } from '@/utils/format'
 import { CheckboxGroupRoot } from 'reka-ui'
 import { computed, ref, shallowRef, watch } from 'vue'
 

@@ -21,7 +21,7 @@
 import { useModals } from '@/composables/useModals'
 import THREE from '@/three'
 import { loadTexture } from '@/three/modules/loaders/textureLoader'
-import { isPolyHavenFileInfo } from '@/utils/utils'
+import { isPolyHavenFileInfo } from '@/utils/polyhaven'
 import { useFileDialog } from '@vueuse/core'
 
 const model = defineModel<THREE.Texture | null>()

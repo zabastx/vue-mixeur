@@ -97,7 +97,7 @@
 <script lang="ts" setup>
 import type { AssetFiles, TextureAsset, TextureFiles } from '@/composables/types/polyhaven'
 import { usePolyHaven } from '@/composables/usePolyHaven'
-import { bytesToSize } from '@/utils/utils'
+import { bytesToSize } from '@/utils/format'
 import { CheckboxGroupRoot } from 'reka-ui'
 import { computed, ref, shallowRef, watch } from 'vue'
 

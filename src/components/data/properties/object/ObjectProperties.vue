@@ -10,9 +10,11 @@
 		</InputField>
 		<MAccordionRoot collapsible type="multiple" class="flex gap-0.5 flex-col">
 			<MAccordionItem label="Transform" :item="{ value: 'transform' }">
-				<TransformLocation />
-				<TransformRotation class="my-2" />
-				<TransformScale />
+				<div class="p-1">
+					<TransformLocation />
+					<TransformRotation class="my-2" />
+					<TransformScale />
+				</div>
 			</MAccordionItem>
 			<MAccordionItem label="Visibility" :item="{ value: 'visibility' }">
 				<ObjectVisibility />

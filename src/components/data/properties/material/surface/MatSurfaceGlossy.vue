@@ -1,10 +1,12 @@
 <template>
-	<div v-if="material" class="flex flex-col items-end gap-1">
-		<InputField input-width="150px" label="Base Color">
-			<InputColor v-model:hex="color" />
-		</InputField>
+	<div v-if="material">
+		<div class="flex flex-col items-end gap-1 p-1 pr-3">
+			<InputField input-width="150px" label="Base Color">
+				<InputColor v-model:hex="color" />
+			</InputField>
+		</div>
 		<MAccordionItem label="Specular" :item="{ value: 'specular' }" class="w-full" nested>
-			<div class="flex flex-col items-end gap-1">
+			<div class="flex flex-col items-end gap-1 p-1 pr-3">
 				<InputField input-width="150px" label="Color">
 					<InputColor v-model:hex="specular" />
 				</InputField>

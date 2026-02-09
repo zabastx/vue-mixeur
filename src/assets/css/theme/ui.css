@@ -207,7 +207,7 @@
 	--color-ui-active-panel-outline: #4772b3ff;
 	--color-ui-panel-title: #e6e6e6;
 	--color-ui-panel-text: #e6e6e6;
-	--color-ui-panel-outline: #ffffff11;
+	--color-ui-panel-outline: #ffffff20;
 	--ui-panel-roundness: 0.4;
 	--radius-ui-panel: calc(var(--ui-panel-roundness) * 1rem * 0.75);
 

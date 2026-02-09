@@ -1,5 +1,5 @@
 <template>
-	<Select.Root v-model="model">
+	<Select.Root v-bind="root" v-model="model">
 		<Select.Trigger
 			v-bind="trigger"
 			class="inline-flex max-w-full items-center justify-between gap-1 rounded border
@@ -22,7 +22,7 @@
 							v-for="val in items"
 							v-bind="item"
 							:key="'item_' + val.value"
-							:value="val"
+							:value="val.value"
 							class="rounded p-1 leading-[1em] text-xs data-highlighted:text-ui-menu-item-selected
 								data-highlighted:bg-gray-500 data-[state='checked']:bg--menu-item-inner-selected"
 						>
@@ -49,14 +49,17 @@ defineProps<SelectProps>()
 
 const model = defineModel<AcceptableValue | AcceptableValue[]>()
 
-interface SelectProps extends SelectRootProps {
+interface SelectProps {
+	root?: SelectRootProps
 	placeholder?: string
 	trigger?: SelectTriggerProps
 	content?: SelectContentProps
 	item?: SelectItemProps
-	items: {
-		value: AcceptableValue
-		label: string
-	}[]
+	items: InputSelectOption[]
+}
+
+export interface InputSelectOption {
+	value: AcceptableValue
+	label: string
 }
 </script>

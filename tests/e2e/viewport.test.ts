@@ -19,19 +19,19 @@ test.describe('3D Viewport', () => {
 		const rotateBtn = page.locator('[data-testid="toolbar-btn-rotate"]')
 		const scaleBtn = page.locator('[data-testid="toolbar-btn-scale"]')
 
-		await canvas.hover()
+		await canvas.click()
 		await canvas.press('g')
 		await expect(translateBtn).toHaveAttribute('data-active', 'true')
 		await expect(rotateBtn).toHaveAttribute('data-active', 'false')
 		await expect(scaleBtn).toHaveAttribute('data-active', 'false')
 
-		await canvas.hover()
+		await canvas.click()
 		await canvas.press('r')
 		await expect(translateBtn).toHaveAttribute('data-active', 'false')
 		await expect(rotateBtn).toHaveAttribute('data-active', 'true')
 		await expect(scaleBtn).toHaveAttribute('data-active', 'false')
 
-		await canvas.hover()
+		await canvas.click()
 		await canvas.press('s')
 		await expect(translateBtn).toHaveAttribute('data-active', 'false')
 		await expect(rotateBtn).toHaveAttribute('data-active', 'false')

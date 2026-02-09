@@ -1,14 +1,16 @@
 <template>
-	<div v-if="material" class="flex flex-col items-end gap-1">
-		<InputField input-width="150px" label="Base Color">
-			<InputColor v-model:hex="color" />
-		</InputField>
-		<InputField input-width="150px" label="Map">
-			<InputTexture v-model="map" />
-		</InputField>
-		<InputField input-width="150px" label="Gradient Map">
-			<InputTexture v-model="gradientMap" />
-		</InputField>
+	<div v-if="material">
+		<div class="p-1 pr-3 flex flex-col items-end gap-1">
+			<InputField input-width="150px" label="Base Color">
+				<InputColor v-model:hex="color" />
+			</InputField>
+			<InputField input-width="150px" label="Map">
+				<InputTexture v-model="map" />
+			</InputField>
+			<InputField input-width="150px" label="Gradient Map">
+				<InputTexture v-model="gradientMap" />
+			</InputField>
+		</div>
 		<MAccordionItem label="Emission" :item="{ value: 'emission' }" class="w-full" nested>
 			<EmissionProperties />
 		</MAccordionItem>

@@ -22,6 +22,30 @@
 	--color-outliner-alternate-rows: #ffffff04;
 
 	--color-browser-selected: #4772b3;
+
+	--animate-accordion-slide-down: slide-down 100ms ease-out;
+	--animate-accordion-slide-up: slide-up 100ms ease-out;
+
+	@keyframes slide-down {
+		0% {
+			height: 0;
+		}
+		100% {
+			height: var(--reka-accordion-content-height);
+		}
+	}
+
+	@keyframes slide-up {
+		0% {
+			height: var(--reka-accordion-content-height);
+		}
+		99% {
+			padding: 0;
+		}
+		100% {
+			height: 0;
+		}
+	}
 }
 
 @import './ui.css';

@@ -109,11 +109,11 @@ watch(isOpen, (val) => {
 
 const modelFilesData = ref<ModelFiles['gltf']>()
 const fileResOptions = shallowRef<{ value: string; label: string }[]>([])
-const selectedResOption = ref<{ value: string; label: string }>()
+const selectedResOption = ref<string>()
 
 const selectedOptionData = computed(() => {
 	if (!selectedResOption.value || !modelFilesData.value) return null
-	const data = modelFilesData.value[selectedResOption.value.value]?.['gltf']
+	const data = modelFilesData.value[selectedResOption.value]?.['gltf']
 	if (!data) return null
 	const includedFiles = data.include ? Object.values(data.include) : []
 	const sizeInBytes = data.size + includedFiles.reduce((prev, cur) => cur.size + prev, 0)
@@ -128,7 +128,7 @@ function setFilesData(files: AssetFiles) {
 		if (!gtlfData) return
 		modelFilesData.value = gtlfData
 		fileResOptions.value = Object.keys(gtlfData).map((value) => ({ value, label: value }))
-		selectedResOption.value = fileResOptions.value[0]
+		selectedResOption.value = fileResOptions.value[0]?.value
 	}
 }
 
@@ -138,7 +138,7 @@ function importModel() {
 	if (!selectedResOption.value || !selectedAsset.value || !modelFilesData.value) return
 	const data = getModelData({
 		format: 'gltf',
-		resolution: selectedResOption.value.value,
+		resolution: selectedResOption.value,
 		files: modelFilesData.value
 	})
 	if (data) {

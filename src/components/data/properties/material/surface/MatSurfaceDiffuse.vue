@@ -1,8 +1,10 @@
 <template>
-	<div v-if="material" class="flex flex-col items-end gap-1">
-		<InputField label="Base Color" input-width="150px">
-			<InputColor v-model:hex="color" />
-		</InputField>
+	<div v-if="material">
+		<div class="flex flex-col items-end gap-1 p-1 pr-3">
+			<InputField label="Base Color" input-width="150px">
+				<InputColor v-model:hex="color" />
+			</InputField>
+		</div>
 		<MAccordionItem label="Emission" :item="{ value: 'emission' }" class="w-full" nested>
 			<EmissionProperties />
 		</MAccordionItem>

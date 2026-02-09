@@ -12,6 +12,8 @@ export const useShadingStore = defineStore('shading', () => {
 	const materialCache = new Map<string, MaterialCache>()
 	const shadingMode = computed(() => currentMode.value)
 
+	let helperObjects: THREE.Object3D[] = []
+
 	/**
 	 * Determines if an object should be affected by shading modes.
 	 * Only objects explicitly marked as shadable will be affected by shading changes.
@@ -104,6 +106,21 @@ export const useShadingStore = defineStore('shading', () => {
 			setSceneLightsVisibility(true)
 		} else {
 			setSceneLightsVisibility(false)
+		}
+
+		if (mode === 'export') {
+			scene.traverse((object) => {
+				if (object.userData.isHelper) {
+					object.visible = false
+					helperObjects.push(object)
+				}
+			})
+			setMode('rendered')
+		} else {
+			helperObjects.forEach((obj) => {
+				obj.visible = true
+			})
+			helperObjects = []
 		}
 
 		scene.traverse((object) => {
@@ -387,7 +404,7 @@ if (import.meta.hot) {
 /**
  * Represents the different shading modes available, replicating Blender's viewport shading options.
  */
-export type ShadingMode = 'wireframe' | 'solid' | 'materialPreview' | 'rendered'
+export type ShadingMode = 'wireframe' | 'solid' | 'materialPreview' | 'rendered' | 'export'
 
 /**
  * Internal cache for storing original and current materials for each mesh.

@@ -59,7 +59,7 @@ const textData = reactive({
 	font: defaultFontsList.find((item) => {
 		const cur = getCurrentTextData()?.font?.value
 		return item.value === cur
-	}),
+	})?.value,
 	depth: 1,
 	size: 2,
 	bevelEnabled: false,
@@ -75,7 +75,7 @@ async function onApply() {
 	if (!textData.text || !textData.font) return
 	const obj = store.selectedObject
 	if (obj && obj instanceof THREE.Mesh && obj.geometry instanceof TextGeometry) {
-		const font = await loadFont(textData.font.value)
+		const font = await loadFont(textData.font)
 		if (!font) return
 
 		obj.geometry.dispose()

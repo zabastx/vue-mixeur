@@ -1,5 +1,10 @@
 <template>
-	<Accordion.Item v-slot="{ open }" class="overflow-hidden text-xs" v-bind="item">
+	<Accordion.Item
+		v-slot="{ open }"
+		class="text-xs rounded-ui-panel"
+		v-bind="item"
+		:class="{ 'border-ui-panel-outline border': !nested }"
+	>
 		<Accordion.Header class="bg-ui-panel-header px-2 py-1 text-ui-panel-title" v-bind="header">
 			<Accordion.Trigger
 				class="group flex w-full cursor-pointer items-center gap-1"
@@ -13,7 +18,9 @@
 			</Accordion.Trigger>
 		</Accordion.Header>
 		<Accordion.Content
-			class="animation-slide overflow-hidden text-ui-panel-text"
+			class="data-[state='open']:animate-accordion-slide-down
+				data-[state='closed']:animate-accordion-slide-up overflow-hidden text-ui-panel-text
+				bg-ui-panel-header"
 			v-bind="content"
 			:class="{ 'bg-ui-sub-panel': nested }"
 		>
@@ -40,36 +47,3 @@ defineProps<{
 	nested?: boolean
 }>()
 </script>
-
-<style scoped>
-.animation-slide {
-	animation-duration: 200ms;
-	animation-timing-function: ease-out;
-
-	&[data-state='open'] {
-		animation-name: slide-down;
-	}
-
-	&[data-state='closed'] {
-		animation-name: slide-up;
-	}
-}
-
-@keyframes slide-down {
-	from {
-		height: 0;
-	}
-	to {
-		height: var(--reka-accordion-content-height);
-	}
-}
-
-@keyframes slide-up {
-	from {
-		height: var(--reka-accordion-content-height);
-	}
-	to {
-		height: 0;
-	}
-}
-</style>

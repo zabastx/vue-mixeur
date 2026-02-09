@@ -7,7 +7,7 @@
 						<InputSelect v-model="matType" :items class="w-[150px]" />
 					</InputField>
 				</div>
-				<component :is="getSurfaceComponent(matType.value)" v-if="matType" />
+				<component :is="getSurfaceComponent(matType)" v-if="matType" />
 			</MAccordionItem>
 		</MAccordionRoot>
 	</div>
@@ -57,17 +57,11 @@ const items = [
 
 type MaterialType = (typeof items)[number]['value']
 
-const matType = ref<
-	| {
-			value: MaterialType
-			label: string
-	  }
-	| undefined
->(getInitialType())
+const matType = ref<MaterialType | undefined>(getInitialType())
 
 watch(matType, (val) => {
 	if (!val || !(selectedObject.value instanceof THREE.Mesh)) return
-	switch (val.value) {
+	switch (val) {
 		case 'principled_bsdf':
 			shadingStore.changeMaterial(selectedObject.value, new THREE.MeshPhysicalMaterial())
 			break
@@ -104,7 +98,7 @@ function getInitialType() {
 			value = 'glossy_bsdf'
 			break
 	}
-	return items.find((item) => item.value === value)
+	return items.find((item) => item.value === value)?.value
 }
 
 function getSurfaceComponent(value: (typeof items)[number]['value']) {

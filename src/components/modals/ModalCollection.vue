@@ -5,6 +5,7 @@
 		v-model="openModals.textureLibrary"
 		:callback="dialogCallbacks.textureLibrary"
 	/>
+	<ModalRenderImage v-model="openModals.renderImage" />
 </template>
 
 <script lang="ts" setup>

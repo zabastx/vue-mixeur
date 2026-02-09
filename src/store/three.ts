@@ -205,7 +205,7 @@ export const useThreeStore = defineStore('three', () => {
 				return
 			}
 
-			selectObject.value?.(intersects[0].object.uuid)
+			selectObject.value?.(intersects[0].object.uuid, true)
 		})
 		// -----------------------------
 
@@ -243,7 +243,6 @@ export const useThreeStore = defineStore('three', () => {
 		object.traverse((obj) => {
 			obj.castShadow = true
 			obj.receiveShadow = true
-			console.log('obje', obj)
 			obj.userData.isSelectable = true
 			if (obj instanceof THREE.Mesh) {
 				obj.userData.isShadable = true
@@ -364,7 +363,7 @@ export const useThreeStore = defineStore('three', () => {
 
 	function exportScene() {
 		const mode = shadingStore.shadingMode
-		shadingStore.setMode('rendered')
+		shadingStore.setMode('export')
 		exportModel(scene)
 		shadingStore.setMode(mode)
 	}
@@ -389,7 +388,8 @@ export const useThreeStore = defineStore('three', () => {
 		sceneChildren,
 		objectVisibilityUpdate,
 		updateScene,
-		exportScene
+		exportScene,
+		scene
 	}
 })
 

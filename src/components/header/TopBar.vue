@@ -23,8 +23,9 @@ import { useThreeStore } from '@/store/three'
 import { useToast } from '@/composables/useToast'
 import type { loadModel } from '@/three/modules/loaders/modelLoader'
 import IconExport from '../icons/misc/IconExport.vue'
+import IconRenderImage from '../icons/IconRenderImage.vue'
 import { useModals } from '@/composables/useModals'
-import { getFile } from '@/composables/getfile'
+import { uploadFile } from '@/utils/files'
 
 const appStore = useAppStore()
 const threeStore = useThreeStore()
@@ -72,9 +73,9 @@ const menuItems: IMenubarMenu[] = [
 					{
 						type: 'item',
 						key: 'import_gltf',
-						label: 'glTF 2.0 (.gltf/.glb)',
+						label: 'glTF 2.0 (.glb)',
 						onClick: () => {
-							importFile('gltf')
+							importFile('glb')
 						}
 					},
 					{
@@ -102,6 +103,20 @@ const menuItems: IMenubarMenu[] = [
 				icon: IconExport,
 				onClick() {
 					threeStore.exportScene()
+				}
+			}
+		]
+	},
+	{
+		label: 'Render',
+		items: [
+			{
+				type: 'item',
+				key: 'render_image',
+				label: 'Render Image',
+				icon: IconRenderImage,
+				onClick() {
+					open('renderImage')
 				}
 			}
 		]
@@ -140,12 +155,15 @@ const sceneStore = useThreeStore()
 const { toast } = useToast()
 
 async function importFile(format: Parameters<typeof loadModel>[0]['format']) {
+	const { data } = await uploadFile(`.${format}`)
+	if (!data) return
 	try {
-		const file = await getFile(format)
-		await sceneStore.importModel(file)
+		await sceneStore.importModel({ filename: data.filename, url: data.url, format })
 	} catch (e) {
 		console.error(e)
-		toast.error(`Failed to import ${format.toUpperCase()} file`)
+		toast.error(`Failed to import ${format} file`)
+	} finally {
+		data?.cleanup()
 	}
 }
 </script>

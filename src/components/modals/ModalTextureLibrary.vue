@@ -150,29 +150,29 @@ const mapTypesMap = new Map([
 
 const textureFilesData = ref<TextureFiles>()
 
-const selectedMapType = ref<InputSelectOption>()
-const textureTypes = shallowRef<InputSelectOption[]>([])
+const selectedMapType = ref<string>()
+const textureTypes = shallowRef<{ label: string; value: string }[]>([])
 
-const selectedResOption = ref<InputSelectOption>()
+const selectedResOption = ref<string>()
 const fileResOptions = computed(() => {
 	if (!selectedMapType.value || !textureFilesData.value) return []
-	return Object.keys(textureFilesData.value[selectedMapType.value.value] ?? {}).map((item) => ({
+	return Object.keys(textureFilesData.value[selectedMapType.value] ?? {}).map((item) => ({
 		label: item,
 		value: item
 	}))
 })
 
-const selectedFormatOption = ref<InputSelectOption>()
+const selectedFormatOption = ref<string>()
 const formatOptions = computed(() => {
 	if (
 		!selectedMapType.value ||
 		!selectedResOption.value ||
 		!textureFilesData.value ||
-		!textureFilesData.value[selectedMapType.value.value]?.[selectedResOption.value.value]
+		!textureFilesData.value[selectedMapType.value]?.[selectedResOption.value]
 	)
 		return []
 	return Object.keys(
-		textureFilesData.value?.[selectedMapType.value.value]?.[selectedResOption.value.value] ?? {}
+		textureFilesData.value?.[selectedMapType.value]?.[selectedResOption.value] ?? {}
 	).map((item) => ({
 		label: item,
 		value: item
@@ -188,9 +188,9 @@ const selectedTexture = computed(() => {
 	)
 		return
 
-	const mapType = selectedMapType.value.value
-	const res = selectedResOption.value.value
-	const format = selectedFormatOption.value.value
+	const mapType = selectedMapType.value
+	const res = selectedResOption.value
+	const format = selectedFormatOption.value
 
 	return textureFilesData.value[mapType]?.[res]?.[format]
 })
@@ -211,10 +211,5 @@ function setFilesData(files: AssetFiles) {
 			}
 		})
 		.filter((item) => !!item.value)
-}
-
-interface InputSelectOption {
-	label: string
-	value: string
 }
 </script>

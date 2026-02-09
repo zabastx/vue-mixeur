@@ -61,6 +61,32 @@ export function createComposer({ camera, canvas, gizmo, scene }: ComposerParamet
 	return { renderer, composer, outlinePass, handleResize }
 }
 
+export function createRenderComposer({
+	camera,
+	canvas,
+	scene
+}: {
+	canvas: HTMLCanvasElement
+	camera: THREE.PerspectiveCamera | THREE.OrthographicCamera
+	scene: THREE.Scene
+}) {
+	const renderer = createBlenderRenderer({ canvas })
+	const composer = new EffectComposer(renderer)
+	composer.setPixelRatio(window.devicePixelRatio)
+
+	const renderPass = new RenderPass(scene, camera)
+	composer.addPass(renderPass)
+
+	const taaPass = new TAARenderPass(scene, camera)
+	taaPass.sampleLevel = 2
+	composer.addPass(taaPass)
+
+	const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader)
+	composer.addPass(gammaCorrectionPass)
+
+	return { renderer, composer }
+}
+
 interface ComposerParameters {
 	canvas: HTMLCanvasElement
 	scene: THREE.Scene

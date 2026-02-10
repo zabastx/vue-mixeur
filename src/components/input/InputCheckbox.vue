@@ -1,12 +1,12 @@
 <template>
 	<CheckboxRoot
-		v-bind="props"
-		v-model="model"
+		v-bind="forwarded"
 		class="size-5 rounded border border-ui-option-outline bg-ui-option-inner"
 	>
 		<CheckboxIndicator
 			class="h-full text-xs w-full rounded flex items-center justify-center
 				bg-ui-option-inner-selected"
+			data-testid="checkbox-indicator"
 		>
 			<IconCheckmark />
 		</CheckboxIndicator>
@@ -14,9 +14,10 @@
 </template>
 
 <script lang="ts" setup>
-import type { CheckboxRootProps } from 'reka-ui'
+import { useForwardPropsEmits, type CheckboxRootEmits, type CheckboxRootProps } from 'reka-ui'
 
 const props = defineProps<CheckboxRootProps>()
+const emits = defineEmits<CheckboxRootEmits>()
 
-const model = defineModel<boolean>()
+const forwarded = useForwardPropsEmits(props, emits)
 </script>

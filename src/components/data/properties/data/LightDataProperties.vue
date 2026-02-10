@@ -28,7 +28,7 @@
 						:format-options="{ style: 'percent' }"
 					/>
 				</InputField>
-				<template v-if="light instanceof RectAreaLight">
+				<template v-if="isRectAreaLight(light)">
 					<InputField label="Width" input-width="150px">
 						<InputNumber v-model="light.width" :step="0.1" :min="0" />
 					</InputField>
@@ -36,7 +36,7 @@
 						<InputNumber v-model="light.height" :step="0.1" :min="0" />
 					</InputField>
 				</template>
-				<template v-if="light instanceof THREE.SpotLight">
+				<template v-if="isSpotLight(light)">
 					<InputField label="Angle" input-width="150px">
 						<InputNumber
 							v-model="spotLightAngle"
@@ -55,7 +55,7 @@
 <script lang="ts" setup>
 import { useThreeStore } from '@/store/three'
 import THREE from '@/three'
-import { MathUtils, RectAreaLight } from 'three'
+import { MathUtils } from 'three'
 import { computed } from 'vue'
 
 const store = useThreeStore()
@@ -94,5 +94,13 @@ const spotLightAngle = computed({
 	}
 })
 
-type LightTypes = THREE.PointLight | THREE.DirectionalLight | THREE.SpotLight | RectAreaLight
+type LightTypes = THREE.PointLight | THREE.DirectionalLight | THREE.SpotLight | THREE.RectAreaLight
+
+function isRectAreaLight(light: LightTypes): light is THREE.RectAreaLight {
+	return light instanceof THREE.RectAreaLight
+}
+
+function isSpotLight(light: LightTypes): light is THREE.SpotLight {
+	return light instanceof THREE.SpotLight
+}
 </script>

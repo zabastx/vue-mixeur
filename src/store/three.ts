@@ -45,24 +45,10 @@ export const useThreeStore = defineStore('three', () => {
 		triggerRef(sceneChildren)
 	}
 
-	// Camera controls
 	const { activeCamera, switchCamera } = cameraSetup()
 	const controls = shallowRef<OrbitControls>()
 	const gizmo = shallowRef<ViewportGizmo>()
 
-	watch(activeCamera, (newCamera) => {
-		if (!controls.value || !gizmo.value) return
-		controls.value.object = newCamera
-		gizmo.value.camera = newCamera
-	})
-	// --------------------------------------
-
-	const outlinePass = shallowRef<OutlinePass>()
-
-	const selectObject = shallowRef<(uuid?: string, raycasted?: boolean) => void>()
-	const selectedObject = ref<THREE.Object3D | THREE.Light | THREE.Mesh | null>(null)
-
-	// Transform controls
 	const transformControls = shallowRef<TransformControls>()
 	const currentTransformMode = ref<TransformControlsMode>('translate')
 
@@ -70,7 +56,18 @@ export const useThreeStore = defineStore('three', () => {
 		transformControls.value?.setMode(mode)
 		currentTransformMode.value = mode
 	}
+
+	watch(activeCamera, (newCamera) => {
+		if (!controls.value || !gizmo.value || !transformControls.value) return
+		controls.value.object = newCamera
+		gizmo.value.camera = newCamera
+		transformControls.value.camera = newCamera
+	})
 	// ----------------------------------------
+	const outlinePass = shallowRef<OutlinePass>()
+
+	const selectObject = shallowRef<(uuid?: string, raycasted?: boolean) => void>()
+	const selectedObject = ref<THREE.Object3D | THREE.Light | THREE.Mesh | null>(null)
 
 	const { initStats, monitor, stats } = useStats()
 

@@ -44,6 +44,7 @@ export function createLight<T extends CreateLightParams>({ type, parameters }: T
 
 	if (light.shadow) {
 		light.shadow.bias = -0.001
+		light.shadow.normalBias = 0.02
 	}
 
 	light.name = type

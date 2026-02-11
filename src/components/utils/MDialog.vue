@@ -1,15 +1,19 @@
 <template>
-	<Dialog.Root v-model="open">
+	<Dialog.Root v-bind="root" v-model:open="open">
 		<Dialog.Trigger v-bind="trigger">
 			<slot name="trigger"></slot>
 		</Dialog.Trigger>
 		<Dialog.Portal v-bind="portal">
 			<Dialog.Overlay class="fixed inset-0" v-bind="overlay" />
-			<Dialog.Content v-bind="content" as-child>
+			<Dialog.Content
+				v-bind="content"
+				as-child
+				@pointer-down-outside="(e) => (outsideInteraction ? e.preventDefault() : undefined)"
+			>
 				<div
 					ref="dialogContentRef"
 					:style="style"
-					class="fixed overflow-hidden rounded p-0 z-50"
+					class="fixed overflow-hidden rounded p-0 z-1000"
 					:class="[$attrs.class, { resize }]"
 				>
 					<div ref="handleRef" class="z-10 absolute top-0 left-0 w-full h-9 cursor-move"></div>
@@ -48,6 +52,7 @@ defineProps<{
 	overlay?: DialogOverlayProps
 	content?: DialogContentProps
 	resize?: boolean
+	outsideInteraction?: boolean
 }>()
 
 const dialogContentRef = useTemplateRef('dialogContentRef')

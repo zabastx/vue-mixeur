@@ -1,6 +1,6 @@
 <template>
 	<MDialog
-		v-model:open="isOpen"
+		v-model="isOpen"
 		title="Models Library"
 		class="w-7xl h-[75dvh] text-ui-text-text block-border bg-window-bg flex flex-col"
 		resize

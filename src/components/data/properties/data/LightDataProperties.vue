@@ -1,7 +1,7 @@
 <template>
 	<MAccordionRoot collapsible type="multiple">
 		<MAccordionItem v-if="light" label="Light" :item="{ value: 'light' }">
-			<div class="text-xs flex flex-col items-end gap-1 pr-2.5">
+			<div class="text-xs flex flex-col items-end gap-1 p-2">
 				<InputField label="Color" input-width="150px">
 					<InputColor v-model:hex="lightColor" />
 				</InputField>
@@ -13,20 +13,6 @@
 				</InputField>
 				<InputField v-if="'distance' in light" label="Distance" input-width="150px">
 					<InputNumber v-model="light.distance" :min="0" :step="0.1" />
-				</InputField>
-				<InputField v-if="light.shadow" label="Cast shadow">
-					<div class="w-[150px]">
-						<InputCheckbox v-model="light.castShadow" />
-					</div>
-				</InputField>
-				<InputField v-if="light.shadow" label="Shadow intensity" input-width="150px">
-					<InputNumber
-						v-model="light.shadow.intensity"
-						:min="0"
-						:max="1"
-						:step="0.01"
-						:format-options="{ style: 'percent' }"
-					/>
 				</InputField>
 				<template v-if="isRectAreaLight(light)">
 					<InputField label="Width" input-width="150px">
@@ -49,10 +35,45 @@
 				</template>
 			</div>
 		</MAccordionItem>
+		<MAccordionItem
+			v-if="light?.shadow"
+			v-model="light.castShadow"
+			:item="{ value: 'shadow' }"
+			label="Shadow"
+			class="w-full mt-1"
+			show-checkbox
+		>
+			<div class="flex flex-col items-end gap-1 p-2">
+				<InputField label="Bias" input-width="150px" :tooltip="tooltipMap.get('bias')">
+					<InputNumber
+						v-model="light.shadow.bias"
+						:step="0.0001"
+						:format-options="{ minimumFractionDigits: 4 }"
+					/>
+				</InputField>
+				<InputField label="Normal Bias" input-width="150px" :tooltip="tooltipMap.get('normalBias')">
+					<InputNumber
+						v-model="light.shadow.normalBias"
+						:step="0.0001"
+						:format-options="{ minimumFractionDigits: 4 }"
+					/>
+				</InputField>
+				<InputField label="Intensity" input-width="150px" :tooltip="tooltipMap.get('intensity')">
+					<InputNumber
+						v-model="light.shadow.intensity"
+						:min="0"
+						:max="1"
+						:step="0.01"
+						:format-options="{ style: 'percent' }"
+					/>
+				</InputField>
+			</div>
+		</MAccordionItem>
 	</MAccordionRoot>
 </template>
 
 <script lang="ts" setup>
+import type { MTooltipContent } from '@/components/utils/MTooltip.vue'
 import { useThreeStore } from '@/store/three'
 import THREE from '@/three'
 import { MathUtils } from 'three'
@@ -103,4 +124,27 @@ function isRectAreaLight(light: LightTypes): light is THREE.RectAreaLight {
 function isSpotLight(light: LightTypes): light is THREE.SpotLight {
 	return light instanceof THREE.SpotLight
 }
+
+const tooltipMap: ReadonlyMap<string, MTooltipContent> = new Map([
+	[
+		'bias',
+		{
+			title: 'Shadow map bias',
+			text: 'How much to add or subtract from the normalized depth when deciding whether a surface is in shadow'
+		}
+	],
+	[
+		'normalBias',
+		{
+			title: 'Shadow map normal bias',
+			text: 'Defines how much the position used to query the shadow map is offset along the object normal. Increasing this value can be used to reduce shadow acne especially in large scenes where light shines onto geometry at a shallow angle. The cost is that shadows may appear distorted.'
+		}
+	],
+	[
+		'intensity',
+		{
+			text: 'The intensity of the shadow'
+		}
+	]
+])
 </script>

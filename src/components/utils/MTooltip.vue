@@ -1,5 +1,5 @@
 <template>
-	<TooltipRoot>
+	<TooltipRoot :disabled="tooltipDisabled">
 		<TooltipTrigger as-child v-bind="options?.trigger">
 			<slot name="default"></slot>
 		</TooltipTrigger>
@@ -31,6 +31,7 @@ import {
 } from 'reka-ui'
 
 defineProps<{
+	tooltipDisabled?: boolean
 	tooltip?: MTooltipContent
 	options?: {
 		trigger?: TooltipTriggerProps

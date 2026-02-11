@@ -211,11 +211,18 @@ export const useThreeStore = defineStore('three', () => {
 
 		addInitialObjects()
 
+		const targetFPS = 30
+		const frameDelay = 1000 / targetFPS
+		let lastFrameTime = 0
+
 		const clock = new THREE.Clock()
 		let passedTime = 0
 		renderer.setAnimationLoop(render)
 
-		function render() {
+		function render(currentTime: number) {
+			const deltaTime = currentTime - lastFrameTime
+			if (deltaTime < frameDelay) return
+			lastFrameTime = currentTime - (deltaTime % frameDelay)
 			const delta = clock.getDelta()
 			passedTime += delta
 

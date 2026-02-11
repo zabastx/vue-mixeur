@@ -14,16 +14,21 @@
 					class="transition-rotate inline-block size-[1em] duration-200
 						group-data-[state='open']:rotate-90"
 				/>
+				<InputCheckbox v-if="showCheckbox" v-model="model" @click.stop />
 				<span class="font-panel-title">{{ label }}</span>
 			</Accordion.Trigger>
 		</Accordion.Header>
 		<Accordion.Content
 			class="data-[state='open']:animate-accordion-slide-down
 				data-[state='closed']:animate-accordion-slide-up overflow-hidden text-ui-panel-text
-				bg-ui-panel-header"
+				bg-ui-panel-header relative"
 			v-bind="content"
 			:class="{ 'bg-ui-sub-panel': nested }"
 		>
+			<div
+				v-show="!model && showCheckbox"
+				class="inset-0 absolute z-10 bg-ui-panel-background/75 pointer-events-none"
+			></div>
 			<slot :open="open"></slot>
 		</Accordion.Content>
 	</Accordion.Item>
@@ -38,6 +43,8 @@ import type {
 } from 'reka-ui'
 import { Accordion } from 'reka-ui/namespaced'
 
+const model = defineModel<boolean>()
+
 defineProps<{
 	item: AccordionItemProps
 	header?: AccordionHeaderProps
@@ -45,5 +52,6 @@ defineProps<{
 	content?: AccordionContentProps
 	label: string
 	nested?: boolean
+	showCheckbox?: boolean
 }>()
 </script>

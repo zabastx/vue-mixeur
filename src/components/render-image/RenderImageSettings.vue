@@ -1,45 +1,41 @@
 <template>
-	<div class="w-80 flex flex-col gap-3">
-		<div class="space-y-2 text-sm text-ui-text-text">
-			<div class="space-y-2">
-				<InputField label="Preset" label-width="90px">
-					<InputSelect v-model="settings.preset" :items="resolutionOptions" />
-				</InputField>
+	<div class="flex flex-col gap-2 p-2">
+		<InputField label="Preset" label-width="90px">
+			<InputSelect v-model="settings.preset" :items="resolutionOptions" />
+		</InputField>
 
-				<template v-if="settings.preset === 'custom'">
-					<InputField label="Width" label-width="90px">
-						<InputNumber
-							v-model="model.width"
-							:min="100"
-							:max="8192"
-							:format-options="{ maximumFractionDigits: 0 }"
-						/>
-					</InputField>
-					<InputField label="Height" label-width="90px">
-						<InputNumber
-							v-model="model.height"
-							:min="100"
-							:max="8192"
-							:format-options="{ maximumFractionDigits: 0 }"
-						/>
-					</InputField>
-				</template>
+		<template v-if="settings.preset === 'custom'">
+			<InputField label="Width" label-width="90px">
+				<InputNumber
+					v-model="model.width"
+					:min="100"
+					:max="8192"
+					:format-options="{ maximumFractionDigits: 0 }"
+				/>
+			</InputField>
+			<InputField label="Height" label-width="90px">
+				<InputNumber
+					v-model="model.height"
+					:min="100"
+					:max="8192"
+					:format-options="{ maximumFractionDigits: 0 }"
+				/>
+			</InputField>
+		</template>
 
-				<InputField label="Format" label-width="90px">
-					<InputSelect v-model="model.selectedFormat" :items="FORMAT_PRESETS" />
-				</InputField>
+		<InputField label="Format" label-width="90px">
+			<InputSelect v-model="model.selectedFormat" :items="FORMAT_PRESETS" />
+		</InputField>
 
-				<InputField v-if="model.selectedFormat !== 'png'" label="Quality" label-width="90px">
-					<div class="flex items-center gap-2">
-						<MSlider v-model="qualityValue" :root="{ min: 0, max: 100, step: 1 }" />
-						<span class="text-xs w-9">{{ model.quality }}%</span>
-					</div>
-				</InputField>
-				<InputField v-if="model.selectedFormat !== 'jpeg'" label="Background" label-width="90px">
-					<InputCheckbox v-model="model.background" />
-				</InputField>
+		<InputField v-if="model.selectedFormat !== 'png'" label="Quality" label-width="90px">
+			<div class="flex items-center gap-2">
+				<MSlider v-model="qualityValue" :root="{ min: 0, max: 100, step: 1 }" />
+				<span class="text-xs w-9">{{ model.quality }}%</span>
 			</div>
-		</div>
+		</InputField>
+		<InputField v-if="model.selectedFormat !== 'jpeg'" label="Background" label-width="90px">
+			<InputCheckbox v-model="model.background" />
+		</InputField>
 	</div>
 </template>
 
@@ -89,9 +85,16 @@ watch(
 	{ immediate: true }
 )
 
+watch(
+	() => model.value.selectedFormat,
+	(val) => {
+		if (val === 'jpeg') model.value.background = true
+	}
+)
+
 const qualityValue = computed({
 	get: () => [model.value.quality],
-	set: (val) => (model.value.quality = val[0] ?? 95)
+	set: (val) => (model.value.quality = val[0] ?? 100)
 })
 
 export interface RenderSettings {

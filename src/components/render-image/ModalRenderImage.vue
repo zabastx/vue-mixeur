@@ -21,11 +21,7 @@
 						overflow-hidden"
 				>
 					<canvas ref="canvasRef" class="max-w-full max-h-full m-auto opacity-0 hidden" />
-					<img
-						ref="previewRef"
-						class="max-w-full max-h-full m-auto block object-contain"
-						@load="() => (isRendering = false)"
-					/>
+					<img ref="previewRef" class="max-w-full max-h-full m-auto block object-contain" />
 					<div
 						v-if="isRendering"
 						class="absolute inset-0 z-10 flex items-center justify-center bg-black/50"
@@ -256,9 +252,9 @@ async function renderImage(skipPreview?: boolean) {
 				title: 'Image render error',
 				message: err.message
 			})
-			isRendering.value = false
 		} finally {
 			shadingStore.setMode(originalMode)
+			isRendering.value = false
 		}
 	}, 10)
 }

@@ -8,7 +8,7 @@
 			<Dialog.Content
 				v-bind="content"
 				as-child
-				@pointer-down-outside="(e) => (outsideInteraction ? e.preventDefault() : undefined)"
+				@interact-outside="(e) => (outsideInteraction ? e.preventDefault() : undefined)"
 			>
 				<div
 					ref="dialogContentRef"

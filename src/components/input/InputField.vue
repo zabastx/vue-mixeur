@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="grid grid-cols-[min-content_1fr] items-start gap-2.5 whitespace-nowrap relative"
+		class="grid grid-cols-[min-content_1fr] items-start gap-x-2.5 whitespace-nowrap relative"
 		:style="{ gridTemplateColumns: gridCols }"
 	>
 		<MTooltip :tooltip :tooltip-disabled="!tooltip">

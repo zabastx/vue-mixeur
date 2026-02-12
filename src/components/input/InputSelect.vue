@@ -10,7 +10,7 @@
 			<IconChevronRight class="rotate-90" />
 		</Select.Trigger>
 
-		<Select.Portal>
+		<Select.Portal disabled>
 			<Select.Content
 				v-bind="content"
 				class="z-50 rounded border border-ui-menu-bg-outline bg-ui-menu-bg-inner p-0.5 text-[1em]

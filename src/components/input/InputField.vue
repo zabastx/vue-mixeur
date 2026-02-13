@@ -4,7 +4,7 @@
 		:style="{ gridTemplateColumns: gridCols }"
 	>
 		<MTooltip :tooltip :tooltip-disabled="!tooltip">
-			<span class="px-1 py-0.5" :class="{ 'order-1': reverse }">
+			<span class="px-1 py-0.5 leading-4" :class="{ 'order-1': reverse }">
 				{{ label }}
 			</span>
 		</MTooltip>

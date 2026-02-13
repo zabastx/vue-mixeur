@@ -1,4 +1,4 @@
-import { shallowRef } from 'vue'
+import { ref } from 'vue'
 import { createCamera } from './create'
 import THREE from '@/three'
 
@@ -7,20 +7,18 @@ export function cameraSetup() {
 		type: 'Perspective',
 		fov: 39.6,
 		near: 0.1,
-		far: 10000,
+		far: 1000,
 		name: 'Default Perspective Camera'
 	})
 
 	const orthographicCamera = createCamera({
 		type: 'Orthographic',
-		near: -10000,
-		far: 10000,
+		near: -1000,
+		far: 1000,
 		name: 'Default Orthographic Camera'
 	})
 
-	const activeCamera = shallowRef<THREE.PerspectiveCamera | THREE.OrthographicCamera>(
-		perspectiveCamera
-	)
+	const activeCamera = ref<THREE.PerspectiveCamera | THREE.OrthographicCamera>(perspectiveCamera)
 
 	activeCamera.value.position.set(4, 4, 4)
 	activeCamera.value.lookAt(0, 0, 0)

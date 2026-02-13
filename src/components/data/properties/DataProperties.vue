@@ -8,16 +8,15 @@
 			default-value="object"
 		>
 			<Tabs.List class="relative flex flex-col gap-0.5 bg-ui-tab-inner pt-1 pl-1">
-				<Tabs.Trigger
-					v-for="item in tabs"
-					:key="item.value"
-					:value="item.value"
-					class="cursor-pointer rounded-l-sm p-1 text-lg hover:bg-ui-tab-inner-selected
-						data-[state='active']:bg-ui-tab-inner-selected"
-					:title="item.title"
-				>
-					<component :is="item.icon" class="m-auto" />
-				</Tabs.Trigger>
+				<MTooltip v-for="item in tabs" :key="item.value" :tooltip="{ text: item.title }">
+					<Tabs.Trigger
+						:value="item.value"
+						class="cursor-pointer rounded-l-sm p-1 text-lg hover:bg-ui-tab-inner-selected
+							data-[state='active']:bg-ui-tab-inner-selected"
+					>
+						<component :is="item.icon" class="m-auto" />
+					</Tabs.Trigger>
+				</MTooltip>
 			</Tabs.List>
 			<ScrollContainer>
 				<Tabs.Content v-for="item in tabs" :key="item.value" :value="item.value" class="p-2 pr-3">
@@ -42,6 +41,8 @@ import IconTextProperties from '@/components/icons/properties/IconTextProperties
 import TextDataProperties from './data/TextDataProperties.vue'
 import IconMaterialData from '@/components/icons/IconMaterialData.vue'
 import MaterialProperties from './material/MaterialProperties.vue'
+import IconCameraProperties from '@/components/icons/properties/IconCameraProperties.vue'
+import CameraProperties from './camera/CameraProperties.vue'
 
 const store = useThreeStore()
 
@@ -50,9 +51,9 @@ const activetab = ref('object')
 watch(
 	() => store.selectedObject,
 	() => {
-		if (store.selectedObject) {
-			activetab.value = 'object'
-		}
+		const selected = tabs.value.find((item) => item.value === activetab.value)
+		if (selected) return
+		activetab.value = tabs.value[0]?.value || 'object'
 	}
 )
 
@@ -60,6 +61,12 @@ const tabs = computed<DataTabItem[]>(() => {
 	const obj = store.selectedObject
 	if (!obj) return []
 	const list: DataTabItem[] = [
+		{
+			icon: IconCameraProperties,
+			value: 'camera',
+			content: CameraProperties,
+			title: 'Camera Properties'
+		},
 		{
 			icon: IconObjectData,
 			value: 'object',

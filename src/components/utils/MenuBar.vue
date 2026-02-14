@@ -2,14 +2,20 @@
 	<Menubar.Root loop>
 		<Menubar.Menu v-for="menu in items" :key="menu.label">
 			<Menubar.Trigger class="trigger">
-				<component :is="menu.icon" v-if="menu.icon" />
+				<img
+					v-if="menu.icon === 'mixeur'"
+					src="/favicon.svg"
+					alt=""
+					class="inline-block size-[1em] scale-150"
+				/>
+				<MxIcon v-else-if="menu.icon" :name="menu.icon" />
 				<span v-else>{{ menu.label }}</span>
 			</Menubar.Trigger>
 			<Menubar.Content class="menubar-content">
 				<template v-for="item in menu.items" :key="item.key">
 					<Menubar.Item v-if="item.type === 'item'" class="item" @click="item.onClick">
 						<span class="w-[1em]">
-							<component :is="item.icon" v-if="item.icon" />
+							<MxIcon v-if="item.icon" :name="item.icon" />
 						</span>
 						{{ item.label }}
 					</Menubar.Item>
@@ -18,16 +24,17 @@
 						v-model="item.model.value"
 						class="item"
 					>
-						<IconCheckbox :checked="item.model.value" />
+						<MxIcon v-if="item.model.value" name="ui/checkbox-checked" />
+						<MxIcon v-else name="ui/checkbox-unchecked" />
 						{{ item.label }}
 					</Menubar.CheckboxItem>
 					<Menubar.Sub v-else-if="item.type === 'sub'">
 						<Menubar.SubTrigger class="item">
 							<span class="w-[1em]">
-								<component :is="item.icon" v-if="item.icon" />
+								<MxIcon v-if="item.icon" :name="item.icon" />
 							</span>
 							{{ item.label }}
-							<IconTriangle class="ml-auto text-[0.7em]" />
+							<MxIcon name="base/triangle-right" class="ml-auto text-[0.7em]" />
 						</Menubar.SubTrigger>
 						<Menubar.SubContent :align-offset="-3" class="menubar-content">
 							<Menubar.Item
@@ -37,7 +44,7 @@
 								@click="subitem.onClick"
 							>
 								<span class="w-[1em]">
-									<component :is="subitem.icon" v-if="item.icon" />
+									<MxIcon v-if="subitem.icon" :name="subitem.icon" />
 								</span>
 								{{ subitem.label }}
 							</Menubar.Item>
@@ -55,21 +62,21 @@
 
 <script lang="ts" setup>
 import { Menubar } from 'reka-ui/namespaced'
-import type { Component, ComputedRef, Ref } from 'vue'
+import type { ComputedRef, Ref } from 'vue'
 
 const { items } = defineProps<{
 	items: IMenubarMenu[]
 }>()
 
 export interface IMenubarMenu {
-	icon?: Component
+	icon?: MxIconName | 'mixeur'
 	label: string
 	items: (IMenubarItem | IMenubarCheckbox | IMenubarSub | { type: 'separator'; key: string })[]
 }
 
 interface IMenubarItem extends IMenubarCommon {
 	type: 'item'
-	icon?: Component
+	icon?: MxIconName
 	onClick: () => void | Promise<void>
 }
 
@@ -80,7 +87,7 @@ interface IMenubarCheckbox extends IMenubarCommon {
 
 interface IMenubarSub extends IMenubarCommon {
 	type: 'sub'
-	icon?: Component
+	icon?: MxIconName
 	items: IMenubarItem[]
 }
 

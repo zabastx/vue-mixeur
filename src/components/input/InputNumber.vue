@@ -5,7 +5,7 @@
 				class="cursor-pointer shrink-0 grow-0 bg-ui-number-inner px-0.5 opacity-0
 					group-hover:opacity-100 hover:brightness-125"
 			>
-				<IconArrowRight class="rotate-180 text-[0.75em]" />
+				<MxIcon name="ui/arrow-right" class="rotate-180 text-[0.75em]" />
 			</NumberFieldDecrement>
 			<NumberFieldInput
 				class="grow w-full bg-ui-number-inner text-center outline-none group-hover:brightness-110
@@ -16,7 +16,7 @@
 				class="shrink-0 grow-0 cursor-pointer bg-ui-number-inner px-0.5 opacity-0
 					group-hover:opacity-100 hover:brightness-125"
 			>
-				<IconArrowRight class="text-[0.75em]" />
+				<MxIcon name="ui/arrow-right" class="text-[0.75em]" />
 			</NumberFieldIncrement>
 		</div>
 	</NumberFieldRoot>

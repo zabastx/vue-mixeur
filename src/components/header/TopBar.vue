@@ -7,23 +7,18 @@
 			target="_blank"
 			title="GitHub repository"
 		>
-			<IconGithub />
+			<MxIcon name="misc/github" />
 		</a>
 	</header>
 </template>
 
 <script lang="ts" setup>
 import { useAppStore } from '@/store/app'
-import IconImport from '../icons/IconImport.vue'
-import IconMixeur from '../icons/IconMixeur.vue'
-import IconFullScreen from '../icons/misc/IconFullScreen.vue'
 import MenuBar, { type IMenubarMenu } from '../utils/MenuBar.vue'
 import { computed } from 'vue'
 import { useThreeStore } from '@/store/three'
 import { useToast } from '@/composables/useToast'
 import type { loadModel } from '@/three/modules/loaders/modelLoader'
-import IconExport from '../icons/misc/IconExport.vue'
-import IconRenderImage from '../icons/IconRenderImage.vue'
 import { useModals } from '@/composables/useModals'
 import { uploadFile } from '@/utils/files'
 
@@ -42,8 +37,8 @@ const showStatusBar = computed({
 
 const menuItems: IMenubarMenu[] = [
 	{
-		label: 'mixuer',
-		icon: IconMixeur,
+		label: 'mixeur',
+		icon: 'mixeur',
 		items: [
 			// {
 			// 	type: 'item',
@@ -68,7 +63,7 @@ const menuItems: IMenubarMenu[] = [
 				type: 'sub',
 				key: 'import',
 				label: 'Import',
-				icon: IconImport,
+				icon: 'ui/import',
 				items: [
 					{
 						type: 'item',
@@ -100,7 +95,7 @@ const menuItems: IMenubarMenu[] = [
 				type: 'item',
 				key: 'export',
 				label: 'Export',
-				icon: IconExport,
+				icon: 'misc/export',
 				onClick() {
 					threeStore.exportScene()
 				}
@@ -114,7 +109,7 @@ const menuItems: IMenubarMenu[] = [
 				type: 'item',
 				key: 'render_image',
 				label: 'Render Image',
-				icon: IconRenderImage,
+				icon: 'ui/render-image',
 				onClick() {
 					open('renderImage')
 				}
@@ -128,7 +123,7 @@ const menuItems: IMenubarMenu[] = [
 				type: 'item',
 				key: 'window_fullscreen',
 				label: 'Toggle Window Fullscreen',
-				icon: IconFullScreen,
+				icon: 'misc/full-screen',
 				onClick() {
 					if (document.fullscreenElement) {
 						document.exitFullscreen()

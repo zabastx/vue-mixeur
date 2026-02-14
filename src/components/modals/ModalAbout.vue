@@ -3,7 +3,12 @@
 		<div class="flex max-w-xl flex-col text-ui-menu-bg-text">
 			<!-- Header -->
 			<div class="flex items-center gap-4 p-4">
-				<IconMixeur class="text-5xl" />
+				<img
+					class="inline-block size-[1em] scale-125 text-5xl"
+					src="/favicon.svg"
+					alt=""
+					aria-hidden
+				/>
 				<div>
 					<h1 class="text-2xl font-bold text-white">Vue Mixeur</h1>
 					<p class="text-sm">Version {{ version }}</p>
@@ -30,19 +35,19 @@
 						**:inline-block *:hover:bg-gray-500/50"
 				>
 					<a href="https://www.blender.org/" target="_blank">
-						<IconUrl />
+						<MxIcon name="misc/url" />
 						Blender
 					</a>
 					<a href="https://threejs.org/" target="_blank">
-						<IconUrl />
+						<MxIcon name="misc/url" />
 						Three.js
 					</a>
 					<a href="https://vuejs.org/" target="_blank">
-						<IconUrl />
+						<MxIcon name="misc/url" />
 						Vue.js
 					</a>
 					<a href="https://github.com/zabastx/vue-mixeur" target="_blank">
-						<IconUrl />
+						<MxIcon name="misc/url" />
 						GitHub repository
 					</a>
 				</div>

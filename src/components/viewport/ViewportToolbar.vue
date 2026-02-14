@@ -20,7 +20,7 @@
 				:data-active="item.name === threeStore.currentTransformMode"
 				@click="item.onClick"
 			>
-				<component :is="item.icon" />
+				<MxIcon :name="item.icon" />
 			</button>
 		</MTooltip>
 	</div>
@@ -28,17 +28,14 @@
 
 <script lang="ts" setup>
 import { useThreeStore } from '@/store/three'
-import IconToolMove from '../icons/toolbar/IconToolMove.vue'
-import IconToolRotate from '../icons/toolbar/IconToolRotate.vue'
-import IconToolScale from '../icons/toolbar/IconToolScale.vue'
 import MTooltip from '../utils/MTooltip.vue'
 
 const threeStore = useThreeStore()
 
-const toolbarItems = [
+const toolbarItems: ToolbarItem[] = [
 	{
 		name: 'translate',
-		icon: IconToolMove,
+		icon: 'toolbar/tool-move',
 		onClick: () => {
 			threeStore.setTransformMode('translate')
 		},
@@ -48,7 +45,7 @@ const toolbarItems = [
 	},
 	{
 		name: 'rotate',
-		icon: IconToolRotate,
+		icon: 'toolbar/tool-rotate',
 		onClick: () => {
 			threeStore.setTransformMode('rotate')
 		},
@@ -58,7 +55,7 @@ const toolbarItems = [
 	},
 	{
 		name: 'scale',
-		icon: IconToolScale,
+		icon: 'toolbar/tool-scale',
 		onClick: () => {
 			threeStore.setTransformMode('scale')
 		},
@@ -66,5 +63,14 @@ const toolbarItems = [
 		tooltip: 'Scale (resize) selected items',
 		footer: 'S'
 	}
-] as const
+]
+
+interface ToolbarItem {
+	name: 'rotate' | 'scale' | 'translate'
+	title: string
+	tooltip: string
+	icon: MxIconName
+	onClick: () => unknown
+	footer: 'G' | 'R' | 'S'
+}
 </script>

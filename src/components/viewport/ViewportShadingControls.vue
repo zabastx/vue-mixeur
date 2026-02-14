@@ -15,7 +15,7 @@
 				type="button"
 				@click="shadingStore.setMode(btn.name)"
 			>
-				<component :is="btn.icon" />
+				<MxIcon :name="btn.icon" />
 			</button>
 			<template #content>
 				<!-- eslint-disable vue/no-v-html -->
@@ -29,11 +29,6 @@
 </template>
 
 <script lang="ts" setup>
-import IconShadingWireframe from '../icons/shading/IconShadingWireframe.vue'
-import type { Component } from 'vue'
-import IconShadingSolid from '../icons/shading/IconShadingSolid.vue'
-import IconShadingTexture from '../icons/shading/IconShadingTexture.vue'
-import IconShadingRendered from '../icons/shading/IconShadingRendered.vue'
 import MTooltip, { type MTooltipContent } from '../utils/MTooltip.vue'
 import { useShadingStore, type ShadingMode } from '@/store/shading'
 
@@ -42,7 +37,7 @@ const shadingStore = useShadingStore()
 const buttons: ShadingControlsElement[] = [
 	{
 		name: 'wireframe',
-		icon: IconShadingWireframe,
+		icon: 'shading/shading-wireframe',
 		tooltip: {
 			title: 'Viewport Shading: <em>Wireframe</em>',
 			footer: 'Display only edges of geometry without surface shading'
@@ -50,7 +45,7 @@ const buttons: ShadingControlsElement[] = [
 	},
 	{
 		name: 'solid',
-		icon: IconShadingSolid,
+		icon: 'shading/shading-solid',
 		tooltip: {
 			title: 'Viewport Shading: <em>Solid</em>',
 			footer: 'Display objects with flat lighting and basic surface shading'
@@ -58,7 +53,7 @@ const buttons: ShadingControlsElement[] = [
 	},
 	{
 		name: 'materialPreview',
-		icon: IconShadingTexture,
+		icon: 'shading/shading-preview',
 		tooltip: {
 			title: 'Viewport Shading: <em>Material Preview</em>',
 			footer: 'Preview materials using predefined environment lights'
@@ -66,7 +61,7 @@ const buttons: ShadingControlsElement[] = [
 	},
 	{
 		name: 'rendered',
-		icon: IconShadingRendered,
+		icon: 'shading/shading-rendered',
 		tooltip: {
 			title: 'Viewport Shading: <em>Rendered</em>',
 			footer: 'Preview the final scene using the active render engine'
@@ -76,7 +71,7 @@ const buttons: ShadingControlsElement[] = [
 
 interface ShadingControlsElement {
 	name: ShadingMode
-	icon: Component
+	icon: MxIconName
 	tooltip: Partial<MTooltipContent>
 }
 </script>

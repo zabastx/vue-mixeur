@@ -9,7 +9,7 @@
 	>
 		<!-- Header -->
 		<h1 class="p-1 text-xl flex items-center gap-1 bg-header-background text-ui-text-text">
-			<IconRenderImage /> Render Image
+			<MxIcon name="ui/render-image" /> Render Image
 		</h1>
 
 		<!-- Horizontal Layout: Preview + Settings -->

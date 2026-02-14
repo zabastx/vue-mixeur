@@ -20,8 +20,11 @@
 			v-bind="$attrs"
 			@click="sceneStore.switchCamera"
 		>
-			<IconViewPerspective v-if="sceneStore.activeCamera.type === 'PerspectiveCamera'" />
-			<IconViewOrtho v-else />
+			<MxIcon
+				v-if="sceneStore.activeCamera.type === 'PerspectiveCamera'"
+				name="view/view-perspective"
+			/>
+			<MxIcon v-else name="view/view-orthographic" />
 		</button>
 	</MTooltip>
 </template>

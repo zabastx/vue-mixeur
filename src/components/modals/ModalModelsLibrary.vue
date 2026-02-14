@@ -6,7 +6,7 @@
 		resize
 	>
 		<h1 class="p-1 text-xl flex items-center gap-1 bg-header-background">
-			<IconAssetBrowser /> Asset Browser
+			<MxIcon name="ui/asset-browser" /> Asset Browser
 		</h1>
 		<div class="flex grow gap-2 p-2 overflow-hidden">
 			<div class="bg-header-background flex flex-col gap-2 basis-[20%] shrink-0">

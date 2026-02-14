@@ -27,7 +27,7 @@
 					class="btn text-[1.25em] p-0.5"
 					@click="handleEyeDropper"
 				>
-					<IconEyeDropper />
+					<MxIcon name="misc/eye-dropper" />
 				</button>
 			</div>
 		</template>

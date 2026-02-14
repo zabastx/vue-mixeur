@@ -3,9 +3,11 @@
 		class="block-border text-sm leading-6 flex flex-col overflow-hidden rounded bg-window-bg
 			alternate-rows relative"
 	>
-		<h2 class="flex items-center gap-1 px-1 text-[1rem]"><IconOutliner /> Outliner</h2>
+		<h2 class="flex items-center gap-1 px-1 text-[1rem]">
+			<MxIcon name="outliner/outliner" /> Outliner
+		</h2>
 		<ScrollContainer>
-			<h3 class="flex items-center gap-1 px-1"><IconCollection /> Scene Collection</h3>
+			<h3 class="flex items-center gap-1 px-1"><MxIcon name="ui/collection" /> Scene Collection</h3>
 			<Tree.Root
 				v-slot="{ flattenItems }"
 				v-model="selectedItem"
@@ -29,13 +31,14 @@
 					@select="onSelect"
 					@toggle="onToggle"
 				>
-					<IconArrowRight
+					<MxIcon
 						v-if="item.hasChildren"
+						name="ui/arrow-right"
 						:class="{ 'rotate-90': isExpanded }"
 						class="size-[1.5em] p-0.5 shrink-0 text-xs"
 						data-toggle
 					/>
-					<component :is="iconMap.get(item.value.type) || IconEmpty" class="shrink-0" />
+					<MxIcon :name="iconMap.get(item.value.type) || 'outliner/empty'" class="shrink-0" />
 					<span class="overflow-hidden text-ellipsis whitespace-nowrap grow">
 						{{ item.value.name }}
 					</span>
@@ -47,7 +50,9 @@
 								store.objectVisibilityUpdate(item.value.uuid, !item.value.visible)
 							"
 						>
-							<IconVisibility :visible="item.value.visible" />
+							<MxIcon
+								:name="item.value.visible ? 'misc/visibility-visible' : 'misc/visibility-hidden'"
+							/>
 						</CheckboxRoot>
 					</div>
 				</Tree.Item>
@@ -57,20 +62,11 @@
 </template>
 
 <script lang="ts" setup>
-import {
-	IconLightArea,
-	IconLightPoint,
-	IconLightSpot,
-	IconLightSun
-} from '@/components/icons/light'
-import { IconMesh } from '@/components/icons/mesh'
-import IconGroup from '@/components/icons/outliner/IconGroup.vue'
 import { useThreeStore } from '@/store/three'
 import type THREE from '@/three'
 import { Tree } from 'reka-ui/namespaced'
 import { computed, shallowRef, watch } from 'vue'
 import { type SelectItemSelectEvent, type TreeItemToggleEvent } from 'reka-ui'
-import IconEmpty from '@/components/icons/outliner/IconEmpty.vue'
 
 const store = useThreeStore()
 
@@ -94,7 +90,7 @@ function parseObject(obj: THREE.Object3D): OutlinerItem {
 		name: obj.name || obj.type,
 		visible: obj.visible,
 		userData: obj.userData,
-		children: obj.children.length > 0 ? obj.children.map(parseObject) : undefined
+		children: obj.children.length > 0 ? obj.children.map(parseObject) : []
 	}
 }
 
@@ -115,13 +111,13 @@ function getPadding(level: number) {
 	return `${level * 1.5}em`
 }
 
-const iconMap = new Map([
-	['PointLight', IconLightPoint],
-	['SpotLight', IconLightSpot],
-	['DirectionalLight', IconLightSun],
-	['RectAreaLight', IconLightArea],
-	['Mesh', IconMesh],
-	['Group', IconGroup]
+const iconMap: ReadonlyMap<string, MxIconName> = new Map([
+	['PointLight', 'light/light-point'],
+	['SpotLight', 'light/light-spot'],
+	['DirectionalLight', 'light/light-sun'],
+	['RectAreaLight', 'light/light-area'],
+	['Mesh', 'mesh/mesh'],
+	['Group', 'outliner/group']
 ])
 
 interface OutlinerItem {

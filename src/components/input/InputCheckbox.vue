@@ -8,7 +8,7 @@
 				bg-ui-option-inner-selected"
 			data-testid="checkbox-indicator"
 		>
-			<IconCheckmark />
+			<MxIcon name="ui/checkmark" />
 		</CheckboxIndicator>
 	</CheckboxRoot>
 </template>

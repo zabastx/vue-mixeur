@@ -10,7 +10,8 @@
 				class="group flex w-full cursor-pointer items-center gap-1"
 				v-bind="trigger"
 			>
-				<IconArrowRight
+				<MxIcon
+					name="ui/arrow-right"
 					class="transition-rotate inline-block size-[1em] duration-200
 						group-data-[state='open']:rotate-90"
 				/>

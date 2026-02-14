@@ -1,6 +1,6 @@
 <template>
 	<div class="flex items-center p-1 gap-2">
-		<IconViewport />
+		<MxIcon name="ui/viewport" />
 		<MenuBar :items="menuItems" />
 		<ViewportShadingControls class="ml-auto" />
 	</div>
@@ -10,26 +10,7 @@
 import { useThreeStore } from '@/store/three'
 import MenuBar, { type IMenubarMenu } from '../utils/MenuBar.vue'
 import { createMesh } from '@/three/modules/mesh'
-import {
-	IconMeshPlane,
-	IconMesh,
-	IconMeshCircle,
-	IconMeshCone,
-	IconMeshCube,
-	IconMeshCylinder,
-	IconMeshIcosphere,
-	IconMeshSphere,
-	IconMeshTorus
-} from '../icons/mesh'
 import { createLight } from '@/three/modules/light'
-import {
-	IconLight,
-	IconLightArea,
-	IconLightPoint,
-	IconLightSpot,
-	IconLightSun
-} from '../icons/light'
-import IconText from '../icons/misc/IconText.vue'
 import { createText } from '@/three/modules/text'
 
 const menuItems: IMenubarMenu[] = [
@@ -40,13 +21,13 @@ const menuItems: IMenubarMenu[] = [
 				type: 'sub',
 				key: 'mesh',
 				label: 'Mesh',
-				icon: IconMesh,
+				icon: 'mesh/mesh',
 				items: [
 					{
 						type: 'item',
 						key: 'mesh_plane',
 						label: 'Plane',
-						icon: IconMeshPlane,
+						icon: 'mesh/mesh-plane',
 						onClick() {
 							addMesh('plane')
 						}
@@ -55,7 +36,7 @@ const menuItems: IMenubarMenu[] = [
 						type: 'item',
 						key: 'mesh_cube',
 						label: 'Cube',
-						icon: IconMeshCube,
+						icon: 'mesh/mesh-cube',
 						onClick() {
 							addMesh('cube')
 						}
@@ -64,7 +45,7 @@ const menuItems: IMenubarMenu[] = [
 						type: 'item',
 						key: 'mesh_circle',
 						label: 'Circle',
-						icon: IconMeshCircle,
+						icon: 'mesh/mesh-circle',
 						onClick() {
 							addMesh('circle')
 						}
@@ -73,7 +54,7 @@ const menuItems: IMenubarMenu[] = [
 						type: 'item',
 						key: 'mesh_sphere',
 						label: 'UV Sphere',
-						icon: IconMeshSphere,
+						icon: 'mesh/mesh-sphere',
 						onClick() {
 							addMesh('sphere')
 						}
@@ -82,7 +63,7 @@ const menuItems: IMenubarMenu[] = [
 						type: 'item',
 						key: 'mesh_icosphere',
 						label: 'Ico Sphere',
-						icon: IconMeshIcosphere,
+						icon: 'mesh/mesh-icosphere',
 						onClick() {
 							addMesh('icosphere')
 						}
@@ -91,7 +72,7 @@ const menuItems: IMenubarMenu[] = [
 						type: 'item',
 						key: 'mesh_cylinder',
 						label: 'Cylinder',
-						icon: IconMeshCylinder,
+						icon: 'mesh/mesh-cylinder',
 						onClick() {
 							addMesh('cylinder')
 						}
@@ -100,7 +81,7 @@ const menuItems: IMenubarMenu[] = [
 						type: 'item',
 						key: 'mesh_cone',
 						label: 'Cone',
-						icon: IconMeshCone,
+						icon: 'mesh/mesh-cone',
 						onClick() {
 							addMesh('cone')
 						}
@@ -109,7 +90,7 @@ const menuItems: IMenubarMenu[] = [
 						type: 'item',
 						key: 'mesh_torus',
 						label: 'Torus',
-						icon: IconMeshTorus,
+						icon: 'mesh/mesh-torus',
 						onClick() {
 							addMesh('torus')
 						}
@@ -120,7 +101,7 @@ const menuItems: IMenubarMenu[] = [
 				type: 'item',
 				key: 'text',
 				label: 'Text',
-				icon: IconText,
+				icon: 'misc/text',
 				onClick() {
 					createText().then((text) => {
 						if (text) {
@@ -137,13 +118,13 @@ const menuItems: IMenubarMenu[] = [
 				type: 'sub',
 				key: 'light',
 				label: 'Light',
-				icon: IconLight,
+				icon: 'light/light',
 				items: [
 					{
 						type: 'item',
 						key: 'light_point',
 						label: 'Point',
-						icon: IconLightPoint,
+						icon: 'light/light-point',
 						onClick() {
 							addLight('point')
 						}
@@ -152,7 +133,7 @@ const menuItems: IMenubarMenu[] = [
 						type: 'item',
 						key: 'light_spot',
 						label: 'Spot',
-						icon: IconLightSpot,
+						icon: 'light/light-spot',
 						onClick() {
 							addLight('spot')
 						}
@@ -161,7 +142,7 @@ const menuItems: IMenubarMenu[] = [
 						type: 'item',
 						key: 'light_directional',
 						label: 'Directional',
-						icon: IconLightSun,
+						icon: 'light/light-sun',
 						onClick() {
 							addLight('sun')
 						}
@@ -170,7 +151,7 @@ const menuItems: IMenubarMenu[] = [
 						type: 'item',
 						key: 'light_area',
 						label: 'Area',
-						icon: IconLightArea,
+						icon: 'light/light-area',
 						onClick() {
 							addLight('area')
 						}

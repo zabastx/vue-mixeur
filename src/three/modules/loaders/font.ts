@@ -1,10 +1,10 @@
 import { useProgressStore, type LoadingProgress } from '@/store/progress'
 import { useToast } from '@/composables/useToast'
+import { FontLoader } from 'three/examples/jsm/Addons.js'
 
 export async function loadFont(font: StdFontName | (string & {})) {
 	const progressStore = useProgressStore()
 	const loadingId = `font-${Date.now()}-${Math.random().toString(36).slice(2)}`
-	const { FontLoader } = await import('three/examples/jsm/Addons.js')
 	const fontLoader = new FontLoader()
 
 	try {

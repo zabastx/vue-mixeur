@@ -5,6 +5,8 @@ import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 import Components from 'unplugin-vue-components/vite'
 import RekaResolver from 'reka-ui/resolver'
+import svgLoader from 'vite-svg-loader'
+import { iconTypesPlugin } from './plugins/vite-plugin-icon-types'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -14,7 +16,9 @@ export default defineConfig({
 		Components({
 			dts: 'src/components.d.ts',
 			resolvers: [RekaResolver()]
-		})
+		}),
+		svgLoader(),
+		iconTypesPlugin()
 	],
 	resolve: {
 		alias: {
@@ -26,6 +30,7 @@ export default defineConfig({
 			output: {
 				manualChunks(id) {
 					if (id.includes('node_modules/three/build')) return 'three'
+					if (id.includes('assets/icons')) return 'icons'
 					if (id.includes('node_modules/three/examples/jsm/loaders/')) {
 						return 'loaders'
 					}

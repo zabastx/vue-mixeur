@@ -8,6 +8,13 @@ vi.mock('@vueuse/core', () => ({
 	useEventListener: vi.fn()
 }))
 
+vi.mock('@/components/utils/MxIcon.vue', () => ({
+	default: {
+		template: '<span v-bind="$attrs" />',
+		props: ['name']
+	}
+}))
+
 vi.mock('three-viewport-gizmo', () => ({
 	ViewportGizmo: vi.fn(() => ({
 		render: vi.fn(),

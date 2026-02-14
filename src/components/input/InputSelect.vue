@@ -7,7 +7,7 @@
 			:class="$attrs.class"
 		>
 			<Select.Value :placeholder class="h-[1.5em]" />
-			<IconChevronRight class="rotate-90" />
+			<MxIcon name="ui/chevron-right" class="rotate-90" />
 		</Select.Trigger>
 
 		<Select.Portal disabled>

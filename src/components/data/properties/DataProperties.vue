@@ -1,6 +1,8 @@
 <template>
 	<div class="block-border flex flex-col overflow-hidden rounded bg-window-bg">
-		<h2 class="flex items-center gap-1 p-1 leading-0"><IconProperties /> Properties</h2>
+		<h2 class="flex items-center gap-1 p-1 leading-0">
+			<MxIcon name="properties/properties" /> Properties
+		</h2>
 		<Tabs.Root
 			v-model="activetab"
 			class="grid w-full grow grid-cols-[min-content_1fr] grid-rows-1 overflow-hidden"
@@ -14,7 +16,7 @@
 						class="cursor-pointer rounded-l-sm p-1 text-lg hover:bg-ui-tab-inner-selected
 							data-[state='active']:bg-ui-tab-inner-selected"
 					>
-						<component :is="item.icon" class="m-auto" />
+						<MxIcon :name="item.icon" class="m-auto" />
 					</Tabs.Trigger>
 				</MTooltip>
 			</Tabs.List>
@@ -28,20 +30,15 @@
 </template>
 
 <script lang="ts" setup>
-import IconObjectData from '@/components/icons/IconObjectData.vue'
 import ObjectProperties from './object/ObjectProperties.vue'
 import { Tabs } from 'reka-ui/namespaced'
 import { computed, ref, watch, type Component } from 'vue'
 import { useThreeStore } from '@/store/three'
 import THREE from '@/three'
 import LightDataProperties from './data/LightDataProperties.vue'
-import IconLightProperties from '@/components/icons/properties/IconLightProperties.vue'
 import { TextGeometry } from 'three/examples/jsm/Addons.js'
-import IconTextProperties from '@/components/icons/properties/IconTextProperties.vue'
 import TextDataProperties from './data/TextDataProperties.vue'
-import IconMaterialData from '@/components/icons/IconMaterialData.vue'
 import MaterialProperties from './material/MaterialProperties.vue'
-import IconCameraProperties from '@/components/icons/properties/IconCameraProperties.vue'
 import CameraProperties from './camera/CameraProperties.vue'
 
 const store = useThreeStore()
@@ -62,13 +59,13 @@ const tabs = computed<DataTabItem[]>(() => {
 	if (!obj) return []
 	const list: DataTabItem[] = [
 		{
-			icon: IconCameraProperties,
+			icon: 'properties/camera-properties',
 			value: 'camera',
 			content: CameraProperties,
 			title: 'Camera Properties'
 		},
 		{
-			icon: IconObjectData,
+			icon: 'ui/object-data',
 			value: 'object',
 			content: ObjectProperties,
 			title: 'Object Properties'
@@ -76,7 +73,7 @@ const tabs = computed<DataTabItem[]>(() => {
 	]
 	if (obj instanceof THREE.Light) {
 		list.push({
-			icon: IconLightProperties,
+			icon: 'properties/light-properties',
 			content: LightDataProperties,
 			title: 'Light Properties',
 			value: 'light'
@@ -85,7 +82,7 @@ const tabs = computed<DataTabItem[]>(() => {
 	if (obj instanceof THREE.Mesh) {
 		if (obj.geometry instanceof TextGeometry) {
 			list.push({
-				icon: IconTextProperties,
+				icon: 'properties/text-properties',
 				value: 'textdata',
 				content: TextDataProperties,
 				title: 'Text Properties'
@@ -103,7 +100,7 @@ const tabs = computed<DataTabItem[]>(() => {
 
 		if ('material' in obj) {
 			list.push({
-				icon: IconMaterialData,
+				icon: 'ui/material-data',
 				value: 'material',
 				content: MaterialProperties,
 				title: 'Material Properties'
@@ -114,7 +111,7 @@ const tabs = computed<DataTabItem[]>(() => {
 })
 
 interface DataTabItem {
-	icon: Component
+	icon: MxIconName
 	value: string
 	content: Component
 	title: string

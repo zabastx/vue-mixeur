@@ -23,7 +23,8 @@ export default defineConfig(
 			}
 		},
 		rules: {
-			'@typescript-eslint/ban-ts-comment': 'warn'
+			'@typescript-eslint/ban-ts-comment': 'warn',
+			'no-undef': 'off'
 		}
 	},
 	eslintConfigPrettier

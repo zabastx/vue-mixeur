@@ -9,7 +9,7 @@ export default mergeConfig(
 			coverage: {
 				enabled: true,
 				reporter: ['text', 'json', 'html'],
-				exclude: ['**/components/icons/**/*']
+				exclude: ['**/assets/icons/**/*']
 			},
 			setupFiles: ['./tests/setup.ts'],
 			include: ['./tests/**/*.test.ts'],

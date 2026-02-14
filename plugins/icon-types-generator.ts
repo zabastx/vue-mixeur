@@ -33,7 +33,6 @@ export function generateIconTypes(iconsDir: string, outputPath: string): void {
 	}
 
 	const typeContent = `// Auto-generated file. Do not edit manually.
-// Generated at: ${new Date().toISOString()}
 // Total icons: ${iconPaths.length}
 
 declare global {

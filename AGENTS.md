@@ -64,7 +64,6 @@ import { setGridHelper } from '@/three/modules/helpers/grid'
 ### Component Structure
 
 - PascalCase for component names (e.g., `MViewport`, `InputNumber`)
-- Prefix components: `M` for main, `Input` for form inputs
 - Use scoped styles with Tailwind classes
 - Example:
 
@@ -87,11 +86,7 @@ const model = defineModel<number>({ default: 0 })
 
 ### Formatting (Prettier)
 
-- Single quotes, no semicolons
-- Tabs with width of 2
-- No trailing commas
-- Print width: 100
-- Plugins: `prettier-plugin-tailwindcss`, `prettier-plugin-classnames`
+- `.prettierrc.json` - config
 
 ### ESLint Rules
 
@@ -193,3 +188,9 @@ describe('InputNumber', () => {
 - Use the existing toast system for notifications (`useToast`)
 - Use the `@` alias for all internal imports
 - Pre-commit hooks run ESLint and Prettier automatically
+
+## Clarification and Correction Rules
+
+- If the user’s instructions contain contradictions, factual errors, or impossible steps, the agent should point them out and propose corrections.
+- If essential details are missing, the agent must ask clarifying questions.
+- If non‑essential details are missing, the agent should infer reasonable defaults and proceed.

@@ -23,14 +23,14 @@ jobs:
       - name: Lint
         run: bun run lint
 
+      - name: Build project
+        run: bun run build
+
       - name: Type check
         run: bun run type-check
 
       - name: Run unit tests
         run: bun run test:unit
-
-      - name: Build project
-        run: bun run build
 
       - name: Install Playwright
         run: bunx playwright install --with-deps

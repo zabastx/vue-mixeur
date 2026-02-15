@@ -359,6 +359,27 @@ export const useShadingStore = defineStore('shading', () => {
 		applyModeToMesh(mesh, currentMode.value)
 	}
 
+	function clearMaterialCache(uuid: string) {
+		const cache = materialCache.get(uuid)
+		if (!cache) return false
+
+		disposeMaterials(cache.original)
+		disposeMaterials(cache.current)
+
+		/**
+		 * Dispose original materials that were cloned for caching
+		 */
+		function disposeMaterials(materials: THREE.Material | THREE.Material[]) {
+			if (Array.isArray(materials)) {
+				materials.forEach((mat) => mat.dispose())
+			} else {
+				materials.dispose()
+			}
+		}
+
+		return materialCache.delete(uuid)
+	}
+
 	return {
 		init,
 		cacheNewObjectMaterials,
@@ -367,7 +388,8 @@ export const useShadingStore = defineStore('shading', () => {
 		shadingMode,
 		getMaterial,
 		updateMaterial,
-		changeMaterial
+		changeMaterial,
+		clearMaterialCache
 	}
 })
 

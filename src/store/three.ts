@@ -69,19 +69,7 @@ export const useThreeStore = defineStore('three', () => {
 	const selectObject = shallowRef<(uuid?: string, raycasted?: boolean) => void>()
 	const selectedObject = ref<THREE.Object3D | THREE.Light | THREE.Mesh | null>(null)
 
-	const { initStats, monitor, stats } = useStats()
-
-	function updateMonitor(renderer: THREE.WebGLRenderer) {
-		if ('memory' in performance) {
-			// @ts-expect-error Performance.memory is only available in Chrome
-			const used = (performance.memory.usedJSHeapSize / 1048576).toFixed(2)
-			monitor.value.memory = used
-		}
-
-		const gpu = renderer.info.memory
-		monitor.value.geometries = gpu.geometries
-		monitor.value.textures = gpu.textures
-	}
+	const { setFPSCounter, monitor, updateMonitor } = useStats()
 
 	function addInitialObjects() {
 		const pointLight = createLight({ type: 'point' })
@@ -98,7 +86,7 @@ export const useThreeStore = defineStore('three', () => {
 		const canvas = canvasRef.value
 		shadingStore.init(scene)
 
-		if (import.meta.env.DEV) initStats(canvas.parentElement)
+		if (import.meta.env.DEV) setFPSCounter(canvas.parentElement)
 
 		if (!(activeCamera.value instanceof THREE.PerspectiveCamera)) return
 		activeCamera.value.aspect = canvas.clientWidth / canvas.clientHeight

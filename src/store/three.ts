@@ -1,6 +1,6 @@
 import type { ViewportGizmo } from 'three-viewport-gizmo'
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { computed, ref, shallowRef, triggerRef, watch, type ShallowRef } from 'vue'
+import { computed, ref, shallowRef, triggerRef, type ShallowRef } from 'vue'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import THREE, { enableBVH } from '@/three'
 import { setGridHelper } from '@/three/modules/helpers/grid'
@@ -8,7 +8,6 @@ import { setupBlenderControls } from '@/three/modules/controls/blenderControls'
 import { loadModel, type ModelLoaderParameters } from '@/three/modules/loaders/modelLoader'
 import { setRaycaster } from '@/three/modules/core/raycaster'
 import { useEventListener } from '@vueuse/core'
-import { createComposer } from '@/three/modules/postprocess/composer'
 import { cameraSetup } from '@/three/modules/camera/setup'
 import {
 	OutlinePass,
@@ -21,13 +20,15 @@ import { useStats } from '@/three/modules/extras/stats'
 import { useShadingStore } from './shading'
 import { createMesh } from '@/three/modules/mesh'
 import { exportModel } from '@/three/modules/addons/exporter'
+import { useComposerStore } from './composer'
 
 export const useThreeStore = defineStore('three', () => {
+	const composerStore = useComposerStore()
+	const shadingStore = useShadingStore()
+
 	const scene = new THREE.Scene()
 	const helperScene = new THREE.Scene()
 	scene.background = new THREE.Color('#3D3D3D')
-
-	const shadingStore = useShadingStore()
 
 	const grid = setGridHelper(scene)
 
@@ -57,17 +58,8 @@ export const useThreeStore = defineStore('three', () => {
 		currentTransformMode.value = mode
 	}
 
-	watch(activeCamera, (newCamera) => {
-		if (!controls.value || !gizmo.value || !transformControls.value) return
-		controls.value.object = newCamera
-		gizmo.value.camera = newCamera
-		transformControls.value.camera = newCamera
-	})
 	// ----------------------------------------
-	const outlinePass = shallowRef<OutlinePass>()
-
-	const selectObject = shallowRef<(uuid?: string, raycasted?: boolean) => void>()
-	const selectedObject = ref<THREE.Object3D | THREE.Light | THREE.Mesh | null>(null)
+	const outlinePassRef = shallowRef<OutlinePass>()
 
 	const { setFPSCounter, monitor, updateMonitor } = useStats()
 
@@ -91,12 +83,14 @@ export const useThreeStore = defineStore('three', () => {
 		if (!(activeCamera.value instanceof THREE.PerspectiveCamera)) return
 		activeCamera.value.aspect = canvas.clientWidth / canvas.clientHeight
 
-		const { renderer, composer, handleResize } = createComposer({
-			canvas,
-			scene,
+		const { composer, handleResize, outlinePass, renderer } = composerStore.init({
 			camera: activeCamera,
-			gizmo
+			canvas,
+			gizmo,
+			scene
 		})
+
+		outlinePassRef.value = outlinePass
 
 		setupBlenderControls({
 			cameraRef: activeCamera,
@@ -107,78 +101,17 @@ export const useThreeStore = defineStore('three', () => {
 			helperScene
 		})
 
-		// Object selection
-		outlinePass.value = composer.passes.find((pass) => pass instanceof OutlinePass) as OutlinePass
-
-		selectObject.value = (uuid?: string, raycasted?: boolean) => {
-			if (!outlinePass.value || !uuid) return
-
-			const object = scene.getObjectByProperty('uuid', uuid)
-
-			if (!object || (raycasted && !object.userData.isSelectable)) return
-
-			if (object instanceof THREE.Light) {
-				// @ts-ignore light/object type mismatch
-				transformControls.value?.attach(object)
-				selectedObject.value = object
-				const helper = scene.getObjectByProperty('light', object)
-				if (helper) {
-					outlinePass.value.selectedObjects = [helper]
-				}
-				return
-			}
-
-			if ('light' in object) {
-				const light = object.light as THREE.Light
-				// @ts-ignore light/object type mismatch
-				transformControls.value?.attach(light)
-				outlinePass.value.selectedObjects = [object]
-				selectedObject.value = light
-				return
-			}
-
-			transformControls.value?.attach(object)
-			outlinePass.value.selectedObjects = [object]
-			selectedObject.value = object
-		}
-
-		transformControls.value?.addEventListener('objectChange', () => {
-			triggerRef(selectedObject)
-		})
-
-		transformControls.value?.addEventListener('object-changed', (e) => {
-			const object = e.target.object as unknown as THREE.Object3D | LightHelper | undefined
-			if (!object) {
-				if (outlinePass.value) outlinePass.value.selectedObjects = []
-				return
-			}
-
-			if ('light' in object) {
-				// @ts-ignore light/object type mismatch
-				transformControls.value?.attach(object.light)
-				selectedObject.value = object.light
-				return
-			}
-
-			if (object.userData.skipRaycast && object.parent) {
-				transformControls.value?.attach(object.parent)
-				selectedObject.value = object.parent
-			}
-		})
-		// -------------------------
-
 		// Raycasting
 		const { pointer, raycaster } = setRaycaster(canvasRef)
 
 		let wasDragging = false
 
 		transformControls.value?.addEventListener('dragging-changed', (e) => {
-			wasDragging = !e.value // Set flag when dragging ends
+			wasDragging = !e.value
 		})
 
 		useEventListener(canvasRef, 'click', () => {
-			if (!outlinePass.value) return
-
+			if (!outlinePassRef.value) return
 			if (wasDragging) return (wasDragging = false)
 
 			raycaster.setFromCamera(pointer, activeCamera.value)
@@ -186,11 +119,12 @@ export const useThreeStore = defineStore('three', () => {
 			const intersects = raycaster.intersectObjects(raycasterObjects, true)
 
 			if (!intersects[0]) {
+				outlinePassRef.value.selectedObjects = []
 				transformControls.value?.detach()
 				return
 			}
 
-			selectObject.value?.(intersects[0].object.uuid, true)
+			selectObject(intersects[0].object.uuid, true)
 		})
 		// -----------------------------
 
@@ -201,7 +135,6 @@ export const useThreeStore = defineStore('three', () => {
 		let lastFrameTime = 0
 
 		const clock = new THREE.Clock()
-		let passedTime = 0
 		renderer.setAnimationLoop(render)
 
 		function render(currentTime: number) {
@@ -209,13 +142,11 @@ export const useThreeStore = defineStore('three', () => {
 			if (deltaTime < frameDelay) return
 			lastFrameTime = currentTime - (deltaTime % frameDelay)
 			const delta = clock.getDelta()
-			passedTime += delta
 
 			handleResize()
 
 			grid.update(activeCamera.value)
 			controls.value?.update(delta)
-			stats.update()
 			lightHelperObjects.forEach((item) => {
 				if ('update' in item) item.update()
 			})
@@ -224,12 +155,70 @@ export const useThreeStore = defineStore('three', () => {
 			renderer.clearDepth()
 			renderer.render(helperScene, activeCamera.value)
 
-			if (passedTime > 1) {
-				passedTime = 0
-				updateMonitor(renderer)
-			}
+			updateMonitor(renderer)
 		}
 	}
+
+	// Object selection
+	const selectedObject = ref<THREE.Object3D | THREE.Light | THREE.Mesh | null>(null)
+
+	function selectObject(uuid?: string, raycasted?: boolean) {
+		if (!uuid || !outlinePassRef.value) return
+
+		const object = scene.getObjectByProperty('uuid', uuid)
+
+		if (!object || (raycasted && !object.userData.isSelectable)) return
+
+		if (object instanceof THREE.Light) {
+			// @ts-ignore light/object type mismatch
+			transformControls.value?.attach(object)
+			selectedObject.value = object
+			const helper = scene.getObjectByProperty('light', object)
+			if (helper) {
+				outlinePassRef.value.selectedObjects = [helper]
+			}
+			return
+		}
+
+		if ('light' in object) {
+			const light = object.light as THREE.Light
+			// @ts-ignore light/object type mismatch
+			transformControls.value?.attach(light)
+			outlinePassRef.value.selectedObjects = [object]
+			selectedObject.value = light
+			return
+		}
+
+		transformControls.value?.attach(object)
+		outlinePassRef.value.selectedObjects = [object]
+		selectedObject.value = object
+	}
+
+	transformControls.value?.addEventListener('objectChange', () => {
+		triggerRef(selectedObject)
+	})
+
+	transformControls.value?.addEventListener('object-changed', (e) => {
+		const object = e.target.object as unknown as THREE.Object3D | LightHelper | undefined
+		if (!object) {
+			if (!outlinePassRef.value) return
+			outlinePassRef.value.selectedObjects = []
+			return
+		}
+
+		if ('light' in object) {
+			// @ts-ignore light/object type mismatch
+			transformControls.value?.attach(object.light)
+			selectedObject.value = object.light
+			return
+		}
+
+		if (object.userData.skipRaycast && object.parent) {
+			transformControls.value?.attach(object.parent)
+			selectedObject.value = object.parent
+		}
+	})
+	// -------------------------
 
 	function addModelToScene(object: THREE.Object3D) {
 		object.traverse((obj) => {
@@ -259,7 +248,7 @@ export const useThreeStore = defineStore('three', () => {
 		shadingStore.cacheNewObjectMaterials(object)
 		selectedObject.value = object
 		transformControls.value?.attach(object)
-		if (outlinePass.value) outlinePass.value.selectedObjects = [object]
+		if (outlinePassRef.value) outlinePassRef.value.selectedObjects = [object]
 	}
 
 	function addLightToScene(light: THREE.Light) {
@@ -288,7 +277,7 @@ export const useThreeStore = defineStore('three', () => {
 		// @ts-ignore light/object type mismatch
 		transformControls.value?.attach(light)
 
-		if (outlinePass.value) outlinePass.value.selectedObjects = [helper]
+		if (outlinePassRef.value) outlinePassRef.value.selectedObjects = [helper]
 	}
 
 	function deleteFromScene(object: THREE.Object3D) {
@@ -317,13 +306,19 @@ export const useThreeStore = defineStore('three', () => {
 			selectedObject.value = null
 		}
 
-		if (outlinePass.value) {
-			outlinePass.value.selectedObjects = outlinePass.value.selectedObjects.filter(
+		if (outlinePassRef.value) {
+			outlinePassRef.value.selectedObjects = outlinePassRef.value.selectedObjects.filter(
 				(selected) => selected !== object
 			)
 		}
 
 		disposeModel(object)
+		shadingStore.clearMaterialCache(object.uuid)
+
+		const raycasterIdx = raycasterObjects.findIndex((obj) => obj.uuid === object.uuid)
+		if (raycasterIdx >= 0) {
+			raycasterObjects.splice(raycasterIdx, 1)
+		}
 	}
 
 	/**
@@ -365,7 +360,7 @@ export const useThreeStore = defineStore('three', () => {
 		activeCamera,
 		switchCamera,
 		importModel,
-		outlinePass,
+		outlinePassRef,
 		selectedObject,
 		controls,
 		addModelToScene,

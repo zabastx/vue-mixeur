@@ -37,9 +37,10 @@ export function setupBlenderControls({
 	gizmoRef.value.attachControls(controlsRef.value)
 
 	watch(cameraRef, (newCamera) => {
-		if (!controlsRef.value || !gizmoRef.value) return
+		if (!controlsRef.value || !gizmoRef.value || !transformControlsRef.value) return
 		controlsRef.value.object = newCamera
 		gizmoRef.value.camera = newCamera
+		transformControlsRef.value.camera = newCamera
 	})
 }
 

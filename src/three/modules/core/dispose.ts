@@ -16,8 +16,14 @@ export function disposeModel(model: THREE.Object3D) {
 		if (child instanceof THREE.Light && child.shadow.map) {
 			child.shadow.map.dispose()
 		}
+		if (child instanceof THREE.BatchedMesh) {
+			child.disposeBoundsTree()
+			child.dispose()
+		}
+
 		if (child instanceof THREE.Mesh) {
 			if (child.geometry) {
+				child.geometry.disposeBoundsTree()
 				child.geometry.dispose()
 			}
 

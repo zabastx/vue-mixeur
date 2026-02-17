@@ -54,16 +54,20 @@ watch(
 	}
 )
 
+const DEFAULT_TABS: DataTabItem[] = [
+	{
+		icon: 'properties/camera-properties',
+		value: 'camera',
+		content: CameraProperties,
+		title: 'Camera Properties'
+	}
+]
+
 const tabs = computed<DataTabItem[]>(() => {
 	const obj = store.selectedObject
-	if (!obj) return []
+	if (!obj) return DEFAULT_TABS
 	const list: DataTabItem[] = [
-		{
-			icon: 'properties/camera-properties',
-			value: 'camera',
-			content: CameraProperties,
-			title: 'Camera Properties'
-		},
+		...DEFAULT_TABS,
 		{
 			icon: 'ui/object-data',
 			value: 'object',

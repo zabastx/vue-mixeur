@@ -45,6 +45,18 @@ export const useThreeStore = defineStore('three', () => {
 	function updateScene() {
 		triggerRef(sceneChildren)
 	}
+	function addGroup() {
+		const group = new THREE.Group()
+		group.name = 'Group'
+		scene.add(group)
+		return group
+	}
+	function moveToGroup(objUUID: string, groupUUID: string) {
+		const group = scene.getObjectByProperty('uuid', groupUUID)
+		const object = scene.getObjectByProperty('uuid', objUUID)
+		if (!(group instanceof THREE.Group) || !object) return
+		group.add(object)
+	}
 
 	const { activeCamera, switchCamera } = cameraSetup()
 	const controls = shallowRef<OrbitControls>()
@@ -376,7 +388,9 @@ export const useThreeStore = defineStore('three', () => {
 		objectVisibilityUpdate,
 		updateScene,
 		exportScene,
-		scene
+		scene,
+		addGroup,
+		moveToGroup
 	}
 })
 

@@ -10,21 +10,25 @@
 			>
 				<template v-for="item in items" :key="item.key">
 					<ContextMenu.Sub v-if="item.submenu">
-						<ContextMenu.SubTrigger class="context-item flex items-center gap-2"
-							>{{ item.label }} <MxIcon name="base/triangle-right" class="ml-auto text-[0.8em]" />
+						<ContextMenu.SubTrigger class="context-item flex items-center gap-2">
+							{{ item.label }}
+							<MxIcon name="base/triangle-right" class="ml-auto text-[0.8em]" />
 						</ContextMenu.SubTrigger>
 
-						<ContextMenu.SubContent class="bg-ui-menu-bg-inner p-1 rounded">
+						<ContextMenu.SubContent class="bg-ui-menu-bg-inner p-1 rounded" v-bind="subContent">
 							<ContextMenu.Item
 								v-for="subitem in item.submenu"
 								:key="subitem.key"
 								class="context-item"
+								@select="subitem.onSelect"
 							>
 								{{ subitem.label }}
 							</ContextMenu.Item>
 						</ContextMenu.SubContent>
 					</ContextMenu.Sub>
-					<ContextMenu.Item v-else class="context-item">{{ item.label }}</ContextMenu.Item>
+					<ContextMenu.Item v-else class="context-item" @select="item.onSelect">
+						{{ item.label }}
+					</ContextMenu.Item>
 				</template>
 			</ContextMenu.Content>
 		</ContextMenu.Portal>
@@ -35,20 +39,21 @@
 import type {
 	ContextMenuContentProps,
 	ContextMenuRootProps,
+	ContextMenuSubContentProps,
 	ContextMenuTriggerProps
 } from 'reka-ui'
 import { ContextMenu } from 'reka-ui/namespaced'
 
 const {
-	content = {
-		collisionPadding: 10
-	},
+	content = undefined,
 	root = undefined,
-	trigger = undefined
+	trigger = undefined,
+	subContent = { alignOffset: -4 }
 } = defineProps<{
 	root?: ContextMenuRootProps
 	trigger?: ContextMenuTriggerProps
 	content?: ContextMenuContentProps
+	subContent?: ContextMenuSubContentProps
 	items: MxContextMenuItem[]
 }>()
 
@@ -56,7 +61,7 @@ export interface MxContextMenuItem {
 	key: string
 	label: string
 	submenu?: MxContextMenuItem[]
-	onClick?: (args: unknown) => unknown
+	onSelect?: (e: Event) => unknown
 }
 </script>
 

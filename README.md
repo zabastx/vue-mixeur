@@ -1,11 +1,11 @@
 # Vue Mixeur
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Vue](https://img.shields.io/badge/Vue-3.5.27-4FC08D.svg)](https://vuejs.org/)
-[![Three.js](https://img.shields.io/badge/Three.js-0.182.0-049EF4.svg)](https://threejs.org/)
+[![Vue](https://img.shields.io/badge/Vue-3.5.28-4FC08D.svg)](https://vuejs.org/)
+[![Three.js](https://img.shields.io/badge/Three.js-0.183.0-049EF4.svg)](https://threejs.org/)
 [![Vite](https://img.shields.io/badge/Vite-7.3.1-646CFF.svg)](https://vitejs.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6.svg)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1.18-06B6D4.svg)](https://tailwindcss.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.2.0-06B6D4.svg)](https://tailwindcss.com/)
 
 A Blender-like web-based 3D editor built with Vue.js and Three.js. Vue Mixeur provides an interface for 3D modeling, object manipulation, and scene management directly in the browser.
 
@@ -77,53 +77,20 @@ Try the live demo at [mixeur.zabastx.ru](https://mixeur.zabastx.ru)
 ```
 src/
 ├── components/          # Vue components
-│   ├── data/           # Data panels
-│   │   ├── outliner/   # Scene hierarchy tree
-│   │   └── properties/ # Object properties editor
+│   ├── data/           # Data panels (outliner, properties)
 │   ├── header/         # Top navigation bar
-│   ├── icons/          # SVG icon components
-│   │   ├── base/       # Common icons
-│   │   ├── light/      # Light type icons
-│   │   ├── mesh/       # Mesh/primitive icons
-│   │   ├── outliner/   # Outliner type icons
-│   │   ├── properties/ # Properties panel icons
-│   │   ├── shading/    # Shading mode icons
-│   │   ├── toolbar/    # Toolbar icons
-│   │   └── view/       # View/camera icons
 │   ├── input/          # Form input components
 │   ├── modals/         # Modal dialogs
 │   ├── render-image/   # Image rendering dialog
 │   ├── sidebar/        # Right sidebar panel
 │   ├── status/         # Bottom status bar
 │   ├── utils/          # Utility components
-│   │   ├── Accordion/  # Collapsible sections
-│   │   └── ColorPicker/# Color picker component
 │   └── viewport/       # 3D viewport component
 ├── composables/        # Vue composition functions
-│   └── types/          # Composable type definitions
 ├── store/              # Pinia stores
 ├── three/              # Three.js setup and modules
-│   ├── index.ts        # Three.js initialization with BVH
-│   └── modules/        # Three.js functionality
-│       ├── addons/     # Third-party addons
-│       ├── camera/     # Camera management
-│       ├── controls/   # Transform controls
-│       ├── core/       # Core utilities (raycaster, disposal)
-│       ├── extras/     # Extra utilities
-│       ├── helpers/    # Three.js helpers
-│       ├── light/      # Light management
-│       ├── loaders/    # Model loaders (GLTF, OBJ, FBX)
-│       ├── mesh/       # Mesh primitives creation
-│       ├── postprocess/# Post-processing effects
-│       ├── renderer/   # Renderer setup
-│       └── text/       # 3D text generation
 ├── utils/              # General utility functions
 └── assets/             # Static assets
-    └── css/            # Stylesheets
-        └── theme/      # CSS theme variables
-tests/                  # Test files
-├── e2e/               # Playwright E2E tests
-└── unit/              # Vitest unit tests
 ```
 
 ## Tech Stack

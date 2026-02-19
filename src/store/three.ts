@@ -23,6 +23,7 @@ import { exportModel } from '@/three/modules/addons/exporter'
 import { useComposerStore } from './composer'
 
 export const useThreeStore = defineStore('three', () => {
+	const isInitiated = ref(false)
 	const composerStore = useComposerStore()
 	const shadingStore = useShadingStore()
 
@@ -127,7 +128,7 @@ export const useThreeStore = defineStore('three', () => {
 			if (wasDragging) return (wasDragging = false)
 
 			raycaster.setFromCamera(pointer, activeCamera.value)
-			// @ts-ignore light/object type mismatch
+			// @ts-ignore Three.js polymorphic this type issue
 			const intersects = raycaster.intersectObjects(raycasterObjects, true)
 
 			if (!intersects[0]) {
@@ -148,6 +149,8 @@ export const useThreeStore = defineStore('three', () => {
 
 		const clock = new THREE.Clock()
 		renderer.setAnimationLoop(render)
+
+		isInitiated.value = true
 
 		function render(currentTime: number) {
 			const deltaTime = currentTime - lastFrameTime
@@ -390,7 +393,8 @@ export const useThreeStore = defineStore('three', () => {
 		exportScene,
 		scene,
 		addGroup,
-		moveToGroup
+		moveToGroup,
+		isInitiated
 	}
 })
 

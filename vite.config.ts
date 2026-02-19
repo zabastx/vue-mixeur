@@ -31,10 +31,6 @@ export default defineConfig({
 				manualChunks(id) {
 					if (id.includes('node_modules/three/build')) return 'three'
 					if (id.includes('assets/icons')) return 'icons'
-					if (id.includes('node_modules/three/examples/jsm/loaders/')) {
-						return 'loaders'
-					}
-					return 'vendor'
 				}
 			}
 		}

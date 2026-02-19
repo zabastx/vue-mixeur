@@ -29,7 +29,7 @@
 
 		<InputField v-if="model.selectedFormat !== 'png'" label="Quality" label-width="90px">
 			<div class="flex items-center gap-2">
-				<MSlider v-model="qualityValue" :root="{ min: 0, max: 100, step: 1 }" />
+				<MxSlider v-model="qualityValue" :root="{ min: 0, max: 100, step: 1 }" />
 				<span class="text-xs w-9">{{ model.quality }}%</span>
 			</div>
 		</InputField>

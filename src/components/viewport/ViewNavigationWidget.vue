@@ -1,5 +1,5 @@
 <template>
-	<MTooltip
+	<MxTooltip
 		:tooltip="{
 			text: 'Switch the current view from perspective/orthographic projection',
 			footer: 'Shortcut: Numpad 5'
@@ -26,7 +26,7 @@
 			/>
 			<MxIcon v-else name="view/view-orthographic" />
 		</button>
-	</MTooltip>
+	</MxTooltip>
 </template>
 
 <script lang="ts" setup>

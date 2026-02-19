@@ -1,5 +1,5 @@
 <template>
-	<MDialog
+	<MxDialog
 		v-model="isOpen"
 		title="Render Image"
 		class="w-5xl bg-window-bg block-border flex flex-col h-2/3"
@@ -56,19 +56,19 @@
 			<!-- Right Side: Settings -->
 			<div class="flex flex-col max-w-xs w-full">
 				<ScrollContainer>
-					<MAccordionRoot
+					<MxAccordionRoot
 						collapsible
 						:default-value="['image-settings']"
 						type="multiple"
 						class="space-y-1 mr-2.5"
 					>
-						<MAccordionItem label="Image settings" :item="{ value: 'image-settings' }">
+						<MxAccordionItem label="Image settings" :item="{ value: 'image-settings' }">
 							<RenderImageSettings v-model="renderSettings" />
-						</MAccordionItem>
-						<!-- <MAccordionItem label="Camera settings" :item="{ value: 'camera-settings' }">
+						</MxAccordionItem>
+						<!-- <MxAccordionItem label="Camera settings" :item="{ value: 'camera-settings' }">
 							<CameraSettings v-model="cameraSettings" />
-						</MAccordionItem> -->
-					</MAccordionRoot>
+						</MxAccordionItem> -->
+					</MxAccordionRoot>
 				</ScrollContainer>
 
 				<!-- Action Buttons -->
@@ -78,7 +78,7 @@
 				</div>
 			</div>
 		</div>
-	</MDialog>
+	</MxDialog>
 </template>
 
 <script lang="ts" setup>

@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import type { ToastOptions } from '@/components/utils/MToast.vue'
+import type { ToastOptions } from '@/components/utils/MxToast.vue'
 
 // Global toast state
 interface ToastInstance {

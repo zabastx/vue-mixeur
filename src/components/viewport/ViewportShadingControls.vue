@@ -1,6 +1,6 @@
 <template>
 	<div class="flex">
-		<MTooltip
+		<MxTooltip
 			v-for="(btn, index) in buttons"
 			:key="btn.name"
 			:content="{ align: 'start', side: 'bottom', alignOffset: -10, sideOffset: 10 }"
@@ -24,12 +24,12 @@
 				<p class="mt-1">Method to display/shade objects in the 3D View</p>
 				<span class="text-[.9em] opacity-50">{{ btn.tooltip.footer }}</span>
 			</template>
-		</MTooltip>
+		</MxTooltip>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import MTooltip, { type MTooltipContent } from '../utils/MTooltip.vue'
+import MxTooltip, { type MxTooltipContent } from '../utils/MxTooltip.vue'
 import { useShadingStore, type ShadingMode } from '@/store/shading'
 
 const shadingStore = useShadingStore()
@@ -72,7 +72,7 @@ const buttons: ShadingControlsElement[] = [
 interface ShadingControlsElement {
 	name: ShadingMode
 	icon: MxIconName
-	tooltip: Partial<MTooltipContent>
+	tooltip: Partial<MxTooltipContent>
 }
 </script>
 

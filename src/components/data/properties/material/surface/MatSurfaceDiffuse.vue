@@ -5,9 +5,9 @@
 				<InputColor v-model:hex="color" />
 			</InputField>
 		</div>
-		<MAccordionItem label="Emission" :item="{ value: 'emission' }" class="w-full" nested>
+		<MxAccordionItem label="Emission" :item="{ value: 'emission' }" class="w-full" nested>
 			<EmissionProperties />
-		</MAccordionItem>
+		</MxAccordionItem>
 	</div>
 </template>
 

@@ -8,18 +8,18 @@
 				@change="store.updateScene"
 			/>
 		</InputField>
-		<MAccordionRoot collapsible type="multiple" class="flex gap-0.5 flex-col">
-			<MAccordionItem label="Transform" :item="{ value: 'transform' }">
+		<MxAccordionRoot collapsible type="multiple" class="flex gap-0.5 flex-col">
+			<MxAccordionItem label="Transform" :item="{ value: 'transform' }">
 				<div class="p-1">
 					<TransformLocation />
 					<TransformRotation class="my-2" />
 					<TransformScale />
 				</div>
-			</MAccordionItem>
-			<MAccordionItem label="Visibility" :item="{ value: 'visibility' }">
+			</MxAccordionItem>
+			<MxAccordionItem label="Visibility" :item="{ value: 'visibility' }">
 				<ObjectVisibility />
-			</MAccordionItem>
-		</MAccordionRoot>
+			</MxAccordionItem>
+		</MxAccordionRoot>
 	</template>
 </template>
 

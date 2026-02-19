@@ -1,6 +1,6 @@
 <template>
-	<MAccordionRoot collapsible type="multiple" class="space-y-0.5">
-		<MAccordionItem label="Lens" :item="{ value: 'lens' }">
+	<MxAccordionRoot collapsible type="multiple" class="space-y-0.5">
+		<MxAccordionItem label="Lens" :item="{ value: 'lens' }">
 			<div class="p-1 flex flex-col gap-0.5 items-end">
 				<InputField label="Type" input-width="150px" class="mb-1">
 					<InputSelect v-model="cameraType" :items="TYPE_OPTIONS" />
@@ -54,8 +54,8 @@
 					<InputNumber v-model="threeStore.activeCamera.far" />
 				</InputField>
 			</div>
-		</MAccordionItem>
-		<MAccordionItem label="Transform" :item="{ value: 'transform' }">
+		</MxAccordionItem>
+		<MxAccordionItem label="Transform" :item="{ value: 'transform' }">
 			<div class="p-1 flex flex-col gap-0.5 items-end">
 				<InputField label="Position X" input-width="150px">
 					<InputNumber v-model="threeStore.activeCamera.position.x" />
@@ -67,8 +67,8 @@
 					<InputNumber v-model="threeStore.activeCamera.position.z" />
 				</InputField>
 			</div>
-		</MAccordionItem>
-	</MAccordionRoot>
+		</MxAccordionItem>
+	</MxAccordionRoot>
 </template>
 
 <script lang="ts" setup>

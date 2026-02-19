@@ -1,6 +1,6 @@
 <template>
-	<MAccordionRoot collapsible type="multiple">
-		<MAccordionItem v-if="light" label="Light" :item="{ value: 'light' }">
+	<MxAccordionRoot collapsible type="multiple">
+		<MxAccordionItem v-if="light" label="Light" :item="{ value: 'light' }">
 			<div class="text-xs flex flex-col items-end gap-1 p-2">
 				<InputField label="Color" input-width="150px">
 					<InputColor v-model:hex="lightColor" />
@@ -34,8 +34,8 @@
 					</InputField>
 				</template>
 			</div>
-		</MAccordionItem>
-		<MAccordionItem
+		</MxAccordionItem>
+		<MxAccordionItem
 			v-if="light?.shadow"
 			v-model="light.castShadow"
 			:item="{ value: 'shadow' }"
@@ -68,12 +68,12 @@
 					/>
 				</InputField>
 			</div>
-		</MAccordionItem>
-	</MAccordionRoot>
+		</MxAccordionItem>
+	</MxAccordionRoot>
 </template>
 
 <script lang="ts" setup>
-import type { MTooltipContent } from '@/components/utils/MTooltip.vue'
+import type { MxTooltipContent } from '@/components/utils/MxTooltip.vue'
 import { useThreeStore } from '@/store/three'
 import THREE from '@/three'
 import { MathUtils } from 'three'
@@ -125,7 +125,7 @@ function isSpotLight(light: LightTypes): light is THREE.SpotLight {
 	return light instanceof THREE.SpotLight
 }
 
-const tooltipMap: ReadonlyMap<string, MTooltipContent> = new Map([
+const tooltipMap: ReadonlyMap<string, MxTooltipContent> = new Map([
 	[
 		'bias',
 		{

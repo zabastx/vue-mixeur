@@ -32,14 +32,14 @@ import {
 
 defineProps<{
 	tooltipDisabled?: boolean
-	tooltip?: MTooltipContent
+	tooltip?: MxTooltipContent
 	options?: {
 		trigger?: TooltipTriggerProps
 		content?: TooltipContentProps
 	}
 }>()
 
-export interface MTooltipContent {
+export interface MxTooltipContent {
 	title?: string
 	text?: string
 	footer?: string

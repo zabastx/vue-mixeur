@@ -1,6 +1,6 @@
 <template>
 	<div class="border border-ui-slider-outline rounded">
-		<MSlider
+		<MxSlider
 			v-for="item in fields"
 			:key="item.prop"
 			v-model="item.value.value"
@@ -14,7 +14,7 @@
 				<span>{{ item.title }}</span>
 				<span>{{ formatSliderValue(item.value.value[0] || 0, item.max) }}</span>
 			</div>
-		</MSlider>
+		</MxSlider>
 	</div>
 </template>
 

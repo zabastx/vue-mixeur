@@ -3,11 +3,11 @@
 		class="grid grid-cols-[min-content_1fr] items-start gap-x-2.5 whitespace-nowrap relative"
 		:style="{ gridTemplateColumns: gridCols }"
 	>
-		<MTooltip :tooltip :tooltip-disabled="!tooltip">
+		<MxTooltip :tooltip :tooltip-disabled="!tooltip">
 			<span class="px-1 py-0.5 leading-4" :class="{ 'order-1': reverse }">
 				{{ label }}
 			</span>
-		</MTooltip>
+		</MxTooltip>
 
 		<slot></slot>
 	</div>
@@ -15,7 +15,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import type { MTooltipContent } from '../utils/MTooltip.vue'
+import type { MxTooltipContent } from '../utils/MxTooltip.vue'
 
 const {
 	inputWidth = 'auto',
@@ -26,7 +26,7 @@ const {
 	inputWidth?: string
 	labelWidth?: string
 	reverse?: boolean
-	tooltip?: MTooltipContent
+	tooltip?: MxTooltipContent
 }>()
 
 const gridCols = computed(() => `${labelWidth} ${inputWidth}`)

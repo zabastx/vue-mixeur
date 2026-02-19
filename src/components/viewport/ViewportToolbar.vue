@@ -1,6 +1,6 @@
 <template>
 	<div class="absolute top-10 left-2.5 flex flex-col text-3xl">
-		<MTooltip
+		<MxTooltip
 			v-for="item in toolbarItems"
 			:key="'toolbar_' + item.name"
 			:tooltip="{ title: item.title, text: item.tooltip, footer: `Shortcut: ${item.footer}` }"
@@ -22,13 +22,13 @@
 			>
 				<MxIcon :name="item.icon" />
 			</button>
-		</MTooltip>
+		</MxTooltip>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { useThreeStore } from '@/store/three'
-import MTooltip from '../utils/MTooltip.vue'
+import MxTooltip from '../utils/MxTooltip.vue'
 
 const threeStore = useThreeStore()
 

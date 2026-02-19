@@ -1,5 +1,5 @@
 <template>
-	<MDialog v-model="isOpen" title="About Mixeur" class="max-w-xl bg-editor-border">
+	<MxDialog v-model="isOpen" title="About Mixeur" class="max-w-xl bg-editor-border">
 		<div class="flex max-w-xl flex-col text-ui-menu-bg-text">
 			<!-- Header -->
 			<div class="flex items-center gap-4 p-4">
@@ -53,7 +53,7 @@
 				</div>
 			</div>
 		</div>
-	</MDialog>
+	</MxDialog>
 </template>
 
 <script lang="ts" setup>

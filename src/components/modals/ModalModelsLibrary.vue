@@ -1,5 +1,5 @@
 <template>
-	<MDialog
+	<MxDialog
 		v-model="isOpen"
 		title="Models Library"
 		class="w-7xl h-[75dvh] text-ui-text-text block-border bg-window-bg flex flex-col"
@@ -74,7 +74,7 @@
 				<button type="button" class="btn mt-auto" @click="importModel">Import model</button>
 			</div>
 		</div>
-	</MDialog>
+	</MxDialog>
 </template>
 
 <script lang="ts" setup>

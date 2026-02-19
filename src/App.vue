@@ -5,15 +5,15 @@
 				<TopBar v-if="threeStore.isInitiated" />
 
 				<main class="grid min-h-0 flex-1 grid-cols-(--main-cols) bg-editor-border p-1 select-none">
-					<MViewport class="block-border" />
+					<MxViewport class="block-border" />
 					<div ref="divider" class="divider w-1 cursor-col-resize"></div>
-					<MSidebar v-if="threeStore.isInitiated" />
+					<MxSidebar v-if="threeStore.isInitiated" />
 				</main>
 
 				<StatusBar v-show="appStore.showStatusBar" />
 
 				<ModelLoadingProgress />
-				<MToast ref="toastRef" />
+				<MxToast ref="toastRef" />
 				<ModalCollection />
 			</div>
 		</TooltipProvider>
@@ -22,13 +22,7 @@
 
 <script lang="ts" setup>
 import { ref, useTemplateRef, onMounted } from 'vue'
-import MSidebar from './components/sidebar/MSidebar.vue'
 import { useEventListener } from '@vueuse/core'
-import MViewport from './components/viewport/MViewport.vue'
-import StatusBar from './components/status/StatusBar.vue'
-import TopBar from './components/header/TopBar.vue'
-import ModelLoadingProgress from './components/utils/ModelLoadingProgress.vue'
-import MToast from './components/utils/MToast.vue'
 import { ToastProvider, TooltipProvider } from 'reka-ui'
 import { useAppStore } from './store/app'
 import { useToast } from './composables/useToast'

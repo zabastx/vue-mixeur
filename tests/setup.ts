@@ -15,6 +15,13 @@ vi.mock('@/components/utils/MxIcon.vue', () => ({
 	}
 }))
 
+vi.mock('@/components/utils/MxTooltip.vue', () => ({
+	default: {
+		template: '<slot name="default"></slot>',
+		props: ['tooltipDisabled', 'tooltip', 'options']
+	}
+}))
+
 vi.mock('three-viewport-gizmo', () => ({
 	ViewportGizmo: vi.fn(() => ({
 		render: vi.fn(),

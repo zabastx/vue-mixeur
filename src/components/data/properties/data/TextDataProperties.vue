@@ -1,6 +1,6 @@
 <template>
-	<MAccordionRoot collapsible type="multiple">
-		<MAccordionItem label="Text" :item="{ value: 'text' }">
+	<MxAccordionRoot collapsible type="multiple">
+		<MxAccordionItem label="Text" :item="{ value: 'text' }">
 			<div class="flex flex-col items-end gap-1 text-xs pr-2">
 				<InputField label="Text">
 					<input v-model="textData.text" type="text" class="input w-[150px]" />
@@ -40,8 +40,8 @@
 				</template>
 				<button type="button" class="btn text-sm mt-2" @click="onApply">Apply</button>
 			</div>
-		</MAccordionItem>
-	</MAccordionRoot>
+		</MxAccordionItem>
+	</MxAccordionRoot>
 </template>
 
 <script lang="ts" setup>

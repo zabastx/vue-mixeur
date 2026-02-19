@@ -10,7 +10,7 @@
 			default-value="object"
 		>
 			<Tabs.List class="relative flex flex-col gap-0.5 bg-ui-tab-inner pt-1 pl-1">
-				<MTooltip v-for="item in tabs" :key="item.value" :tooltip="{ text: item.title }">
+				<MxTooltip v-for="item in tabs" :key="item.value" :tooltip="{ text: item.title }">
 					<Tabs.Trigger
 						:value="item.value"
 						class="cursor-pointer rounded-l-sm p-1 text-lg hover:bg-ui-tab-inner-selected
@@ -18,7 +18,7 @@
 					>
 						<MxIcon :name="item.icon" class="m-auto" />
 					</Tabs.Trigger>
-				</MTooltip>
+				</MxTooltip>
 			</Tabs.List>
 			<ScrollContainer>
 				<Tabs.Content v-for="item in tabs" :key="item.value" :value="item.value" class="p-2 pr-3">

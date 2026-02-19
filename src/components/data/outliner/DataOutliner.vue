@@ -5,11 +5,11 @@
 	>
 		<h2 class="flex items-center gap-1 px-1 text-[1rem]">
 			<MxIcon name="outliner/outliner" /> Outliner
-			<MTooltip :tooltip="{ text: 'Add Group' }">
+			<MxTooltip :tooltip="{ text: 'Add Group' }">
 				<button class="btn ml-auto" type="button" @click="store.addGroup">
 					<MxIcon name="ui/collection" />
 				</button>
-			</MTooltip>
+			</MxTooltip>
 		</h2>
 		<ScrollContainer>
 			<div class="flex justify-between items-center">

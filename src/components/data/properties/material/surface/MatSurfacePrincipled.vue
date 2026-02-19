@@ -31,23 +31,23 @@
 				<InputNumber v-model="opacity" :min="0" :max="1" :step="0.01" />
 			</InputField>
 		</div>
-		<MAccordionRoot collapsible type="multiple">
-			<MAccordionItem label="Specular" :item="{ value: 'specular' }" nested>
+		<MxAccordionRoot collapsible type="multiple">
+			<MxAccordionItem label="Specular" :item="{ value: 'specular' }" nested>
 				<SpecularProperties />
-			</MAccordionItem>
-			<MAccordionItem label="Transmission" :item="{ value: 'transmission' }" nested>
+			</MxAccordionItem>
+			<MxAccordionItem label="Transmission" :item="{ value: 'transmission' }" nested>
 				<TransmissionProperties />
-			</MAccordionItem>
-			<MAccordionItem label="Coat" :item="{ value: 'coat' }" nested>
+			</MxAccordionItem>
+			<MxAccordionItem label="Coat" :item="{ value: 'coat' }" nested>
 				<ClearcoatProperties />
-			</MAccordionItem>
-			<MAccordionItem label="Sheen" :item="{ value: 'sheen' }" nested>
+			</MxAccordionItem>
+			<MxAccordionItem label="Sheen" :item="{ value: 'sheen' }" nested>
 				<SheenProperties />
-			</MAccordionItem>
-			<MAccordionItem label="Emission" :item="{ value: 'emission' }" nested>
+			</MxAccordionItem>
+			<MxAccordionItem label="Emission" :item="{ value: 'emission' }" nested>
 				<EmissionProperties />
-			</MAccordionItem>
-		</MAccordionRoot>
+			</MxAccordionItem>
+		</MxAccordionRoot>
 	</div>
 </template>
 

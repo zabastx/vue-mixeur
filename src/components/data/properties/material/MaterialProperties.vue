@@ -1,15 +1,15 @@
 <template>
 	<div v-if="meshMaterial">
-		<MAccordionRoot collapsible type="multiple">
-			<MAccordionItem label="Surface" :item="{ value: 'surface' }">
+		<MxAccordionRoot collapsible type="multiple">
+			<MxAccordionItem label="Surface" :item="{ value: 'surface' }">
 				<div class="pl-1 pt-1 pr-3">
 					<InputField label="Surface" class="ml-auto w-fit mb-4">
 						<InputSelect v-model="matType" :items class="w-[150px]" />
 					</InputField>
 				</div>
 				<component :is="getSurfaceComponent(matType)" v-if="matType" />
-			</MAccordionItem>
-		</MAccordionRoot>
+			</MxAccordionItem>
+		</MxAccordionRoot>
 	</div>
 </template>
 

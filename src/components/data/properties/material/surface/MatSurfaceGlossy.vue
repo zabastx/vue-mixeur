@@ -5,7 +5,7 @@
 				<InputColor v-model:hex="color" />
 			</InputField>
 		</div>
-		<MAccordionItem label="Specular" :item="{ value: 'specular' }" class="w-full" nested>
+		<MxAccordionItem label="Specular" :item="{ value: 'specular' }" class="w-full" nested>
 			<div class="flex flex-col items-end gap-1 p-1 pr-3">
 				<InputField input-width="150px" label="Color">
 					<InputColor v-model:hex="specular" />
@@ -14,10 +14,10 @@
 					<InputTexture v-model="specularMap" />
 				</InputField>
 			</div>
-		</MAccordionItem>
-		<MAccordionItem label="Emission" :item="{ value: 'emission' }" class="w-full" nested>
+		</MxAccordionItem>
+		<MxAccordionItem label="Emission" :item="{ value: 'emission' }" class="w-full" nested>
 			<EmissionProperties />
-		</MAccordionItem>
+		</MxAccordionItem>
 	</div>
 </template>
 

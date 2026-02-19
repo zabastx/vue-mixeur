@@ -63,9 +63,11 @@ import { setGridHelper } from '@/three/modules/helpers/grid'
 
 ### Component Structure
 
-- PascalCase for component names (e.g., `MViewport`, `InputNumber`)
+- PascalCase for component names (e.g., `MxViewport`, `InputNumber`)
+- Components are auto-imported via `unplugin-vue-components` (see `src/components.d.ts`)
+- Reka UI components are auto-imported (NumberFieldRoot, CheckboxRoot, etc.)
 - Use scoped styles with Tailwind classes
-- Example:
+- Add `data-testid` attributes for test selection
 
 ```vue
 <template>
@@ -86,7 +88,12 @@ const model = defineModel<number>({ default: 0 })
 
 ### Formatting (Prettier)
 
-- `.prettierrc.json` - config
+Config in `.prettierrc.json`:
+
+- `singleQuote: true`, `semi: false`, `tabWidth: 2`
+- `trailingComma: "none"`, `useTabs: true`
+- `printWidth: 100`
+- Plugins: `prettier-plugin-tailwindcss`, `prettier-plugin-classnames`
 
 ### ESLint Rules
 
@@ -96,7 +103,7 @@ const model = defineModel<number>({ default: 0 })
 
 ### State Management (Pinia)
 
-- Use composition API style stores:
+Use composition API style stores with HMR:
 
 ```typescript
 export const useProgressStore = defineStore('progress', () => {
@@ -108,9 +115,11 @@ export const useProgressStore = defineStore('progress', () => {
 
 	return { loadingItems, startLoading }
 })
-```
 
-- Enable HMR with: `if (import.meta.hot) { import.meta.hot.accept(acceptHMRUpdate(useStore, import.meta.hot)) }`
+if (import.meta.hot) {
+	import.meta.hot.accept(acceptHMRUpdate(useProgressStore, import.meta.hot))
+}
+```
 
 ### Three.js Integration
 
@@ -122,9 +131,10 @@ export const useProgressStore = defineStore('progress', () => {
 
 ### Styling
 
-- Use Tailwind CSS v4 (`@import 'tailwindcss'`)
-- Follow existing CSS custom properties (see `src/assets/css/theme/`)
+- Tailwind CSS v4 with `@import 'tailwindcss'`
+- Theme variables in `src/assets/css/theme/`
 - Use semantic class names (e.g., `bg-editor-border`, `text-gray-200`)
+- Custom CSS properties for UI colors in `@theme` blocks
 
 ### Error Handling
 
@@ -142,9 +152,8 @@ export const useProgressStore = defineStore('progress', () => {
 
 - Use `@testing-library/vue` for component tests
 - Use `@testing-library/user-event` for interactions
-- Add `data-testid` attributes for test selection
 - Mock Three.js and stores in `tests/setup.ts`
-- Example:
+- Environment: `happy-dom`
 
 ```typescript
 import { render, screen } from '@testing-library/vue'
@@ -171,6 +180,7 @@ describe('InputNumber', () => {
 
 ### Three.js Structure
 
+- `src/three/index.ts` - Main wrapper with BVH acceleration
 - `src/three/modules/core/` - Core utilities (raycaster, disposal)
 - `src/three/modules/loaders/` - Model and asset loading
 - `src/three/modules/helpers/` - Three.js helper objects
@@ -191,6 +201,6 @@ describe('InputNumber', () => {
 
 ## Clarification and Correction Rules
 
-- If the user’s instructions contain contradictions, factual errors, or impossible steps, the agent should point them out and propose corrections.
+- If the user's instructions contain contradictions, factual errors, or impossible steps, the agent should point them out and propose corrections.
 - If essential details are missing, the agent must ask clarifying questions.
-- If non‑essential details are missing, the agent should infer reasonable defaults and proceed.
+- If non-essential details are missing, the agent should infer reasonable defaults and proceed.

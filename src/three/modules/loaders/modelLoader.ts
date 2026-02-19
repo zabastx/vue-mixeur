@@ -2,6 +2,10 @@ import { LoadingManager } from 'three'
 import { useToast } from '@/composables/useToast'
 import { useProgressStore } from '@/store/progress'
 
+const { DRACOLoader } = await import('three/examples/jsm/loaders/DRACOLoader.js')
+const dracoLoader = new DRACOLoader()
+dracoLoader.setDecoderPath('/draco/')
+
 export async function loadModel({
 	url,
 	format,
@@ -31,7 +35,6 @@ export async function loadModel({
 			case 'gltf':
 			case 'glb': {
 				const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader.js')
-				const { DRACOLoader } = await import('three/examples/jsm/loaders/DRACOLoader.js')
 				const { MeshoptDecoder } = await import('three/examples/jsm/libs/meshopt_decoder.module.js')
 
 				// Create a custom loading manager if we have a texture URL map
@@ -50,9 +53,7 @@ export async function loadModel({
 				}
 
 				const loader = new GLTFLoader(manager)
-				const dracoLoader = new DRACOLoader()
 
-				dracoLoader.setDecoderPath('/draco/')
 				loader.setDRACOLoader(dracoLoader)
 
 				loader.setMeshoptDecoder(MeshoptDecoder)

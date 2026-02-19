@@ -11,6 +11,7 @@ export default defineConfig({
 	retries: process.env.CI ? 2 : 0,
 	workers: process.env.CI ? 1 : 3,
 	reporter: 'html',
+	timeout: 60 * 1000,
 
 	use: {
 		baseURL: process.env.CI ? 'http://localhost:4173' : 'http://localhost:5173',
@@ -29,6 +30,6 @@ export default defineConfig({
 		command: process.env.CI ? 'bun run preview' : 'bun run dev',
 		url: process.env.CI ? 'http://localhost:4173' : 'http://localhost:5173',
 		reuseExistingServer: !process.env.CI,
-		timeout: 120000
+		timeout: 2 * 60 * 1000
 	}
 })

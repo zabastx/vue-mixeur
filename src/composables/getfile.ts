@@ -1,5 +1,5 @@
 import type { loadModel } from '@/three/modules/loaders/modelLoader'
-import { useToast } from './useToast'
+import { useToast } from './toast'
 
 export async function getFile(format: Parameters<typeof loadModel>[0]['format']) {
 	return new Promise<{

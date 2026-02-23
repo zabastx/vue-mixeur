@@ -1,5 +1,5 @@
 import { useProgressStore, type LoadingProgress } from '@/store/progress'
-import { useToast } from '@/composables/useToast'
+import { useToast } from '@/composables/toast'
 import { FontLoader } from 'three/examples/jsm/Addons.js'
 
 export async function loadFont(font: StdFontName | (string & {})) {

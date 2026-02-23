@@ -91,7 +91,7 @@ import { useModals } from '@/composables/useModals'
 import { downloadFile } from '@/utils/files'
 import type { RenderSettings } from './RenderImageSettings.vue'
 // import type { CameraSettings } from './CameraSettings.vue'
-import { useToast } from '@/composables/useToast'
+import { useToast } from '@/composables/toast'
 
 const isOpen = defineModel<boolean>({ default: false })
 

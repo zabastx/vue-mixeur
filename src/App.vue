@@ -25,7 +25,7 @@ import { ref, useTemplateRef, onMounted } from 'vue'
 import { useEventListener } from '@vueuse/core'
 import { ToastProvider, TooltipProvider } from 'reka-ui'
 import { useAppStore } from './store/app'
-import { useToast } from './composables/useToast'
+import { useToast } from './composables/toast'
 import { useThreeStore } from './store/three'
 
 const appStore = useAppStore()

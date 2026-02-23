@@ -1,7 +1,7 @@
 import THREE from '@/three'
 import { EXRLoader } from 'three/examples/jsm/Addons.js'
 import { useProgressStore, type LoadingProgress } from '@/store/progress'
-import { useToast } from '@/composables/useToast'
+import { useToast } from '@/composables/toast'
 import { pmremGenerator } from '../extras/pmremGenerator'
 
 const exrLoader = new EXRLoader().setPath('/textures/world/')

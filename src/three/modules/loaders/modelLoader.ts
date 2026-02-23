@@ -1,5 +1,5 @@
 import { LoadingManager } from 'three'
-import { useToast } from '@/composables/useToast'
+import { useToast } from '@/composables/toast'
 import { useProgressStore } from '@/store/progress'
 
 const { DRACOLoader } = await import('three/examples/jsm/loaders/DRACOLoader.js')

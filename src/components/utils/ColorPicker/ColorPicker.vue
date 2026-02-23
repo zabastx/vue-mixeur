@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useToast } from '@/composables/useToast'
+import { useToast } from '@/composables/toast'
 import iro from '@jaames/iro'
 import type { ColorPickerProps } from '@jaames/iro/dist/ColorPicker'
 import { useEyeDropper } from '@vueuse/core'

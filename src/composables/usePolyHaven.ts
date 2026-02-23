@@ -1,6 +1,6 @@
 import { createFetch } from '@vueuse/core'
 import { computed, ref, shallowRef } from 'vue'
-import { useToast } from './useToast'
+import { useToast } from './toast'
 import type {
 	Asset,
 	AssetAuthorInfo,

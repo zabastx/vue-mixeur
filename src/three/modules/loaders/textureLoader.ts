@@ -1,4 +1,4 @@
-import { useToast } from '@/composables/useToast'
+import { useToast } from '@/composables/toast'
 import { useProgressStore } from '@/store/progress'
 import THREE from '@/three'
 

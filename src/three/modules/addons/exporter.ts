@@ -1,4 +1,4 @@
-import { useToast } from '@/composables/useToast'
+import { useToast } from '@/composables/toast'
 import THREE from '@/three'
 import { downloadFile } from '@/utils/files'
 import { GLTFExporter } from 'three/examples/jsm/Addons.js'

@@ -13,7 +13,7 @@ export async function loadFont(font: StdFontName | (string & {})) {
 		return res
 	} catch (err) {
 		const error = err as Error
-		useToast().toast.error('Error when loading world texture')
+		useToast().toast.add({ type: 'error', message: 'Error when loading font' })
 		if (import.meta.env.DEV) console.error(error.name, error.message)
 		return null
 	} finally {

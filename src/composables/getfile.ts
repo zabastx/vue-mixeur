@@ -33,7 +33,7 @@ export async function getFile(format: Parameters<typeof loadModel>[0]['format'])
 			input.remove()
 		} catch (err) {
 			const error = err as Error
-			useToast().toast.error('', { title: 'Error uploading file', message: error.message })
+			useToast().toast.add({ type: 'error', title: 'Error uploading file', message: error.message })
 			reject({ error })
 		}
 	})

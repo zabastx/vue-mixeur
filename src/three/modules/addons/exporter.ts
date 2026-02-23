@@ -26,7 +26,8 @@ export async function exportModel(scene: THREE.Scene) {
 	} catch (error) {
 		const err = error as Error
 		console.error('Export error:', err.message)
-		toast.error('', {
+		toast.add({
+			type: 'error',
 			title: 'Failed to export scene',
 			message: err.message
 		})

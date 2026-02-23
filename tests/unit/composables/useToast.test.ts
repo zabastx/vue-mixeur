@@ -16,23 +16,24 @@ describe('useToast', () => {
 		const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
 		const { toast } = useToast()
 
-		toast.info('Test message')
-		toast.error('Test message')
-		toast.success('Test message')
-		toast.warning('Test message')
+		toast.add({ type: 'info', message: 'Test message' })
+		toast.add({ type: 'error', message: 'Test message' })
+		toast.add({ type: 'success', message: 'Test message' })
+		toast.add({ type: 'warning', message: 'Test message' })
 
-		expect(consoleSpy).toHaveBeenNthCalledWith(4, 'Toast instance not initialized')
+		expect(consoleSpy).toHaveBeenCalledTimes(4)
+		expect(consoleSpy).toHaveBeenCalledWith('Toast instance not initialized')
 	})
 
 	it('should call addToast with correct parameters', () => {
 		const { toast, setToastInstance } = useToast()
 		setToastInstance(mockToastInstance)
 
-		toast.success('Success message', { duration: 5000 })
+		toast.add({ type: 'success', message: 'Success message', duration: 5000 })
 
 		expect(mockToastInstance.addToast).toHaveBeenCalledWith({
-			message: 'Success message',
 			type: 'success',
+			message: 'Success message',
 			duration: 5000
 		})
 	})

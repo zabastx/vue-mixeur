@@ -17,7 +17,7 @@ export async function loadWorldTexture(name: WorldTextureName): Promise<THREE.Te
 		return envMap
 	} catch (err) {
 		const error = err as Error
-		useToast().toast.add({ type: 'error', message: 'Error when loading world texture' })
+		useToast().add({ type: 'error', message: 'Error when loading world texture' })
 		if (import.meta.env.DEV) console.error(error.name, error.message)
 		return null
 	} finally {

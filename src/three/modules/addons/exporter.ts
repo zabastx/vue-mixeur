@@ -3,7 +3,7 @@ import THREE from '@/three'
 import { downloadFile } from '@/utils/files'
 import { GLTFExporter } from 'three/examples/jsm/Addons.js'
 
-const { toast } = useToast()
+const toast = useToast()
 
 const isLightExportable = (light: THREE.Light) =>
 	light instanceof THREE.PointLight ||

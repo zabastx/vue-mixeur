@@ -80,7 +80,7 @@ export async function loadModel({
 	} catch (e) {
 		const error = e as Error
 		console.error(`Error loading a model (${url}):`, error.name, error.message)
-		useToast().toast.add({
+		useToast().add({
 			type: 'error',
 			title: 'Error loading a model',
 			message: error.message

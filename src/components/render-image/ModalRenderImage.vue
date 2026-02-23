@@ -96,7 +96,7 @@ import { useToast } from '@/composables/toast'
 const isOpen = defineModel<boolean>({ default: false })
 
 const { close } = useModals()
-const { toast } = useToast()
+const toast = useToast()
 
 const threeStore = useThreeStore()
 const shadingStore = useShadingStore()

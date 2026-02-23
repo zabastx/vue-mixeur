@@ -147,7 +147,7 @@ const menuItems: IMenubarMenu[] = [
 ]
 
 const sceneStore = useThreeStore()
-const { toast } = useToast()
+const toast = useToast()
 
 async function importFile(format: Parameters<typeof loadModel>[0]['format']) {
 	const { data } = await uploadFile(`.${format}`)

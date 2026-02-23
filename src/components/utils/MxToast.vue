@@ -6,7 +6,7 @@
 		:key="toast.id"
 		:open="toast.open"
 		:duration="toast.duration"
-		@update:open="(open) => !open && removeToast(toast.id)"
+		@update:open="(open) => !open && remove(toast.id)"
 	>
 		<div class="toast-content">
 			<div class="flex items-start gap-2">
@@ -37,51 +37,12 @@
 
 <script lang="ts" setup>
 import { ToastClose, ToastDescription, ToastRoot, ToastTitle, ToastViewport } from 'reka-ui'
-import { ref } from 'vue'
+import { useToast } from '@/composables/toast'
 
-export interface ToastOptions {
-	id?: string
-	title?: string
-	message: string
-	type?: 'info' | 'success' | 'warning' | 'error'
-	duration?: number
-}
+const { toasts, remove } = useToast()
 
-interface Toast extends Required<Omit<ToastOptions, 'title'>> {
-	title?: string
-	open: boolean
-}
-
-const toasts = ref<Toast[]>([])
-let toastIdCounter = 0
-
-const addToast = (options: ToastOptions) => {
-	const id = options.id || `toast-${++toastIdCounter}`
-	const toast: Toast = {
-		id,
-		title: options.title,
-		message: options.message,
-		type: options.type || 'info',
-		duration: options.duration || 5000,
-		open: true
-	}
-
-	toasts.value.push(toast)
-	return id
-}
-
-const removeToast = (id: string) => {
-	const index = toasts.value.findIndex((toast) => toast.id === id)
-	if (index > -1) {
-		toasts.value.splice(index, 1)
-	}
-}
-
-const clearAllToasts = () => {
-	toasts.value = []
-}
-
-const getToastTypeClass = (type: Toast['type']) => {
+const getToastTypeClass = (type?: 'info' | 'success' | 'warning' | 'error') => {
+	if (!type) return ''
 	const classes = {
 		info: 'toast-icon-info',
 		success: 'toast-icon-success',
@@ -90,12 +51,6 @@ const getToastTypeClass = (type: Toast['type']) => {
 	}
 	return classes[type]
 }
-
-defineExpose({
-	addToast,
-	removeToast,
-	clearAllToasts
-})
 </script>
 
 <style scoped>

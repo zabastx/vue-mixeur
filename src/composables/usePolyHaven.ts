@@ -18,7 +18,7 @@ import type {
 	TextureAsset
 } from './types/polyhaven'
 
-const { toast } = useToast()
+const toast = useToast()
 
 const usePolyHavenFetch = createFetch({
 	baseUrl: 'https://api.polyhaven.com',

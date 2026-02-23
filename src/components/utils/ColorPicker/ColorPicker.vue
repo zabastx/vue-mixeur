@@ -47,7 +47,7 @@ const pickerRef = useTemplateRef('pickerRef')
 const picker = ref<iro.ColorPicker>()
 const colorType = ref<'RGB' | 'HSV'>('RGB')
 
-const { toast } = useToast()
+const toast = useToast()
 
 const hexString = computed({
 	set(v: string) {

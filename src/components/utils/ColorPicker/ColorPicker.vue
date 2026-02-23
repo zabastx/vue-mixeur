@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useToast } from '@/composables/useToast'
+import { useToast } from '@/composables/toast'
 import iro from '@jaames/iro'
 import type { ColorPickerProps } from '@jaames/iro/dist/ColorPicker'
 import { useEyeDropper } from '@vueuse/core'
@@ -47,7 +47,7 @@ const pickerRef = useTemplateRef('pickerRef')
 const picker = ref<iro.ColorPicker>()
 const colorType = ref<'RGB' | 'HSV'>('RGB')
 
-const { toast } = useToast()
+const toast = useToast()
 
 const hexString = computed({
 	set(v: string) {
@@ -56,7 +56,7 @@ const hexString = computed({
 			picker.value.color.hex8String = v
 		} catch (e) {
 			const err = e as Error
-			toast.error(err.message)
+			toast.add({ type: 'error', message: err.message })
 		}
 	},
 	get() {

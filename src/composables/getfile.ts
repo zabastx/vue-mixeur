@@ -1,5 +1,5 @@
 import type { loadModel } from '@/three/modules/loaders/modelLoader'
-import { useToast } from './useToast'
+import { useToast } from './toast'
 
 export async function getFile(format: Parameters<typeof loadModel>[0]['format']) {
 	return new Promise<{
@@ -33,7 +33,7 @@ export async function getFile(format: Parameters<typeof loadModel>[0]['format'])
 			input.remove()
 		} catch (err) {
 			const error = err as Error
-			useToast().toast.error('', { title: 'Error uploading file', message: error.message })
+			useToast().add({ type: 'error', title: 'Error uploading file', message: error.message })
 			reject({ error })
 		}
 	})

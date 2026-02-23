@@ -1,6 +1,6 @@
 import { createFetch } from '@vueuse/core'
 import { computed, ref, shallowRef } from 'vue'
-import { useToast } from './useToast'
+import { useToast } from './toast'
 import type {
 	Asset,
 	AssetAuthorInfo,
@@ -18,7 +18,7 @@ import type {
 	TextureAsset
 } from './types/polyhaven'
 
-const { toast } = useToast()
+const toast = useToast()
 
 const usePolyHavenFetch = createFetch({
 	baseUrl: 'https://api.polyhaven.com',
@@ -87,7 +87,8 @@ export function usePolyHaven() {
 		}
 
 		if (error.value) {
-			toast.error('', {
+			toast.add({
+				type: 'error',
 				title: 'API Error',
 				message: 'Failed to load assets'
 			})
@@ -102,7 +103,8 @@ export function usePolyHaven() {
 		const { data, error } = await usePolyHavenFetch(`/info/${id}`).get().json<T>()
 
 		if (error.value) {
-			toast.error('', {
+			toast.add({
+				type: 'error',
 				title: 'API Error',
 				message: 'Failed to load asset details'
 			})
@@ -118,7 +120,8 @@ export function usePolyHaven() {
 			.json<AssetAuthorInfo>()
 
 		if (error.value) {
-			toast.error('', {
+			toast.add({
+				type: 'error',
 				title: 'API Error',
 				message: 'Failed to load author info'
 			})
@@ -145,7 +148,8 @@ export function usePolyHaven() {
 		}
 
 		if (error.value) {
-			toast.error('', {
+			toast.add({
+				type: 'error',
 				title: 'API Error',
 				message: 'Failed to fetch categories'
 			})
@@ -159,7 +163,8 @@ export function usePolyHaven() {
 		const { data, error } = await usePolyHavenFetch(`/files/${id}`).get().json<AssetFiles>()
 
 		if (error.value) {
-			toast.error('', {
+			toast.add({
+				type: 'error',
 				title: 'API Error',
 				message: 'Failed to load asset files'
 			})

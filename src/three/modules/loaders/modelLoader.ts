@@ -1,5 +1,5 @@
 import { LoadingManager } from 'three'
-import { useToast } from '@/composables/useToast'
+import { useToast } from '@/composables/toast'
 import { useProgressStore } from '@/store/progress'
 
 const { DRACOLoader } = await import('three/examples/jsm/loaders/DRACOLoader.js')
@@ -80,8 +80,9 @@ export async function loadModel({
 	} catch (e) {
 		const error = e as Error
 		console.error(`Error loading a model (${url}):`, error.name, error.message)
-		useToast().toast.error('', {
-			title: `Error loading a model`,
+		useToast().add({
+			type: 'error',
+			title: 'Error loading a model',
 			message: error.message
 		})
 		return null

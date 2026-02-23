@@ -1,4 +1,4 @@
-import { useToast } from '@/composables/useToast'
+import { useToast } from '@/composables/toast'
 import { useProgressStore } from '@/store/progress'
 import THREE from '@/three'
 
@@ -15,8 +15,9 @@ export async function loadTexture({ url, filename, size }: TextureLoaderParamete
 	} catch (e) {
 		const error = e as Error
 		console.error(`Error loading a texture (${url}):`, error.name, error.message)
-		useToast().toast.error('', {
-			title: `Error loading a texture`,
+		useToast().add({
+			type: 'error',
+			title: 'Error loading a texture',
 			message: error.message
 		})
 		return null

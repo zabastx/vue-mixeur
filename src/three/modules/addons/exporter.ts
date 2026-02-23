@@ -1,9 +1,9 @@
-import { useToast } from '@/composables/useToast'
+import { useToast } from '@/composables/toast'
 import THREE from '@/three'
 import { downloadFile } from '@/utils/files'
 import { GLTFExporter } from 'three/examples/jsm/Addons.js'
 
-const { toast } = useToast()
+const toast = useToast()
 
 const isLightExportable = (light: THREE.Light) =>
 	light instanceof THREE.PointLight ||
@@ -26,7 +26,8 @@ export async function exportModel(scene: THREE.Scene) {
 	} catch (error) {
 		const err = error as Error
 		console.error('Export error:', err.message)
-		toast.error('', {
+		toast.add({
+			type: 'error',
 			title: 'Failed to export scene',
 			message: err.message
 		})

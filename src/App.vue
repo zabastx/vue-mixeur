@@ -13,7 +13,7 @@
 				<StatusBar v-show="appStore.showStatusBar" />
 
 				<ModelLoadingProgress />
-				<MxToast ref="toastRef" />
+				<MxToast />
 				<ModalCollection />
 			</div>
 		</TooltipProvider>
@@ -21,24 +21,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, useTemplateRef, onMounted } from 'vue'
+import { ref, useTemplateRef } from 'vue'
 import { useEventListener } from '@vueuse/core'
 import { ToastProvider, TooltipProvider } from 'reka-ui'
 import { useAppStore } from './store/app'
-import { useToast } from './composables/useToast'
 import { useThreeStore } from './store/three'
 
 const appStore = useAppStore()
 const threeStore = useThreeStore()
-
-const { setToastInstance } = useToast()
-const toastRef = useTemplateRef('toastRef')
-
-onMounted(() => {
-	if (toastRef.value) {
-		setToastInstance(toastRef.value)
-	}
-})
 
 const divider = useTemplateRef('divider')
 const rightWidth = ref(window.innerWidth * 0.25)

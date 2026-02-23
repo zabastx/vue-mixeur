@@ -17,7 +17,7 @@ import { useAppStore } from '@/store/app'
 import MenuBar, { type IMenubarMenu } from '../utils/MenuBar.vue'
 import { computed } from 'vue'
 import { useThreeStore } from '@/store/three'
-import { useToast } from '@/composables/useToast'
+import { useToast } from '@/composables/toast'
 import type { loadModel } from '@/three/modules/loaders/modelLoader'
 import { useModals } from '@/composables/useModals'
 import { uploadFile } from '@/utils/files'
@@ -147,7 +147,7 @@ const menuItems: IMenubarMenu[] = [
 ]
 
 const sceneStore = useThreeStore()
-const { toast } = useToast()
+const toast = useToast()
 
 async function importFile(format: Parameters<typeof loadModel>[0]['format']) {
 	const { data } = await uploadFile(`.${format}`)
@@ -156,7 +156,7 @@ async function importFile(format: Parameters<typeof loadModel>[0]['format']) {
 		await sceneStore.importModel({ filename: data.filename, url: data.url, format })
 	} catch (e) {
 		console.error(e)
-		toast.error(`Failed to import ${format} file`)
+		toast.add({ type: 'error', message: `Failed to import ${format} file` })
 	} finally {
 		data?.cleanup()
 	}

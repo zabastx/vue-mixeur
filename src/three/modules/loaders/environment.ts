@@ -1,7 +1,7 @@
 import THREE from '@/three'
 import { EXRLoader } from 'three/examples/jsm/Addons.js'
 import { useProgressStore, type LoadingProgress } from '@/store/progress'
-import { useToast } from '@/composables/useToast'
+import { useToast } from '@/composables/toast'
 import { pmremGenerator } from '../extras/pmremGenerator'
 
 const exrLoader = new EXRLoader().setPath('/textures/world/')
@@ -17,7 +17,7 @@ export async function loadWorldTexture(name: WorldTextureName): Promise<THREE.Te
 		return envMap
 	} catch (err) {
 		const error = err as Error
-		useToast().toast.error('Error when loading world texture')
+		useToast().add({ type: 'error', message: 'Error when loading world texture' })
 		if (import.meta.env.DEV) console.error(error.name, error.message)
 		return null
 	} finally {

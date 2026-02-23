@@ -91,12 +91,12 @@ import { useModals } from '@/composables/useModals'
 import { downloadFile } from '@/utils/files'
 import type { RenderSettings } from './RenderImageSettings.vue'
 // import type { CameraSettings } from './CameraSettings.vue'
-import { useToast } from '@/composables/useToast'
+import { useToast } from '@/composables/toast'
 
 const isOpen = defineModel<boolean>({ default: false })
 
 const { close } = useModals()
-const { toast } = useToast()
+const toast = useToast()
 
 const threeStore = useThreeStore()
 const shadingStore = useShadingStore()
@@ -248,7 +248,8 @@ async function renderImage(skipPreview?: boolean) {
 		} catch (error) {
 			console.error('Render failed:\n', error)
 			const err = error as Error
-			toast.error('', {
+			toast.add({
+				type: 'error',
 				title: 'Image render error',
 				message: err.message
 			})

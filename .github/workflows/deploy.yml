@@ -36,7 +36,7 @@ jobs:
         run: bun run test:unit
 
       - name: Install Playwright
-        run: bunx playwright install --with-deps
+        run: bunx playwright install
 
       - name: Run E2E tests
         run: bun run test:e2e

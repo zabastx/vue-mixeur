@@ -248,7 +248,8 @@ async function renderImage(skipPreview?: boolean) {
 		} catch (error) {
 			console.error('Render failed:\n', error)
 			const err = error as Error
-			toast.error('', {
+			toast.add({
+				type: 'error',
 				title: 'Image render error',
 				message: err.message
 			})

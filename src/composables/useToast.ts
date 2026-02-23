@@ -16,52 +16,12 @@ export const useToast = () => {
 	}
 
 	const toast = {
-		info: (message: string, options?: Partial<ToastOptions>) => {
+		add: (options: ToastOptions) => {
 			if (!toastInstance.value) {
 				console.warn('Toast instance not initialized')
 				return
 			}
-			return toastInstance.value.addToast({
-				message,
-				type: 'info',
-				...options
-			})
-		},
-
-		success: (message: string, options?: Partial<ToastOptions>) => {
-			if (!toastInstance.value) {
-				console.warn('Toast instance not initialized')
-				return
-			}
-			return toastInstance.value.addToast({
-				message,
-				type: 'success',
-				...options
-			})
-		},
-
-		warning: (message: string, options?: Partial<ToastOptions>) => {
-			if (!toastInstance.value) {
-				console.warn('Toast instance not initialized')
-				return
-			}
-			return toastInstance.value.addToast({
-				message,
-				type: 'warning',
-				...options
-			})
-		},
-
-		error: (message: string, options?: Partial<ToastOptions>) => {
-			if (!toastInstance.value) {
-				console.warn('Toast instance not initialized')
-				return
-			}
-			return toastInstance.value.addToast({
-				message,
-				type: 'error',
-				...options
-			})
+			return toastInstance.value.addToast(options)
 		},
 
 		remove: (id: string) => {

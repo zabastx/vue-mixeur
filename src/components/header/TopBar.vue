@@ -156,7 +156,7 @@ async function importFile(format: Parameters<typeof loadModel>[0]['format']) {
 		await sceneStore.importModel({ filename: data.filename, url: data.url, format })
 	} catch (e) {
 		console.error(e)
-		toast.error(`Failed to import ${format} file`)
+		toast.add({ type: 'error', message: `Failed to import ${format} file` })
 	} finally {
 		data?.cleanup()
 	}

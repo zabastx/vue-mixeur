@@ -56,7 +56,7 @@ const hexString = computed({
 			picker.value.color.hex8String = v
 		} catch (e) {
 			const err = e as Error
-			toast.error(err.message)
+			toast.add({ type: 'error', message: err.message })
 		}
 	},
 	get() {

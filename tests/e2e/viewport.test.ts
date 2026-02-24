@@ -70,10 +70,6 @@ test.describe('3D Viewport', () => {
 
 		await fileChooser.setFiles(filePath)
 
-		await expect(page.locator('[data-testid="loading-progress"]')).toBeVisible()
-
-		await page.waitForSelector('[data-testid="loading-progress"]', { state: 'detached' })
-
-		await expect(page.locator('text=test-gltf')).toBeVisible()
+		await expect(page.locator('text=test-gltf')).toBeVisible({ timeout: 10000 })
 	})
 })

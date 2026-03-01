@@ -147,7 +147,7 @@ export const useThreeStore = defineStore('three', () => {
 		const frameDelay = 1000 / targetFPS
 		let lastFrameTime = 0
 
-		const clock = new THREE.Clock()
+		const timer = new THREE.Timer()
 		renderer.setAnimationLoop(render)
 
 		isInitiated.value = true
@@ -156,7 +156,8 @@ export const useThreeStore = defineStore('three', () => {
 			const deltaTime = currentTime - lastFrameTime
 			if (deltaTime < frameDelay) return
 			lastFrameTime = currentTime - (deltaTime % frameDelay)
-			const delta = clock.getDelta()
+			timer.update()
+			const delta = timer.getDelta()
 
 			handleResize()
 

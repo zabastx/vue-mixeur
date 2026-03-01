@@ -20,11 +20,12 @@ export function useStats() {
 	}
 
 	let passedTime = 0
-	const clock = new THREE.Clock()
+	const timer = new THREE.Timer()
 
 	function updateMonitor(renderer: THREE.WebGLRenderer) {
 		stats.update()
-		const delta = clock.getDelta()
+		timer.update()
+		const delta = timer.getDelta()
 		passedTime += delta
 
 		if (passedTime < 1) return

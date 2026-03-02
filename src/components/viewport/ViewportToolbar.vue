@@ -13,11 +13,11 @@
 				class="cursor-pointer border-[0.5px] border-ui-toolbar-outline bg-ui-toolbar-inner p-1
 					first:rounded-t last:rounded-b last:border-t-0 first:border-b-0"
 				:class="{
-					'bg-ui-toolbar-inner-selected': item.name === threeStore.currentTransformMode
+					'bg-ui-toolbar-inner-selected': item.name === controlsStore.currentTransformMode
 				}"
 				:title="item.title"
 				:data-testid="`toolbar-btn-${item.name}`"
-				:data-active="item.name === threeStore.currentTransformMode"
+				:data-active="item.name === controlsStore.currentTransformMode"
 				@click="item.onClick"
 			>
 				<MxIcon :name="item.icon" />
@@ -27,17 +27,16 @@
 </template>
 
 <script lang="ts" setup>
-import { useThreeStore } from '@/store/three'
-import MxTooltip from '../utils/MxTooltip.vue'
+import { useControlsStore } from '@/store/controls'
 
-const threeStore = useThreeStore()
+const controlsStore = useControlsStore()
 
 const toolbarItems: ToolbarItem[] = [
 	{
 		name: 'translate',
 		icon: 'toolbar/tool-move',
 		onClick: () => {
-			threeStore.setTransformMode('translate')
+			controlsStore.currentTransformMode = 'translate'
 		},
 		title: 'Move',
 		tooltip: 'Move selected items',
@@ -47,7 +46,7 @@ const toolbarItems: ToolbarItem[] = [
 		name: 'rotate',
 		icon: 'toolbar/tool-rotate',
 		onClick: () => {
-			threeStore.setTransformMode('rotate')
+			controlsStore.currentTransformMode = 'rotate'
 		},
 		title: 'Rotate',
 		tooltip: 'Rotate selected items',
@@ -57,7 +56,7 @@ const toolbarItems: ToolbarItem[] = [
 		name: 'scale',
 		icon: 'toolbar/tool-scale',
 		onClick: () => {
-			threeStore.setTransformMode('scale')
+			controlsStore.currentTransformMode = 'scale'
 		},
 		title: 'Scale',
 		tooltip: 'Scale (resize) selected items',

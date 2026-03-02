@@ -1,19 +1,13 @@
-import type { ViewportGizmo } from 'three-viewport-gizmo'
-import { acceptHMRUpdate, defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia'
 import { computed, ref, shallowRef, triggerRef, type ShallowRef } from 'vue'
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import THREE, { enableBVH } from '@/three'
 import { setGridHelper } from '@/three/modules/helpers/grid'
-import { setupBlenderControls } from '@/three/modules/controls/blenderControls'
+import { useControlsStore } from './controls'
 import { loadModel, type ModelLoaderParameters } from '@/three/modules/loaders/modelLoader'
 import { setRaycaster } from '@/three/modules/core/raycaster'
 import { useEventListener } from '@vueuse/core'
 import { cameraSetup } from '@/three/modules/camera/setup'
-import {
-	OutlinePass,
-	type TransformControls,
-	type TransformControlsMode
-} from 'three/examples/jsm/Addons.js'
+import { OutlinePass } from 'three/examples/jsm/Addons.js'
 import { disposeModel } from '@/three/modules/core/dispose'
 import { createLight, getLightHelper, type LightHelper } from '@/three/modules/light'
 import { useStats } from '@/three/modules/extras/stats'
@@ -26,6 +20,7 @@ export const useThreeStore = defineStore('three', () => {
 	const isInitiated = ref(false)
 	const composerStore = useComposerStore()
 	const shadingStore = useShadingStore()
+	const controlsStore = useControlsStore()
 
 	const scene = new THREE.Scene()
 	const helperScene = new THREE.Scene()
@@ -49,7 +44,7 @@ export const useThreeStore = defineStore('three', () => {
 	function addGroup() {
 		const group = new THREE.Group()
 		group.name = 'Group'
-		scene.add(group)
+		addModelToScene(group)
 		return group
 	}
 	function moveToGroup(objUUID: string, groupUUID: string) {
@@ -60,16 +55,7 @@ export const useThreeStore = defineStore('three', () => {
 	}
 
 	const { activeCamera, switchCamera } = cameraSetup()
-	const controls = shallowRef<OrbitControls>()
-	const gizmo = shallowRef<ViewportGizmo>()
-
-	const transformControls = shallowRef<TransformControls>()
-	const currentTransformMode = ref<TransformControlsMode>('translate')
-
-	function setTransformMode(mode: TransformControlsMode) {
-		transformControls.value?.setMode(mode)
-		currentTransformMode.value = mode
-	}
+	const { controls, gizmo, transformControls } = storeToRefs(controlsStore)
 
 	// ----------------------------------------
 	const outlinePassRef = shallowRef<OutlinePass>()
@@ -105,11 +91,8 @@ export const useThreeStore = defineStore('three', () => {
 
 		outlinePassRef.value = outlinePass
 
-		setupBlenderControls({
+		controlsStore.setupControls({
 			cameraRef: activeCamera,
-			transformControlsRef: transformControls,
-			controlsRef: controls,
-			gizmoRef: gizmo,
 			renderer,
 			helperScene
 		})
@@ -117,15 +100,9 @@ export const useThreeStore = defineStore('three', () => {
 		// Raycasting
 		const { pointer, raycaster } = setRaycaster(canvasRef)
 
-		let wasDragging = false
-
-		transformControls.value?.addEventListener('dragging-changed', (e) => {
-			wasDragging = !e.value
-		})
-
 		useEventListener(canvasRef, 'click', () => {
 			if (!outlinePassRef.value) return
-			if (wasDragging) return (wasDragging = false)
+			if (controlsStore.wasDragging) return (controlsStore.wasDragging = false)
 
 			raycaster.setFromCamera(pointer, activeCamera.value)
 			// @ts-ignore Three.js polymorphic this type issue
@@ -380,8 +357,6 @@ export const useThreeStore = defineStore('three', () => {
 		selectedObject,
 		controls,
 		addModelToScene,
-		setTransformMode,
-		currentTransformMode,
 		deleteFromScene,
 		transformControls,
 		addLightToScene,

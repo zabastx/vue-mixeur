@@ -1,0 +1,125 @@
+import { ViewportGizmo, type GizmoOptions } from 'three-viewport-gizmo'
+import { acceptHMRUpdate, defineStore } from 'pinia'
+import { computed, ref, shallowRef, watch, type Ref } from 'vue'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { TransformControls, type TransformControlsMode } from 'three/examples/jsm/Addons.js'
+import THREE from '@/three'
+
+export const useControlsStore = defineStore('controls', () => {
+	const controls = shallowRef<OrbitControls>()
+	const gizmo = shallowRef<ViewportGizmo>()
+	const transformControls = shallowRef<TransformControls>()
+	const currentTransformMode = computed<TransformControlsMode>({
+		get: () => transformControls.value?.getMode() ?? 'translate',
+		set: (mode) => {
+			if (!transformControls.value) {
+				console.warn('Cannot set transform mode: controls not initialized')
+				return
+			}
+			transformControls.value.setMode(mode)
+		}
+	})
+
+	const wasDragging = ref(false)
+
+	function setupControls({
+		cameraRef,
+		renderer,
+		helperScene
+	}: {
+		cameraRef: Ref<THREE.PerspectiveCamera | THREE.OrthographicCamera>
+		renderer: THREE.WebGLRenderer
+		helperScene: THREE.Scene
+	}) {
+		controls.value = new OrbitControls(cameraRef.value, renderer.domElement)
+		transformControls.value = new TransformControls(cameraRef.value, renderer.domElement)
+		const transformHelper = transformControls.value.getHelper()
+		transformHelper.name = 'TransformHelper'
+
+		// @ts-ignore
+		helperScene.add(transformHelper)
+
+		controls.value.enablePan = true
+		controls.value.screenSpacePanning = true
+		controls.value.enableZoom = false
+		controls.value.mouseButtons = {
+			LEFT: null,
+			MIDDLE: THREE.MOUSE.ROTATE,
+			RIGHT: null
+		}
+		controls.value.touches = {
+			ONE: THREE.TOUCH.ROTATE,
+			TWO: THREE.TOUCH.PAN
+		}
+
+		gizmo.value = new ViewportGizmo(cameraRef.value, renderer, getGizmoConfig())
+		gizmo.value.attachControls(controls.value)
+
+		watch(cameraRef, (newCamera) => {
+			if (!controls.value || !gizmo.value || !transformControls.value) return
+			controls.value.object = newCamera
+			gizmo.value.camera = newCamera
+			transformControls.value.camera = newCamera
+		})
+
+		transformControls.value.addEventListener('dragging-changed', (e) => {
+			wasDragging.value = !e.value
+		})
+
+		return {
+			controls,
+			gizmo,
+			transformControls
+		}
+	}
+
+	function getGizmoConfig(): GizmoOptions {
+		const rootStyle = getComputedStyle(document.documentElement)
+		const colorX = rootStyle.getPropertyValue('--color-axis-x')
+		const colorY = rootStyle.getPropertyValue('--color-axis-y')
+		const colorZ = rootStyle.getPropertyValue('--color-axis-z')
+
+		return {
+			container: '.gizmo-wrapper',
+			className: 'gizmo',
+			size: 100,
+			placement: 'top-right',
+			lineWidth: 3,
+			resolution: 128,
+			x: {
+				color: colorX,
+				hover: {
+					labelColor: '#fff',
+					color: colorX
+				}
+			},
+			y: {
+				color: colorY,
+				hover: {
+					labelColor: '#fff',
+					color: colorY
+				}
+			},
+			z: {
+				color: colorZ,
+				hover: {
+					labelColor: '#fff',
+					color: colorZ
+				}
+			}
+		}
+	}
+
+	return {
+		controls,
+		gizmo,
+		transformControls,
+		setupControls,
+		currentTransformMode,
+		wasDragging
+	}
+})
+
+if (import.meta.hot) {
+	import.meta.hot.accept(acceptHMRUpdate(useControlsStore, import.meta.hot))
+}

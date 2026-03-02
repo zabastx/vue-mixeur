@@ -2,6 +2,7 @@ import { useEventListener } from '@vueuse/core'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { ref, type ShallowRef } from 'vue'
 import { useThreeStore } from './three'
+import { useControlsStore } from './controls'
 import THREE from '@/three'
 
 export const useAppStore = defineStore('app', () => {
@@ -9,6 +10,7 @@ export const useAppStore = defineStore('app', () => {
 	const isCtrlDown = ref(false)
 	const isShiftDown = ref(false)
 	const sceneStore = useThreeStore()
+	const controlsStore = useControlsStore()
 
 	function useHotKeys(canvas: ShallowRef<HTMLCanvasElement | null>) {
 		useEventListener(canvas, 'pointerenter', () => (pointerOnCanvas.value = true))
@@ -24,7 +26,7 @@ export const useAppStore = defineStore('app', () => {
 			isCtrlDown.value = e.ctrlKey
 			isShiftDown.value = e.shiftKey
 
-			if (!pointerOnCanvas.value) return
+			if (!pointerOnCanvas.value || !controlsStore.transformControls) return
 
 			switch (e.code) {
 				case 'Numpad5': // Perspective / Orthographic camera toggle
@@ -45,13 +47,13 @@ export const useAppStore = defineStore('app', () => {
 					break
 
 				case 'KeyG':
-					sceneStore.setTransformMode('translate')
+					controlsStore.currentTransformMode = 'translate'
 					break
 				case 'KeyR':
-					sceneStore.setTransformMode('rotate')
+					controlsStore.currentTransformMode = 'rotate'
 					break
 				case 'KeyS':
-					sceneStore.setTransformMode('scale')
+					controlsStore.currentTransformMode = 'scale'
 					break
 
 				case 'Delete':

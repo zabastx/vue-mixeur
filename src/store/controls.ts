@@ -1,6 +1,6 @@
 import { ViewportGizmo, type GizmoOptions } from 'three-viewport-gizmo'
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { computed, ref, shallowRef, watch, type Ref } from 'vue'
+import { ref, shallowRef, watch, type Ref } from 'vue'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { TransformControls, type TransformControlsMode } from 'three/examples/jsm/Addons.js'
 import THREE from '@/three'
@@ -9,15 +9,14 @@ export const useControlsStore = defineStore('controls', () => {
 	const controls = shallowRef<OrbitControls>()
 	const gizmo = shallowRef<ViewportGizmo>()
 	const transformControls = shallowRef<TransformControls>()
-	const currentTransformMode = computed<TransformControlsMode>({
-		get: () => transformControls.value?.getMode() ?? 'translate',
-		set: (mode) => {
-			if (!transformControls.value) {
-				console.warn('Cannot set transform mode: controls not initialized')
-				return
-			}
-			transformControls.value.setMode(mode)
+	const currentTransformMode = ref<TransformControlsMode>('translate')
+
+	watch(currentTransformMode, (val) => {
+		if (!transformControls.value) {
+			console.warn('Cannot set transform mode: controls not initialized')
+			return
 		}
+		transformControls.value.setMode(val)
 	})
 
 	const wasDragging = ref(false)
@@ -33,6 +32,7 @@ export const useControlsStore = defineStore('controls', () => {
 	}) {
 		controls.value = new OrbitControls(cameraRef.value, renderer.domElement)
 		transformControls.value = new TransformControls(cameraRef.value, renderer.domElement)
+		transformControls.value.setMode(currentTransformMode.value)
 		const transformHelper = transformControls.value.getHelper()
 		transformHelper.name = 'TransformHelper'
 

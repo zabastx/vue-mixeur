@@ -97,6 +97,8 @@ export const useThreeStore = defineStore('three', () => {
 			helperScene
 		})
 
+		setupTransformControlsListener()
+
 		// Raycasting
 		const { pointer, raycaster } = setRaycaster(canvasRef)
 
@@ -187,30 +189,35 @@ export const useThreeStore = defineStore('three', () => {
 		selectedObject.value = object
 	}
 
-	transformControls.value?.addEventListener('objectChange', () => {
-		triggerRef(selectedObject)
-	})
+	function setupTransformControlsListener() {
+		if (!transformControls.value) return
 
-	transformControls.value?.addEventListener('object-changed', (e) => {
-		const object = e.target.object as unknown as THREE.Object3D | LightHelper | undefined
-		if (!object) {
-			if (!outlinePassRef.value) return
-			outlinePassRef.value.selectedObjects = []
-			return
-		}
+		transformControls.value.addEventListener('objectChange', () => {
+			triggerRef(selectedObject)
+		})
 
-		if ('light' in object) {
-			// @ts-ignore light/object type mismatch
-			transformControls.value?.attach(object.light)
-			selectedObject.value = object.light
-			return
-		}
+		transformControls.value.addEventListener('object-changed', (e) => {
+			const object = e.target.object as unknown as THREE.Object3D | LightHelper | undefined
+			if (!object) {
+				if (!outlinePassRef.value) return
+				outlinePassRef.value.selectedObjects = []
+				return
+			}
 
-		if (object.userData.skipRaycast && object.parent) {
-			transformControls.value?.attach(object.parent)
-			selectedObject.value = object.parent
-		}
-	})
+			if ('light' in object) {
+				// @ts-ignore light/object type mismatch
+				transformControls.value?.attach(object.light)
+				selectedObject.value = object.light
+				return
+			}
+
+			if (object.userData.skipRaycast && object.parent) {
+				transformControls.value?.attach(object.parent)
+				selectedObject.value = object.parent
+			}
+		})
+	}
+
 	// -------------------------
 
 	function addModelToScene(object: THREE.Object3D) {

@@ -5,7 +5,9 @@ import { cleanup } from '@testing-library/vue'
 afterEach(() => cleanup())
 
 vi.mock('@vueuse/core', () => ({
-	useEventListener: vi.fn()
+	useEventListener: vi.fn(),
+	usePointer: vi.fn(() => ({ x: 0, y: 0 })),
+	useKeyModifier: vi.fn(() => false)
 }))
 
 vi.mock('@/components/utils/MxIcon.vue', () => ({

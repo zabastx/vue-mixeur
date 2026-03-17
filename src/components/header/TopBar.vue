@@ -1,9 +1,30 @@
 <template>
 	<header class="flex items-center bg-topbar-background p-1 px-2">
-		<MenuBar :items="menuItems" />
+		<MenuBar :items="menuItems" class="mr-auto" />
+		<button
+			v-if="needRefresh"
+			class="btn cursor-pointer mr-2 flex items-center gap-1 px-2 py-1 text-xs"
+			@click="update"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="16"
+				height="16"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+				<path d="M21 3v5h-5" />
+			</svg>
+			Update available
+		</button>
 		<a
 			href="https://github.com/zabastx/vue-mixeur"
-			class="ml-auto text-xl"
+			class="text-xl"
 			target="_blank"
 			title="GitHub repository"
 		>
@@ -20,11 +41,13 @@ import { useThreeStore } from '@/store/three'
 import { useToast } from '@/composables/toast'
 import type { loadModel } from '@/three/modules/loaders/modelLoader'
 import { useModals } from '@/composables/useModals'
+import { usePwaUpdate } from '@/composables/usePwaUpdate'
 import { uploadFile } from '@/utils/files'
 
 const appStore = useAppStore()
 const threeStore = useThreeStore()
 const { open } = useModals()
+const { needRefresh, update } = usePwaUpdate()
 
 const showStatusBar = computed({
 	get() {

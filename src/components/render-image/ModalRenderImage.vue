@@ -195,7 +195,7 @@ async function renderImage(skipPreview?: boolean) {
 		try {
 			shadingStore.setMode('export')
 
-			const renderScene = createRenderScene(threeStore.scene)
+			const renderScene = createRenderScene(threeStore.scene as THREE.Scene)
 			if (!renderSettings.value.background) {
 				renderScene.background = null
 			}

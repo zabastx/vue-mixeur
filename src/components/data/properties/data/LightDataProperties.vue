@@ -36,7 +36,7 @@
 			</div>
 		</MxAccordionItem>
 		<MxAccordionItem
-			v-if="light?.shadow"
+			v-if="light && lightHasShadow(light)"
 			v-model="light.castShadow"
 			:item="{ value: 'shadow' }"
 			label="Shadow"
@@ -76,6 +76,7 @@
 import type { MxTooltipContent } from '@/components/utils/MxTooltip.vue'
 import { useThreeStore } from '@/store/three'
 import THREE from '@/three'
+import { lightHasShadow } from '@/three/modules/light'
 import { MathUtils } from 'three'
 import { computed } from 'vue'
 

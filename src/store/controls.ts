@@ -36,7 +36,6 @@ export const useControlsStore = defineStore('controls', () => {
 		const transformHelper = transformControls.value.getHelper()
 		transformHelper.name = 'TransformHelper'
 
-		// @ts-ignore
 		helperScene.add(transformHelper)
 
 		controls.value.enablePan = true

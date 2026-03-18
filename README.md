@@ -1,11 +1,11 @@
 # Vue Mixeur
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Vue](https://img.shields.io/badge/Vue-3.5.28-4FC08D.svg)](https://vuejs.org/)
-[![Three.js](https://img.shields.io/badge/Three.js-0.183.0-049EF4.svg)](https://threejs.org/)
-[![Vite](https://img.shields.io/badge/Vite-7.3.1-646CFF.svg)](https://vitejs.dev/)
+[![Vue](https://img.shields.io/badge/Vue-3.5.30-4FC08D.svg)](https://vuejs.org/)
+[![Three.js](https://img.shields.io/badge/Three.js-0.183.2-049EF4.svg)](https://threejs.org/)
+[![Vite](https://img.shields.io/badge/Vite-8.0.0-646CFF.svg)](https://vitejs.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6.svg)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.2.0-06B6D4.svg)](https://tailwindcss.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.2.1-06B6D4.svg)](https://tailwindcss.com/)
 
 A Blender-like web-based 3D editor built with Vue.js and Three.js. Vue Mixeur provides an interface for 3D modeling, object manipulation, and scene management directly in the browser.
 
@@ -99,7 +99,7 @@ src/
 - **3D Engine**: Three.js with BVH acceleration for fast raycasting
 - **State Management**: Pinia 3
 - **Styling**: Tailwind CSS v4
-- **Build Tool**: Vite 7
+- **Build Tool**: Vite 8
 - **TypeScript**: Full type safety
 - **UI Components**: Reka UI
 - **Icons**: Custom SVG icon system
@@ -129,6 +129,6 @@ src/
 
 ## License
 
-MIT License - Copyright (c) 2025 Danil Popov
+MIT License - Copyright (c) 2026 Danil Popov
 
 See [LICENSE](LICENSE) for more details.

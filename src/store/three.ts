@@ -7,9 +7,14 @@ import { loadModel, type ModelLoaderParameters } from '@/three/modules/loaders/m
 import { setRaycaster } from '@/three/modules/core/raycaster'
 import { useEventListener } from '@vueuse/core'
 import { cameraSetup } from '@/three/modules/camera/setup'
-import { OutlinePass } from 'three/examples/jsm/Addons.js'
+import { OutlinePass, RectAreaLightUniformsLib } from 'three/examples/jsm/Addons.js'
 import { disposeModel } from '@/three/modules/core/dispose'
-import { createLight, getLightHelper, type LightHelper } from '@/three/modules/light'
+import {
+	createLight,
+	getLightHelper,
+	lightHasShadow,
+	type LightHelper
+} from '@/three/modules/light'
 import { useStats } from '@/three/modules/extras/stats'
 import { useShadingStore } from './shading'
 import { createMesh } from '@/three/modules/mesh'
@@ -76,6 +81,7 @@ export const useThreeStore = defineStore('three', () => {
 		if (!canvasRef.value) return
 		const canvas = canvasRef.value
 		shadingStore.init(scene)
+		RectAreaLightUniformsLib.init()
 
 		if (import.meta.env.DEV) setFPSCounter(canvas.parentElement)
 
@@ -296,9 +302,10 @@ export const useThreeStore = defineStore('three', () => {
 			objectsForRemoval.forEach((obj) => {
 				// @ts-ignore light/object type mismatch
 				scene.remove(obj)
-				if (obj instanceof THREE.Light && obj.shadow.map) {
-					obj.shadow.map.dispose()
-				}
+				const isLight = obj instanceof THREE.Light
+				if (!isLight) return
+
+				if (lightHasShadow(obj)) obj.shadow.map?.dispose()
 			})
 		}
 

@@ -42,7 +42,7 @@ export function createLight<T extends CreateLightParams>({ type, parameters }: T
 			break
 	}
 
-	if (light.shadow) {
+	if (lightHasShadow(light)) {
 		light.shadow.bias = -0.001
 		light.shadow.normalBias = 0.02
 	}
@@ -142,3 +142,13 @@ export type LightHelper =
 	| THREE.SpotLightHelper
 	| THREE.DirectionalLightHelper
 	| RectAreaLightHelper
+
+export type LightWithShadow = THREE.DirectionalLight | THREE.PointLight | THREE.SpotLight
+
+export function lightHasShadow(light: THREE.Light): light is LightWithShadow {
+	return (
+		light instanceof THREE.PointLight ||
+		light instanceof THREE.SpotLight ||
+		light instanceof THREE.DirectionalLight
+	)
+}

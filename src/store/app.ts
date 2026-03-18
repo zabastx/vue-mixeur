@@ -1,4 +1,4 @@
-import { useEventListener } from '@vueuse/core'
+import { useEventListener, useKeyModifier } from '@vueuse/core'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { ref, type ShallowRef } from 'vue'
 import { useThreeStore } from './three'
@@ -7,10 +7,11 @@ import THREE from '@/three'
 
 export const useAppStore = defineStore('app', () => {
 	const pointerOnCanvas = ref(false)
-	const isCtrlDown = ref(false)
-	const isShiftDown = ref(false)
 	const sceneStore = useThreeStore()
 	const controlsStore = useControlsStore()
+
+	const isCtrlDown = useKeyModifier('Control')
+	const isShiftDown = useKeyModifier('Shift')
 
 	function useHotKeys(canvas: ShallowRef<HTMLCanvasElement | null>) {
 		useEventListener(canvas, 'pointerenter', () => (pointerOnCanvas.value = true))
@@ -23,9 +24,6 @@ export const useAppStore = defineStore('app', () => {
 		})
 
 		useEventListener(window, 'keydown', (e) => {
-			isCtrlDown.value = e.ctrlKey
-			isShiftDown.value = e.shiftKey
-
 			if (!pointerOnCanvas.value || !controlsStore.transformControls) return
 
 			switch (e.code) {
@@ -64,11 +62,6 @@ export const useAppStore = defineStore('app', () => {
 			}
 		})
 
-		useEventListener(window, 'keyup', (e) => {
-			isCtrlDown.value = e.ctrlKey
-			isShiftDown.value = e.shiftKey
-		})
-
 		// Moves perspective camera on scroll instead of zoom
 		useEventListener(canvas, 'wheel', (event) => {
 			if (event.ctrlKey) event.preventDefault()
@@ -76,10 +69,13 @@ export const useAppStore = defineStore('app', () => {
 			if (!controls) return
 			const delta = event.deltaY * -0.01
 			if (activeCamera instanceof THREE.PerspectiveCamera) {
-				const direction = new THREE.Vector3()
-				direction.subVectors(controls.target, activeCamera.position).normalize()
-				const adjustedDelta = event.shiftKey ? delta : event.ctrlKey ? delta * 100 : delta * 10
-				activeCamera.position.addScaledVector(direction, adjustedDelta)
+				let dollyScale = 1.2
+
+				if (isCtrlDown.value) dollyScale = 1.3
+				if (isShiftDown.value) dollyScale = 1.05
+
+				if (delta < 0) controls.dollyIn(dollyScale)
+				if (delta > 0) controls.dollyOut(dollyScale)
 			} else if (activeCamera instanceof THREE.OrthographicCamera) {
 				const zoomFactor = 1 + delta * 0.1
 				activeCamera.zoom *= zoomFactor

@@ -34,9 +34,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useEventListener, useKeyModifier, usePointer } from '@vueuse/core'
+import { useEventListener, useKeyModifier } from '@vueuse/core'
 import type { NumberFieldInput, NumberFieldRootProps } from 'reka-ui'
-import { computed, ref, useTemplateRef, watch } from 'vue'
+import { computed, ref, useTemplateRef } from 'vue'
 
 const props = withDefaults(defineProps<NumberFieldRootProps>(), {
 	formatOptions: () => ({ minimumFractionDigits: 3 }),
@@ -51,38 +51,31 @@ const isPointerMoved = ref(false)
 const isPointerDown = ref(false)
 const isInputFocused = ref(false)
 
-function onPointerDown(e: PointerEvent) {
-	if (e.button !== 0) return
-	isPointerDown.value = true
-	if (!isInputFocused.value) e.preventDefault()
-}
-
-useEventListener('pointerup', () => {
-	if (!isPointerDown.value) return
-	if (inputRef.value && !isPointerMoved.value) {
-		const input = inputRef.value.$el as HTMLInputElement
-		input.focus()
-	}
-	isPointerMoved.value = false
-	isPointerDown.value = false
-})
-
-const { x } = usePointer()
-
 const shiftState = useKeyModifier('Shift')
 const controlState = useKeyModifier('Control')
 
 const STEP_MULTIPLIER_CONTROL = 10
 const STEP_MULTIPLIER_SHIFT = 0.1
 
-watch(x, (val, oldVal) => {
+function onPointerDown(e: PointerEvent) {
+	if (e.button !== 0) return
+	isPointerDown.value = true
+
+	if (!isInputFocused.value) {
+		e.preventDefault()
+		const $el = e.target as HTMLInputElement
+		$el.requestPointerLock()
+		return
+	}
+}
+
+useEventListener('pointermove', (e: PointerEvent) => {
 	if (!isPointerDown.value) return
 
-	const delta = val - oldVal
-	if (delta === 0 || isInputFocused.value) return
+	if (e.movementX === 0 || isInputFocused.value) return
 	isPointerMoved.value = true
 
-	let step = delta > 0 ? props.step : -props.step
+	let step = e.movementX > 0 ? props.step : -props.step
 	if (controlState.value) step = step * STEP_MULTIPLIER_CONTROL
 	if (shiftState.value) step = step * STEP_MULTIPLIER_SHIFT
 
@@ -92,6 +85,19 @@ watch(x, (val, oldVal) => {
 	if (props.min !== undefined && newVal < props.min) newVal = props.min
 
 	model.value = newVal
+})
+
+useEventListener('pointerup', () => {
+	if (!isPointerDown.value) return
+
+	if (inputRef.value && !isPointerMoved.value) {
+		const input = inputRef.value.$el as HTMLInputElement
+		input.focus()
+	}
+
+	isPointerMoved.value = false
+	isPointerDown.value = false
+	if (document.pointerLockElement) document.exitPointerLock()
 })
 
 const barFillWidth = computed(() => {

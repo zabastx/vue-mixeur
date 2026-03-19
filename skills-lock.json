@@ -1,6 +1,11 @@
 {
   "version": 1,
   "skills": {
+    "changelog-maintenance": {
+      "source": "supercent-io/skills-template",
+      "sourceType": "github",
+      "computedHash": "ac538e27fdba50d613ce72eb929f4b33ac1d2d8bd25aff266b138cd6fb5529ee"
+    },
     "vue-best-practices": {
       "source": "antfu/skills",
       "sourceType": "github",

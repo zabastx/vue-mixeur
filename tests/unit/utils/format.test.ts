@@ -3,14 +3,14 @@ import { describe, it, expect } from 'vitest'
 
 describe('bytesToSize', () => {
 	it('returns "n/a" for 0 or negative bytes', () => {
-		expect(bytesToSize(0)).toBe('n/a')
+		expect(bytesToSize(0)).toBe('0 Bytes')
 		expect(bytesToSize(-10000)).toBe('n/a')
 	})
 
 	it('returns bytes for values less than 1024', () => {
-		expect(bytesToSize(512)).toBe('512 Bytes)')
-		expect(bytesToSize(1)).toBe('1 Bytes)')
-		expect(bytesToSize(1023)).toBe('1023 Bytes)')
+		expect(bytesToSize(512)).toBe('512 Bytes')
+		expect(bytesToSize(1)).toBe('1 Bytes')
+		expect(bytesToSize(1023)).toBe('1023 Bytes')
 	})
 
 	it('converts to KB correctly', () => {

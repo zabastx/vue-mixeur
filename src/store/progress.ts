@@ -1,62 +1,78 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export interface LoadingProgress {
+export interface ProgressItem {
 	id: string
-	filename: string
-	percentage: number
+	title: string
+	percentage?: number
 	loaded: number
-	total: number
+	total?: number
 	startTime: number
 	estimatedTimeRemaining?: number
 }
 
 export const useProgressStore = defineStore('progress', () => {
-	const loadingItems = ref<LoadingProgress[]>([])
+	const progressItems = ref<ProgressItem[]>([])
 
-	function startLoading(id: string, filename: string, total: number) {
-		const progress: LoadingProgress = {
+	function initProgress(title: string) {
+		const id = crypto.randomUUID()
+		let idx: number | undefined
+
+		const start = (total?: number) => {
+			idx =
+				progressItems.value.push({
+					id,
+					title,
+					percentage: 0,
+					loaded: 0,
+					total,
+					startTime: Date.now()
+				}) - 1
+		}
+
+		const update = (id: string, loaded: number) => {
+			const item = progressItems.value.find((p) => p.id === id)
+			if (!item || !item.total) return
+
+			item.loaded = loaded
+			item.percentage = (loaded / item.total) * 100
+
+			// Calculate ETA
+			const elapsed = Date.now() - item.startTime
+			if (elapsed > 0 && loaded > 0) {
+				const rate = loaded / elapsed // bytes per millisecond
+				const remaining = item.total - loaded
+				item.estimatedTimeRemaining = remaining / rate
+			}
+		}
+
+		const stop = () => {
+			if (idx === undefined) return
+			progressItems.value.splice(idx, 1)
+		}
+
+		const onProgress = (e: ProgressEvent) => {
+			if (e.lengthComputable) {
+				const item = progressItems.value.find((p: ProgressItem) => p.id === id)
+
+				if (!item) return start(e.total)
+
+				update(item.id, e.loaded)
+			}
+		}
+
+		return {
 			id,
-			filename,
-			percentage: 0,
-			loaded: 0,
-			total,
-			startTime: Date.now()
+			start,
+			update,
+			stop,
+			onProgress
 		}
-		loadingItems.value.push(progress)
-	}
-
-	function updateProgress(id: string, loaded: number) {
-		const item = loadingItems.value.find((p) => p.id === id)
-		if (!item) return
-
-		item.loaded = loaded
-		item.percentage = (loaded / item.total) * 100
-
-		// Calculate ETA
-		const elapsed = Date.now() - item.startTime
-		const rate = loaded / elapsed // bytes per millisecond
-		const remaining = item.total - loaded
-		item.estimatedTimeRemaining = remaining / rate
-	}
-
-	function finishLoading(id: string) {
-		const index = loadingItems.value.findIndex((p) => p.id === id)
-		if (index !== -1) {
-			loadingItems.value.splice(index, 1)
-		}
-	}
-
-	function getActiveLoadings() {
-		return loadingItems.value
 	}
 
 	return {
-		loadingItems,
-		startLoading,
-		updateProgress,
-		finishLoading,
-		getActiveLoadings
+		progressItems,
+		initProgress
 	}
 })
 

@@ -8,7 +8,7 @@
 			<span class="overflow-hidden text-ellipsis" :title="model?.name">
 				{{ model?.name || 'None' }}
 			</span>
-			<button v-if="model" type="button" class="cursor-pointer px-1" @click="removeMap">x</button>
+			<button v-if="model" type="button" class="cursor-pointer px-1" @click="reset">x</button>
 		</div>
 		<div class="hidden grid-cols-2 group-focus-within:grid">
 			<button type="button" class="btn" @click="openLibrary">Library</button>
@@ -20,6 +20,7 @@
 <script lang="ts" setup>
 import { useModals } from '@/composables/useModals'
 import THREE from '@/three'
+import { loadEXR } from '@/three/modules/loaders/exr'
 import { loadTexture } from '@/three/modules/loaders/textureLoader'
 import { isPolyHavenFileInfo } from '@/utils/polyhaven'
 import { useFileDialog } from '@vueuse/core'
@@ -28,17 +29,25 @@ const model = defineModel<THREE.Texture | null>()
 
 const { open, onChange } = useFileDialog({
 	multiple: false,
-	accept: 'image/*'
+	accept: 'image/*, .exr'
 })
 
 onChange(async (files) => {
 	const file = files?.[0]
 	if (!file) return
 	const url = URL.createObjectURL(file)
-	const loader = new THREE.TextureLoader()
-	const texture = await loader.loadAsync(url)
-	URL.revokeObjectURL(url)
-	texture.name = file.name
+	const isEXR = file.name.toLowerCase().endsWith('.exr')
+
+	const parameters = {
+		url,
+		filename: file.name,
+		size: file.size
+	}
+
+	const texture = isEXR ? await loadEXR(parameters) : await loadTexture(parameters)
+
+	if (!texture) return
+
 	const oldTexture = model.value
 	model.value = texture
 	if (oldTexture) oldTexture.dispose()
@@ -49,13 +58,23 @@ const { open: openModal } = useModals()
 function openLibrary() {
 	openModal('textureLibrary', async (file) => {
 		if (!isPolyHavenFileInfo(file)) return
+		const isEXR = file.url.toLowerCase().endsWith('.exr')
 		const filename = file.url.match(/[^/]+$/)?.[0] ?? 'Texture'
-		const texture = await loadTexture({ url: file.url, filename, size: file.size })
+		const parameters = {
+			url: file.url,
+			filename,
+			size: file.size
+		}
+		const texture = isEXR ? await loadEXR(parameters) : await loadTexture(parameters)
+		if (!texture) return
+
+		const oldTexture = model.value
 		model.value = texture
+		if (oldTexture) oldTexture.dispose()
 	})
 }
 
-function removeMap() {
+function reset() {
 	if (model.value) {
 		const texture = model.value
 		model.value = null

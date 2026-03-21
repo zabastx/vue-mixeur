@@ -1,33 +1,26 @@
-import { useProgressStore, type LoadingProgress } from '@/store/progress'
+import { useProgressStore } from '@/store/progress'
 import { useToast } from '@/composables/toast'
 import { FontLoader } from 'three/examples/jsm/Addons.js'
 
+const toast = useToast()
+
+const fontLoader = new FontLoader()
+
 export async function loadFont(font: StdFontName | (string & {})) {
 	const progressStore = useProgressStore()
-	const loadingId = `font-${Date.now()}-${Math.random().toString(36).slice(2)}`
-	const fontLoader = new FontLoader()
+	const progressItem = progressStore.initProgress(font)
 
 	try {
 		const url = defaultFontUrls.get(font) || font
-		const res = await fontLoader.loadAsync(url, onProgress)
+		const res = await fontLoader.loadAsync(url, progressItem.onProgress)
 		return res
 	} catch (err) {
 		const error = err as Error
-		useToast().add({ type: 'error', message: 'Error when loading font' })
-		if (import.meta.env.DEV) console.error(error.name, error.message)
+		toast.add({ type: 'error', message: 'Error when loading font' })
+		if (import.meta.env.DEV) console.error('loadFont Error\n', error.name, error.message)
 		return null
 	} finally {
-		progressStore.finishLoading(loadingId)
-	}
-
-	function onProgress(e: ProgressEvent) {
-		if (e.lengthComputable) {
-			if (progressStore.loadingItems.find((p: LoadingProgress) => p.id === loadingId)) {
-				progressStore.updateProgress(loadingId, e.loaded)
-			} else {
-				progressStore.startLoading(loadingId, font, e.total)
-			}
-		}
+		progressItem.stop()
 	}
 }
 

@@ -11,7 +11,7 @@
 			<Popover.Content
 				avoid-collisions
 				position-strategy="absolute"
-				class="bg-ui-menu-bg-inner rounded p-2"
+				class="bg-ui-menu-bg-inner rounded p-2 z-1"
 			>
 				<ColorPicker v-model="modelHex" v-model:alpha="modelAlpha" />
 			</Popover.Content>

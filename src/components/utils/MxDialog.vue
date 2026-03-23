@@ -16,7 +16,7 @@
 					class="fixed overflow-hidden rounded p-0 z-1000"
 					:class="[$attrs.class, { resize }]"
 				>
-					<div ref="handleRef" class="z-10 absolute top-0 left-0 w-full h-9 cursor-move"></div>
+					<div ref="handleRef" class="z-10 absolute top-0 left-0 w-full h-5 cursor-move"></div>
 					<VisuallyHidden as-child>
 						<Dialog.Title>{{ title }}</Dialog.Title>
 					</VisuallyHidden>

@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Model format loaders: Added support for additional 3D model formats
+  - GLTF/GLB loader with Draco, KTX2, and Meshopt compression support
+  - MTL (Material Template Library) loader for associated materials
+  - OBJ loader for legacy model support
+  - FBX (Filmbox) loader for common 3D format support
+  - All loaders include URL modifier support and proper error handling with toast notifications
+
+### Changed
+
+- EXR loader refactored to move loader instantiation inside the function and added JSDoc documentation
+
 ## [0.10.0] - 2026-03-22
 
 ### Added
@@ -58,7 +73,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Transform controls initialized after event listeners
 
-[Unreleased]: https://github.com/username/repo/compare/v0.9.3...HEAD
+[Unreleased]: https://github.com/username/repo/compare/v0.10.0...HEAD
 [0.9.3]: https://github.com/username/repo/compare/v0.9.2...v0.9.3
 [0.9.2]: https://github.com/username/repo/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/username/repo/compare/v0.9.0...v0.9.1

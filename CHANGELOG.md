@@ -20,7 +20,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- InputSelect component refactored to use generics for improved type safety
+- Simplified type annotations in camera-related components
 - EXR loader refactored to move loader instantiation inside the function and added JSDoc documentation
+
+### Fixed
+
+- InputTexture memory leak: Added URL.revokeObjectURL() to release blob URL after texture loading
 
 ## [0.10.0] - 2026-03-22
 

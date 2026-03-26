@@ -35,9 +35,8 @@
 	</Select.Root>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup generic="T extends string | number | Record<string, unknown> | null">
 import type {
-	AcceptableValue,
 	SelectContentProps,
 	SelectItemProps,
 	SelectRootProps,
@@ -47,7 +46,7 @@ import { Select } from 'reka-ui/namespaced'
 
 defineProps<SelectProps>()
 
-const model = defineModel<AcceptableValue | AcceptableValue[]>()
+const model = defineModel<T>()
 
 interface SelectProps {
 	root?: SelectRootProps
@@ -55,11 +54,11 @@ interface SelectProps {
 	trigger?: SelectTriggerProps
 	content?: SelectContentProps
 	item?: SelectItemProps
-	items: InputSelectOption[]
+	items: InputSelectOption[] | readonly InputSelectOption[]
 }
 
-export interface InputSelectOption {
-	value: AcceptableValue
+interface InputSelectOption {
+	value: T
 	label: string
 }
 </script>

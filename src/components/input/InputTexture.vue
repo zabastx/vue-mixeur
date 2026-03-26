@@ -46,6 +46,8 @@ onChange(async (files) => {
 
 	const texture = isEXR ? await loadEXR(parameters) : await loadTexture(parameters)
 
+	URL.revokeObjectURL(url)
+
 	if (!texture) return
 
 	const oldTexture = model.value

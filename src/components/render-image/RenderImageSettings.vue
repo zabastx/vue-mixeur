@@ -41,7 +41,6 @@
 
 <script lang="ts" setup>
 import { computed, reactive, watch } from 'vue'
-import type { InputSelectOption } from '../input/InputSelect.vue'
 
 const RESOLUTION_PRESETS = [
 	{ value: '480p', label: '480p (854x480)', width: 854, height: 480 },
@@ -58,7 +57,7 @@ const FORMAT_PRESETS = [
 	{ value: 'png', label: 'PNG' },
 	{ value: 'jpeg', label: 'JPEG' },
 	{ value: 'webp', label: 'WebP' }
-] as const satisfies InputSelectOption[]
+] as const
 
 type RenderPreset = (typeof RESOLUTION_PRESETS)[number]
 type FormatPreset = (typeof FORMAT_PRESETS)[number]

@@ -72,7 +72,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { InputSelectOption } from '@/components/input/InputSelect.vue'
 import { useThreeStore } from '@/store/three'
 import THREE from '@/three'
 import { computed, ref } from 'vue'
@@ -95,7 +94,7 @@ function isPerspectiveCamera(
 	return threeStore.activeCamera.type === 'PerspectiveCamera'
 }
 
-const TYPE_OPTIONS: InputSelectOption[] = [
+const TYPE_OPTIONS = [
 	{
 		label: 'Perspective',
 		value: 'PerspectiveCamera'
@@ -104,7 +103,7 @@ const TYPE_OPTIONS: InputSelectOption[] = [
 		label: 'Orthographic',
 		value: 'OrthographicCamera'
 	}
-]
+] as const
 
 const currentLensUnit = ref<(typeof LENS_UNIT_OPTIONS)[number]['value']>('fov')
 
@@ -131,5 +130,5 @@ const LENS_UNIT_OPTIONS = [
 		label: 'Millimeters',
 		value: 'focal'
 	}
-] as const satisfies InputSelectOption[]
+] as const
 </script>

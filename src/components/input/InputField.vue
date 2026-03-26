@@ -4,8 +4,9 @@
 		:style="{ gridTemplateColumns: gridCols }"
 	>
 		<MxTooltip :tooltip :tooltip-disabled="!tooltip">
-			<span class="px-1 py-0.5 leading-4" :class="{ 'order-1': reverse }">
+			<span class="px-1 py-0.5 leading-4 cursor-default" :class="{ 'order-1': reverse }">
 				{{ label }}
+				<MxIcon v-if="tooltip" class="inline-block align-[center]" name="misc/question" />
 			</span>
 		</MxTooltip>
 

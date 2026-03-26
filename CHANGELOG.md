@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - OBJ loader for legacy model support
   - FBX (Filmbox) loader for common 3D format support
   - All loaders include URL modifier support and proper error handling with toast notifications
+- Input field tooltip indicators: Added question mark icon to labeled inputs with tooltips
+- Tooltip layering: Added z-index to ensure tooltip content renders above other elements
 
 ### Changed
 

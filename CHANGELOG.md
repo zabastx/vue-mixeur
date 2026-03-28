@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Import Scene Modal: New unified interface for importing 3D model files with support for:
+  - Multi-format support: glTF/GLB, OBJ, and FBX files
+  - Automatic format detection via magic bytes and content analysis
+  - Asset management panel for textures, materials (.mtl), and binary (.bin) files
+  - Auto-fill functionality to automatically match required assets by filename
+  - Material settings panel for OBJ imports (side, wrapping, RGB normalization, transparency)
+  - Proper blob URL cleanup with try-finally to prevent memory leaks
+  - Error handling with toast notifications for failed imports
 - Model format loaders: Added support for additional 3D model formats
   - GLTF/GLB loader with Draco, KTX2, and Meshopt compression support
   - MTL (Material Template Library) loader for associated materials

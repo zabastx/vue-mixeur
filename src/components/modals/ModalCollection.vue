@@ -6,6 +6,7 @@
 		:callback="dialogCallbacks.textureLibrary"
 	/>
 	<ModalRenderImage v-model="openModals.renderImage" />
+	<ModalImportScene v-model="openModals.importScene" />
 </template>
 
 <script lang="ts" setup>

@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
 
-type DialogName = 'modelsLibrary' | 'textureLibrary' | 'about' | 'renderImage'
+type DialogName = 'modelsLibrary' | 'textureLibrary' | 'about' | 'renderImage' | 'importScene'
 
 type DialogCallback = (...args: unknown[]) => unknown
 
@@ -8,14 +8,16 @@ export const openModals = reactive<Record<DialogName, boolean>>({
 	about: false,
 	modelsLibrary: false,
 	textureLibrary: false,
-	renderImage: false
+	renderImage: false,
+	importScene: false
 })
 
 export const dialogCallbacks = reactive<Record<DialogName, DialogCallback | null>>({
 	about: null,
 	modelsLibrary: null,
 	textureLibrary: null,
-	renderImage: null
+	renderImage: null,
+	importScene: null
 })
 
 export function useModals() {

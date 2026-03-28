@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test'
-import { fileURLToPath } from 'node:url'
 
 test.describe('3D Viewport', () => {
 	test.beforeEach(async ({ page }) => {
@@ -44,7 +43,9 @@ test.describe('3D Viewport', () => {
 
 		expect(box).not.toBeNull()
 
-		if (!box) return
+		if (!box) {
+			throw new Error('Canvas bounding box is null')
+		}
 
 		const x = box.x + box.width / 2
 		const y = box.y + box.height / 2
@@ -53,23 +54,5 @@ test.describe('3D Viewport', () => {
 
 		const selectedItem = page.locator('[data-testid="outliner-selected"]')
 		await expect(selectedItem).toBeAttached()
-	})
-
-	test('import model flow', async ({ page, browserName }) => {
-		test.skip(browserName === 'webkit', 'WebKit file chooser behaves differently in CI')
-
-		await page.click('text=File')
-		await page.hover('text=Import')
-
-		const [fileChooser] = await Promise.all([
-			page.waitForEvent('filechooser'),
-			page.click('text=GLTF')
-		])
-
-		const filePath = fileURLToPath(new URL('./files/test-gltf.glb', import.meta.url))
-
-		await fileChooser.setFiles(filePath)
-
-		await expect(page.locator('text=test-gltf')).toBeVisible({ timeout: 10000 })
 	})
 })

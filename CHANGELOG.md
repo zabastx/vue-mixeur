@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Material settings panel for OBJ imports (side, wrapping, RGB normalization, transparency)
   - Proper blob URL cleanup with try-finally to prevent memory leaks
   - Error handling with toast notifications for failed imports
+  - End-to-end tests for GLB, OBJ, and FBX file imports with asset management
+  - Additional tests: modal close, multiple file upload, manual asset mapping
 - Model format loaders: Added support for additional 3D model formats
   - GLTF/GLB loader with Draco, KTX2, and Meshopt compression support
   - MTL (Material Template Library) loader for associated materials

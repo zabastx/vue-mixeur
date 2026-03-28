@@ -17,6 +17,7 @@
 							v-for="item in sceneFiles"
 							:key="item.id"
 							class="px-1 rounded cursor-default truncate"
+							data-testid="model-file"
 							:class="[
 								selectedFile?.id === item.id
 									? 'bg-ui-list-inner-selected'
@@ -43,6 +44,7 @@
 						<div
 							v-for="item in assetFiles"
 							:key="item.id"
+							data-testid="asset-file"
 							class="px-1 rounded cursor-default"
 							:class="{ 'hover:hover:bg-active-editor-outline': item.isImage }"
 							@pointerenter="onImageAssetHover(item)"

@@ -6,7 +6,7 @@
 				border-ui-menu-outline bg-ui-menu-inner px-1 py-0.5 text-ui-menu-text"
 			:class="$attrs.class"
 		>
-			<Select.Value :placeholder class="h-[1.5em]" />
+			<Select.Value :placeholder class="h-[1.5em] truncate" />
 			<MxIcon name="ui/chevron-right" class="rotate-90" />
 		</Select.Trigger>
 
@@ -21,7 +21,7 @@
 						<Select.Item
 							v-for="val in items"
 							v-bind="item"
-							:key="'item_' + val.value"
+							:key="'option_' + val.label"
 							:value="val.value"
 							class="rounded p-1 text-xs data-highlighted:text-ui-menu-item-selected
 								data-highlighted:bg-gray-500 data-[state='checked']:bg--menu-item-inner-selected"

@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - InputTexture memory leak: Added URL.revokeObjectURL() to release blob URL after texture loading
+- InputSelect text overflow: Added truncate class to prevent long text from overflowing the select trigger
 
 ## [0.10.0] - 2026-03-22
 

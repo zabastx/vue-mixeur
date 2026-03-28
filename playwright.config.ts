@@ -8,9 +8,10 @@ export default defineConfig({
 	testDir: './tests/e2e',
 	fullyParallel: true,
 	forbidOnly: !!process.env.CI,
-	retries: process.env.CI ? 2 : 0,
+	retries: process.env.CI ? 1 : 0,
 	workers: process.env.CI ? 1 : 3,
 	reporter: 'html',
+	timeout: 2 * 60 * 1000,
 
 	use: {
 		baseURL: process.env.CI ? 'http://localhost:4173' : 'http://localhost:5173',
@@ -18,7 +19,7 @@ export default defineConfig({
 		screenshot: 'only-on-failure',
 		launchOptions: {
 			args: [
-				'--use-gl=angle',
+				'--use-gl=swiftshader',
 				'--disable-gpu-sandbox',
 				...(process.env.CI ? ['--disable-gpu', '--no-sandbox', '--disable-setuid-sandbox'] : [])
 			]

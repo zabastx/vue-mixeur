@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Dependency updates: Updated all dependencies to latest compatible versions
+- MenuBar CSS refactoring: Moved menubar utility classes from `utils.css` to `components.css`, renamed classes for consistency (`.trigger` → `.menubar-trigger`, `.item` → `.menubar-item`), and replaced hardcoded colors with design token variables from the theme
 - CSS improvements: Refactored button hover states to use more specific selectors (`not-disabled:hover`) instead of global `button:hover`
 - Button variants: Added `.btn--highlight` variant with blue background for emphasized actions
 - CSS cleanup: Removed unused tailwind-scrollbar plugin from main CSS

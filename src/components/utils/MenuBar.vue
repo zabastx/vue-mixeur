@@ -1,7 +1,7 @@
 <template>
 	<Menubar.Root loop>
 		<Menubar.Menu v-for="menu in items" :key="menu.label">
-			<Menubar.Trigger class="trigger">
+			<Menubar.Trigger class="menubar-trigger">
 				<img
 					v-if="menu.icon === 'mixeur'"
 					src="/favicon.svg"
@@ -13,7 +13,7 @@
 			</Menubar.Trigger>
 			<Menubar.Content class="menubar-content">
 				<template v-for="item in menu.items" :key="item.key">
-					<Menubar.Item v-if="item.type === 'item'" class="item" @click="item.onClick">
+					<Menubar.Item v-if="item.type === 'item'" class="menubar-item" @click="item.onClick">
 						<span class="w-[1em]">
 							<MxIcon v-if="item.icon" :name="item.icon" />
 						</span>
@@ -22,14 +22,14 @@
 					<Menubar.CheckboxItem
 						v-else-if="item.type === 'checkbox'"
 						v-model="item.model.value"
-						class="item"
+						class="menubar-item"
 					>
 						<MxIcon v-if="item.model.value" name="ui/checkbox-checked" />
 						<MxIcon v-else name="ui/checkbox-unchecked" />
 						{{ item.label }}
 					</Menubar.CheckboxItem>
 					<Menubar.Sub v-else-if="item.type === 'sub'">
-						<Menubar.SubTrigger class="item">
+						<Menubar.SubTrigger class="menubar-item">
 							<span class="w-[1em]">
 								<MxIcon v-if="item.icon" :name="item.icon" />
 							</span>
@@ -40,7 +40,7 @@
 							<Menubar.Item
 								v-for="subitem in item.items"
 								:key="subitem.key"
-								class="item"
+								class="menubar-item"
 								@click="subitem.onClick"
 							>
 								<span class="w-[1em]">
@@ -96,27 +96,3 @@ interface IMenubarCommon {
 	label: string
 }
 </script>
-
-<style scoped>
-@reference 'tailwindcss/theme';
-
-.trigger {
-	@apply cursor-default rounded px-2 py-1 text-sm leading-none text-(--color-ui-menu-item-text) hover:bg-[#3D3D3DFF];
-	&[data-highlighted] {
-		@apply text-(--color-ui-menu-item-selected);
-	}
-	&[data-state='open'] {
-		@apply rounded-b-none bg-[#3D3D3DFF];
-	}
-}
-
-.item {
-	@apply flex cursor-default items-center gap-1 rounded p-1 pl-2.5 leading-none;
-	&[data-highlighted] {
-		@apply text-(--color-ui-menu-item-selected) data-highlighted:bg-gray-500;
-	}
-	& > :first-child {
-		@apply text-sm;
-	}
-}
-</style>

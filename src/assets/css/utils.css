@@ -1,7 +1,3 @@
-@utility menubar-content {
-	@apply text-ui-menu-item-text border-ui-menu-bg-outline bg-ui-menu-bg-inner z-10 flex min-w-[200px] flex-col gap-1 rounded border p-0.5 text-xs data-[state=open]:rounded-tl-none;
-}
-
 @utility block-border {
 	@apply border-editor-outline hover:border-active-editor-outline border;
 }

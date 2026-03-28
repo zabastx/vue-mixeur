@@ -15,4 +15,20 @@
 	.btn--highlight {
 		@apply bg-[#4772B3FF];
 	}
+
+	.menubar-trigger {
+		@apply rounded px-2 py-1 text-sm leading-none text-ui-menu-item-text hover:bg-ui-menu-outline
+			data-highlighted:text-ui-menu-item-text-selected data-[state=open]:rounded-b-none
+			bg-ui-menu-item-outline;
+	}
+
+	.menubar-content {
+		@apply text-ui-menu-item-text border-ui-menu-bg-outline bg-ui-menu-bg-inner z-10 flex
+			min-w-[200px] flex-col gap-1 rounded border p-0.5 text-xs data-[state=open]:rounded-tl-none;
+	}
+
+	.menubar-item {
+		@apply flex items-center gap-1 rounded p-1 pl-2.5 leading-none
+			data-highlighted:text-ui-menu-item-text-selected data-highlighted:bg-gray-500 *:first:text-sm;
+	}
 }

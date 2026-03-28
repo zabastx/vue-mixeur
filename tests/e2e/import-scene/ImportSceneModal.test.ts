@@ -79,10 +79,10 @@ test.describe('Import Scene Modal', () => {
 			page.click('text=Upload files')
 		])
 		const glbPath = fileURLToPath(new URL('../files/test-gltf.glb', import.meta.url))
-		const fbxPath = fileURLToPath(new URL('../files/fbx/cliff-side.fbx', import.meta.url))
-		await fileChooser.setFiles([glbPath, fbxPath])
+		const objPath = fileURLToPath(new URL('../files/obj/female02.obj', import.meta.url))
+		await fileChooser.setFiles([glbPath, objPath])
 		await expect(page.getByText('test-gltf.glb')).toBeVisible()
-		await expect(page.getByText('cliff-side.fbx')).toBeVisible()
+		await expect(page.getByText('female02.obj')).toBeVisible()
 	})
 
 	test('Manual asset mapping', async ({ page }) => {

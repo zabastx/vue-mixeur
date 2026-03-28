@@ -25,9 +25,6 @@ export async function loadTexture({ url, filename, size }: TextureLoaderParamete
 		return null
 	} finally {
 		progressItem.stop()
-		if (url.startsWith('blob:')) {
-			URL.revokeObjectURL(url)
-		}
 	}
 }
 

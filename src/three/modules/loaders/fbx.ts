@@ -14,6 +14,7 @@ import { FBXLoader } from 'three/examples/jsm/Addons.js'
  * @param parameters.url - URL or path to the FBX file
  * @param parameters.filename - Display name for progress tracking
  * @param parameters.urlModifier - Optional function to transform URLs (e.g., to resolve relative paths)
+ * @param parameters.isBinary - Optional flag indicating if the file is binary (skips progress tracking)
  * @returns Promise resolving to the loaded THREE.Object3D, or undefined on error
  *
  * @example
@@ -34,7 +35,7 @@ import { FBXLoader } from 'three/examples/jsm/Addons.js'
  * })
  * ```
  */
-export async function loadFBX({ url, filename, urlModifier }: LoadFBXParameters) {
+export async function loadFBX({ url, filename, urlModifier, isBinary }: LoadFBXParameters) {
 	const loader = new FBXLoader()
 
 	const toast = useToast()
@@ -47,6 +48,8 @@ export async function loadFBX({ url, filename, urlModifier }: LoadFBXParameters)
 			manager.setURLModifier(urlModifier)
 			loader.manager = manager
 		}
+
+		if (!isBinary) progressItem.start()
 
 		const fbx = await loader.loadAsync(url, progressItem.onProgress)
 		return fbx
@@ -66,5 +69,6 @@ export async function loadFBX({ url, filename, urlModifier }: LoadFBXParameters)
 interface LoadFBXParameters {
 	url: string
 	filename: string
+	isBinary?: boolean
 	urlModifier?: (url: string) => string
 }

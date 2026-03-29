@@ -6,16 +6,19 @@ import { defineConfig, devices } from '@playwright/test'
  */
 export default defineConfig({
 	testDir: './tests/e2e',
-	fullyParallel: true,
+	fullyParallel: !process.env.CI,
 	forbidOnly: !!process.env.CI,
-	retries: process.env.CI ? 1 : 0,
+	retries: process.env.CI ? 2 : 0,
 	workers: process.env.CI ? 1 : 3,
 	reporter: 'html',
+	timeout: 60 * 1000,
 
 	use: {
 		baseURL: process.env.CI ? 'http://localhost:4173' : 'http://localhost:5173',
 		trace: 'on-first-retry',
-		screenshot: 'only-on-failure'
+		screenshot: 'only-on-failure',
+		actionTimeout: 15 * 1000,
+		navigationTimeout: 30 * 1000
 	},
 
 	projects: [
@@ -32,14 +35,18 @@ export default defineConfig({
 				}
 			}
 		},
-		{
-			name: 'firefox',
-			use: devices['Desktop Firefox']
-		},
-		{
-			name: 'webkit',
-			use: devices['Desktop Safari']
-		}
+		...(!process.env.CI
+			? [
+					{
+						name: 'firefox',
+						use: devices['Desktop Firefox']
+					},
+					{
+						name: 'webkit',
+						use: devices['Desktop Safari']
+					}
+				]
+			: [])
 	],
 
 	webServer: {

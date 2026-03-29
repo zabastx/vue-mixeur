@@ -11,25 +11,26 @@ export default defineConfig({
 	retries: process.env.CI ? 1 : 0,
 	workers: process.env.CI ? 1 : 3,
 	reporter: 'html',
-	timeout: 2 * 60 * 1000,
 
 	use: {
 		baseURL: process.env.CI ? 'http://localhost:4173' : 'http://localhost:5173',
 		trace: 'on-first-retry',
-		screenshot: 'only-on-failure',
-		launchOptions: {
-			args: [
-				'--use-gl=swiftshader',
-				'--disable-gpu-sandbox',
-				...(process.env.CI ? ['--disable-gpu', '--no-sandbox', '--disable-setuid-sandbox'] : [])
-			]
-		}
+		screenshot: 'only-on-failure'
 	},
 
 	projects: [
 		{
 			name: 'chromium',
-			use: devices['Desktop Chrome']
+			use: {
+				...devices['Desktop Chrome'],
+				launchOptions: {
+					args: [
+						'--use-gl=angle',
+						'--disable-gpu-sandbox',
+						...(process.env.CI ? ['--disable-gpu', '--no-sandbox', '--disable-setuid-sandbox'] : [])
+					]
+				}
+			}
 		},
 		{
 			name: 'firefox',
@@ -44,6 +45,7 @@ export default defineConfig({
 	webServer: {
 		command: process.env.CI ? 'bun run preview' : 'bun run dev',
 		url: process.env.CI ? 'http://localhost:4173' : 'http://localhost:5173',
-		reuseExistingServer: !process.env.CI
+		reuseExistingServer: !process.env.CI,
+		timeout: 2 * 60 * 1000
 	}
 })

@@ -27,7 +27,6 @@
 <script lang="ts" setup>
 import { useThreeStore } from '@/store/three'
 import THREE from '@/three'
-import type { InputSelectOption } from '../input/InputSelect.vue'
 
 const model = defineModel<CameraSettings>({ required: true })
 
@@ -52,7 +51,7 @@ const CAMERA_TYPE_OPTIONS = [
 		label: 'Orthographic',
 		value: 'OrthographicCamera'
 	}
-] as const satisfies InputSelectOption[]
+] as const
 
 export interface CameraSettings {
 	fov: number

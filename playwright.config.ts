@@ -8,7 +8,7 @@ export default defineConfig({
 	testDir: './tests/e2e',
 	fullyParallel: true,
 	forbidOnly: !!process.env.CI,
-	retries: process.env.CI ? 2 : 0,
+	retries: process.env.CI ? 1 : 0,
 	workers: process.env.CI ? 1 : 3,
 	reporter: 'html',
 
@@ -18,20 +18,29 @@ export default defineConfig({
 		screenshot: 'only-on-failure'
 	},
 
-	projects: process.env.CI
-		? [
-				{
-					name: 'chromium',
-					use: {
-						...devices['Desktop Chrome'],
-						launchOptions: {
-							args: ['--use-gl=swiftshader', '--no-sandbox']
-						}
-					}
-				},
-				{ name: 'webkit', use: devices['Desktop Safari'] }
-			]
-		: [{ name: 'chromium', use: devices['Desktop Chrome'] }],
+	projects: [
+		{
+			name: 'chromium',
+			use: {
+				...devices['Desktop Chrome'],
+				launchOptions: {
+					args: [
+						'--use-gl=angle',
+						'--disable-gpu-sandbox',
+						...(process.env.CI ? ['--disable-gpu', '--no-sandbox', '--disable-setuid-sandbox'] : [])
+					]
+				}
+			}
+		},
+		{
+			name: 'firefox',
+			use: devices['Desktop Firefox']
+		},
+		{
+			name: 'webkit',
+			use: devices['Desktop Safari']
+		}
+	],
 
 	webServer: {
 		command: process.env.CI ? 'bun run preview' : 'bun run dev',

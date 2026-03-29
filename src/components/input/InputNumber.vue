@@ -12,7 +12,7 @@
 				<NumberFieldInput
 					ref="inputRef"
 					class="grow w-full text-center outline-none group-hover:brightness-110 py-0.5
-						cursor-ew-resize select-none z-10 relative focus:cursor-text"
+						cursor-ew-resize select-none z-1 relative focus:cursor-text"
 					data-testid="number-input"
 					@pointerdown="onPointerDown"
 					@focus="isInputFocused = true"

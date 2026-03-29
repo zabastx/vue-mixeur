@@ -17,10 +17,7 @@ import { useAppStore } from '@/store/app'
 import MenuBar, { type IMenubarMenu } from '../utils/MenuBar.vue'
 import { computed } from 'vue'
 import { useThreeStore } from '@/store/three'
-import { useToast } from '@/composables/toast'
-import type { loadModel } from '@/three/modules/loaders/modelLoader'
 import { useModals } from '@/composables/useModals'
-import { uploadFile } from '@/utils/files'
 
 const appStore = useAppStore()
 const threeStore = useThreeStore()
@@ -68,17 +65,9 @@ const menuItems: IMenubarMenu[] = [
 					{
 						type: 'item',
 						key: 'import_gltf',
-						label: 'glTF 2.0 (.glb)',
+						label: 'Import from file',
 						onClick: () => {
-							importFile('glb')
-						}
-					},
-					{
-						type: 'item',
-						key: 'import_obj',
-						label: 'Wavefront (.obj)',
-						onClick: () => {
-							importFile('obj')
+							open('importScene')
 						}
 					},
 					{
@@ -145,20 +134,4 @@ const menuItems: IMenubarMenu[] = [
 		]
 	}
 ]
-
-const sceneStore = useThreeStore()
-const toast = useToast()
-
-async function importFile(format: Parameters<typeof loadModel>[0]['format']) {
-	const { data } = await uploadFile(`.${format}`)
-	if (!data) return
-	try {
-		await sceneStore.importModel({ filename: data.filename, url: data.url, format })
-	} catch (e) {
-		console.error(e)
-		toast.add({ type: 'error', message: `Failed to import ${format} file` })
-	} finally {
-		data?.cleanup()
-	}
-}
 </script>

@@ -3,8 +3,6 @@
 @import './components.css';
 @import './utils.css';
 
-@plugin 'tailwind-scrollbar';
-
 @theme {
 	--font-sans: InterVariable, sans-serif;
 	--font-sans--font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
@@ -41,8 +39,4 @@ body {
 
 .selection-box {
 	@apply pointer-events-none absolute z-100 border border-dashed border-white bg-[#ffffff10];
-}
-
-button:hover {
-	@apply brightness-125;
 }

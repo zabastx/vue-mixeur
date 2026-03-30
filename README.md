@@ -89,7 +89,6 @@ Try the live demo at [mixeur.zabastx.ru](https://mixeur.zabastx.ru)
 - `three`: 3D graphics library
 - `three-mesh-bvh`: Bounding Volume Hierarchy for fast raycasting
 - `three-viewport-gizmo`: Camera navigation gizmo
-- `three-stdlib`: Three.js standard library extensions
 - `vue`: Progressive JavaScript framework
 - `pinia`: State management for Vue 3
 - `@vueuse/core`: Collection of Vue composition utilities

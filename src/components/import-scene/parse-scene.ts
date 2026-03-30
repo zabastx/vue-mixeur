@@ -94,6 +94,30 @@ function isGLTFJson(json: unknown): json is GLTFJson {
 	)
 }
 
+function extractGLBJson(bytes: Uint8Array): unknown {
+	// GLB header: magic(4) + version(4) + length(4) = 12 bytes
+	// Chunk 0 header: chunkLength(4) + chunkType(4) = 8 bytes, then JSON data
+	const chunkLength = bytes[12] | (bytes[13] << 8) | (bytes[14] << 16) | (bytes[15] << 24)
+
+	const jsonBytes = bytes.slice(20, 20 + chunkLength)
+	try {
+		return JSON.parse(new TextDecoder().decode(jsonBytes))
+	} catch {
+		return null
+	}
+}
+
+async function extractGLBUris(file: File): Promise<string[]> {
+	const { bytes } = await readFile(file, file.size)
+	const json = extractGLBJson(bytes)
+	if (!isGLTFJson(json)) return []
+
+	const uris: string[] = []
+	json.buffers?.forEach((b) => b.uri && uris.push(b.uri))
+	json.images?.forEach((i) => i.uri && uris.push(i.uri))
+	return [...new Set(uris)].filter(isRelativeUri)
+}
+
 async function extractGLTFUris(file: File): Promise<string[]> {
 	let json: unknown
 	try {
@@ -212,7 +236,7 @@ export async function analyzeModelFile(file: File): Promise<ModelAssets | null> 
 		const head = await readFile(file)
 
 		if (detectGLB(head)) {
-			return { format: 'glb', uris: [] } // self-contained
+			return { format: 'glb', uris: await extractGLBUris(file) }
 		}
 
 		if (detectGLTF(head)) {

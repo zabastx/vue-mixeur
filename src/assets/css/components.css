@@ -28,7 +28,7 @@
 	}
 
 	.menubar-item {
-		@apply flex items-center gap-1 rounded p-1 pl-2.5 leading-none
+		@apply cursor-default h-6 flex items-center gap-1 rounded pr-1 pl-2.5 leading-none
 			data-highlighted:text-ui-menu-item-text-selected data-highlighted:bg-gray-500 *:first:text-sm;
 	}
 }

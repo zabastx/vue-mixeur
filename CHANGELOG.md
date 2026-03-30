@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Simplified type annotations in camera-related components
 - EXR loader refactored to move loader instantiation inside the function and added JSDoc documentation
 - Removed manual icon chunking from Vite build configuration
+- Self-hosted Inter font: Switched from external CDN (`rsms.me`) to local font files
 
 ### Fixed
 

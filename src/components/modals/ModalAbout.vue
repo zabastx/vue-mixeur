@@ -46,7 +46,7 @@
 						<MxIcon name="misc/url" />
 						Vue.js
 					</a>
-					<a href="https://github.com/zabastx/vue-mixeur" target="_blank">
+					<a href="https://github.com/zabastx/mixeur" target="_blank">
 						<MxIcon name="misc/url" />
 						GitHub repository
 					</a>

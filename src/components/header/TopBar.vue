@@ -2,7 +2,7 @@
 	<header class="flex items-center bg-topbar-background p-1 px-2">
 		<MenuBar :items="menuItems" />
 		<a
-			href="https://github.com/zabastx/vue-mixeur"
+			href="https://github.com/zabastx/mixeur"
 			class="ml-auto text-xl"
 			target="_blank"
 			title="GitHub repository"

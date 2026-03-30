@@ -32,7 +32,7 @@ export default defineConfig({
 				'logo_og.png'
 			],
 			manifest: {
-				name: 'Vue Mixeur',
+				name: 'Mixeur',
 				short_name: 'Mixeur',
 				description: 'Blender-like web-based 3D editor built with Vue.js and Three.js',
 				theme_color: '#303030',

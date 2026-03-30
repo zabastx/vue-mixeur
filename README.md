@@ -1,13 +1,13 @@
-# Vue Mixeur
+# Mixeur
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Vue](https://img.shields.io/badge/Vue-3.5.30-4FC08D.svg)](https://vuejs.org/)
+[![Vue](https://img.shields.io/badge/Vue-3.5.31-4FC08D.svg)](https://vuejs.org/)
 [![Three.js](https://img.shields.io/badge/Three.js-0.183.2-049EF4.svg)](https://threejs.org/)
 [![Vite](https://img.shields.io/badge/Vite-8.0.0-646CFF.svg)](https://vitejs.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6.svg)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.2.1-06B6D4.svg)](https://tailwindcss.com/)
 
-A Blender-like web-based 3D editor built with Vue.js and Three.js. Vue Mixeur provides an interface for 3D modeling, object manipulation, and scene management directly in the browser.
+A Blender-like web-based 3D editor built with Vue.js and Three.js. Mixeur provides an interface for 3D modeling, object manipulation, and scene management directly in the browser.
 
 ## Demo
 
@@ -38,10 +38,10 @@ Try the live demo at [mixeur.zabastx.ru](https://mixeur.zabastx.ru)
 
 ### Asset Management
 
-- **Model Import**: Support for GLTF/GLB with DRACO/Meshopt compression
+- **Model Import**: Support for GLTF/GLB, OBJ, and FBX formats with automatic format detection
 - **Model Export**: Export entire scenes to GLB format
 - **Models Library**: Browse and import free CC0 3D models from Poly Haven
-- **Texture Library**: Import and manage textures (diffuse, normal, roughness, AO, etc.)
+- **Texture Library**: Import and manage textures (diffuse, normal, roughness, AO, EXR, etc.)
 
 ### Scene Management
 
@@ -71,27 +71,6 @@ Try the live demo at [mixeur.zabastx.ru](https://mixeur.zabastx.ru)
 | `Numpad 1` | Front view (Ctrl+1 for back view)      |
 | `Numpad 3` | Right view (Ctrl+3 for left view)      |
 | `Numpad 7` | Top view (Ctrl+7 for bottom view)      |
-
-## Project Structure
-
-```
-src/
-├── components/          # Vue components
-│   ├── data/           # Data panels (outliner, properties)
-│   ├── header/         # Top navigation bar
-│   ├── input/          # Form input components
-│   ├── modals/         # Modal dialogs
-│   ├── render-image/   # Image rendering dialog
-│   ├── sidebar/        # Right sidebar panel
-│   ├── status/         # Bottom status bar
-│   ├── utils/          # Utility components
-│   └── viewport/       # 3D viewport component
-├── composables/        # Vue composition functions
-├── store/              # Pinia stores
-├── three/              # Three.js setup and modules
-├── utils/              # General utility functions
-└── assets/             # Static assets
-```
 
 ## Tech Stack
 

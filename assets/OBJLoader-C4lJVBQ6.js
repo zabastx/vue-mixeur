@@ -1,0 +1,1 @@
+import{t as e}from"./OBJLoader-D-mekj9N.js";export{e as OBJLoader};

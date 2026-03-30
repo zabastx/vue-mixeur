@@ -10,7 +10,7 @@
 					v-model="model.width"
 					:min="100"
 					:max="8192"
-					:format-options="{ maximumFractionDigits: 0 }"
+					:format-options="{ maximumFractionDigits: 0, useGrouping: false }"
 				/>
 			</InputField>
 			<InputField label="Height" label-width="90px">
@@ -18,7 +18,7 @@
 					v-model="model.height"
 					:min="100"
 					:max="8192"
-					:format-options="{ maximumFractionDigits: 0 }"
+					:format-options="{ maximumFractionDigits: 0, useGrouping: false }"
 				/>
 			</InputField>
 		</template>
@@ -28,10 +28,12 @@
 		</InputField>
 
 		<InputField v-if="model.selectedFormat !== 'png'" label="Quality" label-width="90px">
-			<div class="flex items-center gap-2">
-				<MxSlider v-model="qualityValue" :root="{ min: 0, max: 100, step: 1 }" />
-				<span class="text-xs w-9">{{ model.quality }}%</span>
-			</div>
+			<InputNumber
+				v-model="model.quality"
+				:min="0"
+				:max="100"
+				:format-options="{ maximumFractionDigits: 0 }"
+			/>
 		</InputField>
 		<InputField v-if="model.selectedFormat !== 'jpeg'" label="Background" label-width="90px">
 			<InputCheckbox v-model="model.background" />
@@ -40,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, watch } from 'vue'
+import { reactive, watch } from 'vue'
 
 const RESOLUTION_PRESETS = [
 	{ value: '480p', label: '480p (854x480)', width: 854, height: 480 },
@@ -90,11 +92,6 @@ watch(
 		if (val === 'jpeg') model.value.background = true
 	}
 )
-
-const qualityValue = computed({
-	get: () => [model.value.quality],
-	set: (val) => (model.value.quality = val[0] ?? 100)
-})
 
 export interface RenderSettings {
 	width: number

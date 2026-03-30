@@ -1,13 +1,11 @@
 <template>
 	<MxDialog
 		v-model="isOpen"
-		title="Models Library"
+		title="Asset Browser"
 		class="w-7xl h-[75dvh] text-ui-text-text block-border bg-window-bg flex flex-col"
 		resize
+		icon="ui/asset-browser"
 	>
-		<h1 class="p-1 text-xl flex items-center gap-1 bg-header-background">
-			<MxIcon name="ui/asset-browser" /> Asset Browser
-		</h1>
 		<div class="flex grow gap-2 p-2 overflow-hidden">
 			<div class="bg-header-background flex flex-col gap-2 basis-[20%] shrink-0">
 				<div
@@ -71,7 +69,9 @@
 						<div><b>Size: </b>{{ selectedOptionData?.size }}</div>
 					</div>
 				</ScrollContainer>
-				<button type="button" class="btn mt-auto" @click="importModel">Import model</button>
+				<button type="button" class="btn btn--highlight mt-auto" @click="importModel">
+					Import
+				</button>
 			</div>
 		</div>
 	</MxDialog>

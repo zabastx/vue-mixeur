@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- MxDialog: Added `icon` prop to display icon in dialog header
+- Close icon: New close button SVG icon for dialog headers
 - Import Scene Modal: New unified interface for importing 3D model files with support for:
   - Multi-format support: glTF/GLB, OBJ, and FBX files
   - Automatic format detection via magic bytes and content analysis
@@ -30,6 +32,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- MxDialog: Redesigned header with integrated close button for consistent modal styling
+- Import Scene Modal: Renamed title from "Import Model" to "File Browser"
+- Asset Browser modals: Unified titles to "Asset Browser" across Models and Texture libraries
+- Render Image: Quality input changed from slider to number input for precision
+- About Modal: Simplified branding from "Vue Mixeur" to "Mixeur"
 - Dependency updates: Updated all dependencies to latest compatible versions
 - MenuBar CSS refactoring: Moved menubar utility classes from `utils.css` to `components.css`, renamed classes for consistency (`.trigger` → `.menubar-trigger`, `.item` → `.menubar-item`), and replaced hardcoded colors with design token variables from the theme
 - CSS improvements: Refactored button hover states to use more specific selectors (`not-disabled:hover`) instead of global `button:hover`

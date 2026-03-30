@@ -1,11 +1,16 @@
 <template>
 	<MxDialog
 		v-model="isOpen"
-		title="Import Model"
+		title="File Browser"
 		class="max-w-6xl w-full h-2/3 text-ui-text-text block-border bg-window-bg flex flex-col"
 		resize
+		:root="{
+			modal: false
+		}"
+		outside-interaction
+		icon="file/bin"
 	>
-		<div class="h-full p-4 grid grid-rows-[1fr_min-content] gap-1" data-testid="import-scene">
+		<div class="h-full p-2 grid grid-rows-[1fr_min-content] gap-1" data-testid="import-scene">
 			<div class="grid grid-cols-[300px_1fr_250px] gap-2 overflow-hidden">
 				<ScrollContainer>
 					<ImportSceneFiles
@@ -63,7 +68,7 @@
 
 			<div class="text-sm flex gap-1 justify-end">
 				<button type="button" class="btn btn--highlight px-2" @click="importScene">Import</button>
-				<button type="button" class="btn px-2" @click="isOpen = false">Close</button>
+				<button type="button" class="btn px-2" @click="isOpen = false">Cancel</button>
 			</div>
 		</div>
 	</MxDialog>

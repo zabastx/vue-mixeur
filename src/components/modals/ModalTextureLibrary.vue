@@ -1,13 +1,11 @@
 <template>
 	<MxDialog
 		v-model="isOpen"
-		title="Models Library"
+		title="Asset Browser"
 		class="w-7xl h-[75dvh] text-ui-text-text block-border bg-window-bg flex flex-col"
 		resize
+		icon="ui/asset-browser"
 	>
-		<h1 class="p-1 text-xl flex items-center gap-1 bg-header-background">
-			<MxIcon name="ui/asset-browser" /> Asset Browser
-		</h1>
 		<div class="flex grow overflow-hidden gap-2 p-2">
 			<div class="bg-header-background flex flex-col gap-2 basis-[20%] shrink-0">
 				<div
@@ -88,7 +86,9 @@
 						<div v-if="selectedTexture"><b>Size: </b>{{ bytesToSize(selectedTexture.size) }}</div>
 					</div>
 				</ScrollContainer>
-				<button type="button" class="btn mt-auto" @click="importTexture">Import Texture</button>
+				<button type="button" class="btn mt-auto btn--highlight" @click="importTexture">
+					Import
+				</button>
 			</div>
 		</div>
 	</MxDialog>

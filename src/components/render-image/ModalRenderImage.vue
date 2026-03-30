@@ -6,12 +6,8 @@
 		:root="{ modal: false }"
 		resize
 		outside-interaction
+		icon="ui/render-image"
 	>
-		<!-- Header -->
-		<h1 class="p-1 text-xl flex items-center gap-1 bg-header-background text-ui-text-text">
-			<MxIcon name="ui/render-image" /> Render Image
-		</h1>
-
 		<!-- Horizontal Layout: Preview + Settings -->
 		<div class="flex gap-3 p-3 grow overflow-hidden">
 			<!-- Left Side: Render Preview -->
@@ -54,13 +50,13 @@
 			</div>
 
 			<!-- Right Side: Settings -->
-			<div class="flex flex-col max-w-xs w-full">
+			<div class="flex flex-col max-w-xs w-full -mr-2.5">
 				<ScrollContainer>
 					<MxAccordionRoot
 						collapsible
 						:default-value="['image-settings']"
 						type="multiple"
-						class="space-y-1 mr-2.5"
+						class="space-y-1 pr-2.5"
 					>
 						<MxAccordionItem label="Image settings" :item="{ value: 'image-settings' }">
 							<RenderImageSettings v-model="renderSettings" />
@@ -72,9 +68,11 @@
 				</ScrollContainer>
 
 				<!-- Action Buttons -->
-				<div class="flex gap-2 text-ui-text-text text-sm justify-end mt-1">
-					<button class="btn" :disabled="isRendering" @click="close('renderImage')">Close</button>
-					<button class="btn" :disabled="!canSaveImage" @click="saveImage">Save Image</button>
+				<div class="flex gap-2 text-ui-text-text text-sm justify-end mt-1 pr-2.5">
+					<button class="btn btn--highlight" :disabled="!canSaveImage" @click="saveImage">
+						Save Image
+					</button>
+					<button class="btn" :disabled="isRendering" @click="close('renderImage')">Cancel</button>
 				</div>
 			</div>
 		</div>

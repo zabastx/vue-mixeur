@@ -13,13 +13,35 @@
 				<div
 					ref="dialogContentRef"
 					:style="style"
-					class="fixed overflow-hidden rounded p-0 z-1000"
-					:class="[$attrs.class, { resize }]"
+					class="fixed overflow-hidden p-0 z-1000"
+					:class="[$attrs.class, { resize, rounded: !title }]"
 				>
-					<div ref="handleRef" class="z-10 absolute top-0 left-0 w-full h-5 cursor-move"></div>
-					<VisuallyHidden as-child>
-						<Dialog.Title>{{ title }}</Dialog.Title>
-					</VisuallyHidden>
+					<Dialog.Title
+						v-if="title"
+						class="grid grid-cols-[1fr_min-content] bg-black text-ui-text-text"
+					>
+						<div ref="handleRef" class="flex items-center gap-1 cursor-move py-1 px-2">
+							<MxIcon v-if="icon" :name="icon" />
+							<h1>
+								{{ title }}
+							</h1>
+						</div>
+						<div class="ml-auto cursor-default flex" @pointerdown.stop>
+							<button
+								type="button"
+								class="block h-full w-10 hover:bg-[#e81123]"
+								aria-label="Close dialog"
+								@click="open = false"
+							>
+								<MxIcon name="ui/close" class="m-auto" />
+							</button>
+						</div>
+					</Dialog.Title>
+					<div
+						v-else
+						ref="handleRef"
+						class="z-10 absolute top-0 left-0 w-full h-5 cursor-move"
+					></div>
 					<VisuallyHidden as-child>
 						<Dialog.Description />
 					</VisuallyHidden>
@@ -53,6 +75,7 @@ defineProps<{
 	content?: DialogContentProps
 	resize?: boolean
 	outsideInteraction?: boolean
+	icon?: MxIconName
 }>()
 
 const dialogContentRef = useTemplateRef('dialogContentRef')

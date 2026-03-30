@@ -1,5 +1,5 @@
 <template>
-	<MxDialog v-model="isOpen" title="About Mixeur" class="max-w-xl bg-editor-border">
+	<MxDialog v-model="isOpen" class="max-w-xl bg-editor-border">
 		<div class="flex max-w-xl flex-col text-ui-menu-bg-text">
 			<!-- Header -->
 			<div class="flex items-center gap-4 p-4">
@@ -10,7 +10,7 @@
 					aria-hidden
 				/>
 				<div>
-					<h1 class="text-2xl font-bold text-white">Vue Mixeur</h1>
+					<h1 class="text-2xl font-bold text-white">Mixeur</h1>
 					<p class="text-sm">Version {{ version }}</p>
 				</div>
 			</div>

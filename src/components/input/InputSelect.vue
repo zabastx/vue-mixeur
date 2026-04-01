@@ -26,7 +26,9 @@
 							class="rounded p-1 text-xs data-highlighted:text-ui-menu-item-selected
 								data-highlighted:bg-gray-500 data-[state='checked']:bg--menu-item-inner-selected"
 						>
-							<Select.ItemText>{{ val.label }}</Select.ItemText>
+							<MxTooltip :tooltip-disabled="!val.tooltip" :tooltip="val.tooltip">
+								<Select.ItemText>{{ val.label }}</Select.ItemText>
+							</MxTooltip>
 						</Select.Item>
 					</Select.Viewport>
 				</ScrollContainer>
@@ -43,6 +45,7 @@ import type {
 	SelectTriggerProps
 } from 'reka-ui'
 import { Select } from 'reka-ui/namespaced'
+import type { MxTooltipContent } from '../utils/MxTooltip.vue'
 
 defineProps<SelectProps>()
 
@@ -60,5 +63,6 @@ interface SelectProps {
 interface InputSelectOption {
 	value: T
 	label: string
+	tooltip?: MxTooltipContent
 }
 </script>

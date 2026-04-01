@@ -1,22 +1,28 @@
 <template>
 	<div
-		class="grid grid-cols-[min-content_1fr] items-start gap-x-2.5 whitespace-nowrap relative"
+		class="grid grid-cols-[min-content_1fr] items-start gap-x-2.5 relative"
 		:style="{ gridTemplateColumns: gridCols }"
+		:class="{ 'opacity-50': disabled }"
 	>
 		<MxTooltip :tooltip :tooltip-disabled="!tooltip">
-			<span class="px-1 py-0.5 leading-4 cursor-default" :class="{ 'order-1': reverse }">
+			<label
+				:for="id"
+				class="px-1 py-0.5 leading-4 cursor-default truncate"
+				:class="{ 'order-1': reverse }"
+			>
 				{{ label }}
 				<MxIcon v-if="tooltip" class="inline-block align-[center]" name="misc/question" />
-			</span>
+			</label>
 		</MxTooltip>
-
-		<slot></slot>
+		<slot :id :disabled></slot>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, useId } from 'vue'
 import type { MxTooltipContent } from '../utils/MxTooltip.vue'
+
+const id = useId()
 
 const {
 	inputWidth = 'auto',
@@ -28,6 +34,7 @@ const {
 	labelWidth?: string
 	reverse?: boolean
 	tooltip?: MxTooltipContent
+	disabled?: boolean
 }>()
 
 const gridCols = computed(() => `${labelWidth} ${inputWidth}`)

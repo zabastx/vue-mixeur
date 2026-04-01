@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Input components: Added `disabled` prop support across InputField, InputNumber, InputTexture, and related components
+- InputSelect: Added tooltip support for individual options
+- MxTooltip: Added `whitespace-pre-line` CSS for multi-line tooltip text rendering
+- InputField: Proper `<label>` element with `useId()` for improved accessibility
+
+### Changed
+
+- InputTexture: Close button now uses MxIcon component instead of text "x"
+- InputNumber: Drag cursor only shows when not disabled
+
 ## [0.11.1] - 2026-03-30
 
 ### Fixed

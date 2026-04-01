@@ -10,6 +10,7 @@
 			<slot></slot>
 		</SliderTrack>
 		<SliderThumb v-bind="$props.thumb" />
+		<SliderThumb v-bind="$props.thumb" />
 	</SliderRoot>
 </template>
 

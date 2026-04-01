@@ -12,7 +12,7 @@
 			>
 				<slot name="content">
 					<span v-if="tooltip?.title">{{ tooltip.title }}</span>
-					<p v-if="tooltip?.text">{{ tooltip?.text }}</p>
+					<p v-if="tooltip?.text" class="whitespace-pre-line">{{ tooltip?.text }}</p>
 					<span v-if="tooltip?.footer" class="text-[0.9em] opacity-50">{{ tooltip?.footer }}</span>
 				</slot>
 			</TooltipContent>

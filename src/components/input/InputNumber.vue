@@ -11,9 +11,10 @@
 			<div class="relative">
 				<NumberFieldInput
 					ref="inputRef"
-					class="grow w-full text-center outline-none group-hover:brightness-110 py-0.5
-						cursor-ew-resize select-none z-1 relative focus:cursor-text"
+					class="grow w-full text-center outline-none group-hover:brightness-110 py-0.5 select-none
+						z-1 relative focus:cursor-text"
 					data-testid="number-input"
+					:class="{ 'cursor-ew-resize': !disabled }"
 					@pointerdown="onPointerDown"
 					@focus="isInputFocused = true"
 					@blur="isInputFocused = false"
@@ -58,6 +59,7 @@ const STEP_MULTIPLIER_CONTROL = 10
 const STEP_MULTIPLIER_SHIFT = 0.1
 
 function onPointerDown(e: PointerEvent) {
+	if (props.disabled) return
 	if (e.button !== 0) return
 	isPointerDown.value = true
 

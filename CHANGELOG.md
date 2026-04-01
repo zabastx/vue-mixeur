@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- MxAccordionItem: Improved header styling with hover brightness effect; reorganized padding from header to trigger; added conditional left padding for nested items
 - InputTexture: Close button now uses MxIcon component instead of text "x"
 - InputNumber: Drag cursor only shows when not disabled
 

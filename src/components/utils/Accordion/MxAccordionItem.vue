@@ -5,9 +5,13 @@
 		v-bind="item"
 		:class="{ 'border-ui-panel-outline border': !nested }"
 	>
-		<Accordion.Header class="bg-ui-panel-header px-2 py-1 text-ui-panel-title" v-bind="header">
+		<Accordion.Header
+			class="bg-ui-panel-header text-ui-panel-title hover:brightness-125"
+			v-bind="header"
+		>
 			<Accordion.Trigger
-				class="group flex w-full cursor-pointer items-center gap-1"
+				class="group flex w-full cursor-pointer items-center gap-1 px-2 py-1"
+				:class="{ 'pl-4': nested }"
 				v-bind="trigger"
 			>
 				<MxIcon

@@ -9,10 +9,6 @@
 - Import from `@/three` wrapper (includes BVH acceleration)
 - Use `shallowRef` for Three.js objects
 
-## Development Tips
-
-- Pre-commit hooks run ESLint and Prettier automatically
-
 ## Clarification and Correction Rules
 
 - If the user's instructions contain contradictions, factual errors, or impossible steps, the agent should point them out and propose corrections.

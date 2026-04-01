@@ -297,28 +297,31 @@ export const useShadingStore = defineStore('shading', () => {
 		})
 	}
 
-	function getMaterial(mesh: THREE.Mesh) {
+	function getMaterialCache(mesh: THREE.Mesh): MaterialCache | undefined {
 		const cache = materialCache.get(mesh.uuid)
-		return cache
+		return cache as MaterialCache | undefined
 	}
 
-	function updateMaterial(mesh: THREE.Mesh, data: { prop: string; value: unknown }) {
+	function updateMaterial<T extends THREE.Material = THREE.Material>(
+		mesh: THREE.Mesh,
+		data: { prop: keyof T; value: T[keyof T] }
+	) {
 		const cache = materialCache.get(mesh.uuid)
 		if (!cache) return
 		if (Array.isArray(cache.original)) return
 
-		const originalMaterial = cache.original as unknown as Record<string, unknown>
-		updateMaterialProperty(originalMaterial, data.prop, data.value)
+		const originalMaterial = cache.original as unknown as T
+		updateMaterialProperty<T>(originalMaterial, data.prop, data.value)
 
 		if (
 			currentMode.value === 'materialPreview' &&
 			cache.current !== cache.original &&
 			!Array.isArray(cache.current)
 		) {
-			const currentMaterial = cache.current as unknown as Record<string, unknown>
+			const currentMaterial = cache.current as unknown as T
 
 			if (data.prop in currentMaterial) {
-				updateMaterialProperty(currentMaterial, data.prop, data.value)
+				updateMaterialProperty<T>(currentMaterial, data.prop, data.value)
 			}
 		}
 
@@ -332,7 +335,11 @@ export const useShadingStore = defineStore('shading', () => {
 	 * Updates a material property, handling special cases like Color objects.
 	 * This ensures proper updates for all property types including Colors, Vectors, etc.
 	 */
-	function updateMaterialProperty(material: Record<string, unknown>, prop: string, value: unknown) {
+	function updateMaterialProperty<T extends THREE.Material = THREE.Material>(
+		material: T,
+		prop: keyof T,
+		value: T[keyof T]
+	) {
 		const currentValue = material[prop]
 
 		if (currentValue instanceof THREE.Color && value instanceof THREE.Color) {
@@ -383,7 +390,7 @@ export const useShadingStore = defineStore('shading', () => {
 		setEnvironmentMap,
 		setMode,
 		shadingMode,
-		getMaterial,
+		getMaterialCache,
 		updateMaterial,
 		changeMaterial,
 		clearMaterialCache

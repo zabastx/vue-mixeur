@@ -31,7 +31,7 @@ const selectedObject = computed(() => threeStore.selectedObject)
 
 const meshMaterial = computed(() => {
 	if (selectedObject.value instanceof THREE.Mesh) {
-		return shadingStore.getMaterial(selectedObject.value)?.original || null
+		return shadingStore.getMaterialCache(selectedObject.value)?.original || null
 	}
 	return null
 })

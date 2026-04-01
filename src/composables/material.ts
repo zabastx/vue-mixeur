@@ -17,7 +17,7 @@ export function useMeshMaterial<T extends THREE.Material>() {
 
 	const material = computed<T | null>(() => {
 		if (selectedObject.value) {
-			const mat = shadingStore.getMaterial(selectedObject.value)?.original
+			const mat = shadingStore.getMaterialCache(selectedObject.value)?.original
 			if (mat instanceof THREE.Material) return mat as T
 		}
 		return null

@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+## [0.11.2] - 2026-04-01
+
+### Added
+
 - Input components: Added `disabled` prop support across InputField, InputNumber, InputTexture, and related components
 - InputSelect: Added tooltip support for individual options
 - MxTooltip: Added `whitespace-pre-line` CSS for multi-line tooltip text rendering
@@ -128,7 +134,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Transform controls initialized after event listeners
 
-[Unreleased]: https://github.com/zabastx/mixeur/compare/v0.11.1...HEAD
+[Unreleased]: https://github.com/zabastx/mixeur/compare/v0.11.2...HEAD
+[0.11.2]: https://github.com/zabastx/mixeur/compare/v0.11.1...v0.11.2
 [0.11.1]: https://github.com/zabastx/mixeur/compare/v0.11.0...v0.11.1
 [0.11.0]: https://github.com/zabastx/mixeur/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/zabastx/mixeur/compare/v0.9.3...v0.10.0

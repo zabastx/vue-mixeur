@@ -7,7 +7,7 @@
 			<MxIcon name="outliner/outliner" /> Outliner
 			<MxTooltip :tooltip="{ text: 'Add Group' }">
 				<button class="btn ml-auto" type="button" @click="store.addGroup">
-					<MxIcon name="ui/collection" />
+					<MxIcon name="outliner/group-new" />
 				</button>
 			</MxTooltip>
 		</h2>

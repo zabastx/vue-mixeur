@@ -10,10 +10,13 @@
 			v-if="item.hasChildren"
 			name="ui/arrow-right"
 			:class="{ 'rotate-90': isExpanded }"
-			class="size-[1.5em] p-0.5 shrink-0 text-xs"
+			class="size-[1.5em] p-0.5 shrink-0 text-xs hover:cursor-pointer hover:brightness-125"
 			data-toggle
 		/>
-		<MxIcon :name="iconMap.get(item.value.type) || 'outliner/empty'" class="shrink-0" />
+		<MxIcon
+			:name="iconMap.get(item.value.type) || 'outliner/empty'"
+			class="shrink-0 text-icon-object"
+		/>
 		<MxContextMenu :items="contextMenuItems">
 			<template #trigger>
 				<span class="overflow-hidden text-ellipsis whitespace-nowrap grow">

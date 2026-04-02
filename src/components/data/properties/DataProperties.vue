@@ -38,8 +38,8 @@ import THREE from '@/three'
 import LightDataProperties from './data/LightDataProperties.vue'
 import { TextGeometry } from 'three/examples/jsm/Addons.js'
 import TextDataProperties from './data/TextDataProperties.vue'
-import MaterialProperties from './material/MaterialProperties.vue'
 import CameraProperties from './camera/CameraProperties.vue'
+import MaterialProperties from './material/MaterialProperties.vue'
 
 const store = useThreeStore()
 

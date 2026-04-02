@@ -53,6 +53,18 @@ export async function loadMTL({ url, filename, urlModifier, materialOptions }: L
 		}
 
 		const mtl = await loader.loadAsync(url, progressItem.onProgress)
+		mtl.preload()
+
+		for (const matName in mtl.materials) {
+			const mat = mtl.materials[matName]
+
+			for (const key in mat) {
+				const value = mat[key as keyof typeof mat]
+				if (value instanceof THREE.Texture) {
+					value.name = `${key}_${matName}`
+				}
+			}
+		}
 		return mtl
 	} catch (e) {
 		const error = e as Error

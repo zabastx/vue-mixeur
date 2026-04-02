@@ -5,8 +5,8 @@
 				grid grid-cols-[1fr_auto] gap-1"
 			:tabindex="disabled ? undefined : 0"
 		>
-			<span class="overflow-hidden text-ellipsis" :title="model?.name">
-				{{ model?.name || 'None' }}
+			<span class="truncate" :title="model?.name">
+				{{ model?.name ?? 'None' }}
 			</span>
 			<button v-if="model" type="button" class="cursor-pointer px-1" @click="reset">
 				<MxIcon name="ui/close" />

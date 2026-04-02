@@ -9,9 +9,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Material properties: New declarative field-based configuration system for material properties
+  - New `MaterialInputFields` component renders form fields from typed configuration arrays
+  - New `useMeshMaterial` composable for material property access and updates
+  - Support for 6 material types: Physical, Standard, Phong, Toon, Lambert, and Normal
+  - Added `NormalMaterial` surface type for displaying normal vectors as RGB colors
+  - Material tooltips: Comprehensive tooltips for all material properties
+  - Displacement section: Displacement map, scale, and bias controls
+  - Settings section: Side, shadow side, blending, depth function, fog, dithering, vertex colors, precision
+- New group icon: Added `group-new.svg` icon for outliner add group action
+
 ### Changed
 
+- Material properties: Major refactor from per-material Vue components to declarative field-based system
+  - Removed 9 separate material surface component files (MatSurfaceDiffuse, MatSurfaceGlossy, MatSurfacePrincipled, MatSurfaceToon, and 5 utility components)
+  - New `sections/` directory structure for material property sections (Surface, Displacement, Settings)
+  - New `materials/` subdirectory for per-material-type field configurations
+  - All material types now share the same accordion structure and input components
+- DataOutlinerItem: Improved hover effects with brightness filter and cursor pointer
+- DataOutlinerItem: Added `text-icon-object` class for consistent icon color
 - SVG icon fill: Changed from hardcoded `#fff` to `currentColor` for dynamic color control via CSS theming (45 icon files across base, file, light, mesh, misc, outliner, properties, shading, ui, and view categories)
+- MTL loader: Texture names now prefixed with property key and material name for better identification (e.g., `color_MyMaterial`)
+- InputTexture: Changed `overflow-hidden text-ellipsis` to Tailwind `truncate` class; changed `||` to `??` for nullish coalescing
+
+### Fixed
+
+- MTL loader: Added `mtl.preload()` call before accessing materials to ensure proper initialization
 
 ## [0.11.2] - 2026-04-01
 

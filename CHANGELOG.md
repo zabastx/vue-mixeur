@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+## [0.12.0] - 2026-04-02
+
+### Added
+
 - Material properties: New declarative field-based configuration system for material properties
   - New `MaterialInputFields` component renders form fields from typed configuration arrays
   - New `useMeshMaterial` composable for material property access and updates
@@ -159,7 +165,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Transform controls initialized after event listeners
 
-[Unreleased]: https://github.com/zabastx/mixeur/compare/v0.11.2...HEAD
+[Unreleased]: https://github.com/zabastx/mixeur/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/zabastx/mixeur/compare/v0.11.2...v0.12.0
 [0.11.2]: https://github.com/zabastx/mixeur/compare/v0.11.1...v0.11.2
 [0.11.1]: https://github.com/zabastx/mixeur/compare/v0.11.0...v0.11.1
 [0.11.0]: https://github.com/zabastx/mixeur/compare/v0.10.0...v0.11.0

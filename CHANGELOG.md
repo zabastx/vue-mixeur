@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- SVG icon fill: Changed from hardcoded `#fff` to `currentColor` for dynamic color control via CSS theming (45 icon files across base, file, light, mesh, misc, outliner, properties, shading, ui, and view categories)
+
 ## [0.11.2] - 2026-04-01
 
 ### Added

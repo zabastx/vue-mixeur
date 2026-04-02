@@ -3,9 +3,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Vue](https://img.shields.io/badge/Vue-3.5.31-4FC08D.svg)](https://vuejs.org/)
 [![Three.js](https://img.shields.io/badge/Three.js-0.183.2-049EF4.svg)](https://threejs.org/)
-[![Vite](https://img.shields.io/badge/Vite-8.0.0-646CFF.svg)](https://vitejs.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6.svg)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.2.1-06B6D4.svg)](https://tailwindcss.com/)
+[![Vite](https://img.shields.io/badge/Vite-8.0.3-646CFF.svg)](https://vitejs.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6.0.2-3178C6.svg)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.2.2-06B6D4.svg)](https://tailwindcss.com/)
 
 A Blender-like web-based 3D editor built with Vue.js and Three.js. Mixeur provides an interface for 3D modeling, object manipulation, and scene management directly in the browser.
 
@@ -34,7 +34,7 @@ Try the live demo at [mixeur.zabastx.ru](https://mixeur.zabastx.ru)
 - **Primitive Meshes**: Create planes, cubes, circles, spheres, icospheres, cylinders, cones, and torus shapes
 - **Text Objects**: 3D text with customizable fonts, size, depth, and bevel
 - **Lighting System**: Point, directional, spot, and area lights with property editing
-- **Material Editor**: Multiple material types (Principled BSDF, Diffuse, Glossy, Toon) with real-time editing
+- **Material Editor**: Six material types (Physical, Standard, Phong, Toon, Lambert, Normal) with real-time editing, tooltips, and organized settings
 
 ### Asset Management
 

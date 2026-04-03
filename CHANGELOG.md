@@ -9,7 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Icon types generation: New build-time system to generate TypeScript types for SVG icons
+  - New `plugins/icon-types-generator.ts` script scans `src/assets/icons/` and generates type definitions
+  - New `plugins/run-gen.ts` entry point for running the generator
+  - New `types:generate` npm script to auto-generate icon type definitions
+  - Workflow integration: GitHub Actions now run `types:generate` before type checking
+
 ### Changed
+
+- Build pipeline: Reorganized type checking workflow
+  - `type-check` script renamed to `types:check` for consistency
+  - `types:generate` now runs before `types:check` in CI pipelines
+- tsconfig.node.json: Added `plugins/*` to file matching patterns
+- Node imports: Updated to use explicit `node:` protocol prefix (`node:fs`, `node:path`)
 
 ## [0.12.0] - 2026-04-02
 

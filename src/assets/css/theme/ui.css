@@ -57,6 +57,7 @@
 	--color-ui-number-inner: #545454ff;
 	--color-ui-number-inner-selected: #222222ff;
 	--color-ui-number-outline: #3d3d3dff;
+	--color-ui-number-outline-selected: #3d3d3dff;
 	--ui-number-roundness: 0.4;
 	--radius-ui-number: calc(var(--ui-number-roundness) * 1rem * 0.75);
 

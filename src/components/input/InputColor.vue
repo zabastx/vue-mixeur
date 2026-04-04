@@ -11,9 +11,9 @@
 			<Popover.Content
 				avoid-collisions
 				position-strategy="absolute"
-				class="bg-ui-menu-bg-inner rounded p-2 z-1"
+				class="bg-ui-menu-bg-inner rounded p-2 z-1000"
 			>
-				<ColorPicker v-model="modelHex" v-model:alpha="modelAlpha" />
+				<ColorPicker v-model="modelHex" v-model:alpha="modelAlpha" :transparency />
 			</Popover.Content>
 		</Popover.Portal>
 	</Popover.Root>
@@ -21,6 +21,10 @@
 
 <script lang="ts" setup>
 import { Popover } from 'reka-ui/namespaced'
+
+defineProps<{
+	transparency?: boolean
+}>()
 
 const modelHex = defineModel<string>('hex', { required: true })
 const modelAlpha = defineModel<number>('alpha')

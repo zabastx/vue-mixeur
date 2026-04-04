@@ -23,6 +23,10 @@ import type { IroColorPicker } from '@jaames/iro/dist/ColorPicker'
 import { computed } from 'vue'
 import { formatSliderValue } from './utils'
 
+const props = defineProps<{
+	transparency?: boolean
+}>()
+
 const model = defineModel<IroColorPicker['color']['rgba']>({ required: true })
 
 const red = computed({
@@ -86,13 +90,17 @@ const fields = [
 		max: 255,
 		step: 1
 	},
-	{
-		prop: 'alpha',
-		title: 'Alpha',
-		value: alpha,
-		min: 0,
-		max: 1,
-		step: 0.001
-	}
+	...(props.transparency
+		? [
+				{
+					prop: 'alpha',
+					title: 'Alpha',
+					value: alpha,
+					min: 0,
+					max: 1,
+					step: 0.001
+				}
+			]
+		: [])
 ] as const
 </script>

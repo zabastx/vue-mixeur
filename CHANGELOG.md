@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Color picker transparency
+  - When enabled, displays alpha field and uses hex8 color strings (e.g., `#ff000080`)
+  - When disabled, uses standard hex6 strings for simpler color values
 - Icon types generation: New build-time system to generate TypeScript types for SVG icons
   - New `plugins/icon-types-generator.ts` script scans `src/assets/icons/` and generates type definitions
   - New `plugins/run-gen.ts` entry point for running the generator

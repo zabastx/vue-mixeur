@@ -16,8 +16,8 @@
 			</RadioGroupItem>
 		</RadioGroupRoot>
 		<template v-if="picker">
-			<ColorPickerHsv v-if="colorType === 'HSV'" v-model="picker.color.hsva" />
-			<ColorPickerRgb v-if="colorType === 'RGB'" v-model="picker.color.rgba" />
+			<ColorPickerHsv v-if="colorType === 'HSV'" v-model="picker.color.hsva" :transparency />
+			<ColorPickerRgb v-if="colorType === 'RGB'" v-model="picker.color.rgba" :transparency />
 			<div class="flex items-center justify-between text-ui-menu-bg-text gap-2 text-xs">
 				<span>Hex</span>
 				<input type="text" class="input w-[100px]" :value="hexString" @change="onHexChange" />
@@ -41,6 +41,10 @@ import type { ColorPickerProps } from '@jaames/iro/dist/ColorPicker'
 import { useEyeDropper } from '@vueuse/core'
 import { computed, onMounted, ref, triggerRef, useTemplateRef, watch } from 'vue'
 
+const { transparency } = defineProps<{
+	transparency?: boolean
+}>()
+
 const model = defineModel<string>({ required: true })
 const modelAlpha = defineModel<number>('alpha')
 const pickerRef = useTemplateRef('pickerRef')
@@ -53,7 +57,8 @@ const hexString = computed({
 	set(v: string) {
 		if (!picker.value) return
 		try {
-			picker.value.color.hex8String = v
+			if (transparency) picker.value.color.hex8String = v
+			else picker.value.color.hexString = v
 		} catch (e) {
 			const err = e as Error
 			toast.add({ type: 'error', message: err.message })
@@ -61,7 +66,7 @@ const hexString = computed({
 	},
 	get() {
 		if (picker.value) {
-			return picker.value.color.hex8String
+			return transparency ? picker.value.color.hex8String : picker.value.color.hexString
 		} else {
 			return '#fff'
 		}
@@ -72,7 +77,9 @@ watch(
 	picker,
 	(val) => {
 		if (val) {
-			model.value = val.color.hexString
+			if (transparency) model.value = val.color.hex8String
+			else model.value = val.color.hexString
+
 			modelAlpha.value = val.color.alpha
 		}
 	},

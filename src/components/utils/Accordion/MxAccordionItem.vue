@@ -1,7 +1,7 @@
 <template>
 	<Accordion.Item
 		v-slot="{ open }"
-		class="text-xs rounded-ui-panel"
+		class="text-xs rounded-ui-panel overflow-hidden"
 		v-bind="item"
 		:class="{ 'border-ui-panel-outline border': !nested }"
 	>
@@ -20,6 +20,7 @@
 						group-data-[state='open']:rotate-90"
 				/>
 				<InputCheckbox v-if="showCheckbox" v-model="model" @click.stop />
+				<MxIcon v-if="icon" :name="icon" />
 				<span class="font-panel-title">{{ label }}</span>
 			</Accordion.Trigger>
 		</Accordion.Header>
@@ -58,5 +59,6 @@ defineProps<{
 	label: string
 	nested?: boolean
 	showCheckbox?: boolean
+	icon?: MxIconName
 }>()
 </script>

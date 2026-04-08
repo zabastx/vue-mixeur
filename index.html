@@ -35,7 +35,7 @@
 		/>
 		<link rel="stylesheet" href="/fonts/inter/inter.css" />
 		<title>Mixeur - 3D Web Editor</title>
-		<script type="module" crossorigin src="/assets/index-DoN65UYV.js"></script>
+		<script type="module" crossorigin src="/assets/index-CtlWR-6S.js"></script>
 		<link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-lhHHWwHU.js">
 		<link rel="modulepreload" crossorigin href="/assets/vue.runtime.esm-bundler-B5C_pnmk.js">
 		<link rel="modulepreload" crossorigin href="/assets/three-CjXLcDQe.js">
@@ -44,9 +44,77 @@
 		<link rel="modulepreload" crossorigin href="/assets/DRACOLoader-glfnPsAp.js">
 		<link rel="modulepreload" crossorigin href="/assets/GLTFLoader-DpCp2aaH.js">
 		<link rel="modulepreload" crossorigin href="/assets/OBJLoader-D-mekj9N.js">
-		<link rel="stylesheet" crossorigin href="/assets/index-aF4WjhqK.css">
+		<link rel="stylesheet" crossorigin href="/assets/index-KQtPOGob.css">
 	<link rel="manifest" href="/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/registerSW.js"></script></head>
 	<body>
-		<div id="app"></div>
+		<div id="app">
+			<style>
+				#app {
+					display: contents;
+				}
+				body {
+					font-family: InterVariable, sans-serif;
+					background-color: #161616;
+					display: flex;
+					flex-direction: column;
+					color: white;
+					align-items: center;
+					justify-content: center;
+					margin: 0;
+					min-height: 100dvh;
+				}
+				h1 {
+					font-size: 4rem;
+					margin: 0;
+				}
+				img {
+					max-width: 100%;
+				}
+				.loader {
+					width: 32px;
+					height: 32px;
+					border-radius: 50%;
+					display: block;
+					margin: 15px auto;
+					position: relative;
+					background: #41b782;
+					box-shadow:
+						-48px 0 #36495e,
+						48px 0 #ea7701;
+					box-sizing: border-box;
+					animation: shadowPulse 1.5s ease-in-out infinite;
+				}
+
+				@keyframes shadowPulse {
+					0% {
+						background: #ea7701;
+						box-shadow:
+							-48px 0 #41b782,
+							48px 0 #36495e;
+					}
+					33% {
+						background: #36495e;
+						box-shadow:
+							-48px 0 #ea7701,
+							48px 0 #41b782;
+					}
+					66% {
+						background: #41b782;
+						box-shadow:
+							-48px 0 #36495e,
+							48px 0 #ea7701;
+					}
+					100% {
+						background: #ea7701;
+						box-shadow:
+							-48px 0 #41b782,
+							48px 0 #36495e;
+					}
+				}
+			</style>
+			<img src="/logo.webp" alt="Mixeur logo" />
+			<h1>Mixeur</h1>
+			<span class="loader"></span>
+		</div>
 	</body>
 </html>

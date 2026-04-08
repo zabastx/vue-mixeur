@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Splash screen: Added loading screen with logo and animated loader
 - Color picker transparency
   - When enabled, displays alpha field and uses hex8 color strings (e.g., `#ff000080`)
   - When disabled, uses standard hex6 strings for simpler color values

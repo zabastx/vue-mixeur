@@ -1,9 +1,9 @@
 <template>
 	<Accordion.Item
 		v-slot="{ open }"
-		class="text-xs rounded-ui-panel overflow-hidden"
+		class="text-xs overflow-hidden"
 		v-bind="item"
-		:class="{ 'border-ui-panel-outline border': !nested }"
+		:class="{ 'border-ui-panel-outline border rounded-ui-panel': !nested }"
 	>
 		<Accordion.Header
 			class="bg-ui-panel-header text-ui-panel-title hover:brightness-125"
@@ -16,8 +16,7 @@
 			>
 				<MxIcon
 					name="ui/arrow-right"
-					class="transition-rotate inline-block size-[1em] duration-200
-						group-data-[state='open']:rotate-90"
+					class="transition-rotate size-[1em] duration-200 group-data-[state='open']:rotate-90"
 				/>
 				<InputCheckbox v-if="showCheckbox" v-model="model" @click.stop />
 				<MxIcon v-if="icon" :name="icon" />

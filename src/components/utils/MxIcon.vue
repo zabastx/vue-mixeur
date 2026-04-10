@@ -1,18 +1,26 @@
 <template>
-	<component :is="icon" v-bind="$attrs" />
+	<span
+		aria-hidden="true"
+		class="flex leading-none justify-center items-center"
+		v-html="svgContent"
+	/>
 </template>
 
 <script lang="ts" setup>
-import { computed, defineAsyncComponent } from 'vue'
+import { computed } from 'vue'
 
-const props = defineProps<{
+const { name } = defineProps<{
 	name: MxIconName
 }>()
 
-const icon = computed(() => {
-	const fileArr = props.name.split('/')
-	const folder = fileArr[0]
-	const filename = fileArr[1]
-	return defineAsyncComponent(() => import(`@/assets/icons/${folder}/${filename}.svg?component`))
+const icons = import.meta.glob('@/assets/icons/**/*.svg', {
+	eager: true,
+	query: '?raw',
+	import: 'default'
+}) as Record<string, string>
+
+const svgContent = computed<string>(() => {
+	const [folder, filename] = name.split('/')
+	return icons[`/src/assets/icons/${folder}/${filename}.svg`]
 })
 </script>

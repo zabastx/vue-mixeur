@@ -21,9 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Build pipeline: Reorganized type checking workflow
-  - `type-check` script renamed to `types:check` for consistency
-  - `types:generate` now runs before `types:check` in CI pipelines
+- MxIcon: Refactored to use raw SVG import for improved performance
+- Vite config: Added icons chunk for code splitting
+- `type-check` script renamed to `types:check` for consistency
+- `types:generate` now runs before `types:check` in CI pipelines
 - tsconfig.node.json: Added `plugins/*` to file matching patterns
 - Node imports: Updated to use explicit `node:` protocol prefix (`node:fs`, `node:path`)
 

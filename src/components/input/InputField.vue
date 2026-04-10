@@ -7,11 +7,11 @@
 		<MxTooltip :tooltip :tooltip-disabled="!tooltip">
 			<label
 				:for="id"
-				class="px-1 py-0.5 leading-4 cursor-default truncate"
+				class="px-1 py-0.5 leading-4 cursor-default truncate flex gap-1"
 				:class="{ 'order-1': reverse }"
 			>
 				{{ label }}
-				<MxIcon v-if="tooltip" class="inline-block align-[center]" name="misc/question" />
+				<MxIcon v-if="tooltip" class="align-[center]" name="misc/question" />
 			</label>
 		</MxTooltip>
 		<slot :id :disabled></slot>

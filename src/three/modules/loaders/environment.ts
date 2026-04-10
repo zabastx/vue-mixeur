@@ -1,30 +1,28 @@
 import THREE from '@/three'
-import { EXRLoader } from 'three/examples/jsm/Addons.js'
-import { useProgressStore } from '@/store/progress'
-import { useToast } from '@/composables/toast'
+import { loadEXR } from './exr'
 import { pmremGenerator } from '../extras/pmremGenerator'
 
-const exrLoader = new EXRLoader().setPath('/textures/world/')
-
-const toast = useToast()
-
+/**
+ * Loads a world texture (EXR) and processes it for PBR environment lighting.
+ * Returns a PMREM-processed texture suitable for use with scene.environment.
+ *
+ * @param name - The name of the world texture (without .exr extension)
+ * @returns Promise resolving to the processed PMREM texture or null on error
+ */
 export async function loadWorldTexture(name: WorldTextureName): Promise<THREE.Texture | null> {
-	const progressStore = useProgressStore()
 	const filename = `${name}.exr`
-	const progressItem = progressStore.initProgress(filename)
-	try {
-		const texture = await exrLoader.loadAsync(filename, progressItem.onProgress)
-		texture.mapping = THREE.EquirectangularReflectionMapping
-		const envMap = pmremGenerator?.fromEquirectangular(texture).texture ?? null
-		return envMap
-	} catch (err) {
-		const error = err as Error
-		toast.add({ type: 'error', message: 'Error when loading world texture' })
-		if (import.meta.env.DEV) console.error(error.name, error.message)
-		return null
-	} finally {
-		progressItem.stop()
-	}
+	const url = `/textures/world/${filename}`
+
+	const texture = await loadEXR({ url, filename })
+
+	if (!texture) return null
+
+	texture.mapping = THREE.EquirectangularReflectionMapping
+	const envMap = pmremGenerator?.fromEquirectangular(texture).texture ?? null
+
+	texture.dispose()
+
+	return envMap
 }
 
 type WorldTextureName =

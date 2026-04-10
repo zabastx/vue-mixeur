@@ -31,10 +31,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Node imports: Updated to use explicit `node:` protocol prefix (`node:fs`, `node:path`)
 - Shading icons renamed for consistency (shading-preview → preview, shading-rendered → rendered, shading-solid → solid, shading-wireframe → wireframe)
 - Updated outliner and viewport components
+- Updated ModalImportScene to use dynamic imports for GLTF, FBX, OBJ, MTL loaders
+- Refactored ModalModelsLibrary to import GLTF directly
+- Simplified environment.ts to use loadEXR instead of EXRLoader directly
 
 ### Removed
 
 - Unused getfile.ts composable
+- modelLoader module
+- importModel function from three store
 
 ## [0.12.0] - 2026-04-02
 

@@ -77,12 +77,8 @@
 <script lang="ts" setup>
 import { computed, reactive, shallowRef, useTemplateRef, watch } from 'vue'
 import ImportSceneFiles from './ImportSceneFiles.vue'
-import { loadOBJ } from '@/three/modules/loaders/obj'
 import { useThreeStore } from '@/store/three'
-import { loadGTLF } from '@/three/modules/loaders/gltf'
 import type { ModelFileItem } from './types'
-import { loadFBX } from '@/three/modules/loaders/fbx'
-import { loadMTL } from '@/three/modules/loaders/mtl'
 import type ImportSceneSettings from './ImportSceneSettings.vue'
 import { detectMTL } from './parse-scene'
 import { useToast } from '@/composables/toast'
@@ -209,6 +205,7 @@ async function importGLTF(sceneFile: ModelFileItem) {
 	const blobUrls: string[] = [gltfUrl]
 
 	try {
+		const { loadGTLF } = await import('@/three/modules/loaders/gltf')
 		const gltf = await loadGTLF({
 			url: gltfUrl,
 			filename: sceneFile.file.name,
@@ -231,6 +228,7 @@ async function importFBX(sceneFile: ModelFileItem) {
 	const blobUrls: string[] = [fbxUrl]
 
 	try {
+		const { loadFBX } = await import('@/three/modules/loaders/fbx')
 		const fbx = await loadFBX({
 			url: fbxUrl,
 			filename: sceneFile.file.name,
@@ -252,6 +250,7 @@ async function importOBJScene(sceneFile: ModelFileItem) {
 	const blobUrls: string[] = [objUrl]
 
 	try {
+		const { loadOBJ } = await import('@/three/modules/loaders/obj')
 		const map = assetsMap[sceneFile.id]
 		const mtlId = map.get(sceneFile.assets[0])
 		let mtlFile = sceneFilesRef.value?.assetFiles.find((f) => f.id === mtlId)
@@ -265,6 +264,7 @@ async function importOBJScene(sceneFile: ModelFileItem) {
 		let obj: Awaited<ReturnType<typeof loadOBJ>>
 
 		if (mtlFile) {
+			const { loadMTL } = await import('@/three/modules/loaders/mtl')
 			const mtlUrl = URL.createObjectURL(mtlFile.file)
 			blobUrls.push(mtlUrl)
 			const materials = await loadMTL({

@@ -133,17 +133,39 @@ function setFilesData(files: AssetFiles) {
 }
 
 const threeStore = useThreeStore()
+const IS_DEV = import.meta.env.DEV
 
-function importModel() {
+async function importModel() {
 	if (!selectedResOption.value || !selectedAsset.value || !modelFilesData.value) return
+
 	const data = getModelData({
 		format: 'gltf',
 		resolution: selectedResOption.value,
 		files: modelFilesData.value
 	})
-	if (data) {
-		threeStore.importModel({ ...data, format: 'gltf', filename: selectedAsset.value.name })
+
+	if (!data) {
+		if (IS_DEV) console.warn('getModelData is undefined')
+		return
 	}
-	isOpen.value = false
+
+	const { loadGTLF } = await import('@/three/modules/loaders/gltf')
+
+	const gltf = await loadGTLF({
+		url: data.url,
+		filename: selectedAsset.value.name,
+		urlModifier(resourceUrl) {
+			for (const [pattern, actualUrl] of Object.entries(data.textureUrlMap)) {
+				if (resourceUrl.includes(pattern) || resourceUrl.endsWith(pattern)) {
+					return actualUrl
+				}
+			}
+			return resourceUrl
+		}
+	})
+
+	if (!gltf) return
+
+	threeStore.addModelToScene(gltf.scene)
 }
 </script>

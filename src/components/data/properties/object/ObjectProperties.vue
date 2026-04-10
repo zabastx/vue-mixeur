@@ -1,10 +1,11 @@
 <template>
 	<template v-if="store.selectedObject">
-		<InputField label="Name" class="mb-2.5 text-sm">
+		<InputField v-slot="{ id }" label="Name" class="mb-2.5 text-sm">
 			<input
+				:id
 				v-model="store.selectedObject.name"
 				type="text"
-				class="input"
+				class="input text-xs"
 				@change="store.updateScene"
 			/>
 		</InputField>

@@ -3,7 +3,6 @@ import { computed, ref, shallowRef, triggerRef, type ShallowRef } from 'vue'
 import THREE, { enableBVH } from '@/three'
 import { setGridHelper } from '@/three/modules/helpers/grid'
 import { useControlsStore } from './controls'
-import { loadModel, type ModelLoaderParameters } from '@/three/modules/loaders/modelLoader'
 import { setRaycaster } from '@/three/modules/core/raycaster'
 import { useEventListener } from '@vueuse/core'
 import { cameraSetup } from '@/three/modules/camera/setup'
@@ -320,25 +319,6 @@ export const useThreeStore = defineStore('three', () => {
 		}
 	}
 
-	/**
-	 * Asynchronously imports a 3D model, processes it, and adds it to the scene.
-	 *
-	 * This function loads a model using the provided parameters (matching loadModel's signature),
-	 * applies BVH (Bounding Volume Hierarchy) optimization, assigns a default name if missing,
-	 * and adds the model to the active Three.js scene.
-	 *
-	 * @param params - Parameters passed directly to the loadModel function
-	 */
-	async function importModel(params: ModelLoaderParameters): Promise<void> {
-		const model = await loadModel(params)
-		if (!model) return
-
-		const modelName = params.filename.split('.')[0] || 'Model'
-		model.name = modelName
-		addModelToScene(model)
-	}
-	// -----------------------------
-
 	function objectVisibilityUpdate(uuid: string, val: boolean) {
 		const obj = scene.getObjectByProperty('uuid', uuid)
 		if (obj) {
@@ -358,7 +338,6 @@ export const useThreeStore = defineStore('three', () => {
 		initScene,
 		activeCamera,
 		switchCamera,
-		importModel,
 		outlinePassRef,
 		selectedObject,
 		controls,

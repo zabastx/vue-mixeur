@@ -2,10 +2,9 @@ import { useToast } from '@/composables/toast'
 import { useProgressStore } from '@/store/progress'
 import THREE from '@/three'
 
-const toast = useToast()
-const loader = new THREE.TextureLoader()
-
 export async function loadTexture({ url, filename, size }: TextureLoaderParameters) {
+	const toast = useToast()
+	const loader = new THREE.TextureLoader()
 	const progressStore = useProgressStore()
 	const progressItem = progressStore.initProgress(filename)
 

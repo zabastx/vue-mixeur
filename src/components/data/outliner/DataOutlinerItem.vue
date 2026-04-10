@@ -6,16 +6,18 @@
 			'bg-outliner-active-highlight text-outliner-active-object': isSelected
 		}"
 	>
-		<MxIcon
+		<button
 			v-if="item.hasChildren"
-			name="ui/arrow-right"
-			:class="{ 'rotate-90': isExpanded }"
-			class="size-[1.5em] p-0.5 shrink-0 text-xs hover:cursor-pointer hover:brightness-125"
+			type="button"
 			data-toggle
-		/>
+			class="text-base p-0.5 inline-flex items-center justify-center cursor-pointer
+				hover:brightness-125 size-4"
+		>
+			<MxIcon :name="isExpanded ? 'ui/arrow-down' : 'ui/arrow-right'" />
+		</button>
 		<MxIcon
 			:name="iconMap.get(item.value.type) || 'outliner/empty'"
-			class="shrink-0 text-icon-object"
+			class="shrink-0 text-icon-object text-base"
 		/>
 		<MxContextMenu :items="contextMenuItems">
 			<template #trigger>
@@ -48,7 +50,7 @@ const props = defineProps<{
 
 function getPadding(level: number) {
 	if (level === 0) return '0'
-	return `${level * 1.5}em`
+	return `${level * 1.25}rem`
 }
 
 const threeStore = useThreeStore()
@@ -95,6 +97,7 @@ const iconMap: ReadonlyMap<string, MxIconName> = new Map([
 	['SpotLight', 'light/light-spot'],
 	['DirectionalLight', 'light/light-sun'],
 	['RectAreaLight', 'light/light-area'],
+	['Bone', 'mesh/bone'],
 	['Mesh', 'mesh/mesh'],
 	['Group', 'outliner/group']
 ])

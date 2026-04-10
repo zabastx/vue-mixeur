@@ -37,7 +37,7 @@ const shadingStore = useShadingStore()
 const buttons: ShadingControlsElement[] = [
 	{
 		name: 'wireframe',
-		icon: 'shading/shading-wireframe',
+		icon: 'shading/wireframe',
 		tooltip: {
 			title: 'Viewport Shading: <em>Wireframe</em>',
 			footer: 'Display only edges of geometry without surface shading'
@@ -45,7 +45,7 @@ const buttons: ShadingControlsElement[] = [
 	},
 	{
 		name: 'solid',
-		icon: 'shading/shading-solid',
+		icon: 'shading/solid',
 		tooltip: {
 			title: 'Viewport Shading: <em>Solid</em>',
 			footer: 'Display objects with flat lighting and basic surface shading'
@@ -53,7 +53,7 @@ const buttons: ShadingControlsElement[] = [
 	},
 	{
 		name: 'materialPreview',
-		icon: 'shading/shading-preview',
+		icon: 'shading/preview',
 		tooltip: {
 			title: 'Viewport Shading: <em>Material Preview</em>',
 			footer: 'Preview materials using predefined environment lights'
@@ -61,7 +61,7 @@ const buttons: ShadingControlsElement[] = [
 	},
 	{
 		name: 'rendered',
-		icon: 'shading/shading-rendered',
+		icon: 'shading/rendered',
 		tooltip: {
 			title: 'Viewport Shading: <em>Rendered</em>',
 			footer: 'Preview the final scene using the active render engine'

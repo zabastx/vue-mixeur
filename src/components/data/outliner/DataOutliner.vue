@@ -86,7 +86,8 @@ function parseObject(obj: THREE.Object3D): OutlinerItem {
 
 function onToggle(e: TreeItemToggleEvent<OutlinerItem>) {
 	const target = e.target as HTMLElement
-	if ('toggle' in target.dataset) return
+	const btn = target.closest('button')
+	if (btn && 'toggle' in btn.dataset) return
 	e.preventDefault()
 }
 </script>

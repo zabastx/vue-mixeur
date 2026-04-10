@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - New `plugins/run-gen.ts` entry point for running the generator
   - New `types:generate` npm script to auto-generate icon type definitions
   - Workflow integration: GitHub Actions now run `types:generate` before type checking
+- Bone icon for skeletal animation support
+- Arrow icons (arrow-down, arrow-right) for UI navigation
 
 ### Changed
 
@@ -27,6 +29,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `types:generate` now runs before `types:check` in CI pipelines
 - tsconfig.node.json: Added `plugins/*` to file matching patterns
 - Node imports: Updated to use explicit `node:` protocol prefix (`node:fs`, `node:path`)
+- Shading icons renamed for consistency (shading-preview → preview, shading-rendered → rendered, shading-solid → solid, shading-wireframe → wireframe)
+- Updated outliner and viewport components
+
+### Removed
+
+- Unused getfile.ts composable
 
 ## [0.12.0] - 2026-04-02
 

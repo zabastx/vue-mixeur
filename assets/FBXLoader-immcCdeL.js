@@ -1,1 +1,0 @@
-import{t as e}from"./FBXLoader-Bx02qJ7z.js";export{e as FBXLoader};

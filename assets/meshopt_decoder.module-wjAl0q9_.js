@@ -1,1 +1,0 @@
-import{t as e}from"./meshopt_decoder.module-C4tRM4tL.js";export{e as MeshoptDecoder};

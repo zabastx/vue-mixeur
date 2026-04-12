@@ -8,6 +8,11 @@ const mockSceneChildren = ref<unknown[]>([])
 const mockSelectedObject = ref<unknown | null>(null)
 let mockObjectVisibilityUpdate = vi.fn()
 
+// Mock getUserData to return the userData directly
+vi.mock('@/three/utils', () => ({
+	getUserData: (obj: { userData: Record<string, unknown> }) => obj.userData
+}))
+
 // Setup before all tests
 vi.mock('@/store/three', () => ({
 	useThreeStore: vi.fn(() => ({
@@ -38,7 +43,7 @@ describe('DataOutliner', () => {
 			name: 'TestMesh',
 			type: 'Mesh',
 			visible: true,
-			userData: { isHelper: false },
+			userData: { hideInOutliner: false },
 			children: []
 		}
 		mockSceneChildren.value = [mesh]
@@ -54,7 +59,7 @@ describe('DataOutliner', () => {
 			name: 'TestMesh',
 			type: 'Mesh',
 			visible: true,
-			userData: { isHelper: true },
+			userData: { hideInOutliner: true },
 			children: []
 		}
 		mockSceneChildren.value = [mesh]
@@ -70,7 +75,7 @@ describe('DataOutliner', () => {
 			name: 'TestMesh',
 			type: 'Mesh',
 			visible: true,
-			userData: { isHelper: false },
+			userData: { hideInOutliner: false },
 			children: []
 		}
 		mockSceneChildren.value = [mesh]
@@ -91,7 +96,7 @@ describe('DataOutliner', () => {
 			name: 'TestMesh',
 			type: 'Mesh',
 			visible: true,
-			userData: { isHelper: false },
+			userData: { userVisible: true },
 			children: []
 		}
 		mockSceneChildren.value = [mesh]
@@ -112,7 +117,7 @@ describe('DataOutliner', () => {
 			name: 'ChildMesh',
 			type: 'Mesh',
 			visible: true,
-			userData: { isHelper: false },
+			userData: { hideInOutliner: false },
 			children: []
 		}
 
@@ -121,7 +126,7 @@ describe('DataOutliner', () => {
 			name: 'ParentGroup',
 			type: 'Group',
 			visible: true,
-			userData: { isHelper: false },
+			userData: { hideInOutliner: false },
 			children: [child]
 		}
 		mockSceneChildren.value = [parent]

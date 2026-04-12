@@ -1,3 +1,4 @@
+import type { ShadingMode } from '@/store/shading'
 import {
 	computeBoundsTree,
 	disposeBoundsTree,
@@ -6,22 +7,20 @@ import {
 	acceleratedRaycast
 } from 'three-mesh-bvh'
 
+interface MxTextObjectData {
+	textValue: string
+}
+
 interface MxObjectUserData {
 	isShadable?: boolean
 	isHelper?: boolean
 	isSceneLight?: boolean
 	skipRaycast?: boolean
 	isSelectable?: boolean
-	mixeur?: {
-		isShadable?: boolean
-		isHelper?: boolean
-		isSceneLight?: boolean
-		skipRaycast?: boolean
-		isSelectable?: boolean
-		visibleIn?: ('wireframe' | 'solid' | 'preview' | 'rendered' | 'export')[]
-		hideInOutliner?: boolean
-	}
-	[key: string]: unknown
+	hideInModes?: ShadingMode[]
+	hideInOutliner?: boolean
+	userVisible?: boolean
+	text?: MxTextObjectData
 }
 
 declare module 'three' {

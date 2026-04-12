@@ -30,6 +30,6 @@ export function disposeBVH(object: THREE.Object3D) {
 }
 
 export function getUserData(obj: THREE.Object3D): MxObjectUserData {
-	if (!obj.userData) obj.userData = {}
-	return obj.userData
+	if (!obj.userData.mixeur) obj.userData.mixeur = {}
+	return obj.userData.mixeur
 }

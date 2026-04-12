@@ -28,7 +28,7 @@
 		</MxContextMenu>
 		<div class="contents" @click.stop>
 			<CheckboxRoot v-model="visibility" class="ml-auto">
-				<MxIcon :name="item.value.visible ? 'misc/visibility-visible' : 'misc/visibility-hidden'" />
+				<MxIcon :name="visibility ? 'misc/visibility-visible' : 'misc/visibility-hidden'" />
 			</CheckboxRoot>
 		</div>
 	</li>
@@ -108,7 +108,6 @@ export interface OutlinerItem {
 	uuid: string
 	type: string
 	name: string
-	visible: boolean
 	userData: MxObjectUserData
 	children?: OutlinerItem[]
 }

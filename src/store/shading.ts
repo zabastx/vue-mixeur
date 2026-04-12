@@ -4,6 +4,7 @@ import { loadWorldTexture } from '@/three/modules/loaders/environment'
 import { getUserData } from '@/three/utils'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { computed, ref, shallowRef } from 'vue'
+import type { MaterialCache, ShadingMode } from './types/shading'
 
 export const useShadingStore = defineStore('shading', () => {
 	let scene: THREE.Scene | null = null
@@ -83,19 +84,13 @@ export const useShadingStore = defineStore('shading', () => {
 	/**
 	 * Sets the shading mode for all meshes in the scene.
 	 *
-	 * @param mode - The shading mode to apply ('wireframe', 'solid', 'materialPreview', or 'rendered')
+	 * @param mode - The shading mode to apply
 	 */
 	function setMode(mode: ShadingMode) {
 		if (!scene || mode === shadingMode.value) return
 		currentMode.value = mode
 
-		if (mode === 'solid') {
-			solidModeLights.forEach((item) => scene?.add(item))
-		} else {
-			solidModeLights.forEach((item) => scene?.remove(item))
-		}
-
-		if (mode === 'materialPreview') {
+		if (mode === 'preview') {
 			scene.environment = environmentMap.value
 		} else {
 			scene.environment = null
@@ -123,10 +118,18 @@ export const useShadingStore = defineStore('shading', () => {
 		}
 
 		scene.traverse((object) => {
+			const userData = getUserData(object)
+			if (userData.hideInModes?.includes(mode)) {
+				object.visible = false
+			} else {
+				object.visible = userData.userVisible ?? true
+			}
 			if (object instanceof THREE.Mesh) {
 				applyModeToMesh(object, mode)
 			}
 		})
+
+		document.dispatchEvent(new CustomEvent('shading:modeChange', { detail: mode }))
 	}
 
 	function setEnvironmentMap(map: THREE.Texture) {
@@ -152,8 +155,8 @@ export const useShadingStore = defineStore('shading', () => {
 			case 'solid':
 				newMaterial = createSolidMaterial(cache.original)
 				break
-			case 'materialPreview':
-				newMaterial = createMaterialPreviewMaterial(cache.original)
+			case 'preview':
+				newMaterial = cache.original
 				break
 			case 'rendered':
 				newMaterial = cache.original
@@ -233,50 +236,6 @@ export const useShadingStore = defineStore('shading', () => {
 		return solidMat
 	}
 
-	/**
-	 * Creates material preview materials for the given original materials.
-	 * Material preview mode uses physically-based rendering (PBR).
-	 *
-	 * @param original - The original material(s) to convert to PBR materials
-	 * @returns PBR material(s) suitable for material preview
-	 */
-	function createMaterialPreviewMaterial(
-		original: THREE.Material | THREE.Material[]
-	): THREE.Material | THREE.Material[] {
-		if (Array.isArray(original)) {
-			return original.map((mat) => createSingleMaterialPreviewMaterial(mat))
-		}
-		return createSingleMaterialPreviewMaterial(original)
-	}
-
-	/**
-	 * Creates a single material preview material from an original material.
-	 * Converts to MeshStandardMaterial for PBR rendering, preserving textures and colors.
-	 *
-	 * @param original - The original material
-	 * @returns A MeshStandardMaterial for PBR preview
-	 */
-	function createSingleMaterialPreviewMaterial(original: THREE.Material): THREE.Material {
-		if (
-			original instanceof THREE.MeshStandardMaterial ||
-			original instanceof THREE.MeshPhysicalMaterial
-		) {
-			// Already PBR, clone it
-			return original.clone()
-		} else {
-			// Convert to standard material
-			const standardMat = new THREE.MeshStandardMaterial({
-				color: (original as THREE.MeshBasicMaterial).color || 0xffffff,
-				map: (original as THREE.MeshBasicMaterial).map,
-				roughness: 0.5,
-				metalness: 0.0,
-				transparent: (original as THREE.MeshBasicMaterial).transparent,
-				opacity: (original as THREE.MeshBasicMaterial).opacity
-			})
-			return standardMat
-		}
-	}
-
 	function init(newScene: THREE.Scene) {
 		scene = newScene
 		solidModeLights.forEach((item) => scene?.add(item))
@@ -315,7 +274,7 @@ export const useShadingStore = defineStore('shading', () => {
 		updateMaterialProperty<T>(originalMaterial, data.prop, data.value)
 
 		if (
-			currentMode.value === 'materialPreview' &&
+			currentMode.value === 'preview' &&
 			cache.current !== cache.original &&
 			!Array.isArray(cache.current)
 		) {
@@ -416,7 +375,10 @@ function getSolidShadingLights() {
 	const lights = [ambient, mainLight, fillLight]
 
 	lights.forEach((item) => {
-		getUserData(item).isHelper = true
+		const userData = getUserData(item)
+		userData.hideInOutliner = true
+		userData.isHelper = true
+		userData.hideInModes = ['wireframe', 'preview', 'rendered', 'export']
 	})
 
 	return lights
@@ -424,17 +386,4 @@ function getSolidShadingLights() {
 
 if (import.meta.hot) {
 	import.meta.hot.accept(acceptHMRUpdate(useShadingStore, import.meta.hot))
-}
-
-/**
- * Represents the different shading modes available, replicating Blender's viewport shading options.
- */
-export type ShadingMode = 'wireframe' | 'solid' | 'materialPreview' | 'rendered' | 'export'
-
-/**
- * Internal cache for storing original and current materials for each mesh.
- */
-interface MaterialCache {
-	original: THREE.Material | THREE.Material[]
-	current: THREE.Material | THREE.Material[]
 }

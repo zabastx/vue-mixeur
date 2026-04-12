@@ -37,9 +37,9 @@
 					<DataOutlinerItem
 						:item
 						:is-expanded
-						:visibility="item.value.visible"
+						:visibility="item.value.userData.userVisible"
 						:is-selected="item.value.uuid === selectedItem?.uuid"
-						@update:visibility="store.objectVisibilityUpdate(item.value.uuid, !item.value.visible)"
+						@update:visibility="($event) => store.objectVisibilityUpdate(item.value.uuid, !!$event)"
 					/>
 				</Tree.Item>
 			</Tree.Root>
@@ -71,7 +71,7 @@ watch(
 )
 
 const outlinerItems = computed(() => {
-	return store.sceneChildren.filter((item) => !getUserData(item).isHelper).map(parseObject)
+	return store.sceneChildren.filter((item) => !getUserData(item).hideInOutliner).map(parseObject)
 })
 
 function parseObject(obj: THREE.Object3D): OutlinerItem {
@@ -79,7 +79,6 @@ function parseObject(obj: THREE.Object3D): OutlinerItem {
 		uuid: obj.uuid,
 		type: obj.type,
 		name: obj.name || obj.type,
-		visible: obj.visible,
 		userData: getUserData(obj),
 		children: obj.children.length > 0 ? obj.children.map(parseObject) : undefined
 	}

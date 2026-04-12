@@ -46,6 +46,10 @@ export const useThreeStore = defineStore('three', () => {
 	function updateScene() {
 		triggerRef(sceneChildren)
 	}
+	document.addEventListener('shading:modeChange', () => {
+		triggerRef(sceneChildren)
+	})
+
 	function addGroup() {
 		const group = new THREE.Group()
 		group.name = 'Group'
@@ -228,6 +232,7 @@ export const useThreeStore = defineStore('three', () => {
 			obj.receiveShadow = true
 			const userData = getUserData(obj)
 			userData.isSelectable = true
+			userData.userVisible = obj.visible
 			if (obj instanceof THREE.Mesh) {
 				userData.isShadable = true
 				;(obj.material as THREE.Material).dithering = true
@@ -264,6 +269,8 @@ export const useThreeStore = defineStore('three', () => {
 		helperUserData.isSceneLight = true
 		lightUserData.isSelectable = true
 		lightUserData.isSceneLight = true
+		lightUserData.hideInModes = ['wireframe', 'solid', 'preview']
+		lightUserData.userVisible = light.visible
 
 		if (!(light instanceof THREE.RectAreaLight)) {
 			light.castShadow = true
@@ -327,7 +334,11 @@ export const useThreeStore = defineStore('three', () => {
 	function objectVisibilityUpdate(uuid: string, val: boolean) {
 		const obj = scene.getObjectByProperty('uuid', uuid)
 		if (obj) {
-			obj.visible = val
+			const userData = getUserData(obj)
+			userData.userVisible = val
+			if (!userData.hideInModes?.includes(shadingStore.shadingMode)) {
+				obj.visible = val
+			}
 			triggerRef(sceneChildren)
 		}
 	}

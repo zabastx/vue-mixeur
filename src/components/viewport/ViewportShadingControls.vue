@@ -29,8 +29,9 @@
 </template>
 
 <script lang="ts" setup>
+import type { ShadingMode } from '@/store/types/shading'
 import MxTooltip, { type MxTooltipContent } from '../utils/MxTooltip.vue'
-import { useShadingStore, type ShadingMode } from '@/store/shading'
+import { useShadingStore } from '@/store/shading'
 
 const shadingStore = useShadingStore()
 
@@ -52,7 +53,7 @@ const buttons: ShadingControlsElement[] = [
 		}
 	},
 	{
-		name: 'materialPreview',
+		name: 'preview',
 		icon: 'shading/preview',
 		tooltip: {
 			title: 'Viewport Shading: <em>Material Preview</em>',

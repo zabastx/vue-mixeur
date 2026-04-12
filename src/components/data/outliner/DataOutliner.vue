@@ -39,7 +39,10 @@
 						:is-expanded
 						:visibility="item.value.userData.userVisible"
 						:is-selected="item.value.uuid === selectedItem?.uuid"
-						@update:visibility="($event) => store.objectVisibilityUpdate(item.value.uuid, !!$event)"
+						@update:visibility="
+							($event: boolean | undefined) =>
+								store.objectVisibilityUpdate(item.value.uuid, !!$event)
+						"
 					/>
 				</Tree.Item>
 			</Tree.Root>

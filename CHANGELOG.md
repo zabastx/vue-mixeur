@@ -5,20 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
-### Changed
-
-- Three.js utilities: Refactored `enableBVH` and `disposeBVH` to new `src/three/utils.ts` module
-- userData access: New `getUserData()` utility function provides type-safe access to object userData
-  - Safely initializes `userData` if undefined
-  - Returns typed `MxObjectUserData` interface with structured `mixeur` property
-- Updated all components and stores to use `getUserData(obj)` instead of direct `obj.userData` access
+## [0.13.0] - 2026-04-12
 
 ### Added
 
+- Shading mode visibility controls: Objects can now be hidden per shading mode using `hideInModes` property
+  - New `userVisible` tracks user's visibility preference separately from actual Three.js visibility
+  - New `hideInOutliner` hides objects like grid helpers from the outliner
+  - New `shading:modeChange` event dispatched when mode changes
+  - Outliner visibility toggle now properly respects shading mode
+- Material preview mode renamed to 'preview' for consistency with shading UI
+- Text objects now store text value in `userData.text.textValue` for property panel access
+- Composer store now exposes `rendererRef` for external renderer access
+- New `src/store/types/shading.ts` with ShadingMode type and MaterialCache interface
+- New `src/events.d.ts` with global type declarations for shading events
+- Three.js utilities: Refactored `enableBVH` and `disposeBVH` to new `src/three/utils.ts` module
 - New `src/three/utils.ts` module exports: `getUserData`, `enableBVH`, `disposeBVH`
 - New `MxObjectUserData` type with structured `mixeur` property for Mixeur-specific metadata
+
+### Changed
+
+- userData now uses `mixeur` namespace to prevent conflicts with external Three.js libraries
+  - `getUserData()` now returns `obj.userData.mixeur` instead of direct `obj.userData`
+  - All components and stores updated to use the new namespace
+  - Safely initializes `userData` if undefined
+- Shading mode `materialPreview` renamed to `preview` for consistency
+- Default camera position moved from (4,4,4) to (8,8,8) for better initial view
+- Shadow map type changed from PCFSoftShadowMap to PCFShadowMap
+- THREE.Cache enabled for improved performance
+- Light helpers now have proper display names (e.g., "Point Light" instead of "point")
+- Grid and axes helpers hidden from outliner with `hideInOutliner: true`
+- TextDataProperties accordion now defaults to open with `['text']`
 
 ## [0.12.1] - 2026-04-10
 
@@ -210,8 +227,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Transform controls initialized after event listeners
 
-[Unreleased]: https://github.com/zabastx/mixeur/compare/v0.12.0...HEAD
-[0.12.0]: https://github.com/zabastx/mixeur/compare/v0.11.2...v0.12.0
+[0.13.0]: https://github.com/zabastx/mixeur/compare/v0.12.1...v0.13.0
+[0.12.1]: https://github.com/zabastx/mixeur/compare/v0.12.0...v0.12.1
 [0.11.2]: https://github.com/zabastx/mixeur/compare/v0.11.1...v0.11.2
 [0.11.1]: https://github.com/zabastx/mixeur/compare/v0.11.0...v0.11.1
 [0.11.0]: https://github.com/zabastx/mixeur/compare/v0.10.0...v0.11.0

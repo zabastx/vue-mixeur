@@ -37,6 +37,8 @@
 <script lang="ts" setup>
 import type { MxContextMenuItem } from '@/components/utils/MxContextMenu.vue'
 import { useThreeStore } from '@/store/three'
+import type { MxObjectUserData } from '@/three/three'
+import { getUserData } from '@/three/utils'
 import type { FlattenedItem } from 'reka-ui'
 import { computed } from 'vue'
 
@@ -59,7 +61,7 @@ const contextMenuItems = computed<MxContextMenuItem[]>(() => {
 	const groups = threeStore.sceneChildren
 		.filter((item) => {
 			const isGroup = item.type === 'Group'
-			const isHelper = item.userData.isHelper
+			const isHelper = getUserData(item).isHelper
 			return isGroup && !isHelper
 		})
 		.map((item) => ({ uuid: item.uuid, name: item.name }))
@@ -107,7 +109,7 @@ export interface OutlinerItem {
 	type: string
 	name: string
 	visible: boolean
-	userData: Record<string, unknown>
+	userData: MxObjectUserData
 	children?: OutlinerItem[]
 }
 </script>

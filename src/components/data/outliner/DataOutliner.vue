@@ -54,6 +54,7 @@ import { Tree } from 'reka-ui/namespaced'
 import { computed, shallowRef, watch } from 'vue'
 import type { TreeItemToggleEvent } from 'reka-ui'
 import type { OutlinerItem } from './DataOutlinerItem.vue'
+import { getUserData } from '@/three/utils'
 
 const store = useThreeStore()
 
@@ -70,7 +71,7 @@ watch(
 )
 
 const outlinerItems = computed(() => {
-	return store.sceneChildren.filter((item) => !item.userData.isHelper).map(parseObject)
+	return store.sceneChildren.filter((item) => !getUserData(item).isHelper).map(parseObject)
 })
 
 function parseObject(obj: THREE.Object3D): OutlinerItem {
@@ -79,7 +80,7 @@ function parseObject(obj: THREE.Object3D): OutlinerItem {
 		type: obj.type,
 		name: obj.name || obj.type,
 		visible: obj.visible,
-		userData: obj.userData,
+		userData: getUserData(obj),
 		children: obj.children.length > 0 ? obj.children.map(parseObject) : undefined
 	}
 }

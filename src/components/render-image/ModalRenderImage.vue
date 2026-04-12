@@ -90,6 +90,7 @@ import { downloadFile } from '@/utils/files'
 import type { RenderSettings } from './RenderImageSettings.vue'
 // import type { CameraSettings } from './CameraSettings.vue'
 import { useToast } from '@/composables/toast'
+import { getUserData } from '@/three/utils'
 
 const isOpen = defineModel<boolean>({ default: false })
 
@@ -141,7 +142,7 @@ function createRenderScene(sourceScene: THREE.Scene): THREE.Scene {
 
 	// Clone non-helper objects
 	sourceScene.children.forEach((child) => {
-		if (!child.userData.isHelper) {
+		if (!getUserData(child).isHelper) {
 			const cloned = child.clone(true)
 			renderScene.add(cloned)
 		}

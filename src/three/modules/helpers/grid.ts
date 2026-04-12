@@ -1,11 +1,12 @@
 import THREE from '@/three'
 import { InfiniteGridHelper } from './InfiniteGridHelper'
+import { getUserData } from '@/three/utils'
 
 export function setGridHelper(scene: THREE.Scene) {
 	const grid = new InfiniteGridHelper(1, 10, new THREE.Color(0.48, 0.48, 0.48), 1000)
 	grid.renderOrder = -1
 	grid.name = 'InfiniteGridHelper'
-	grid.userData.isHelper = true
+	getUserData(grid).isHelper = true
 	scene.add(grid)
 
 	const axes = getAxes()
@@ -20,7 +21,7 @@ function getAxes() {
 	const axesGroup = new THREE.Group()
 	axesGroup.add(axes, axesMirror)
 	axesGroup.name = 'AxesHelper'
-	axesGroup.userData.isHelper = true
+	getUserData(axesGroup).isHelper = true
 	axesGroup.children.forEach((child) => {
 		child.scale.y = 0
 	})

@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Three.js utilities: Refactored `enableBVH` and `disposeBVH` to new `src/three/utils.ts` module
+- userData access: New `getUserData()` utility function provides type-safe access to object userData
+  - Safely initializes `userData` if undefined
+  - Returns typed `MxObjectUserData` interface with structured `mixeur` property
+- Updated all components and stores to use `getUserData(obj)` instead of direct `obj.userData` access
+
+### Added
+
+- New `src/three/utils.ts` module exports: `getUserData`, `enableBVH`, `disposeBVH`
+- New `MxObjectUserData` type with structured `mixeur` property for Mixeur-specific metadata
+
 ## [0.12.1] - 2026-04-10
 
 ### Added

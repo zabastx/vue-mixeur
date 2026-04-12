@@ -1,4 +1,5 @@
 import THREE from '@/three'
+import { getUserData } from '@/three/utils'
 import { RectAreaLightHelper } from 'three/examples/jsm/Addons.js'
 
 export function createLight<T extends CreateLightParams>({ type, parameters }: T) {
@@ -80,11 +81,9 @@ export function getLightHelper(light: THREE.Light) {
 	if (!helper) return
 	helper.light.name = light.type
 	helper.name = `${light.type}Helper`
-	helper.userData = {
-		isHelper: true
-	}
+	getUserData(helper).isHelper = true
 	helper.traverse((child) => {
-		child.userData.skipRaycast = true
+		getUserData(child).skipRaycast = true
 	})
 	return helper
 }

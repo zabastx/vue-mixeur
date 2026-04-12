@@ -1,6 +1,6 @@
 import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia'
 import { computed, ref, shallowRef, triggerRef, type ShallowRef } from 'vue'
-import THREE, { enableBVH } from '@/three'
+import THREE from '@/three'
 import { setGridHelper } from '@/three/modules/helpers/grid'
 import { useControlsStore } from './controls'
 import { setRaycaster } from '@/three/modules/core/raycaster'
@@ -19,6 +19,7 @@ import { useShadingStore } from './shading'
 import { createMesh } from '@/three/modules/mesh'
 import { exportModel } from '@/three/modules/addons/exporter'
 import { useComposerStore } from './composer'
+import { getUserData, enableBVH } from '@/three/utils'
 
 export const useThreeStore = defineStore('three', () => {
 	const isInitiated = ref(false)
@@ -166,7 +167,7 @@ export const useThreeStore = defineStore('three', () => {
 
 		const object = scene.getObjectByProperty('uuid', uuid)
 
-		if (!object || (raycasted && !object.userData.isSelectable)) return
+		if (!object || (raycasted && !getUserData(object).isSelectable)) return
 
 		if (object instanceof THREE.Light) {
 			transformControls.value?.attach(object)
@@ -212,7 +213,7 @@ export const useThreeStore = defineStore('three', () => {
 				return
 			}
 
-			if (object.userData.skipRaycast && object.parent) {
+			if (getUserData(object).skipRaycast && object.parent) {
 				transformControls.value?.attach(object.parent)
 				selectedObject.value = object.parent
 			}
@@ -225,9 +226,10 @@ export const useThreeStore = defineStore('three', () => {
 		object.traverse((obj) => {
 			obj.castShadow = true
 			obj.receiveShadow = true
-			obj.userData.isSelectable = true
+			const userData = getUserData(obj)
+			userData.isSelectable = true
 			if (obj instanceof THREE.Mesh) {
-				obj.userData.isShadable = true
+				userData.isShadable = true
 				;(obj.material as THREE.Material).dithering = true
 			}
 			if (obj instanceof THREE.Light) {
@@ -255,10 +257,13 @@ export const useThreeStore = defineStore('three', () => {
 		const helper = getLightHelper(light)
 		if (!helper) return
 
-		helper.userData.isSelectable = true
-		helper.userData.isSceneLight = true
-		light.userData.isSelectable = true
-		light.userData.isSceneLight = true
+		const helperUserData = getUserData(helper)
+		const lightUserData = getUserData(light)
+
+		helperUserData.isSelectable = true
+		helperUserData.isSceneLight = true
+		lightUserData.isSelectable = true
+		lightUserData.isSceneLight = true
 
 		if (!(light instanceof THREE.RectAreaLight)) {
 			light.castShadow = true

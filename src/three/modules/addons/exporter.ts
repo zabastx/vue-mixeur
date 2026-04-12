@@ -1,5 +1,6 @@
 import { useToast } from '@/composables/toast'
 import THREE from '@/three'
+import { getUserData } from '@/three/utils'
 import { downloadFile } from '@/utils/files'
 import { GLTFExporter } from 'three/examples/jsm/Addons.js'
 
@@ -14,7 +15,7 @@ export async function exportModel(scene: THREE.Scene) {
 	try {
 		const exportScene = new THREE.Scene()
 		scene.children.forEach((child) => {
-			if (!child.userData.isHelper) {
+			if (!getUserData(child).isHelper) {
 				if (child instanceof THREE.Light && !isLightExportable(child)) return
 				exportScene.add(child.clone(true))
 			}

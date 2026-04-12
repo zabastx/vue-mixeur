@@ -1,6 +1,7 @@
 import THREE from '@/three'
 import type { LightHelper } from '@/three/modules/light'
 import { loadWorldTexture } from '@/three/modules/loaders/environment'
+import { getUserData } from '@/three/utils'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { computed, ref, shallowRef } from 'vue'
 
@@ -24,7 +25,7 @@ export const useShadingStore = defineStore('shading', () => {
 	 */
 	function shouldShadeObject(object: THREE.Object3D): boolean {
 		// Only objects explicitly marked as shadable will be affected
-		return !!object.userData.isShadable
+		return !!getUserData(object).isShadable
 	}
 
 	/**
@@ -108,7 +109,7 @@ export const useShadingStore = defineStore('shading', () => {
 
 		if (mode === 'export') {
 			scene.traverse((object) => {
-				if (object.userData.isHelper) {
+				if (getUserData(object).isHelper) {
 					object.visible = false
 					helperObjects.push(object)
 				}
@@ -291,7 +292,7 @@ export const useShadingStore = defineStore('shading', () => {
 	function setSceneLightsVisibility(val: boolean) {
 		if (!scene) return
 		scene.traverse((obj: LightHelper | THREE.Object3D) => {
-			if ('light' in obj && obj.userData.isSceneLight) {
+			if ('light' in obj && getUserData(obj).isSceneLight) {
 				obj.light.visible = val
 			}
 		})
@@ -415,9 +416,7 @@ function getSolidShadingLights() {
 	const lights = [ambient, mainLight, fillLight]
 
 	lights.forEach((item) => {
-		item.userData = {
-			isHelper: true
-		}
+		getUserData(item).isHelper = true
 	})
 
 	return lights

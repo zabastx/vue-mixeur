@@ -129,8 +129,7 @@ vi.mock('@/three', () => ({
 			setFromCamera: vi.fn(),
 			intersectObjects: vi.fn(() => [])
 		}))
-	},
-	enableBVH: vi.fn()
+	}
 }))
 
 Object.defineProperty(globalThis.HTMLCanvasElement.prototype, 'getContext', {

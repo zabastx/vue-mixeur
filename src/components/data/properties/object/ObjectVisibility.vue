@@ -2,7 +2,7 @@
 	<div class="flex justify-center p-1">
 		<div class="flex flex-col gap-1">
 			<InputField reverse label="Selectable">
-				<InputCheckbox v-model="object.userData.isSelectable" />
+				<InputCheckbox v-model="getUserData(object).isSelectable" />
 			</InputField>
 			<InputField reverse label="Frustum Culled">
 				<InputCheckbox v-model="object.frustumCulled" />
@@ -22,6 +22,7 @@
 <script lang="ts" setup>
 import { useThreeStore } from '@/store/three'
 import type THREE from '@/three'
+import { getUserData } from '@/three/utils'
 import { computed } from 'vue'
 
 const threeStore = useThreeStore()

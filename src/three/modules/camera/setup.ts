@@ -20,7 +20,7 @@ export function cameraSetup() {
 
 	const activeCamera = ref<THREE.PerspectiveCamera | THREE.OrthographicCamera>(perspectiveCamera)
 
-	activeCamera.value.position.set(4, 4, 4)
+	activeCamera.value.position.set(8, 8, 8)
 	activeCamera.value.lookAt(0, 0, 0)
 
 	/**

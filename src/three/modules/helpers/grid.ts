@@ -6,7 +6,11 @@ export function setGridHelper(scene: THREE.Scene) {
 	const grid = new InfiniteGridHelper(1, 10, new THREE.Color(0.48, 0.48, 0.48), 1000)
 	grid.renderOrder = -1
 	grid.name = 'InfiniteGridHelper'
-	getUserData(grid).isHelper = true
+
+	const userData = getUserData(grid)
+	userData.isHelper = true
+	userData.hideInOutliner = true
+
 	scene.add(grid)
 
 	const axes = getAxes()
@@ -21,7 +25,11 @@ function getAxes() {
 	const axesGroup = new THREE.Group()
 	axesGroup.add(axes, axesMirror)
 	axesGroup.name = 'AxesHelper'
-	getUserData(axesGroup).isHelper = true
+
+	const userData = getUserData(axesGroup)
+	userData.isHelper = true
+	userData.hideInOutliner = true
+
 	axesGroup.children.forEach((child) => {
 		child.scale.y = 0
 	})

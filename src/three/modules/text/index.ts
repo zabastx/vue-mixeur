@@ -1,6 +1,7 @@
 import { TextGeometry, type TextGeometryParameters } from 'three/examples/jsm/Addons.js'
 import { loadFont } from '../loaders/font'
 import THREE from '@/three'
+import { getUserData } from '@/three/utils'
 
 export async function createText() {
 	const font = await loadFont('helvetiker-regular')
@@ -15,6 +16,9 @@ export async function createText() {
 	})
 	const mesh = new THREE.Mesh(geometry, new THREE.MeshPhysicalMaterial())
 	mesh.name = 'Text'
+	getUserData(mesh).text = {
+		textValue: 'Text'
+	}
 	return mesh
 }
 

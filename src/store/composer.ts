@@ -44,7 +44,7 @@ export const useComposerStore = defineStore('composer', () => {
 		renderer.outputColorSpace = THREE.SRGBColorSpace
 		renderer.toneMappingExposure = 1.0
 		renderer.shadowMap.enabled = true
-		renderer.shadowMap.type = THREE.PCFSoftShadowMap
+		renderer.shadowMap.type = THREE.PCFShadowMap
 		renderer.autoClear = false
 
 		return renderer
@@ -148,7 +148,8 @@ export const useComposerStore = defineStore('composer', () => {
 	return {
 		composerPasses,
 		init,
-		setupRenderImageComposer
+		setupRenderImageComposer,
+		rendererRef
 	}
 })
 

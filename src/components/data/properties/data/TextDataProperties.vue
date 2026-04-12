@@ -1,7 +1,7 @@
 <template>
-	<MxAccordionRoot collapsible type="multiple">
+	<MxAccordionRoot collapsible type="multiple" :default-value="['text']">
 		<MxAccordionItem label="Text" :item="{ value: 'text' }">
-			<div class="flex flex-col items-end gap-1 text-xs pr-2">
+			<div class="flex flex-col items-end gap-1 text-xs p-1 pr-2">
 				<InputField label="Text">
 					<input v-model="textData.text" type="text" class="input w-[150px]" />
 				</InputField>
@@ -38,7 +38,7 @@
 						<InputNumber v-model="textData.bevelSegments" class="w-[150px]" />
 					</InputField>
 				</template>
-				<button type="button" class="btn text-sm mt-2" @click="onApply">Apply</button>
+				<button type="button" class="btn text-sm" @click="onApply">Apply</button>
 			</div>
 		</MxAccordionItem>
 	</MxAccordionRoot>
@@ -46,9 +46,10 @@
 
 <script lang="ts" setup>
 import { useThreeStore } from '@/store/three'
-import THREE, { enableBVH } from '@/three'
+import THREE from '@/three'
 import { defaultFontsList, loadFont } from '@/three/modules/loaders/font'
 import { createTextGeometry } from '@/three/modules/text'
+import { enableBVH, getUserData } from '@/three/utils'
 import { TextGeometry } from 'three/examples/jsm/Addons.js'
 import { reactive } from 'vue'
 
@@ -95,6 +96,9 @@ async function onApply() {
 		})
 
 		obj.geometry = newGeometry
+		getUserData(obj).text = {
+			textValue: textData.text
+		}
 		enableBVH(obj)
 	}
 }
@@ -110,6 +114,7 @@ function getCurrentTextData() {
 		const { bevelThickness, bevelSize, bevelEnabled, depth, size, bevelOffset, bevelSegments } =
 			options
 		return {
+			text: getUserData(obj).text?.textValue,
 			font,
 			geometry: { bevelEnabled, bevelSize, bevelThickness, depth, size, bevelOffset, bevelSegments }
 		}
@@ -120,12 +125,13 @@ function getCurrentTextData() {
 function setCurrentTextData() {
 	const data = getCurrentTextData()
 	if (!data) return
-	textData.depth = data.geometry.depth || 1
-	textData.size = data.geometry.size || 2
-	textData.bevelEnabled = data.geometry.bevelEnabled || false
-	textData.bevelSize = data.geometry.bevelSize || 8
-	textData.bevelThickness = data.geometry.bevelThickness || 10
-	textData.bevelOffset = data.geometry.bevelOffset || 0
-	textData.bevelSegments = data.geometry.bevelSegments || 3
+	textData.text = data.text ?? ''
+	textData.depth = data.geometry.depth ?? 1
+	textData.size = data.geometry.size ?? 2
+	textData.bevelEnabled = data.geometry.bevelEnabled ?? false
+	textData.bevelSize = data.geometry.bevelSize ?? 8
+	textData.bevelThickness = data.geometry.bevelThickness ?? 10
+	textData.bevelOffset = data.geometry.bevelOffset ?? 0
+	textData.bevelSegments = data.geometry.bevelSegments ?? 3
 }
 </script>

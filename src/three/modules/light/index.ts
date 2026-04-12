@@ -12,11 +12,13 @@ export function createLight<T extends CreateLightParams>({ type, parameters }: T
 				parameters?.distance,
 				parameters?.decay
 			)
+			light.name = 'Point Light'
 			break
 
 		case 'sun':
 			light = new THREE.DirectionalLight(parameters?.color, parameters?.intensity ?? 10)
-			light.target.name = 'DirectionalLightTarget'
+			light.name = 'Directional Light'
+			light.target.name = 'Directional Light Target'
 			light.target.position.set(0, 0, -1)
 			light.add(light.target)
 			break
@@ -28,7 +30,8 @@ export function createLight<T extends CreateLightParams>({ type, parameters }: T
 				parameters?.distance,
 				parameters?.angle
 			)
-			light.target.name = 'SpotLightTarget'
+			light.name = 'Spot Light'
+			light.target.name = 'Spot Light Target'
 			light.target.position.set(0, 0, -1)
 			light.add(light.target)
 			break
@@ -40,6 +43,7 @@ export function createLight<T extends CreateLightParams>({ type, parameters }: T
 				parameters?.width,
 				parameters?.height
 			)
+			light.name = 'Area Light'
 			break
 	}
 
@@ -48,7 +52,6 @@ export function createLight<T extends CreateLightParams>({ type, parameters }: T
 		light.shadow.normalBias = 0.02
 	}
 
-	light.name = type
 	return light as CreateLightReturn<T>
 }
 
@@ -79,9 +82,12 @@ export function getLightHelper(light: THREE.Light) {
 			break
 	}
 	if (!helper) return
-	helper.light.name = light.type
-	helper.name = `${light.type}Helper`
-	getUserData(helper).isHelper = true
+	helper.name = `${helper.light.name} Helper`
+
+	const userData = getUserData(helper)
+	userData.isHelper = true
+	userData.hideInOutliner = true
+
 	helper.traverse((child) => {
 		getUserData(child).skipRaycast = true
 	})

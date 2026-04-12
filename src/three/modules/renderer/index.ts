@@ -22,7 +22,7 @@ export function createBlenderRenderer({ canvas }: { canvas: HTMLCanvasElement })
 	renderer.outputColorSpace = THREE.SRGBColorSpace
 	renderer.toneMappingExposure = 1.0
 	renderer.shadowMap.enabled = true
-	renderer.shadowMap.type = THREE.PCFSoftShadowMap
+	renderer.shadowMap.type = THREE.PCFShadowMap
 	renderer.autoClear = false
 
 	initPMREMGenerator(renderer)

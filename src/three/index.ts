@@ -16,4 +16,6 @@ THREE.BatchedMesh.prototype.computeBoundsTree = computeBatchedBoundsTree
 THREE.BatchedMesh.prototype.disposeBoundsTree = disposeBatchedBoundsTree
 THREE.BatchedMesh.prototype.raycast = acceleratedRaycast
 
+THREE.Cache.enabled = true
+
 export default THREE

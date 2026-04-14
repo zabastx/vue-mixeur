@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- `disposeModel()`: Extended geometry disposal to all Object3D types (not just Mesh)
+  - Now handles CameraHelper, LineSegments, Points, Sprites, and other non-Mesh objects
+  - Added SkinnedMesh skeleton disposal
+  - Refactored material disposal into separate `disposeMaterial()` helper function
+
 ## [0.13.0] - 2026-04-12
 
 ### Added

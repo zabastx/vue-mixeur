@@ -1,11 +1,11 @@
 <template>
-	<div class="flex flex-col gap-2 p-2">
-		<InputField label="Preset" label-width="90px">
+	<div class="flex flex-col gap-1 p-2">
+		<InputField label="Preset" label-width="100px">
 			<InputSelect v-model="settings.preset" :items="resolutionOptions" />
 		</InputField>
 
 		<template v-if="settings.preset === 'custom'">
-			<InputField label="Width" label-width="90px">
+			<InputField label="Width" label-width="100px">
 				<InputNumber
 					v-model="model.width"
 					:min="100"
@@ -13,7 +13,7 @@
 					:format-options="{ maximumFractionDigits: 0, useGrouping: false }"
 				/>
 			</InputField>
-			<InputField label="Height" label-width="90px">
+			<InputField label="Height" label-width="100px">
 				<InputNumber
 					v-model="model.height"
 					:min="100"
@@ -23,11 +23,11 @@
 			</InputField>
 		</template>
 
-		<InputField label="Format" label-width="90px">
+		<InputField label="Format" label-width="100px">
 			<InputSelect v-model="model.selectedFormat" :items="FORMAT_PRESETS" />
 		</InputField>
 
-		<InputField v-if="model.selectedFormat !== 'png'" label="Quality" label-width="90px">
+		<InputField v-if="model.selectedFormat !== 'png'" label="Quality" label-width="100px">
 			<InputNumber
 				v-model="model.quality"
 				:min="0"
@@ -35,7 +35,7 @@
 				:format-options="{ maximumFractionDigits: 0 }"
 			/>
 		</InputField>
-		<InputField v-if="model.selectedFormat !== 'jpeg'" label="Background" label-width="90px">
+		<InputField v-if="model.selectedFormat !== 'jpeg'" label="Background" label-width="100px">
 			<InputCheckbox v-model="model.background" />
 		</InputField>
 	</div>

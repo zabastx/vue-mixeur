@@ -95,6 +95,15 @@ vi.mock('@/three', () => ({
 			power: 0,
 			position: { set: vi.fn() }
 		})),
+		Camera: vi.fn(() => ({
+			uuid: 'camera-uuid',
+			userData: {},
+			traverse: vi.fn(),
+			castShadow: false,
+			receiveShadow: false,
+			visible: true,
+			children: []
+		})),
 		Color: vi.fn((color) => ({ color })),
 		Clock: vi.fn(() => ({ getDelta: vi.fn(() => 0.016) })),
 		PerspectiveCamera: vi.fn(() => ({

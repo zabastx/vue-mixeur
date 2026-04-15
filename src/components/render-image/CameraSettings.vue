@@ -1,61 +1,68 @@
 <template>
-	<div class="flex flex-col gap-2 p-2">
-		<InputField label="Type" label-width="90px">
-			<InputSelect v-model="model.type" :items="CAMERA_TYPE_OPTIONS" />
-		</InputField>
-		<InputField label="FOV" label-width="90px">
-			<InputNumber
-				v-model="model.fov"
-				:format-options="{ unit: 'degree', unitDisplay: 'narrow', style: 'unit' }"
-				:max="180"
-				:min="1"
+	<div class="flex flex-col gap-1 p-2">
+		<InputField label="Camera" label-width="100px">
+			<InputSelect
+				:items="renderCameraOptions"
+				:model-value="renderCamera?.uuid"
+				@update:model-value="onCameraChange"
 			/>
 		</InputField>
-		<InputField label="Zoom" label-width="90px">
-			<InputNumber
-				v-model="model.zoom"
-				:step="0.1"
-				:format-options="{ minimumFractionDigits: 2 }"
-			/>
-		</InputField>
-		<button type="button" class="btn" @click="copyCameraSettings">
-			Copy scene camera settings
-		</button>
+		<template v-if="renderCamera">
+			<InputField v-if="'fov' in renderCamera" label="FOV" label-width="100px">
+				<InputNumber
+					v-model="renderCamera.fov"
+					:format-options="{ unit: 'degree', unitDisplay: 'narrow', style: 'unit' }"
+					:max="180"
+					:min="1"
+				/>
+			</InputField>
+			<InputField label="Clip Start" label-width="100px">
+				<InputNumber
+					v-model="renderCamera.near"
+					:step="1"
+					:format-options="{ minimumFractionDigits: 1 }"
+				/>
+			</InputField>
+			<InputField label="Clip End" label-width="100px">
+				<InputNumber
+					v-model="renderCamera.far"
+					:step="1"
+					:format-options="{ minimumFractionDigits: 1 }"
+				/>
+			</InputField>
+			<InputField label="Zoom" label-width="100px">
+				<InputNumber
+					v-model="renderCamera.zoom"
+					:step="0.1"
+					:format-options="{ minimumFractionDigits: 2 }"
+				/>
+			</InputField>
+		</template>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { useThreeStore } from '@/store/three'
+import { useCameraStore } from '@/store/camera'
 import THREE from '@/three'
+import { computed } from 'vue'
 
-const model = defineModel<CameraSettings>({ required: true })
+const cameraStore = useCameraStore()
 
-const threeStore = useThreeStore()
+const renderCamera = computed(() => {
+	if (cameraStore.renderCamera instanceof THREE.PerspectiveCamera) return cameraStore.renderCamera
+	if (cameraStore.renderCamera instanceof THREE.OrthographicCamera) return cameraStore.renderCamera
+	return null
+})
 
-function copyCameraSettings() {
-	const camera = threeStore.activeCamera
+const renderCameraOptions = computed(() =>
+	cameraStore.renderCameraList.map((cam) => ({
+		value: cam.uuid,
+		label: cam.name
+	}))
+)
 
-	model.value.zoom = camera.zoom
-
-	if (camera instanceof THREE.PerspectiveCamera) {
-		model.value.fov = camera.fov
-	}
-}
-
-const CAMERA_TYPE_OPTIONS = [
-	{
-		label: 'Perspective',
-		value: 'PerspectiveCamera'
-	},
-	{
-		label: 'Orthographic',
-		value: 'OrthographicCamera'
-	}
-] as const
-
-export interface CameraSettings {
-	fov: number
-	zoom: number
-	type: 'PerspectiveCamera' | 'OrthographicCamera'
+function onCameraChange(uuid?: string) {
+	if (!uuid) return
+	cameraStore.setRenderCamera(uuid)
 }
 </script>

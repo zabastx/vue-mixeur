@@ -5,21 +5,15 @@ import { setGridHelper } from '@/three/modules/helpers/grid'
 import { useControlsStore } from './controls'
 import { setRaycaster } from '@/three/modules/core/raycaster'
 import { useEventListener } from '@vueuse/core'
-import { cameraSetup } from '@/three/modules/camera/setup'
 import { OutlinePass, RectAreaLightUniformsLib } from 'three/examples/jsm/Addons.js'
 import { disposeModel } from '@/three/modules/core/dispose'
-import {
-	createLight,
-	getLightHelper,
-	lightHasShadow,
-	type LightHelper
-} from '@/three/modules/light'
+import { getLightHelper, type LightHelper } from '@/three/modules/light'
 import { useStats } from '@/three/modules/extras/stats'
 import { useShadingStore } from './shading'
-import { createMesh } from '@/three/modules/mesh'
 import { exportModel } from '@/three/modules/addons/exporter'
 import { useComposerStore } from './composer'
 import { getUserData, enableBVH } from '@/three/utils'
+import { useCameraStore } from './camera'
 
 export const useThreeStore = defineStore('three', () => {
 	const isInitiated = ref(false)
@@ -63,23 +57,12 @@ export const useThreeStore = defineStore('three', () => {
 		group.add(object)
 	}
 
-	const { activeCamera, switchCamera } = cameraSetup()
 	const { controls, gizmo, transformControls } = storeToRefs(controlsStore)
 
 	// ----------------------------------------
 	const outlinePassRef = shallowRef<OutlinePass>()
 
 	const { setFPSCounter, monitor, updateMonitor } = useStats()
-
-	function addInitialObjects() {
-		const pointLight = createLight({ type: 'point' })
-		pointLight.power = 1000
-		pointLight.position.set(4, 5, 1)
-		addLightToScene(pointLight)
-
-		const companionCube = createMesh('cube')
-		addModelToScene(companionCube)
-	}
 
 	async function initScene(canvasRef: ShallowRef<HTMLCanvasElement | null>) {
 		if (!canvasRef.value) return
@@ -88,6 +71,8 @@ export const useThreeStore = defineStore('three', () => {
 		RectAreaLightUniformsLib.init()
 
 		if (import.meta.env.DEV) setFPSCounter(canvas.parentElement)
+
+		const { activeCamera } = storeToRefs(useCameraStore())
 
 		if (!(activeCamera.value instanceof THREE.PerspectiveCamera)) return
 		activeCamera.value.aspect = canvas.clientWidth / canvas.clientHeight
@@ -129,8 +114,6 @@ export const useThreeStore = defineStore('three', () => {
 		})
 		// -----------------------------
 
-		addInitialObjects()
-
 		const targetFPS = 30
 		const frameDelay = 1000 / targetFPS
 		let lastFrameTime = 0
@@ -167,7 +150,8 @@ export const useThreeStore = defineStore('three', () => {
 	const selectedObject = ref<THREE.Object3D | THREE.Light | THREE.Mesh | null>(null)
 
 	function selectObject(uuid?: string, raycasted?: boolean) {
-		if (!uuid || !outlinePassRef.value) return
+		if (!uuid || !outlinePassRef.value)
+			return console.warn('selectObject: outlinePassRef is undefined')
 
 		const object = scene.getObjectByProperty('uuid', uuid)
 
@@ -183,11 +167,29 @@ export const useThreeStore = defineStore('three', () => {
 			return
 		}
 
+		if (object instanceof THREE.Camera) {
+			transformControls.value?.attach(object)
+			selectedObject.value = object
+			const helper = scene.getObjectByProperty('camera', object)
+			if (helper) {
+				outlinePassRef.value.selectedObjects = [helper]
+			}
+			return
+		}
+
 		if ('light' in object) {
 			const light = object.light as THREE.Light
 			transformControls.value?.attach(light)
 			outlinePassRef.value.selectedObjects = [object]
 			selectedObject.value = light
+			return
+		}
+
+		if ('camera' in object) {
+			const camera = object.camera as THREE.Camera
+			transformControls.value?.attach(camera)
+			outlinePassRef.value.selectedObjects = [object]
+			selectedObject.value = camera
 			return
 		}
 
@@ -253,9 +255,8 @@ export const useThreeStore = defineStore('three', () => {
 		raycasterObjects.push(object)
 
 		shadingStore.cacheNewObjectMaterials(object)
-		selectedObject.value = object
-		transformControls.value?.attach(object)
-		if (outlinePassRef.value) outlinePassRef.value.selectedObjects = [object]
+
+		selectObject(object.uuid)
 	}
 
 	function addLightToScene(light: THREE.Light) {
@@ -271,10 +272,13 @@ export const useThreeStore = defineStore('three', () => {
 		lightUserData.isSceneLight = true
 		lightUserData.hideInModes = ['wireframe', 'solid', 'preview']
 		lightUserData.userVisible = light.visible
+		lightUserData.helperUUID = helper.uuid
 
 		if (!(light instanceof THREE.RectAreaLight)) {
 			light.castShadow = true
 		}
+
+		enableBVH(helper)
 		scene.add(light)
 		scene.add(helper)
 
@@ -284,10 +288,33 @@ export const useThreeStore = defineStore('three', () => {
 
 		raycasterObjects.push(helper)
 		lightHelperObjects.push(helper)
-		selectedObject.value = light
-		transformControls.value?.attach(light)
+		selectObject(light.uuid)
+	}
 
-		if (outlinePassRef.value) outlinePassRef.value.selectedObjects = [helper]
+	function addCameraToScene(camera: THREE.Camera) {
+		const helper = new THREE.CameraHelper(camera)
+
+		helper.name = `${camera.name} Helper`
+
+		const helperUserData = getUserData(helper)
+		const cameraUserData = getUserData(camera)
+
+		helperUserData.isSelectable = true
+		helperUserData.isHelper = true
+		helperUserData.hideInOutliner = true
+		helperUserData.userVisible = camera.visible
+
+		cameraUserData.isSelectable = true
+		cameraUserData.helperUUID = helper.uuid
+		cameraUserData.isRenderCamera = true
+
+		enableBVH(helper)
+		scene.add(camera)
+		scene.add(helper)
+
+		raycasterObjects.push(helper)
+
+		selectObject(camera.uuid)
 	}
 
 	function deleteFromScene(object: THREE.Object3D) {
@@ -298,36 +325,59 @@ export const useThreeStore = defineStore('three', () => {
 			scene.traverse((child: THREE.Object3D | LightHelper) => {
 				if ('light' in child && child.light.uuid === object.uuid) {
 					objectsForRemoval.push(child)
-					const idx = lightHelperObjects.findIndex((item) => child.uuid === item.uuid)
-					if (idx < 0) return
-					lightHelperObjects.splice(idx, 1)
 				}
+				removeFromOutline(child.uuid)
+				removeFromRaycaster(child.uuid)
+
+				const idx = lightHelperObjects.findIndex((item) => item.uuid === child.uuid)
+				if (idx < 0) return
+				lightHelperObjects.splice(idx, 1)
 			})
 			objectsForRemoval.forEach((obj) => {
-				scene.remove(obj)
-				const isLight = obj instanceof THREE.Light
-				if (!isLight) return
-
-				if (lightHasShadow(obj)) obj.shadow.map?.dispose()
+				disposeModel(obj)
 			})
+		}
+
+		if (object instanceof THREE.Camera) {
+			const helperUUID = getUserData(object).helperUUID
+			if (!helperUUID) return console.warn('deleteFromScene: camer helperUUID is undefined')
+
+			const helper = scene.getObjectByProperty('uuid', helperUUID)
+			if (!helper) return console.warn('deleteFromScene: camera helper is undefined')
+
+			const cameraStore = useCameraStore()
+
+			if (cameraStore.renderCamera?.uuid === object.uuid) {
+				cameraStore.renderCamera = null
+			}
+
+			removeFromRaycaster(helperUUID)
+			disposeModel(helper)
 		}
 
 		if (selectedObject.value === object) {
 			selectedObject.value = null
 		}
 
-		if (outlinePassRef.value) {
-			outlinePassRef.value.selectedObjects = outlinePassRef.value.selectedObjects.filter(
-				(selected) => selected !== object
-			)
-		}
+		removeFromOutline(object.uuid)
+		removeFromRaycaster(object.uuid)
 
 		disposeModel(object)
 		shadingStore.clearMaterialCache(object.uuid)
+	}
 
-		const raycasterIdx = raycasterObjects.findIndex((obj) => obj.uuid === object.uuid)
-		if (raycasterIdx >= 0) {
-			raycasterObjects.splice(raycasterIdx, 1)
+	function removeFromRaycaster(uuid: string) {
+		const idx = raycasterObjects.findIndex((obj) => obj.uuid === uuid)
+		if (idx >= 0) {
+			raycasterObjects.splice(idx, 1)
+		}
+	}
+
+	function removeFromOutline(uuid: string) {
+		if (!outlinePassRef.value) return
+		const idx = outlinePassRef.value.selectedObjects.findIndex((obj) => obj.uuid === uuid)
+		if (idx >= 0) {
+			outlinePassRef.value.selectedObjects.splice(idx, 1)
 		}
 	}
 
@@ -336,6 +386,7 @@ export const useThreeStore = defineStore('three', () => {
 		if (obj) {
 			const userData = getUserData(obj)
 			userData.userVisible = val
+			if (userData.helperUUID) objectVisibilityUpdate(userData.helperUUID, val)
 			if (!userData.hideInModes?.includes(shadingStore.shadingMode)) {
 				obj.visible = val
 			}
@@ -352,8 +403,6 @@ export const useThreeStore = defineStore('three', () => {
 
 	return {
 		initScene,
-		activeCamera,
-		switchCamera,
 		outlinePassRef,
 		selectedObject,
 		controls,
@@ -371,7 +420,8 @@ export const useThreeStore = defineStore('three', () => {
 		scene,
 		addGroup,
 		moveToGroup,
-		isInitiated
+		isInitiated,
+		addCameraToScene
 	}
 })
 

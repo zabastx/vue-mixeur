@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- New `camera` store: Dedicated camera state management separated from three store
+  - New `useCameraStore` with viewport cameras (perspective/orthographic) management
+  - New `switchViewportCamera()` function for toggling between camera types
+  - New `renderCamera` and `renderCameraList` for render camera selection
+  - Camera switching now preserves position, quaternion, and scale
+- New `addCameraToScene()` function in three store for adding cameras to scene
+- New scene events: `scene:objectDeleted`, `scene:lightAdded`, `scene:modelAdded`
+- New `emitCustomEvent` and `listenCustomEvent` utilities in `src/utils/events.ts`
+
+### Changed
+
+- Refactored camera management from three store to dedicated camera store
+  - Moved `activeCamera`, `viewportCameraType`, `switchViewportCamera` to camera store
+  - Camera store now creates and manages viewport cameras directly
+  - `selectObject` now handles Camera selection with CameraHelper support
+- `disposeModel()`: Extended geometry disposal to all Object3D types (not just Mesh)
+  - Now handles CameraHelper, LineSegments, Points, Sprites, and other non-Mesh objects
+  - Added SkinnedMesh skeleton disposal
+  - Refactored material disposal into separate `disposeMaterial()` helper function
+- App store: Updated to use camera store for viewport camera operations
+- Light helper objects now tracked for proper cleanup on deletion
+- Object visibility changes now propagate to helper objects via `helperUUID`
+
 ## [0.13.0] - 2026-04-12
 
 ### Added

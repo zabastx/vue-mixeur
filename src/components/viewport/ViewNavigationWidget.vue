@@ -18,10 +18,10 @@
 			class="cursor-pointer rounded-full bg-black p-1.5 text-xl text-white opacity-50
 				hover:bg-gray-500"
 			v-bind="$attrs"
-			@click="sceneStore.switchCamera"
+			@click="cameraStore.switchViewportCamera"
 		>
 			<MxIcon
-				v-if="sceneStore.activeCamera.type === 'PerspectiveCamera'"
+				v-if="cameraStore.viewportCameraType === 'perspective'"
 				name="view/view-perspective"
 			/>
 			<MxIcon v-else name="view/view-orthographic" />
@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useThreeStore } from '@/store/three'
+import { useCameraStore } from '@/store/camera'
 
-const sceneStore = useThreeStore()
+const cameraStore = useCameraStore()
 </script>

@@ -13,6 +13,14 @@ vi.mock('@/three/utils', () => ({
 	getUserData: (obj: { userData: Record<string, unknown> }) => obj.userData
 }))
 
+// Mock camera store
+vi.mock('@/store/camera', () => ({
+	useCameraStore: vi.fn(() => ({
+		renderCamera: null,
+		setRenderCamera: vi.fn()
+	}))
+}))
+
 // Setup before all tests
 vi.mock('@/store/three', () => ({
 	useThreeStore: vi.fn(() => ({

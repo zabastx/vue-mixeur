@@ -21,16 +21,9 @@ export default defineConfig({
 		svgLoader(),
 		iconTypesPlugin(),
 		VitePWA({
+			injectRegister: 'auto',
 			registerType: 'autoUpdate',
-			includeAssets: [
-				'favicon.ico',
-				'favicon.svg',
-				'favicon-96x96.png',
-				'apple-touch-icon.png',
-				'web-app-manifest-192x192.png',
-				'web-app-manifest-512x512.png',
-				'logo_og.png'
-			],
+			includeAssets: ['favicon.ico', 'favicon.svg', 'favicon-96x96.png', 'apple-touch-icon.png'],
 			manifest: {
 				name: 'Mixeur',
 				short_name: 'Mixeur',
@@ -70,6 +63,17 @@ export default defineConfig({
 							},
 							cacheableResponse: {
 								statuses: [0, 200]
+							}
+						}
+					},
+					{
+						urlPattern: /\/draco\/.*/,
+						handler: 'CacheFirst',
+						options: {
+							cacheName: 'draco-cache',
+							expiration: {
+								maxEntries: 10,
+								maxAgeSeconds: 60 * 60 * 24 * 365
 							}
 						}
 					}

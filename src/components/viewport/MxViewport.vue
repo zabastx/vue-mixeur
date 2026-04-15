@@ -28,6 +28,10 @@ import { onMounted, ref, useTemplateRef } from 'vue'
 import WebGL from 'three/addons/capabilities/WebGL.js'
 import ViewNavigationWidget from './ViewNavigationWidget.vue'
 import { useAppStore } from '@/store/app'
+import { createLight } from '@/three/modules/light'
+import { createMesh } from '@/three/modules/mesh'
+import { createCamera } from '@/three/modules/camera/create'
+import { useCameraStore } from '@/store/camera'
 
 const appStore = useAppStore()
 const canvas = useTemplateRef('canvasRef')
@@ -46,7 +50,37 @@ onMounted(() => {
 		return
 	}
 	sceneStore.initScene(canvas)
+
+	setInitialObjects()
 })
+
+function setInitialObjects() {
+	const pointLight = createLight({ type: 'point' })
+	pointLight.power = 1000
+	pointLight.position.set(4, 5, 1)
+
+	sceneStore.addLightToScene(pointLight)
+
+	const camera = createCamera({
+		type: 'Perspective',
+		name: 'Camera',
+		near: 0.1,
+		far: 1000,
+		fov: 39.6
+	})
+
+	camera.position.set(-4, 4, 6)
+	camera.lookAt(0, 0, 0)
+
+	sceneStore.addCameraToScene(camera)
+
+	const cameraStore = useCameraStore()
+	cameraStore.setRenderCamera(camera.uuid)
+
+	const companionCube = createMesh('cube')
+
+	sceneStore.addModelToScene(companionCube)
+}
 </script>
 
 <style>

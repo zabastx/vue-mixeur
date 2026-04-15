@@ -12,6 +12,7 @@ import MenuBar, { type IMenubarMenu } from '../utils/MenuBar.vue'
 import { createMesh } from '@/three/modules/mesh'
 import { createLight } from '@/three/modules/light'
 import { createText } from '@/three/modules/text'
+import { createCamera } from '@/three/modules/camera/create'
 
 const menuItems: IMenubarMenu[] = [
 	{
@@ -157,6 +158,24 @@ const menuItems: IMenubarMenu[] = [
 						}
 					}
 				]
+			},
+			{
+				type: 'separator',
+				key: 'sep1'
+			},
+			{
+				type: 'item',
+				key: 'camera',
+				label: 'Camera',
+				icon: 'outliner/camera-obj',
+				onClick() {
+					const camera = createCamera({
+						type: 'Perspective',
+						name: 'Camera'
+					})
+
+					threeStore.addCameraToScene(camera)
+				}
 			}
 		]
 	}

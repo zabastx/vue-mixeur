@@ -52,7 +52,7 @@
 
 <script lang="ts" setup>
 import { useThreeStore } from '@/store/three'
-import type THREE from '@/three'
+import THREE from '@/three'
 import { Tree } from 'reka-ui/namespaced'
 import { computed, shallowRef, watch } from 'vue'
 import type { TreeItemToggleEvent } from 'reka-ui'
@@ -83,6 +83,7 @@ function parseObject(obj: THREE.Object3D): OutlinerItem {
 		type: obj.type,
 		name: obj.name || obj.type,
 		userData: getUserData(obj),
+		isCamera: obj instanceof THREE.Camera,
 		children: obj.children.length > 0 ? obj.children.map(parseObject) : undefined
 	}
 }

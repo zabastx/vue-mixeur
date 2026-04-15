@@ -1,7 +1,8 @@
 <template>
 	<li
 		:style="{ paddingLeft: getPadding(item.level) }"
-		class="relative flex snap-start items-center gap-1 pr-5 hover:bg-outliner-active-highlight"
+		class="relative flex snap-start items-center gap-1 pr-5 hover:bg-outliner-active-highlight
+			group"
 		:class="{
 			'bg-outliner-active-highlight text-outliner-active-object': isSelected
 		}"
@@ -15,17 +16,35 @@
 		>
 			<MxIcon :name="isExpanded ? 'ui/arrow-down' : 'ui/arrow-right'" />
 		</button>
-		<MxIcon
-			:name="iconMap.get(item.value.type) || 'outliner/empty'"
-			class="shrink-0 text-icon-object text-base"
-		/>
-		<MxContextMenu :items="contextMenuItems">
-			<template #trigger>
-				<span class="overflow-hidden text-ellipsis whitespace-nowrap grow">
-					{{ item.value.name }}
-				</span>
-			</template>
-		</MxContextMenu>
+
+		<div v-if="item.value.isCamera" class="flex gap-1 items-center">
+			<MxIcon name="outliner/camera-obj" class="shrink-0 text-icon-object text-base" />
+			<span class="truncate grow">
+				{{ item.value.name }}
+			</span>
+			<button
+				type="button"
+				class="p-0.5 hover:brightness-125 rounded border-ui-radio-outline cursor-pointer ml-5"
+				:class="{ 'border bg-ui-radio-inner': cameraStore.renderCamera?.uuid === item.value.uuid }"
+				@click.stop="cameraStore.setRenderCamera(item.value.uuid)"
+			>
+				<MxIcon name="outliner/camera" class="shrink-0 text-icon-object-data text-base" />
+			</button>
+		</div>
+
+		<template v-else>
+			<MxIcon
+				:name="iconMap.get(item.value.type) || 'outliner/empty'"
+				class="shrink-0 text-icon-object text-base"
+			/>
+			<MxContextMenu :items="contextMenuItems">
+				<template #trigger>
+					<span class="truncate grow">
+						{{ item.value.name }}
+					</span>
+				</template>
+			</MxContextMenu>
+		</template>
 		<div class="contents" @click.stop>
 			<CheckboxRoot v-model="visibility" class="ml-auto">
 				<MxIcon :name="visibility ? 'misc/visibility-visible' : 'misc/visibility-hidden'" />
@@ -36,11 +55,14 @@
 
 <script lang="ts" setup>
 import type { MxContextMenuItem } from '@/components/utils/MxContextMenu.vue'
+import { useCameraStore } from '@/store/camera'
 import { useThreeStore } from '@/store/three'
 import type { MxObjectUserData } from '@/three/three'
 import { getUserData } from '@/three/utils'
 import type { FlattenedItem } from 'reka-ui'
 import { computed } from 'vue'
+
+const cameraStore = useCameraStore()
 
 const visibility = defineModel<boolean>('visibility')
 
@@ -109,6 +131,7 @@ export interface OutlinerItem {
 	type: string
 	name: string
 	userData: MxObjectUserData
+	isCamera: boolean
 	children?: OutlinerItem[]
 }
 </script>

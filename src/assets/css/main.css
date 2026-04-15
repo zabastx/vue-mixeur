@@ -4,29 +4,8 @@
 @import './utils.css';
 
 @theme {
-	--font-sans: InterVariable, sans-serif;
+	--font-sans: Inter, sans-serif;
 	--font-sans--font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-
-	--animate-reka-slide-down: reka-slide-down 200ms ease-out;
-	--animate-reka-slide-up: reka-slide-up 200ms ease-out;
-
-	@keyframes reka-slide-down {
-		from {
-			height: 0;
-		}
-		to {
-			height: var(--reka-accordion-content-height);
-		}
-	}
-
-	@keyframes reka-slide-up {
-		from {
-			height: var(--reka-accordion-content-height);
-		}
-		to {
-			height: 0;
-		}
-	}
 }
 
 #app {

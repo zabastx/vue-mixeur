@@ -14,7 +14,9 @@ interface MxTextObjectData {
 interface MxObjectUserData {
 	isShadable?: boolean
 	isHelper?: boolean
+	helperUUID?: string
 	isSceneLight?: boolean
+	isRenderCamera?: boolean
 	skipRaycast?: boolean
 	isSelectable?: boolean
 	hideInModes?: ShadingMode[]

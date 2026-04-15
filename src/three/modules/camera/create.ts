@@ -4,10 +4,14 @@ export function createCamera<T extends CameraOptions>(options: T): CameraReturnT
 	const { far, near } = options
 	if (options.type === 'Perspective') {
 		const { aspect, fov } = options
-		return new THREE.PerspectiveCamera(fov, aspect, near, far) as CameraReturnType<T>
+		const camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
+		camera.name = options.name || camera.type
+		return camera as CameraReturnType<T>
 	}
 	const { left, right, bottom, top } = options
-	return new THREE.OrthographicCamera(left, right, top, bottom, near, far) as CameraReturnType<T>
+	const camera = new THREE.OrthographicCamera(left, right, top, bottom, near, far)
+	camera.name = options.name || camera.type
+	return camera as CameraReturnType<T>
 }
 
 interface CameraConstructorOptions {

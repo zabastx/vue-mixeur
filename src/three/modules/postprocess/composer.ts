@@ -67,7 +67,7 @@ export function createRenderComposer({
 	scene
 }: {
 	canvas: HTMLCanvasElement
-	camera: THREE.PerspectiveCamera | THREE.OrthographicCamera
+	camera: THREE.Camera
 	scene: THREE.Scene
 }) {
 	const renderer = createBlenderRenderer({ canvas })

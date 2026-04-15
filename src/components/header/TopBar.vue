@@ -1,11 +1,22 @@
 <template>
-	<header class="flex items-center bg-topbar-background p-1 px-2">
+	<header class="flex items-center bg-topbar-background p-1 px-2 gap-2">
 		<MenuBar :items="menuItems" />
+		<button
+			v-if="isUpdateAvailable"
+			class="ml-auto text-xs cursor-pointer flex gap-1 hover:brightness-125 border-ui-box-outline
+				border px-1 rounded"
+			title="New version available - click to update"
+			@click="updateApp"
+		>
+			<MxIcon name="file/refresh" />
+			New Version Available
+		</button>
 		<a
 			href="https://github.com/zabastx/mixeur"
-			class="ml-auto text-xl"
+			class="text-xl"
 			target="_blank"
 			title="GitHub repository"
+			:class="{ 'ml-auto': !isUpdateAvailable }"
 		>
 			<MxIcon name="misc/github" />
 		</a>
@@ -18,10 +29,13 @@ import MenuBar, { type IMenubarMenu } from '../utils/MenuBar.vue'
 import { computed } from 'vue'
 import { useThreeStore } from '@/store/three'
 import { useModals } from '@/composables/useModals'
+import { usePWAUpdate } from '@/composables/usePWAUpdate'
 
 const appStore = useAppStore()
 const threeStore = useThreeStore()
 const { open } = useModals()
+
+const { isUpdateAvailable, updateApp } = usePWAUpdate()
 
 const showStatusBar = computed({
 	get() {

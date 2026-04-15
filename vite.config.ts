@@ -21,8 +21,7 @@ export default defineConfig({
 		svgLoader(),
 		iconTypesPlugin(),
 		VitePWA({
-			injectRegister: 'auto',
-			registerType: 'autoUpdate',
+			registerType: 'prompt',
 			includeAssets: ['favicon.ico', 'favicon.svg', 'favicon-96x96.png', 'apple-touch-icon.png'],
 			manifest: {
 				name: 'Mixeur',
@@ -50,7 +49,7 @@ export default defineConfig({
 				]
 			},
 			workbox: {
-				globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,exr}'],
+				globPatterns: ['**/*.{js,css,html,ico,png,svg,exr}'],
 				runtimeCaching: [
 					{
 						urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp|exr)$/,

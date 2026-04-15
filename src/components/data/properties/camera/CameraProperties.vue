@@ -81,7 +81,7 @@ const cameraStore = useCameraStore()
 function isPerspectiveCamera(
 	camera: THREE.PerspectiveCamera | THREE.OrthographicCamera
 ): camera is THREE.PerspectiveCamera {
-	return cameraStore.activeCamera.type === 'PerspectiveCamera'
+	return camera.type === 'PerspectiveCamera'
 }
 
 const TYPE_OPTIONS = [

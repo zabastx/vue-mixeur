@@ -17,7 +17,11 @@
 						overflow-hidden"
 				>
 					<canvas ref="canvasRef" class="max-w-full max-h-full m-auto opacity-0 hidden" />
-					<img ref="previewRef" class="max-w-full max-h-full m-auto block object-contain" />
+					<img
+						ref="previewRef"
+						class="max-w-full max-h-full m-auto block object-contain"
+						@load="() => (isRendering = false)"
+					/>
 					<div
 						v-if="isRendering"
 						class="absolute inset-0 z-10 flex items-center justify-center bg-black/50"
@@ -37,7 +41,7 @@
 						:disabled="isRendering"
 						@click="renderImage()"
 					>
-						Render Preview
+						Render Image
 					</button>
 				</div>
 
@@ -54,16 +58,24 @@
 				<ScrollContainer>
 					<MxAccordionRoot
 						collapsible
-						:default-value="['image-settings']"
+						:default-value="['image']"
 						type="multiple"
 						class="space-y-1 pr-2.5"
 					>
-						<MxAccordionItem label="Image settings" :item="{ value: 'image-settings' }">
+						<MxAccordionItem label="Image" :item="{ value: 'image' }">
 							<RenderImageSettings v-model="renderSettings" />
 						</MxAccordionItem>
-						<!-- <MxAccordionItem label="Camera settings" :item="{ value: 'camera-settings' }">
-							<CameraSettings v-model="cameraSettings" />
-						</MxAccordionItem> -->
+						<MxAccordionItem
+							v-if="cameraStore.renderCameraList.length > 0"
+							label="Render Camera"
+							:item="{ value: 'camera' }"
+						>
+							<CameraSettings />
+						</MxAccordionItem>
+						<p v-else class="text-ui-panel-title">
+							No cameras found in scene. <br />
+							Viewport camera will be used
+						</p>
 					</MxAccordionRoot>
 				</ScrollContainer>
 
@@ -88,9 +100,9 @@ import { createRenderComposer } from '@/three/modules/postprocess/composer'
 import { useModals } from '@/composables/useModals'
 import { downloadFile } from '@/utils/files'
 import type { RenderSettings } from './RenderImageSettings.vue'
-// import type { CameraSettings } from './CameraSettings.vue'
 import { useToast } from '@/composables/toast'
 import { getUserData } from '@/three/utils'
+import { useCameraStore } from '@/store/camera'
 
 const isOpen = defineModel<boolean>({ default: false })
 
@@ -99,13 +111,7 @@ const toast = useToast()
 
 const threeStore = useThreeStore()
 const shadingStore = useShadingStore()
-
-// const cameraSettings = ref<CameraSettings>({
-// 	fov:
-// 		threeStore.activeCamera instanceof THREE.PerspectiveCamera ? threeStore.activeCamera.fov : 39.6,
-// 	zoom: threeStore.activeCamera.zoom,
-// 	type: 'PerspectiveCamera'
-// })
+const cameraStore = useCameraStore()
 
 const renderSettings = ref<RenderSettings>({
 	width: 1920,
@@ -128,7 +134,9 @@ const actualHeight = ref(1080)
 const canvasRef = useTemplateRef('canvasRef')
 const previewRef = useTemplateRef('previewRef')
 
-const canSaveImage = computed(() => !isRendering.value)
+const canSaveImage = computed(() => {
+	return !isRendering.value && previewRef.value?.src
+})
 
 /**
  * Creates a render scene from the source scene, excluding helper objects.
@@ -149,27 +157,6 @@ function createRenderScene(sourceScene: THREE.Scene): THREE.Scene {
 	})
 
 	return renderScene
-}
-
-/**
- * Creates a render camera from the source camera.
- */
-function createRenderCamera(
-	sourceCamera: THREE.PerspectiveCamera | THREE.OrthographicCamera
-): THREE.PerspectiveCamera | THREE.OrthographicCamera {
-	if (sourceCamera instanceof THREE.OrthographicCamera) {
-		const camera = new THREE.OrthographicCamera()
-		camera.copy(sourceCamera, true)
-		// camera.zoom = cameraSettings.value.zoom
-		return camera
-	}
-
-	const camera = new THREE.PerspectiveCamera()
-	camera.copy(sourceCamera, true)
-	// camera.fov = cameraSettings.value.fov
-	// camera.zoom = cameraSettings.value.zoom
-	camera.aspect = actualWidth.value / actualHeight.value
-	return camera
 }
 
 /**
@@ -199,22 +186,13 @@ async function renderImage(skipPreview?: boolean) {
 				renderScene.background = null
 			}
 
-			const camera = createRenderCamera(threeStore.activeCamera)
-
-			if (camera instanceof THREE.PerspectiveCamera) {
-				// camera.fov = cameraSettings.value.fov
-				camera.aspect = width / height
-			}
-
-			// camera.zoom = cameraSettings.value.zoom
-
 			displayCanvas.width = width
 			displayCanvas.height = height
 
 			// Create render composer and render directly to display canvas
 			const { composer, renderer } = createRenderComposer({
 				scene: renderScene,
-				camera: camera,
+				camera: cameraStore.renderCamera ?? cameraStore.activeCamera,
 				canvas: displayCanvas
 			})
 
@@ -252,9 +230,9 @@ async function renderImage(skipPreview?: boolean) {
 				title: 'Image render error',
 				message: err.message
 			})
+			isRendering.value = false
 		} finally {
 			shadingStore.setMode(originalMode)
-			isRendering.value = false
 		}
 	}, 10)
 }
@@ -264,8 +242,7 @@ async function renderImage(skipPreview?: boolean) {
  */
 async function saveImage() {
 	const canvas = canvasRef.value
-	if (!canvas) return
-	await renderImage(true)
+	if (!canvas) return console.warn('saveImage: canvas is undefined')
 
 	try {
 		const blob = await new Promise<Blob | null>((resolve) => {
@@ -286,8 +263,14 @@ async function saveImage() {
 		downloadFile(blob, filename, {
 			mimeType: `image/${renderSettings.value.selectedFormat}`
 		})
-	} catch (error) {
-		console.error('Save failed:', error)
+	} catch (e) {
+		const error = e as Error
+		toast.add({
+			type: 'error',
+			title: 'Error saving an image',
+			message: error.message
+		})
+		if (import.meta.env.DEV) console.error('saveImage:\n', error)
 	}
 }
 </script>

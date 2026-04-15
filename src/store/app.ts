@@ -4,11 +4,10 @@ import { ref, type ShallowRef } from 'vue'
 import { useThreeStore } from './three'
 import { useControlsStore } from './controls'
 import THREE from '@/three'
+import { useCameraStore } from './camera'
 
 export const useAppStore = defineStore('app', () => {
 	const pointerOnCanvas = ref(false)
-	const sceneStore = useThreeStore()
-	const controlsStore = useControlsStore()
 
 	const isCtrlDown = useKeyModifier('Control')
 	const isShiftDown = useKeyModifier('Shift')
@@ -18,17 +17,22 @@ export const useAppStore = defineStore('app', () => {
 		useEventListener(canvas, 'pointerleave', () => (pointerOnCanvas.value = false))
 
 		useEventListener(canvas, 'pointerdown', (e) => {
-			if (e.button === THREE.MOUSE.MIDDLE && sceneStore.controls) {
-				sceneStore.controls.screenSpacePanning = !e.ctrlKey
+			const { controls } = useControlsStore()
+			if (e.button === THREE.MOUSE.MIDDLE && controls) {
+				controls.screenSpacePanning = !e.ctrlKey
 			}
 		})
 
 		useEventListener(window, 'keydown', (e) => {
+			const controlsStore = useControlsStore()
+			const sceneStore = useThreeStore()
 			if (!pointerOnCanvas.value || !controlsStore.transformControls) return
+
+			const { switchViewportCamera } = useCameraStore()
 
 			switch (e.code) {
 				case 'Numpad5': // Perspective / Orthographic camera toggle
-					sceneStore.switchCamera()
+					switchViewportCamera()
 					break
 
 				case 'Numpad1': // Front / Back view
@@ -65,7 +69,10 @@ export const useAppStore = defineStore('app', () => {
 		// Moves perspective camera on scroll instead of zoom
 		useEventListener(canvas, 'wheel', (event) => {
 			if (event.ctrlKey) event.preventDefault()
-			const { activeCamera, controls } = sceneStore
+
+			const { activeCamera } = useCameraStore()
+			const { controls } = useControlsStore()
+
 			if (!controls) return
 			const delta = event.deltaY * -0.01
 			if (activeCamera instanceof THREE.PerspectiveCamera) {
@@ -96,7 +103,9 @@ export const useAppStore = defineStore('app', () => {
 		z?: number
 		invert?: boolean
 	}) {
-		const { activeCamera, controls } = sceneStore
+		const { activeCamera } = useCameraStore()
+		const { controls } = useControlsStore()
+
 		if (!controls || !activeCamera) return
 		const dir = invert ? -1 : 1
 		const distance = activeCamera.position.distanceTo(controls.target)

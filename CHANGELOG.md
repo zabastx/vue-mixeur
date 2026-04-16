@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Render Image: Always update preview image data after render completes
+- disposeModel: Fixed shadow map disposal crash when deleting lights by unwrapping Vue reactivity proxy with toRaw()
 
 ## [0.14.0] - 2026-04-15
 

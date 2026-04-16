@@ -1,5 +1,6 @@
 import THREE from '@/three'
 import { lightHasShadow } from '../light'
+import { toRaw } from 'vue'
 
 /**
  * Disposes of all resources used by a 3D model and removes it from its parent container.
@@ -16,35 +17,44 @@ import { lightHasShadow } from '../light'
  * @param model - The THREE.Object3D containing the model hierarchy to be disposed
  */
 export function disposeModel(model: THREE.Object3D) {
-	model.traverse((child) => {
-		if (child instanceof THREE.Light && lightHasShadow(child)) {
-			child.shadow.map?.dispose()
-		}
+	// Use toRaw to unwrap Vue's reactivity proxy and access the original Three.js object.
+	// This ensures internal WebGL properties (like __webglFramebuffer) are accessible.
+	const object = toRaw(model)
 
-		if (child instanceof THREE.BatchedMesh) {
-			child.disposeBoundsTree()
-			child.dispose()
-		}
+	try {
+		object.traverse((child) => {
+			if (child instanceof THREE.Light && lightHasShadow(child)) {
+				child.shadow.map?.dispose()
+			}
 
-		// Dispose geometry for ALL objects with geometry (not just Mesh)
-		// This handles CameraHelper, LineSegments, Points, Sprites, etc.
-		if ('geometry' in child && child.geometry) {
-			const geometry = child.geometry as THREE.BufferGeometry
-			geometry.disposeBoundsTree()
-			geometry.dispose()
-		}
+			if (child instanceof THREE.BatchedMesh) {
+				child.disposeBoundsTree()
+				child.dispose()
+			}
 
-		if (child instanceof THREE.SkinnedMesh && child.skeleton) {
-			child.skeleton.dispose()
-		}
+			// Dispose geometry for ALL objects with geometry (not just Mesh)
+			// This handles CameraHelper, LineSegments, Points, Sprites, etc.
+			if ('geometry' in child && child.geometry) {
+				const geometry = child.geometry as THREE.BufferGeometry
+				geometry.disposeBoundsTree()
+				geometry.dispose()
+			}
 
-		if ('material' in child && child.material) {
-			disposeMaterial(child.material as THREE.Material | THREE.Material[])
-		}
-	})
+			if (child instanceof THREE.SkinnedMesh && child.skeleton) {
+				child.skeleton.dispose()
+			}
 
-	if (model.parent) {
-		model.removeFromParent()
+			if ('material' in child && child.material) {
+				disposeMaterial(child.material as THREE.Material | THREE.Material[])
+			}
+		})
+
+		if (object.parent) {
+			object.removeFromParent()
+		}
+	} catch (e) {
+		const error = e as Error
+		console.error('disposeModel: ', object, error)
 	}
 }
 

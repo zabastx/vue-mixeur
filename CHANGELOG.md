@@ -11,6 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Camera view toggle: New button in viewport navigation for toggling between viewport camera and render camera
 
+### Changed
+
+- Render Image: Removed unused `skipPreview` parameter; preview now always displays after rendering
+- Viewport: Fixed template ref usage - now correctly passes template ref object instead of ref value
+- Viewport: Changed error display from `v-show` to `v-if` for proper conditional rendering
+- Three store: Removed async from `initScene()` - no longer needs to be async
+- Three store: Refactored light helper handling to support lights without helpers gracefully
+- Three store: Simplified `deleteFromScene()` to use consistent helperUUID approach for all object types
+
+### Fixed
+
+- Render Image: Always update preview image data after render completes
+
 ## [0.14.0] - 2026-04-15
 
 ### Added

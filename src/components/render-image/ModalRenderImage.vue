@@ -162,7 +162,7 @@ function createRenderScene(sourceScene: THREE.Scene): THREE.Scene {
 /**
  * Renders the scene to the canvas.
  */
-async function renderImage(skipPreview?: boolean) {
+async function renderImage() {
 	const originalMode = shadingStore.shadingMode
 	isRendering.value = true
 
@@ -204,24 +204,22 @@ async function renderImage(skipPreview?: boolean) {
 			composer.render()
 			const endTime = performance.now()
 
-			if (!skipPreview) {
-				renderedImageData.resolution = `${renderSettings.value.width}x${renderSettings.value.height}`
-				renderedImageData.format = renderSettings.value.selectedFormat
-				renderedImageData.renderTime = Number(((endTime - startTime) / 1000).toFixed(2))
+			renderedImageData.resolution = `${renderSettings.value.width}x${renderSettings.value.height}`
+			renderedImageData.format = renderSettings.value.selectedFormat
+			renderedImageData.renderTime = Number(((endTime - startTime) / 1000).toFixed(2))
 
-				if (previewRef.value?.src) {
-					URL.revokeObjectURL(previewRef.value.src)
-				}
-
-				displayCanvas.toBlob(
-					(blob) => {
-						if (!blob || !previewRef.value) return
-						previewRef.value.src = URL.createObjectURL(blob)
-					},
-					`image/${renderSettings.value.selectedFormat}`,
-					renderSettings.value.quality / 100
-				)
+			if (previewRef.value?.src) {
+				URL.revokeObjectURL(previewRef.value.src)
 			}
+
+			displayCanvas.toBlob(
+				(blob) => {
+					if (!blob || !previewRef.value) return
+					previewRef.value.src = URL.createObjectURL(blob)
+				},
+				`image/${renderSettings.value.selectedFormat}`,
+				renderSettings.value.quality / 100
+			)
 		} catch (error) {
 			console.error('Render failed:\n', error)
 			const err = error as Error

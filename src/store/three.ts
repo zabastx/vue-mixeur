@@ -7,7 +7,7 @@ import { setRaycaster } from '@/three/modules/core/raycaster'
 import { useEventListener } from '@vueuse/core'
 import { OutlinePass, RectAreaLightUniformsLib } from 'three/examples/jsm/Addons.js'
 import { disposeModel } from '@/three/modules/core/dispose'
-import { getLightHelper, type LightHelper } from '@/three/modules/light'
+import { getLightHelper, lightHasShadow, type LightHelper } from '@/three/modules/light'
 import { useStats } from '@/three/modules/extras/stats'
 import { useShadingStore } from './shading'
 import { exportModel } from '@/three/modules/addons/exporter'
@@ -64,7 +64,7 @@ export const useThreeStore = defineStore('three', () => {
 
 	const { setFPSCounter, monitor, updateMonitor } = useStats()
 
-	async function initScene(canvasRef: ShallowRef<HTMLCanvasElement | null>) {
+	function initScene(canvasRef: ShallowRef<HTMLCanvasElement | null>) {
 		if (!canvasRef.value) return
 		const canvas = canvasRef.value
 		shadingStore.init(scene)
@@ -261,33 +261,36 @@ export const useThreeStore = defineStore('three', () => {
 
 	function addLightToScene(light: THREE.Light) {
 		const helper = getLightHelper(light)
-		if (!helper) return
 
-		const helperUserData = getUserData(helper)
 		const lightUserData = getUserData(light)
-
-		helperUserData.isSelectable = true
-		helperUserData.isSceneLight = true
 		lightUserData.isSelectable = true
 		lightUserData.isSceneLight = true
 		lightUserData.hideInModes = ['wireframe', 'solid', 'preview']
 		lightUserData.userVisible = light.visible
-		lightUserData.helperUUID = helper.uuid
 
-		if (!(light instanceof THREE.RectAreaLight)) {
+		if (lightHasShadow(light)) {
 			light.castShadow = true
 		}
-
-		enableBVH(helper)
-		scene.add(light)
-		scene.add(helper)
 
 		if (shadingStore.shadingMode !== 'rendered') {
 			light.visible = false
 		}
 
-		raycasterObjects.push(helper)
-		lightHelperObjects.push(helper)
+		scene.add(light)
+
+		if (helper) {
+			const helperUserData = getUserData(helper)
+			helperUserData.isSelectable = true
+			helperUserData.isSceneLight = true
+			lightUserData.helperUUID = helper.uuid
+
+			raycasterObjects.push(helper)
+			lightHelperObjects.push(helper)
+
+			enableBVH(helper)
+			scene.add(helper)
+		}
+
 		selectObject(light.uuid)
 	}
 
@@ -320,39 +323,19 @@ export const useThreeStore = defineStore('three', () => {
 	function deleteFromScene(object: THREE.Object3D) {
 		transformControls.value?.detach()
 
-		if (object instanceof THREE.Light) {
-			const objectsForRemoval: THREE.Object3D[] = [object]
-			scene.traverse((child: THREE.Object3D | LightHelper) => {
-				if ('light' in child && child.light.uuid === object.uuid) {
-					objectsForRemoval.push(child)
-				}
-				removeFromOutline(child.uuid)
-				removeFromRaycaster(child.uuid)
-
-				const idx = lightHelperObjects.findIndex((item) => item.uuid === child.uuid)
-				if (idx < 0) return
-				lightHelperObjects.splice(idx, 1)
-			})
-			objectsForRemoval.forEach((obj) => {
-				disposeModel(obj)
-			})
+		const helperUUID = getUserData(object).helperUUID
+		if (helperUUID) {
+			const helper = scene.getObjectByProperty('uuid', helperUUID)
+			if (helper) {
+				removeFromOutline(helper.uuid)
+				removeFromRaycaster(helper.uuid)
+				disposeModel(helper)
+			}
 		}
 
-		if (object instanceof THREE.Camera) {
-			const helperUUID = getUserData(object).helperUUID
-			if (!helperUUID) return console.warn('deleteFromScene: camer helperUUID is undefined')
-
-			const helper = scene.getObjectByProperty('uuid', helperUUID)
-			if (!helper) return console.warn('deleteFromScene: camera helper is undefined')
-
-			const cameraStore = useCameraStore()
-
-			if (cameraStore.renderCamera?.uuid === object.uuid) {
-				cameraStore.renderCamera = null
-			}
-
-			removeFromRaycaster(helperUUID)
-			disposeModel(helper)
+		const cameraStore = useCameraStore()
+		if (cameraStore.renderCamera?.uuid === object.uuid) {
+			cameraStore.renderCamera = null
 		}
 
 		if (selectedObject.value === object) {

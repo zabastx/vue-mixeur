@@ -10,9 +10,9 @@
 		<div class="relative overflow-hidden">
 			<div class="gizmo-wrapper absolute top-10 right-0"></div>
 			<ViewNavigationWidget v-if="sceneStore.isInitiated" class="absolute top-40 right-2.5" />
-			<div v-show="isError" ref="webglErrorRef" class="webgl-error"></div>
+			<div v-if="isError" ref="webglErrorRef" class="webgl-error"></div>
 			<canvas
-				v-show="!isError"
+				v-else
 				ref="canvasRef"
 				class="block h-full w-full"
 				data-testid="viewport-canvas"
@@ -34,8 +34,8 @@ import { createCamera } from '@/three/modules/camera/create'
 import { useCameraStore } from '@/store/camera'
 
 const appStore = useAppStore()
-const canvas = useTemplateRef('canvasRef')
-appStore.useHotKeys(canvas)
+const canvasRef = useTemplateRef('canvasRef')
+appStore.useHotKeys(canvasRef)
 
 const sceneStore = useThreeStore()
 const webglErrorRef = useTemplateRef('webglErrorRef')
@@ -49,8 +49,8 @@ onMounted(() => {
 		webglErrorRef.value?.appendChild($error)
 		return
 	}
-	sceneStore.initScene(canvas)
 
+	sceneStore.initScene(canvasRef)
 	setInitialObjects()
 })
 

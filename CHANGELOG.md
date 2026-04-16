@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.15.0] - 2026-04-16
 
 ### Added
 
@@ -274,6 +274,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Transform controls initialized after event listeners
 
+[0.15.0]: https://github.com/zabastx/mixeur/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/zabastx/mixeur/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/zabastx/mixeur/compare/v0.12.1...v0.13.0
 [0.12.1]: https://github.com/zabastx/mixeur/compare/v0.12.0...v0.12.1

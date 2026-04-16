@@ -28,11 +28,17 @@ export const useAppStore = defineStore('app', () => {
 			const sceneStore = useThreeStore()
 			if (!pointerOnCanvas.value || !controlsStore.transformControls) return
 
-			const { switchViewportCamera } = useCameraStore()
+			const { switchViewportCamera, toggleCameraView } = useCameraStore()
 
 			switch (e.code) {
 				case 'Numpad5': // Perspective / Orthographic camera toggle
+					e.preventDefault()
 					switchViewportCamera()
+					break
+
+				case 'Numpad0':
+					e.preventDefault()
+					toggleCameraView()
 					break
 
 				case 'Numpad1': // Front / Back view
@@ -49,16 +55,20 @@ export const useAppStore = defineStore('app', () => {
 					break
 
 				case 'KeyG':
+					e.preventDefault()
 					controlsStore.currentTransformMode = 'translate'
 					break
 				case 'KeyR':
+					e.preventDefault()
 					controlsStore.currentTransformMode = 'rotate'
 					break
 				case 'KeyS':
+					e.preventDefault()
 					controlsStore.currentTransformMode = 'scale'
 					break
 
 				case 'Delete':
+					e.preventDefault()
 					if (sceneStore.selectedObject instanceof THREE.Object3D) {
 						sceneStore.deleteFromScene(sceneStore.selectedObject)
 					}

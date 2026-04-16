@@ -63,12 +63,22 @@ export const useCameraStore = defineStore('camera', () => {
 		renderCamera.value = camera
 	}
 
+	function toggleCameraView() {
+		if (!renderCamera.value || renderCamera.value.uuid === activeCamera.value.uuid) {
+			activeCamera.value = viewportCameras[viewportCameraType.value]
+			return
+		}
+
+		activeCamera.value = renderCamera.value as THREE.PerspectiveCamera | THREE.OrthographicCamera
+	}
+
 	return {
 		activeCamera,
 		switchViewportCamera,
 		viewportCameraType,
 		renderCamera,
 		setRenderCamera,
-		renderCameraList
+		renderCameraList,
+		toggleCameraView
 	}
 })

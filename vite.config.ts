@@ -22,7 +22,7 @@ export default defineConfig({
 		iconTypesPlugin(),
 		VitePWA({
 			registerType: 'prompt',
-			includeAssets: ['favicon.ico', 'favicon.svg', 'favicon-96x96.png', 'apple-touch-icon.png'],
+			includeAssets: ['favicon.ico', 'favicon-96x96.png', 'apple-touch-icon.png'],
 			manifest: {
 				name: 'Mixeur',
 				short_name: 'Mixeur',
@@ -86,11 +86,23 @@ export default defineConfig({
 		}
 	},
 	build: {
-		rollupOptions: {
+		rolldownOptions: {
 			output: {
-				manualChunks(id) {
-					if (id.includes('node_modules/three/build')) return 'three'
-					if (id.includes('/assets/icons')) return 'icons'
+				codeSplitting: {
+					groups: [
+						{
+							name: 'three',
+							test(id) {
+								return id.includes('node_modules/three/build/')
+							}
+						},
+						{
+							name: 'icons',
+							test(id) {
+								return id.includes('assets/icons/')
+							}
+						}
+					]
 				}
 			}
 		}

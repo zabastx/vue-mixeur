@@ -4,7 +4,7 @@
 			<Menubar.Trigger class="menubar-trigger">
 				<img
 					v-if="menu.icon === 'mixeur'"
-					src="/favicon.svg"
+					src="/favicon-96x96.png"
 					alt=""
 					class="inline-block size-[1em] scale-150"
 				/>

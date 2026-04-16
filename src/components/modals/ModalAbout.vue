@@ -4,9 +4,10 @@
 			<!-- Header -->
 			<div class="flex items-center gap-4 p-4">
 				<img
-					class="inline-block size-[1em] scale-125 text-5xl"
-					src="/favicon.svg"
-					alt=""
+					class="inline-block max-h-[1em] scale-125 text-5xl"
+					src="/logo.webp"
+					loading="lazy"
+					alt="mixeur logo"
 					aria-hidden
 				/>
 				<div>

@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- New `MxPopover` component: Reusable popover wrapper component
+
 ### Changed
 
+- `InputColor` component now uses `MxPopover`
 - Replaced separate `scene:lightAdded`/`scene:modelAdded` events with single `scene:objectAdded` event
 - Updates `scene:objectDeleted` event payload to use `null` instead of `THREE.Object3D`
 - Migrated from native DOM event listeners to custom `listenCustomEvent` utility

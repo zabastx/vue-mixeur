@@ -47,8 +47,11 @@
 					hover:bg-gray-500"
 				@click="cameraStore.toggleCameraView"
 			>
-				<MxIcon v-if="cameraStore.viewportCameraType === 'perspective'" name="outliner/camera" />
-				<MxIcon v-else name="outliner/camera-obj" />
+				<MxIcon
+					v-if="cameraStore.activeCamera === cameraStore.renderCamera"
+					name="outliner/camera-obj"
+				/>
+				<MxIcon v-else name="outliner/camera" />
 			</button>
 		</MxTooltip>
 	</div>

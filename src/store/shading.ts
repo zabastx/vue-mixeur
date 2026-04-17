@@ -5,6 +5,7 @@ import { getUserData } from '@/three/utils'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { computed, ref, shallowRef } from 'vue'
 import type { MaterialCache, ShadingMode } from './types/shading'
+import { emitCustomEvent } from '@/utils/events'
 
 export const useShadingStore = defineStore('shading', () => {
 	let scene: THREE.Scene | null = null
@@ -129,7 +130,7 @@ export const useShadingStore = defineStore('shading', () => {
 			}
 		})
 
-		document.dispatchEvent(new CustomEvent('shading:modeChange', { detail: mode }))
+		emitCustomEvent('shading:modeChange', mode)
 	}
 
 	function setEnvironmentMap(map: THREE.Texture) {
@@ -257,9 +258,9 @@ export const useShadingStore = defineStore('shading', () => {
 		})
 	}
 
-	function getMaterialCache(mesh: THREE.Mesh): MaterialCache | undefined {
+	function getMaterialCache(mesh: THREE.Mesh) {
 		const cache = materialCache.get(mesh.uuid)
-		return cache as MaterialCache | undefined
+		return cache
 	}
 
 	function updateMaterial<T extends THREE.Material = THREE.Material>(
@@ -298,7 +299,7 @@ export const useShadingStore = defineStore('shading', () => {
 	function updateMaterialProperty<T extends THREE.Material = THREE.Material>(
 		material: T,
 		prop: keyof T,
-		value: T[keyof T]
+		value: T[typeof prop]
 	) {
 		const currentValue = material[prop]
 

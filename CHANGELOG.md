@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updates `scene:objectDeleted` event payload to use `null` instead of `THREE.Object3D`
 - Migrated from native DOM event listeners to custom `listenCustomEvent` utility
 - Added proper event listener cleanup via `disposeEvents` function for HMR support
+- Changed `ref` to `reactive` in render image settings
 
 ### Fixed
 

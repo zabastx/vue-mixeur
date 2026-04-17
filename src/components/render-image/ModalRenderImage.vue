@@ -113,7 +113,7 @@ const threeStore = useThreeStore()
 const shadingStore = useShadingStore()
 const cameraStore = useCameraStore()
 
-const renderSettings = ref<RenderSettings>({
+const renderSettings = reactive<RenderSettings>({
 	width: 1920,
 	height: 1080,
 	selectedFormat: 'webp',
@@ -172,7 +172,7 @@ async function renderImage() {
 		return
 	}
 
-	const { width, height } = renderSettings.value
+	const { width, height, background, quality, selectedFormat } = renderSettings
 
 	actualWidth.value = width
 	actualHeight.value = height
@@ -182,7 +182,7 @@ async function renderImage() {
 			shadingStore.setMode('export')
 
 			const renderScene = createRenderScene(threeStore.scene as THREE.Scene)
-			if (!renderSettings.value.background) {
+			if (!background) {
 				renderScene.background = null
 			}
 
@@ -204,8 +204,8 @@ async function renderImage() {
 			composer.render()
 			const endTime = performance.now()
 
-			renderedImageData.resolution = `${renderSettings.value.width}x${renderSettings.value.height}`
-			renderedImageData.format = renderSettings.value.selectedFormat
+			renderedImageData.resolution = `${width}x${height}`
+			renderedImageData.format = selectedFormat
 			renderedImageData.renderTime = Number(((endTime - startTime) / 1000).toFixed(2))
 
 			if (previewRef.value?.src) {
@@ -217,8 +217,8 @@ async function renderImage() {
 					if (!blob || !previewRef.value) return
 					previewRef.value.src = URL.createObjectURL(blob)
 				},
-				`image/${renderSettings.value.selectedFormat}`,
-				renderSettings.value.quality / 100
+				`image/${selectedFormat}`,
+				quality / 100
 			)
 		} catch (error) {
 			console.error('Render failed:\n', error)
@@ -243,23 +243,25 @@ async function saveImage() {
 	if (!canvas) return console.warn('saveImage: canvas is undefined')
 
 	try {
+		const { selectedFormat, quality, width, height } = renderSettings
+
 		const blob = await new Promise<Blob | null>((resolve) => {
 			canvas.toBlob(
 				(blob: Blob | null) => {
 					resolve(blob)
 				},
-				`image/${renderSettings.value.selectedFormat}`,
-				renderSettings.value.quality / 100
+				`image/${selectedFormat}`,
+				quality / 100
 			)
 		})
 
 		if (!blob) return
 
-		const resolution = `${renderSettings.value.width}x${renderSettings.value.height}`
-		const filename = `render_${resolution}.${renderSettings.value.selectedFormat}`
+		const resolution = `${width}x${height}`
+		const filename = `render_${resolution}.${selectedFormat}`
 
 		downloadFile(blob, filename, {
-			mimeType: `image/${renderSettings.value.selectedFormat}`
+			mimeType: `image/${selectedFormat}`
 		})
 	} catch (e) {
 		const error = e as Error

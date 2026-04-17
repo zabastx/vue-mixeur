@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Migrated from native DOM event listeners to custom `listenCustomEvent` utility
 - Added proper event listener cleanup via `disposeEvents` function for HMR support
 
+### Fixed
+
+- Fixed camera helper visibility state on creation
+
 ## [0.15.0] - 2026-04-16
 
 ### Added

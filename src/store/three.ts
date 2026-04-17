@@ -310,11 +310,11 @@ export const useThreeStore = defineStore('three', () => {
 		helperUserData.isSelectable = true
 		helperUserData.isHelper = true
 		helperUserData.hideInOutliner = true
-		helperUserData.userVisible = camera.visible
 
 		cameraUserData.isSelectable = true
 		cameraUserData.helperUUID = helper.uuid
 		cameraUserData.isRenderCamera = true
+		cameraUserData.userVisible = camera.visible
 
 		enableBVH(helper)
 		scene.add(camera)
@@ -380,7 +380,7 @@ export const useThreeStore = defineStore('three', () => {
 			if (!userData.hideInModes?.includes(shadingStore.shadingMode)) {
 				obj.visible = val
 			}
-			triggerRef(sceneChildren)
+			updateScene()
 		}
 	}
 

@@ -14,6 +14,7 @@ import { exportModel } from '@/three/modules/addons/exporter'
 import { useComposerStore } from './composer'
 import { getUserData, enableBVH } from '@/three/utils'
 import { useCameraStore } from './camera'
+import { emitCustomEvent, listenCustomEvent } from '@/utils/events'
 
 export const useThreeStore = defineStore('three', () => {
 	const isInitiated = ref(false)
@@ -31,18 +32,20 @@ export const useThreeStore = defineStore('three', () => {
 	const lightHelperObjects: LightHelper[] = []
 
 	const sceneChildren = computed(() => scene.children)
-	scene.addEventListener('childadded', () => {
-		triggerRef(sceneChildren)
-	})
-	scene.addEventListener('childremoved', () => {
-		triggerRef(sceneChildren)
-	})
+
 	function updateScene() {
 		triggerRef(sceneChildren)
 	}
-	document.addEventListener('shading:modeChange', () => {
-		triggerRef(sceneChildren)
-	})
+
+	const customEvents = [
+		listenCustomEvent('shading:modeChange', updateScene),
+		listenCustomEvent('scene:objectDeleted', updateScene),
+		listenCustomEvent('scene:objectAdded', updateScene)
+	]
+
+	function disposeEvents() {
+		customEvents.forEach((cleanup) => cleanup())
+	}
 
 	function addGroup() {
 		const group = new THREE.Group()
@@ -257,6 +260,7 @@ export const useThreeStore = defineStore('three', () => {
 		shadingStore.cacheNewObjectMaterials(object)
 
 		selectObject(object.uuid)
+		emitCustomEvent('scene:objectAdded', object)
 	}
 
 	function addLightToScene(light: THREE.Light) {
@@ -292,6 +296,7 @@ export const useThreeStore = defineStore('three', () => {
 		}
 
 		selectObject(light.uuid)
+		emitCustomEvent('scene:objectAdded', light)
 	}
 
 	function addCameraToScene(camera: THREE.Camera) {
@@ -318,6 +323,7 @@ export const useThreeStore = defineStore('three', () => {
 		raycasterObjects.push(helper)
 
 		selectObject(camera.uuid)
+		emitCustomEvent('scene:objectAdded', camera)
 	}
 
 	function deleteFromScene(object: THREE.Object3D) {
@@ -347,6 +353,7 @@ export const useThreeStore = defineStore('three', () => {
 
 		disposeModel(object)
 		shadingStore.clearMaterialCache(object.uuid)
+		emitCustomEvent('scene:objectDeleted', null)
 	}
 
 	function removeFromRaycaster(uuid: string) {
@@ -404,10 +411,12 @@ export const useThreeStore = defineStore('three', () => {
 		addGroup,
 		moveToGroup,
 		isInitiated,
-		addCameraToScene
+		addCameraToScene,
+		disposeEvents
 	}
 })
 
 if (import.meta.hot) {
 	import.meta.hot.accept(acceptHMRUpdate(useThreeStore, import.meta.hot))
+	import.meta.hot.dispose(() => useThreeStore().disposeEvents())
 }

@@ -4,8 +4,7 @@ import type THREE from './three'
 declare global {
 	interface DocumentEventMap {
 		'shading:modeChange': CustomEvent<ShadingMode>
-		'scene:objectDeleted': CustomEvent<THREE.Object3D>
-		'scene:lightAdded': CustomEvent<THREE.Object3D>
-		'scene:modelAdded': CustomEvent<THREE.Object3D>
+		'scene:objectDeleted': CustomEvent<null>
+		'scene:objectAdded': CustomEvent<THREE.Object3D>
 	}
 }

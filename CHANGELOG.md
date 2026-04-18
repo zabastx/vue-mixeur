@@ -20,12 +20,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added proper event listener cleanup via `disposeEvents` function for HMR support
 - Changed `ref` to `reactive` in render image settings
 - Refactored shading store
+- shadingStore: expose `enviromentMap`
 
 ### Fixed
 
 - Fixed camera helper visibility state on creation
 - Fixed render camera toggle icon on/off state in viewport navigation widget
 - Fixed popover text color and prevent auto-focus
+- Fixed environment map not being aplied if in preview shading mode
 
 ## [0.15.0] - 2026-04-16
 

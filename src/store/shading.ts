@@ -135,6 +135,9 @@ export const useShadingStore = defineStore('shading', () => {
 
 	function setEnvironmentMap(map: THREE.Texture) {
 		environmentMap.value = map
+		if (shadingMode.value === 'preview' && scene) {
+			scene.environment = environmentMap.value
+		}
 	}
 
 	/**
@@ -245,8 +248,8 @@ export const useShadingStore = defineStore('shading', () => {
 		loadWorldTexture('forest').then((map) => {
 			if (!map) return
 			setEnvironmentMap(map)
-			setMode(currentMode.value)
 		})
+		setMode(currentMode.value)
 	}
 
 	function setSceneLightsVisibility(val: boolean) {
@@ -348,6 +351,7 @@ export const useShadingStore = defineStore('shading', () => {
 	return {
 		init,
 		cacheNewObjectMaterials,
+		environmentMap,
 		setEnvironmentMap,
 		setMode,
 		shadingMode,

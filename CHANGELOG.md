@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed camera helper visibility state on creation
 - Fixed render camera toggle icon on/off state in viewport navigation widget
+- Fixed popover text color and prevent auto-focus
 
 ## [0.15.0] - 2026-04-16
 

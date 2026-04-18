@@ -216,7 +216,7 @@ async function importGLTF(sceneFile: ModelFileItem) {
 
 		if (gltf) {
 			gltf.scene.name = sceneFile.file.name
-			store.addModelToScene(gltf.scene)
+			store.addObjectToScene(gltf.scene)
 		}
 	} finally {
 		blobUrls.forEach((url) => URL.revokeObjectURL(url))
@@ -238,7 +238,7 @@ async function importFBX(sceneFile: ModelFileItem) {
 
 		if (fbx) {
 			fbx.name = sceneFile.file.name
-			store.addModelToScene(fbx)
+			store.addObjectToScene(fbx)
 		}
 	} finally {
 		blobUrls.forEach((url) => URL.revokeObjectURL(url))
@@ -290,7 +290,7 @@ async function importOBJScene(sceneFile: ModelFileItem) {
 
 		if (obj) {
 			obj.name = sceneFile.file.name
-			store.addModelToScene(obj)
+			store.addObjectToScene(obj)
 		}
 	} finally {
 		blobUrls.forEach((url) => URL.revokeObjectURL(url))

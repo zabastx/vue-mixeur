@@ -59,7 +59,7 @@ function setInitialObjects() {
 	pointLight.power = 1000
 	pointLight.position.set(4, 5, 1)
 
-	sceneStore.addLightToScene(pointLight)
+	sceneStore.addObjectToScene(pointLight)
 
 	const camera = createCamera({
 		type: 'Perspective',
@@ -72,14 +72,14 @@ function setInitialObjects() {
 	camera.position.set(-4, 4, 6)
 	camera.lookAt(0, 0, 0)
 
-	sceneStore.addCameraToScene(camera)
+	sceneStore.addObjectToScene(camera)
 
 	const cameraStore = useCameraStore()
 	cameraStore.setRenderCamera(camera.uuid)
 
 	const companionCube = createMesh('cube')
 
-	sceneStore.addModelToScene(companionCube)
+	sceneStore.addObjectToScene(companionCube)
 }
 </script>
 

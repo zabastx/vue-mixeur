@@ -7,7 +7,7 @@ import { setRaycaster } from '@/three/modules/core/raycaster'
 import { useEventListener } from '@vueuse/core'
 import { OutlinePass, RectAreaLightUniformsLib } from 'three/examples/jsm/Addons.js'
 import { disposeModel } from '@/three/modules/core/dispose'
-import { getLightHelper, lightHasShadow, type LightHelper } from '@/three/modules/light'
+import { getLightHelper, type LightHelper } from '@/three/modules/light'
 import { useStats } from '@/three/modules/extras/stats'
 import { useShadingStore } from './shading'
 import { exportModel } from '@/three/modules/addons/exporter'
@@ -50,7 +50,7 @@ export const useThreeStore = defineStore('three', () => {
 	function addGroup() {
 		const group = new THREE.Group()
 		group.name = 'Group'
-		addModelToScene(group)
+		addObjectToScene(group)
 		return group
 	}
 	function moveToGroup(objUUID: string, groupUUID: string) {
@@ -231,99 +231,70 @@ export const useThreeStore = defineStore('three', () => {
 
 	// -------------------------
 
-	function addModelToScene(object: THREE.Object3D) {
+	function addObjectToScene(object: THREE.Object3D) {
+		const helpers: THREE.Object3D[] = []
 		object.traverse((obj) => {
+			const userData = getUserData(obj)
+			userData.userVisible = obj.visible
 			obj.castShadow = true
 			obj.receiveShadow = true
-			const userData = getUserData(obj)
-			userData.isSelectable = true
-			userData.userVisible = obj.visible
-			if (obj instanceof THREE.Mesh) {
+
+			if ('material' in obj) {
 				userData.isShadable = true
-				;(obj.material as THREE.Material).dithering = true
+				const material = obj.material as THREE.Material | THREE.Material[]
+				if (Array.isArray(material)) material.forEach((mat) => (mat.dithering = true))
+				else material.dithering = true
 			}
+
 			if (obj instanceof THREE.Light) {
 				const helper = getLightHelper(obj)
-				if (!helper) return
+				userData.hideInModes = ['wireframe', 'solid', 'preview']
+				userData.isSceneLight = true
 
-				object.add(helper)
+				if (!helper) return
 
 				if (shadingStore.shadingMode !== 'rendered') {
 					helper.light.visible = false
 				}
+
+				helpers.push(helper)
+				lightHelperObjects.push(helper)
+				raycasterObjects.push(helper)
+				return
 			}
+
+			if (obj instanceof THREE.Camera) {
+				const helper = new THREE.CameraHelper(obj)
+
+				helper.name = `${obj.name} Helper`
+
+				const helperUserData = getUserData(helper)
+
+				helperUserData.isSelectable = true
+				helperUserData.isHelper = true
+				helperUserData.hideInOutliner = true
+
+				userData.helperUUID = helper.uuid
+				userData.isRenderCamera = true
+
+				helpers.push(helper)
+				raycasterObjects.push(helper)
+				return
+			}
+
+			userData.isSelectable = true
+			raycasterObjects.push(obj)
 		})
+
 		enableBVH(object)
+
 		scene.add(object)
-		raycasterObjects.push(object)
+		helpers.forEach((obj) => scene.add(obj))
 
 		shadingStore.cacheNewObjectMaterials(object)
 
 		selectObject(object.uuid)
 		emitCustomEvent('scene:objectAdded', object)
-	}
-
-	function addLightToScene(light: THREE.Light) {
-		const helper = getLightHelper(light)
-
-		const lightUserData = getUserData(light)
-		lightUserData.isSelectable = true
-		lightUserData.isSceneLight = true
-		lightUserData.hideInModes = ['wireframe', 'solid', 'preview']
-		lightUserData.userVisible = light.visible
-
-		if (lightHasShadow(light)) {
-			light.castShadow = true
-		}
-
-		if (shadingStore.shadingMode !== 'rendered') {
-			light.visible = false
-		}
-
-		scene.add(light)
-
-		if (helper) {
-			const helperUserData = getUserData(helper)
-			helperUserData.isSelectable = true
-			helperUserData.isSceneLight = true
-			lightUserData.helperUUID = helper.uuid
-
-			raycasterObjects.push(helper)
-			lightHelperObjects.push(helper)
-
-			enableBVH(helper)
-			scene.add(helper)
-		}
-
-		selectObject(light.uuid)
-		emitCustomEvent('scene:objectAdded', light)
-	}
-
-	function addCameraToScene(camera: THREE.Camera) {
-		const helper = new THREE.CameraHelper(camera)
-
-		helper.name = `${camera.name} Helper`
-
-		const helperUserData = getUserData(helper)
-		const cameraUserData = getUserData(camera)
-
-		helperUserData.isSelectable = true
-		helperUserData.isHelper = true
-		helperUserData.hideInOutliner = true
-
-		cameraUserData.isSelectable = true
-		cameraUserData.helperUUID = helper.uuid
-		cameraUserData.isRenderCamera = true
-		cameraUserData.userVisible = camera.visible
-
-		enableBVH(helper)
-		scene.add(camera)
-		scene.add(helper)
-
-		raycasterObjects.push(helper)
-
-		selectObject(camera.uuid)
-		emitCustomEvent('scene:objectAdded', camera)
 	}
 
 	function deleteFromScene(object: THREE.Object3D) {
@@ -396,10 +367,9 @@ export const useThreeStore = defineStore('three', () => {
 		outlinePassRef,
 		selectedObject,
 		controls,
-		addModelToScene,
+		addObjectToScene,
 		deleteFromScene,
 		transformControls,
-		addLightToScene,
 		monitor,
 		selectObject,
 		raycasterObjects,
@@ -411,7 +381,6 @@ export const useThreeStore = defineStore('three', () => {
 		addGroup,
 		moveToGroup,
 		isInitiated,
-		addCameraToScene,
 		disposeEvents
 	}
 })

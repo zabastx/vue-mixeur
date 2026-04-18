@@ -87,6 +87,9 @@ export function getLightHelper(light: THREE.Light) {
 	const userData = getUserData(helper)
 	userData.isHelper = true
 	userData.hideInOutliner = true
+	userData.isSelectable = true
+	userData.isSceneLight = true
+	getUserData(light).helperUUID = helper.uuid
 
 	helper.traverse((child) => {
 		getUserData(child).skipRaycast = true

@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Consolidated three store scene addition methods into single `addObjectToScene` function
 - `InputColor` component now uses `MxPopover`
 - Replaced separate `scene:lightAdded`/`scene:modelAdded` events with single `scene:objectAdded` event
 - Updates `scene:objectDeleted` event payload to use `null` instead of `THREE.Object3D`

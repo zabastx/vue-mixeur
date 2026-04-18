@@ -166,6 +166,6 @@ async function importModel() {
 
 	if (!gltf) return
 
-	threeStore.addModelToScene(gltf.scene)
+	threeStore.addObjectToScene(gltf.scene)
 }
 </script>

@@ -106,7 +106,7 @@ const menuItems: IMenubarMenu[] = [
 				onClick() {
 					createText().then((text) => {
 						if (text) {
-							threeStore.addModelToScene(text)
+							threeStore.addObjectToScene(text)
 						}
 					})
 				}
@@ -174,7 +174,7 @@ const menuItems: IMenubarMenu[] = [
 						name: 'Camera'
 					})
 
-					threeStore.addCameraToScene(camera)
+					threeStore.addObjectToScene(camera)
 				}
 			}
 		]
@@ -185,11 +185,11 @@ const threeStore = useThreeStore()
 
 function addMesh(type: Parameters<typeof createMesh>[0]) {
 	const mesh = createMesh(type)
-	threeStore.addModelToScene(mesh)
+	threeStore.addObjectToScene(mesh)
 }
 
 function addLight(type: Parameters<typeof createLight>['0']['type']) {
 	const light = createLight({ type })
-	threeStore.addLightToScene(light)
+	threeStore.addObjectToScene(light)
 }
 </script>

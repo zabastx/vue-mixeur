@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - New `MxPopover` component: Reusable popover wrapper component
+- `loadWorldTexture`: added caching
 
 ### Changed
 

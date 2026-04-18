@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed `ref` to `reactive` in render image settings
 - Refactored shading store
 - shadingStore: expose `enviromentMap`
+- `loadEXR`: improved type definitions and error handling
 
 ### Fixed
 

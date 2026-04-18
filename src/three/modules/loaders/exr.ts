@@ -1,30 +1,21 @@
 import { useToast } from '@/composables/toast'
 import { useProgressStore } from '@/store/progress'
+import type THREE from '@/three'
 import { EXRLoader } from 'three/examples/jsm/Addons.js'
 
 /**
- * Loads an EXR (Extended Dynamic Range) image file and returns a DataTexture.
+ * Loads an EXR file from a URL and returns a Three.js Texture.
  *
- * This function asynchronously loads EXR files, which are high dynamic range (HDR)
- * image formats commonly used for environment maps and HDR lighting in Three.js.
- * Supports optional size parameter for progress tracking.
- *
- * @param parameters - The load parameters
- * @param parameters.url - URL or path to the EXR file
- * @param parameters.filename - Display name for progress tracking and texture naming
- * @param parameters.size - Optional total size in bytes for accurate progress calculation
- * @returns Promise resolving to the loaded DataTexture or null on error
- *
- * @example
- * ```ts
- * const envTexture = await loadEXR({
- *   url: '/assets/textures/sunset.exr',
- *   filename: 'sunset.exr',
- *   size: 162251
- * })
- * ```
+ * @param options.url - URL of the EXR file to load
+ * @param options.filename - Display name used for progress tracking and texture naming
+ * @param options.size - Total file size in bytes for accurate progress reporting
+ * @returns The loaded texture, or `null` if loading failed
  */
-export async function loadEXR({ url, filename, size }: EXRLoaderParameters) {
+export async function loadEXR({
+	url,
+	filename,
+	size
+}: EXRLoaderParameters): Promise<THREE.Texture | null> {
 	const loader = new EXRLoader()
 
 	const toast = useToast()
@@ -37,20 +28,20 @@ export async function loadEXR({ url, filename, size }: EXRLoaderParameters) {
 		texture.name = filename
 		return texture
 	} catch (e) {
-		const error = e as Error
+		const message = e instanceof Error ? e.message : String(e)
 		toast.add({
 			type: 'error',
 			title: 'Error loading an EXR',
-			message: error.message
+			message
 		})
-		if (import.meta.env.DEV) console.error(`loadEXR (${url}) error:`, e)
+		if (import.meta.env.DEV) console.error(`loadEXR: (${url}) error:`, e)
 		return null
 	} finally {
 		progressItem.stop()
 	}
 }
 
-interface EXRLoaderParameters {
+type EXRLoaderParameters = {
 	url: string
 	filename: string
 	size?: number

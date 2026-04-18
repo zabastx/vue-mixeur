@@ -1,16 +1,14 @@
 <template>
-	<div class="flex">
+	<div class="flex rounded overflow-hidden *:not-last:border-r">
 		<MxTooltip
-			v-for="(btn, index) in buttons"
+			v-for="btn in buttons"
 			:key="btn.name"
 			:content="{ align: 'start', side: 'bottom', alignOffset: -10, sideOffset: 10 }"
 		>
 			<button
-				class="cursor-pointer bg-ui-radio-inner p-0.5 hover:brightness-125"
+				class="btn border-0 rounded-none"
 				:class="{
-					'bg-ui-radio-inner-selected': btn.name === shadingStore.shadingMode,
-					'rounded-l': index === 0,
-					'rounded-r': index === buttons.length - 1
+					'bg-ui-radio-inner-selected': btn.name === shadingStore.shadingMode
 				}"
 				type="button"
 				@click="shadingStore.setMode(btn.name)"
@@ -25,6 +23,20 @@
 				<span class="text-[.9em] opacity-50">{{ btn.tooltip.footer }}</span>
 			</template>
 		</MxTooltip>
+		<MxPopover :arrow="{ width: 20, height: 10 }" show-arrow>
+			<template #trigger>
+				<button
+					type="button"
+					:disabled="!settingsComponent"
+					class="btn border-0 rounded-none text-xs bg-ui-menu-inner"
+				>
+					<MxIcon name="ui/arrow-down" />
+				</button>
+			</template>
+			<template #content>
+				<component :is="settingsComponent" />
+			</template>
+		</MxPopover>
 	</div>
 </template>
 
@@ -32,8 +44,22 @@
 import type { ShadingMode } from '@/store/types/shading'
 import MxTooltip, { type MxTooltipContent } from '../utils/MxTooltip.vue'
 import { useShadingStore } from '@/store/shading'
+import { computed, type Component } from 'vue'
+import ShadingControlsSettingsPreview from './shading-controls/ShadingControlsSettingsPreview.vue'
 
 const shadingStore = useShadingStore()
+
+const SETTINGS_COMPONENTS: Record<Exclude<ShadingMode, 'export'>, Component | null> = {
+	wireframe: null,
+	solid: null,
+	preview: ShadingControlsSettingsPreview,
+	rendered: null
+} as const
+
+const settingsComponent = computed(() => {
+	if (shadingStore.shadingMode === 'export') return null
+	return SETTINGS_COMPONENTS[shadingStore.shadingMode]
+})
 
 const buttons: ShadingControlsElement[] = [
 	{
@@ -68,7 +94,7 @@ const buttons: ShadingControlsElement[] = [
 			footer: 'Preview the final scene using the active render engine'
 		}
 	}
-]
+] as const
 
 interface ShadingControlsElement {
 	name: ShadingMode

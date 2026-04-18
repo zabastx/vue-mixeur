@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - New `MxPopover` component: Reusable popover wrapper component
 - `loadWorldTexture`: added caching
+- Studio lighting: environment map texture previews (city, courtyard, forest, interior, night, studio, sunrise, sunset)
+- Viewport shading settings: popover menu for preview shading mode with studio light selection, rotation, and strength controls
 
 ### Changed
 

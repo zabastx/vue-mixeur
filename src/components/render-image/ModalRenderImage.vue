@@ -21,6 +21,7 @@
 						ref="previewRef"
 						class="max-w-full max-h-full m-auto block object-contain"
 						@load="() => (isRendering = false)"
+						@error="() => (isRendering = false)"
 					/>
 					<MxSpinner v-if="isRendering">Rendering...</MxSpinner>
 					<div class="absolute top-2 left-2 text-xs bg-black/50 px-2 py-1 rounded text-white">
@@ -103,7 +104,7 @@ const threeStore = useThreeStore()
 const shadingStore = useShadingStore()
 const cameraStore = useCameraStore()
 
-const renderSettings = reactive<RenderSettings>({
+const renderSettings = ref<RenderSettings>({
 	width: 1920,
 	height: 1080,
 	selectedFormat: 'webp',
@@ -162,7 +163,7 @@ async function renderImage() {
 		return
 	}
 
-	const { width, height, background, quality, selectedFormat } = renderSettings
+	const { width, height, background, quality, selectedFormat } = renderSettings.value
 
 	actualWidth.value = width
 	actualHeight.value = height
@@ -233,7 +234,7 @@ async function saveImage() {
 	if (!canvas) return console.warn('saveImage: canvas is undefined')
 
 	try {
-		const { selectedFormat, quality, width, height } = renderSettings
+		const { selectedFormat, quality, width, height } = renderSettings.value
 
 		const blob = await new Promise<Blob | null>((resolve) => {
 			canvas.toBlob(

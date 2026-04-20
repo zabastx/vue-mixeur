@@ -40,6 +40,8 @@ import { TextGeometry } from 'three/examples/jsm/Addons.js'
 import TextDataProperties from './data/TextDataProperties.vue'
 import CameraProperties from './camera/CameraProperties.vue'
 import MaterialProperties from './material/MaterialProperties.vue'
+import { isThreeGeometry } from '@/three/modules/mesh'
+import PropertiesGeometry from './geometry/PropertiesGeometry.vue'
 
 const store = useThreeStore()
 
@@ -93,14 +95,14 @@ const tabs = computed<DataTabItem[]>(() => {
 			})
 		}
 
-		// if (isThreeGeometry(obj.geometry)) {
-		// 	list.push({
-		// 		icon: IconGeometryProperties,
-		// 		value: 'geometry',
-		// 		content: GeometryProperties,
-		// 		title: 'Geometry Properties'
-		// 	})
-		// }
+		if (isThreeGeometry(obj.geometry)) {
+			list.push({
+				icon: 'properties/geometry-properties',
+				value: 'geometry',
+				content: PropertiesGeometry,
+				title: 'Geometry Properties'
+			})
+		}
 
 		if ('material' in obj) {
 			list.push({

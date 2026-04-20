@@ -22,17 +22,7 @@
 						class="max-w-full max-h-full m-auto block object-contain"
 						@load="() => (isRendering = false)"
 					/>
-					<div
-						v-if="isRendering"
-						class="absolute inset-0 z-10 flex items-center justify-center bg-black/50"
-					>
-						<div class="flex items-center gap-2 text-white">
-							<div
-								class="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"
-							/>
-							<span>Rendering...</span>
-						</div>
-					</div>
+					<MxSpinner v-if="isRendering">Rendering...</MxSpinner>
 					<div class="absolute top-2 left-2 text-xs bg-black/50 px-2 py-1 rounded text-white">
 						Preview
 					</div>

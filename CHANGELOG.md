@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Spinner component
 - Geometry Properties panel: New properties panel for editing mesh geometry parameters
 
+### Changed
+
+- Shading store: Refactored material cache to explicitly store wireframe and solid materials
+
 ## [0.16.0] - 2026-04-18
 
 ### Added

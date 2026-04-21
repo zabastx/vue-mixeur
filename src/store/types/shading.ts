@@ -10,5 +10,6 @@ export type ShadingMode = 'wireframe' | 'solid' | 'preview' | 'rendered' | 'expo
  */
 export interface MaterialCache {
 	original: THREE.Material | THREE.Material[]
-	current: THREE.Material | THREE.Material[]
+	solid: THREE.MeshLambertMaterial | THREE.MeshLambertMaterial[]
+	wireframe: THREE.MeshBasicMaterial | THREE.MeshBasicMaterial[]
 }

@@ -77,8 +77,9 @@ export const useShadingStore = defineStore('shading', () => {
 		const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
 		const originalMaterials = materials.map((mat) => mat.clone())
 		materialCache.set(mesh.uuid, {
-			original: Array.isArray(mesh.material) ? originalMaterials : originalMaterials[0]!,
-			current: mesh.material
+			original: Array.isArray(mesh.material) ? originalMaterials : originalMaterials[0],
+			wireframe: createWireframeMaterial(mesh.material),
+			solid: createSolidMaterial(mesh.material)
 		})
 	}
 
@@ -150,27 +151,20 @@ export const useShadingStore = defineStore('shading', () => {
 		const cache = materialCache.get(mesh.uuid)
 		if (!cache) return
 
-		let newMaterial: THREE.Material | THREE.Material[]
-
 		switch (mode) {
 			case 'wireframe':
-				newMaterial = createWireframeMaterial(cache.original)
+				mesh.material = cache.wireframe
 				break
 			case 'solid':
-				newMaterial = createSolidMaterial(cache.original)
+				mesh.material = cache.solid
 				break
 			case 'preview':
-				newMaterial = cache.original
+				mesh.material = cache.original
 				break
 			case 'rendered':
-				newMaterial = cache.original
+				mesh.material = cache.original
 				break
-			default:
-				return
 		}
-
-		mesh.material = newMaterial
-		cache.current = newMaterial
 	}
 
 	/**
@@ -180,9 +174,7 @@ export const useShadingStore = defineStore('shading', () => {
 	 * @param original - The original material(s) to base the wireframe on
 	 * @returns Wireframe material(s) with the same color and transparency
 	 */
-	function createWireframeMaterial(
-		original: THREE.Material | THREE.Material[]
-	): THREE.Material | THREE.Material[] {
+	function createWireframeMaterial(original: THREE.Material | THREE.Material[]) {
 		if (Array.isArray(original)) {
 			return original.map((mat) => createSingleWireframeMaterial(mat))
 		}
@@ -196,12 +188,12 @@ export const useShadingStore = defineStore('shading', () => {
 	 * @param original - The original material
 	 * @returns A new MeshBasicMaterial with wireframe enabled
 	 */
-	function createSingleWireframeMaterial(original: THREE.Material): THREE.Material {
+	function createSingleWireframeMaterial(original: THREE.Material) {
 		const wireframeMat = new THREE.MeshBasicMaterial({
 			color: 0x000000,
 			wireframe: true,
-			transparent: (original as THREE.MeshBasicMaterial).transparent,
-			opacity: (original as THREE.MeshBasicMaterial).opacity
+			transparent: original.transparent,
+			opacity: original.opacity
 		})
 		return wireframeMat
 	}
@@ -213,9 +205,7 @@ export const useShadingStore = defineStore('shading', () => {
 	 * @param original - The original material(s) to base the solid materials on
 	 * @returns Solid material(s) with flat shading
 	 */
-	function createSolidMaterial(
-		original: THREE.Material | THREE.Material[]
-	): THREE.Material | THREE.Material[] {
+	function createSolidMaterial(original: THREE.Material | THREE.Material[]) {
 		if (Array.isArray(original)) {
 			return original.map((mat) => createSingleSolidMaterial(mat))
 		}
@@ -230,12 +220,12 @@ export const useShadingStore = defineStore('shading', () => {
 	 * @param original - The original material
 	 * @returns A new MeshLambertMaterial with flat shading and grey color
 	 */
-	function createSingleSolidMaterial(original: THREE.Material): THREE.Material {
+	function createSingleSolidMaterial(original: THREE.Material) {
 		const solidMat = new THREE.MeshLambertMaterial({
 			color: 0xcccccc,
 			flatShading: true,
-			transparent: (original as THREE.MeshBasicMaterial).transparent,
-			opacity: (original as THREE.MeshBasicMaterial).opacity
+			transparent: original.transparent,
+			opacity: original.opacity
 		})
 		return solidMat
 	}
@@ -276,23 +266,7 @@ export const useShadingStore = defineStore('shading', () => {
 
 		const originalMaterial = cache.original as unknown as T
 		updateMaterialProperty<T>(originalMaterial, data.prop, data.value)
-
-		if (
-			currentMode.value === 'preview' &&
-			cache.current !== cache.original &&
-			!Array.isArray(cache.current)
-		) {
-			const currentMaterial = cache.current as unknown as T
-
-			if (data.prop in currentMaterial) {
-				updateMaterialProperty<T>(currentMaterial, data.prop, data.value)
-			}
-		}
-
-		// Trigger material update to ensure Three.js recognizes the change
-		if (cache.current instanceof THREE.Material) {
-			cache.current.needsUpdate = true
-		}
+		originalMaterial.needsUpdate = true
 	}
 
 	/**
@@ -322,7 +296,6 @@ export const useShadingStore = defineStore('shading', () => {
 	function changeMaterial(mesh: THREE.Mesh, newMaterial: THREE.Material) {
 		const cache = materialCache.get(mesh.uuid)
 		if (!cache) return
-		cache.current = newMaterial
 		cache.original = newMaterial
 		applyModeToMesh(mesh, currentMode.value)
 	}
@@ -332,11 +305,9 @@ export const useShadingStore = defineStore('shading', () => {
 		if (!cache) return false
 
 		disposeMaterials(cache.original)
-		disposeMaterials(cache.current)
+		disposeMaterials(cache.solid)
+		disposeMaterials(cache.wireframe)
 
-		/**
-		 * Dispose original materials that were cloned for caching
-		 */
 		function disposeMaterials(materials: THREE.Material | THREE.Material[]) {
 			if (Array.isArray(materials)) {
 				materials.forEach((mat) => mat.dispose())

@@ -59,9 +59,9 @@ watch(
 const DEFAULT_TABS: DataTabItem[] = [
 	{
 		icon: 'properties/camera-properties',
-		value: 'camera',
+		value: 'viewport-camera',
 		content: CameraProperties,
-		title: 'Camera Properties'
+		title: 'Viewport Camera Properties'
 	}
 ]
 

@@ -18,7 +18,7 @@
 				type="button"
 				class="cursor-pointer rounded-full bg-black p-1.5 text-xl text-white opacity-50
 					hover:bg-gray-500"
-				@click="cameraStore.switchViewportCamera"
+				@click="cameraStore.toggleViewportCamera"
 			>
 				<MxIcon
 					v-if="cameraStore.viewportCameraType === 'perspective'"

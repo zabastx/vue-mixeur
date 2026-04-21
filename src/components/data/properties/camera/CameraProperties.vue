@@ -1,11 +1,11 @@
 <template>
-	<MxAccordionRoot collapsible type="multiple" class="space-y-0.5">
+	<MxAccordionRoot collapsible type="multiple" class="space-y-0.5" :default-value="['lens']">
 		<MxAccordionItem label="Lens" :item="{ value: 'lens' }">
 			<div class="p-1 flex flex-col gap-0.5 items-end">
 				<InputField label="Type" input-width="150px" class="mb-1">
 					<InputSelect v-model="cameraStore.viewportCameraType" :items="TYPE_OPTIONS" />
 				</InputField>
-				<template v-if="isPerspectiveCamera(cameraStore.activeCamera)">
+				<template v-if="isPerspectiveCamera(currentViewportCamera)">
 					<InputField
 						v-if="currentLensUnit === 'fov'"
 						label="Field of View"
@@ -13,7 +13,7 @@
 						:tooltip="{ text: 'The vertical field of view, from bottom to top of view' }"
 					>
 						<InputNumber
-							v-model="cameraStore.activeCamera.fov"
+							v-model="currentViewportCamera.fov"
 							:format-options="{
 								style: 'unit',
 								unitDisplay: 'narrow',
@@ -36,7 +36,7 @@
 					</InputField>
 				</template>
 				<InputField label="Zoom" input-width="150px">
-					<InputNumber v-model="cameraStore.activeCamera.zoom" :step="0.01" />
+					<InputNumber v-model="currentViewportCamera.zoom" :step="0.01" />
 				</InputField>
 				<InputField
 					label="Clip Start"
@@ -44,27 +44,27 @@
 					class="mt-1"
 					:tooltip="{ text: 'Camera near clipping distance' }"
 				>
-					<InputNumber v-model="cameraStore.activeCamera.near" />
+					<InputNumber v-model="currentViewportCamera.near" />
 				</InputField>
 				<InputField
 					label="End"
 					input-width="150px"
 					:tooltip="{ text: 'Camera far clipping distance' }"
 				>
-					<InputNumber v-model="cameraStore.activeCamera.far" />
+					<InputNumber v-model="currentViewportCamera.far" />
 				</InputField>
 			</div>
 		</MxAccordionItem>
 		<MxAccordionItem label="Transform" :item="{ value: 'transform' }">
 			<div class="p-1 flex flex-col gap-0.5 items-end">
 				<InputField label="Position X" input-width="150px">
-					<InputNumber v-model="cameraStore.activeCamera.position.x" />
+					<InputNumber v-model="currentViewportCamera.position.x" />
 				</InputField>
 				<InputField label="Y" input-width="150px">
-					<InputNumber v-model="cameraStore.activeCamera.position.y" />
+					<InputNumber v-model="currentViewportCamera.position.y" />
 				</InputField>
 				<InputField label="Z" input-width="150px">
-					<InputNumber v-model="cameraStore.activeCamera.position.z" />
+					<InputNumber v-model="currentViewportCamera.position.z" />
 				</InputField>
 			</div>
 		</MxAccordionItem>
@@ -77,6 +77,10 @@ import THREE from '@/three'
 import { computed, ref } from 'vue'
 
 const cameraStore = useCameraStore()
+
+const currentViewportCamera = computed<THREE.PerspectiveCamera | THREE.OrthographicCamera>(
+	() => cameraStore.viewportCameras[cameraStore.viewportCameraType]
+)
 
 function isPerspectiveCamera(
 	camera: THREE.PerspectiveCamera | THREE.OrthographicCamera
@@ -99,13 +103,13 @@ const currentLensUnit = ref<(typeof LENS_UNIT_OPTIONS)[number]['value']>('fov')
 
 const focalLength = computed<number>({
 	set(val) {
-		if ('getFocalLength' in cameraStore.activeCamera) {
-			return cameraStore.activeCamera.setFocalLength(val)
+		if ('getFocalLength' in currentViewportCamera.value) {
+			return currentViewportCamera.value.setFocalLength(val)
 		}
 	},
 	get() {
-		if ('getFocalLength' in cameraStore.activeCamera) {
-			return cameraStore.activeCamera.getFocalLength()
+		if ('getFocalLength' in currentViewportCamera.value) {
+			return currentViewportCamera.value.getFocalLength()
 		}
 		return 0
 	}

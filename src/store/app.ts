@@ -28,12 +28,12 @@ export const useAppStore = defineStore('app', () => {
 			const sceneStore = useThreeStore()
 			if (!pointerOnCanvas.value || !controlsStore.transformControls) return
 
-			const { switchViewportCamera, toggleCameraView } = useCameraStore()
+			const { toggleViewportCamera, toggleCameraView } = useCameraStore()
 
 			switch (e.code) {
 				case 'Numpad5': // Perspective / Orthographic camera toggle
 					e.preventDefault()
-					switchViewportCamera()
+					toggleViewportCamera()
 					break
 
 				case 'Numpad0':

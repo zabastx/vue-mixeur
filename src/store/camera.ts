@@ -41,13 +41,15 @@ export const useCameraStore = defineStore('camera', () => {
 		viewportCameras[newVal].position.copy(viewportCameras[oldVal].position)
 		viewportCameras[newVal].quaternion.copy(viewportCameras[oldVal].quaternion)
 		viewportCameras[newVal].scale.copy(viewportCameras[oldVal].scale)
-		activeCamera.value = viewportCameras[newVal]
+		if (renderCamera.value?.uuid !== activeCamera.value.uuid) {
+			activeCamera.value = viewportCameras[newVal]
+		}
 	})
 
 	activeCamera.value.position.set(8, 8, 8)
 	activeCamera.value.lookAt(0, 0, 0)
 
-	function switchViewportCamera() {
+	function toggleViewportCamera() {
 		if (viewportCameraType.value === 'orthographic') {
 			viewportCameraType.value = 'perspective'
 		} else {
@@ -74,11 +76,12 @@ export const useCameraStore = defineStore('camera', () => {
 
 	return {
 		activeCamera,
-		switchViewportCamera,
+		toggleViewportCamera,
 		viewportCameraType,
 		renderCamera,
 		setRenderCamera,
 		renderCameraList,
-		toggleCameraView
+		toggleCameraView,
+		viewportCameras
 	}
 })

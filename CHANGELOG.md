@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Shading store: Refactored material cache to explicitly store wireframe and solid materials
+- Camera store: Renamed `switchViewportCamera()` to `toggleViewportCamera()` for clarity
+- CameraProperties: Changed to local computed `currentViewportCamera` derived from store
+- CameraProperties: Accordion now defaults to open on Lens section
 
 ## [0.16.0] - 2026-04-18
 

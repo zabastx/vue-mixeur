@@ -1,20 +1,8 @@
 <template>
-	<MxAccordionRoot type="multiple" :default-value="['geometry']">
-		<MxAccordionItem label="Geometry" :item="{ value: 'geometry' }">
-			<div class="flex flex-col gap-0.5 p-1 items-end">
-				<InputField
-					v-for="field in fields"
-					:key="field.key"
-					:label="field.label"
-					:tooltip="field.tooltip"
-					input-width="150px"
-				>
-					<InputNumber v-model="data[field.key]" :min="0" />
-				</InputField>
-				<button type="button" class="btn text-sm px-2" @click="onApply">Apply</button>
-			</div>
-		</MxAccordionItem>
-	</MxAccordionRoot>
+	<div class="flex flex-col gap-0.5 p-1 items-end">
+		<GeometryInputFields v-model="data" :fields="fields" />
+		<button type="button" class="btn text-sm px-2" @click="onApply">Apply</button>
+	</div>
 </template>
 
 <script lang="ts" setup>

@@ -20,11 +20,11 @@
 </template>
 
 <script lang="ts" setup>
+import { isPolyHavenFileInfo } from '@/components/asset-browser/types/polyhaven'
 import { useModals } from '@/composables/useModals'
 import THREE from '@/three'
 import { loadEXR } from '@/three/modules/loaders/exr'
 import { loadTexture } from '@/three/modules/loaders/textureLoader'
-import { isPolyHavenFileInfo } from '@/utils/polyhaven'
 import { useFileDialog } from '@vueuse/core'
 
 defineProps<{

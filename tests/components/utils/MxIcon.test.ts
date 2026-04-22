@@ -1,5 +1,5 @@
+import MxIcon from '@/components/base/ui/MxIcon.vue'
 import { render } from '@testing-library/vue'
-import MxIcon from '@/components/utils/MxIcon.vue'
 import { describe, expect, it } from 'vitest'
 
 describe('MxIcon', () => {

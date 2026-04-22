@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/vue'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
-import InputNumber from '@/components/input/InputNumber.vue'
+import InputNumber from '@/components/base/input/InputNumber.vue'
 
 describe('InputNumber', () => {
 	it('renders with default value', () => {

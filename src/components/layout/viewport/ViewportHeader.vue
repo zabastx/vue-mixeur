@@ -8,11 +8,11 @@
 
 <script lang="ts" setup>
 import { useThreeStore } from '@/store/three'
-import MenuBar, { type IMenubarMenu } from '../utils/MenuBar.vue'
 import { createMesh } from '@/three/modules/mesh'
 import { createLight } from '@/three/modules/light'
 import { createText } from '@/three/modules/text'
 import { createCamera } from '@/three/modules/camera/create'
+import type { IMenubarMenu } from '@/components/base/ui/MenuBar.vue'
 
 const menuItems: IMenubarMenu[] = [
 	{

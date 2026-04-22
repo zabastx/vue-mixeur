@@ -1,0 +1,9 @@
+@theme {
+	--color-ui-btn-text: #e6e6e6;
+	--color-ui-btn-text-selected: #ffffff;
+	--color-ui-btn-bg: #545454;
+	--color-ui-btn-bg-highlight: #4772b3;
+	--color-ui-btn-outline: #3d3d3d;
+	--ui-btn-roundness: 0.4;
+	--radius-ui-btn: calc(var(--ui-btn-roundness) * 1rem * 0.75);
+}

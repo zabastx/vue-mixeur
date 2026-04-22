@@ -1,7 +1,7 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import InputCheckbox from '@/components/input/InputCheckbox.vue'
 import userEvent from '@testing-library/user-event'
+import InputCheckbox from '@/components/base/input/InputCheckbox.vue'
 
 describe('InputCheckbox', () => {
 	it('renders unchecked', () => {

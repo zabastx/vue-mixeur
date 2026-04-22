@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isPolyHavenFileInfo } from '@/utils/polyhaven'
-import type { FileInfo } from '@/composables/types/polyhaven'
+import { isPolyHavenFileInfo, type FileInfo } from '@/components/asset-browser/types/polyhaven'
 
 describe('isPolyHavenFileInfo', () => {
 	it('should return true for valid FileInfo object', () => {

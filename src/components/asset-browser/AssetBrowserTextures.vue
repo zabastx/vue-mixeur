@@ -95,11 +95,15 @@
 </template>
 
 <script lang="ts" setup>
-import type { AssetFiles, TextureAsset, TextureFiles } from '@/composables/types/polyhaven'
-import { usePolyHaven } from '@/composables/usePolyHaven'
+import type {
+	AssetFiles,
+	TextureAsset,
+	TextureFiles
+} from '@/components/asset-browser/types/polyhaven'
 import { bytesToSize } from '@/utils/format'
 import { CheckboxGroupRoot } from 'reka-ui'
 import { computed, ref, shallowRef, watch } from 'vue'
+import { usePolyHaven } from './usePolyHaven'
 
 const isOpen = defineModel<boolean>({ default: false })
 

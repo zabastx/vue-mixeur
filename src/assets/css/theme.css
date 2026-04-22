@@ -48,5 +48,5 @@
 	}
 }
 
-@import './ui.css';
-@import './text.css';
+@import './theme/ui.css';
+@import './theme/text.css';

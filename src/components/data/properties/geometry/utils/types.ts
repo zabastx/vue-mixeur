@@ -1,4 +1,4 @@
-import type { MxTooltipContent } from '@/components/utils/MxTooltip.vue'
+import type { MxTooltipContent } from '@/components/base/ui/MxTooltip.vue'
 
 export type GeometryField<T> = {
 	key: keyof T

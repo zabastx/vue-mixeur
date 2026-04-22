@@ -1,12 +1,12 @@
 <template>
 	<ModalAbout v-model="openModals.about" />
-	<ModalModelsLibrary v-model="openModals.modelsLibrary" />
-	<ModalTextureLibrary
+	<AssetBrowserModels v-model="openModals.modelsLibrary" />
+	<AssetBrowserTextures
 		v-model="openModals.textureLibrary"
 		:callback="dialogCallbacks.textureLibrary"
 	/>
-	<ModalRenderImage v-model="openModals.renderImage" />
-	<ModalImportScene v-model="openModals.importScene" />
+	<RenderImageModal v-model="openModals.renderImage" />
+	<ImportSceneModal v-model="openModals.importScene" />
 </template>
 
 <script lang="ts" setup>

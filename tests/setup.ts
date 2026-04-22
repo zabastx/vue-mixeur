@@ -4,7 +4,7 @@ import { cleanup } from '@testing-library/vue'
 
 afterEach(() => cleanup())
 
-vi.mock('@/components/utils/MxTooltip.vue', () => ({
+vi.mock('@/components/base/ui/MxTooltip.vue', () => ({
 	default: {
 		template: '<slot name="default"></slot>',
 		props: ['tooltipDisabled', 'tooltip', 'options']

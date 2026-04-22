@@ -78,12 +78,12 @@
 </template>
 
 <script lang="ts" setup>
-import type { AssetFiles, ModelFiles } from '@/composables/types/polyhaven'
-import { usePolyHaven } from '@/composables/usePolyHaven'
+import type { AssetFiles, ModelFiles } from '@/components/asset-browser/types/polyhaven'
 import { useThreeStore } from '@/store/three'
 import { bytesToSize } from '@/utils/format'
 import { CheckboxGroupRoot } from 'reka-ui'
 import { computed, ref, shallowRef, watch } from 'vue'
+import { usePolyHaven } from './usePolyHaven'
 
 const isOpen = defineModel<boolean>({ default: false })
 

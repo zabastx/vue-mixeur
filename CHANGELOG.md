@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Custom button component
+
+### Changed
+
+- Component folder structure
+
+### Fixed
+
+- `ViewportShadingControls`: Fixed tooltip `options` prop usage to properly pass reka-ui content configuration
+
 ## [0.17.1] - 2026-04-22
 
 ### Fixed

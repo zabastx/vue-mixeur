@@ -1,10 +1,8 @@
 <template>
 	<div class="pr-3 pb-2">
-		<div class="grid grid-cols-2 gap-1 mb-2">
-			<button type="button" class="btn px-2 text-sm" @click="openFilePicker()">Upload files</button>
-			<button type="button" class="btn px-2 text-sm" @click="openDirPicker()">
-				Upload a folder
-			</button>
+		<div class="grid grid-cols-2 gap-0.5 mb-2 text-sm">
+			<MxButton icon="file/new" @click="openFilePicker()">Upload files</MxButton>
+			<MxButton icon="file/folder" @click="openDirPicker()">Upload a folder</MxButton>
 		</div>
 		<MxAccordionRoot type="multiple" :default-value="['models', 'assets']" class="space-y-1">
 			<MxAccordionItem label="Models" :item="{ value: 'models' }">

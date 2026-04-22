@@ -1,4 +1,4 @@
-import type { MxTooltipContent } from '@/components/utils/MxTooltip.vue'
+import type { MxTooltipContent } from '@/components/base/ui/MxTooltip.vue'
 import type THREE from '@/three'
 
 type NonMethodKeys<T> = {

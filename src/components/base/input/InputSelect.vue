@@ -45,7 +45,7 @@ import type {
 	SelectTriggerProps
 } from 'reka-ui'
 import { Select } from 'reka-ui/namespaced'
-import type { MxTooltipContent } from '../utils/MxTooltip.vue'
+import type { MxTooltipContent } from '../ui/MxTooltip.vue'
 
 defineProps<SelectProps>()
 

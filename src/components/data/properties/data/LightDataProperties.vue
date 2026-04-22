@@ -73,7 +73,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { MxTooltipContent } from '@/components/utils/MxTooltip.vue'
+import type { MxTooltipContent } from '@/components/base/ui/MxTooltip.vue'
 import { useThreeStore } from '@/store/three'
 import THREE from '@/three'
 import { lightHasShadow } from '@/three/modules/light'

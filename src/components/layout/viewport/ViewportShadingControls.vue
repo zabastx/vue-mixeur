@@ -3,7 +3,7 @@
 		<MxTooltip
 			v-for="btn in buttons"
 			:key="btn.name"
-			:content="{ align: 'start', side: 'bottom', alignOffset: -10, sideOffset: 10 }"
+			:options="{ content: { align: 'start', side: 'bottom', alignOffset: -10, sideOffset: 10 } }"
 		>
 			<button
 				class="btn border-0 rounded-none"
@@ -42,10 +42,10 @@
 
 <script lang="ts" setup>
 import type { ShadingMode } from '@/store/types/shading'
-import MxTooltip, { type MxTooltipContent } from '../utils/MxTooltip.vue'
 import { useShadingStore } from '@/store/shading'
 import { computed, type Component } from 'vue'
 import ShadingControlsSettingsPreview from './shading-controls/ShadingControlsSettingsPreview.vue'
+import type { MxTooltipContent } from '@/components/base/ui/MxTooltip.vue'
 
 const shadingStore = useShadingStore()
 

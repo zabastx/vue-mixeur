@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { MxContextMenuItem } from '@/components/utils/MxContextMenu.vue'
+import type { MxContextMenuItem } from '@/components/base/utils/MxContextMenu.vue'
 import { useCameraStore } from '@/store/camera'
 import { useThreeStore } from '@/store/three'
 import type { MxObjectUserData } from '@/three/three'

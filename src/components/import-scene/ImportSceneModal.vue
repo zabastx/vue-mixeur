@@ -10,8 +10,11 @@
 		outside-interaction
 		icon="file/bin"
 	>
-		<div class="h-full p-2 grid grid-rows-[1fr_min-content] gap-1" data-testid="import-scene">
-			<div class="grid grid-cols-[300px_1fr_250px] gap-2 overflow-hidden">
+		<div
+			class="h-full p-2 grid grid-rows-[1fr_min-content] gap-1 overflow-hidden"
+			data-testid="import-scene"
+		>
+			<div class="grid grid-cols-[300px_1fr_250px] gap-1 overflow-hidden">
 				<ScrollContainer>
 					<ImportSceneFiles
 						ref="sceneFilesRef"
@@ -66,9 +69,9 @@
 				<ImportSceneSettings ref="settingsRef" :selected-file="selectedFile" />
 			</div>
 
-			<div class="text-sm flex gap-1 justify-end">
-				<button type="button" class="btn btn--highlight px-2" @click="importScene">Import</button>
-				<button type="button" class="btn px-2" @click="isOpen = false">Cancel</button>
+			<div class="flex gap-1 justify-end">
+				<MxButton highlighted @click="importScene">Import</MxButton>
+				<MxButton @click="isOpen = false">Cancel</MxButton>
 			</div>
 		</div>
 	</MxDialog>

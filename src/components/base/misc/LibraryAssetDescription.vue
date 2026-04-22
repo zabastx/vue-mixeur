@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { AssetAuthorInfo, AssetWithId } from '@/composables/types/polyhaven'
+import type { AssetAuthorInfo, AssetWithId } from '@/components/asset-browser/types/polyhaven'
 
 defineProps<{
 	asset: AssetWithId
@@ -32,5 +32,3 @@ defineProps<{
 	})[]
 }>()
 </script>
-
-<style scoped></style>

@@ -25,11 +25,11 @@
 
 <script lang="ts" setup>
 import { useAppStore } from '@/store/app'
-import MenuBar, { type IMenubarMenu } from '../utils/MenuBar.vue'
 import { computed } from 'vue'
 import { useThreeStore } from '@/store/three'
 import { useModals } from '@/composables/useModals'
 import { usePWAUpdate } from '@/composables/usePWAUpdate'
+import type { IMenubarMenu } from '@/components/base/ui/MenuBar.vue'
 
 const appStore = useAppStore()
 const threeStore = useThreeStore()

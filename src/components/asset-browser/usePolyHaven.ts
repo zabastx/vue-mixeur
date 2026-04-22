@@ -1,6 +1,5 @@
 import { createFetch } from '@vueuse/core'
 import { computed, ref, shallowRef } from 'vue'
-import { useToast } from './toast'
 import type {
 	Asset,
 	AssetAuthorInfo,
@@ -17,6 +16,7 @@ import type {
 	ModelFiles,
 	TextureAsset
 } from './types/polyhaven'
+import { useToast } from '@/composables/toast'
 
 const toast = useToast()
 

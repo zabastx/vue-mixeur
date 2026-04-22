@@ -7,7 +7,7 @@
 
 <script lang="ts" setup>
 import THREE from '@/three'
-import { computed, reactive } from 'vue'
+import { computed, ref } from 'vue'
 import type { GeometryField } from './utils/types'
 
 const { mesh } = defineProps<{
@@ -23,7 +23,7 @@ const geometryParameters = computed(() => {
 	return null
 })
 
-const data = reactive<PlaneGeometrySettings>({
+const data = ref<PlaneGeometrySettings>({
 	width: geometryParameters.value?.width ?? 1,
 	height: geometryParameters.value?.height ?? 1,
 	widthSegments: geometryParameters.value?.widthSegments ?? 1,
@@ -32,10 +32,10 @@ const data = reactive<PlaneGeometrySettings>({
 
 function onApply() {
 	const newGeometry = new THREE.PlaneGeometry(
-		data.width,
-		data.height,
-		data.widthSegments,
-		data.heightSegments
+		data.value.width,
+		data.value.height,
+		data.value.widthSegments,
+		data.value.heightSegments
 	)
 
 	emits('update:geometry', newGeometry)

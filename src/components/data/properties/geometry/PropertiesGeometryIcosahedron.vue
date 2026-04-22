@@ -7,7 +7,7 @@
 
 <script lang="ts" setup>
 import THREE from '@/three'
-import { computed, reactive } from 'vue'
+import { computed, ref } from 'vue'
 import type { GeometryField } from './utils/types'
 
 const { mesh } = defineProps<{
@@ -23,13 +23,13 @@ const geometryParameters = computed(() => {
 	return null
 })
 
-const data = reactive<IcosahedronGeometrySettings>({
+const data = ref<IcosahedronGeometrySettings>({
 	radius: geometryParameters.value?.radius ?? 1,
 	detail: geometryParameters.value?.detail ?? 1
 })
 
 function onApply() {
-	const newGeometry = new THREE.IcosahedronGeometry(data.radius, data.detail)
+	const newGeometry = new THREE.IcosahedronGeometry(data.value.radius, data.value.detail)
 
 	emits('update:geometry', newGeometry)
 }

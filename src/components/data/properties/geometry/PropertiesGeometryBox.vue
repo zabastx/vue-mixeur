@@ -7,7 +7,7 @@
 
 <script lang="ts" setup>
 import THREE from '@/three'
-import { computed, reactive } from 'vue'
+import { computed, ref } from 'vue'
 import type { GeometryField } from './utils/types'
 
 const { mesh } = defineProps<{
@@ -23,7 +23,7 @@ const geometryParameters = computed(() => {
 	return null
 })
 
-const data = reactive<BoxGeometrySettings>({
+const data = ref<BoxGeometrySettings>({
 	width: geometryParameters.value?.width ?? 1,
 	height: geometryParameters.value?.height ?? 1,
 	depth: geometryParameters.value?.depth ?? 1,
@@ -34,12 +34,12 @@ const data = reactive<BoxGeometrySettings>({
 
 function onApply() {
 	const newGeometry = new THREE.BoxGeometry(
-		data.width,
-		data.height,
-		data.depth,
-		data.widthSegments,
-		data.heightSegments,
-		data.depthSegments
+		data.value.width,
+		data.value.height,
+		data.value.depth,
+		data.value.widthSegments,
+		data.value.heightSegments,
+		data.value.depthSegments
 	)
 
 	emits('update:geometry', newGeometry)

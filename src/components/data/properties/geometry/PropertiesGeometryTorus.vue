@@ -7,7 +7,7 @@
 
 <script lang="ts" setup>
 import THREE from '@/three'
-import { computed, reactive } from 'vue'
+import { computed, ref } from 'vue'
 import type { GeometryField } from './utils/types'
 import { MathUtils } from 'three'
 
@@ -24,7 +24,7 @@ const geometryParameters = computed(() => {
 	return null
 })
 
-const data = reactive<TorusGeometrySettings>({
+const data = ref<TorusGeometrySettings>({
 	radius: geometryParameters.value?.radius,
 	tube: geometryParameters.value?.tube,
 	radialSegments: geometryParameters.value?.radialSegments,
@@ -36,13 +36,13 @@ const data = reactive<TorusGeometrySettings>({
 
 function onApply() {
 	const newGeometry = new THREE.TorusGeometry(
-		data.radius,
-		data.tube,
-		data.radialSegments,
-		data.tubularSegments,
-		data.arc ? MathUtils.degToRad(data.arc) : undefined,
-		data.thetaStart ? MathUtils.degToRad(data.thetaStart) : undefined,
-		data.thetaLength ? MathUtils.degToRad(data.thetaLength) : undefined
+		data.value.radius,
+		data.value.tube,
+		data.value.radialSegments,
+		data.value.tubularSegments,
+		data.value.arc ? MathUtils.degToRad(data.value.arc) : undefined,
+		data.value.thetaStart ? MathUtils.degToRad(data.value.thetaStart) : undefined,
+		data.value.thetaLength ? MathUtils.degToRad(data.value.thetaLength) : undefined
 	)
 
 	emits('update:geometry', newGeometry)
@@ -113,16 +113,6 @@ const fields: GeometryField<TorusGeometrySettings>[] = [
 		}
 	}
 ]
-
-/**
- * @param radius Radius of the torus, from the center of the torus to the center of the tube. Default `1`.
- * @param tube Radius of the tube. Must be smaller than `radius`. Default is `0.4`.
- * @param radialSegments Default is `12`.
- * @param tubularSegments Default is `48`.
- * @param arc Central angle. Default is Math.PI * 2.
- * @param {number} [thetaStart=0] - Start of the tubular sweep in radians.
- * @param {number} [thetaLength=Math.PI times 2] - Length of the tubular sweep in radians.
- */
 
 type TorusGeometryArgs = ConstructorParameters<typeof THREE.TorusGeometry>
 

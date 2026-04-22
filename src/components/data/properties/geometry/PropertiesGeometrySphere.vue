@@ -7,7 +7,7 @@
 
 <script lang="ts" setup>
 import THREE from '@/three'
-import { computed, reactive } from 'vue'
+import { computed, ref } from 'vue'
 import type { GeometryField } from './utils/types'
 import { MathUtils } from 'three'
 
@@ -24,7 +24,7 @@ const geometryParameters = computed(() => {
 	return null
 })
 
-const data = reactive<SphereGeometrySettings>({
+const data = ref<SphereGeometrySettings>({
 	radius: geometryParameters.value?.radius,
 	widthSegments: geometryParameters.value?.widthSegments,
 	heightSegments: geometryParameters.value?.heightSegments,
@@ -36,13 +36,13 @@ const data = reactive<SphereGeometrySettings>({
 
 function onApply() {
 	const newGeometry = new THREE.SphereGeometry(
-		data.radius,
-		data.widthSegments,
-		data.heightSegments,
-		data.phiStart ? MathUtils.degToRad(data.phiStart) : undefined,
-		data.phiLength ? MathUtils.degToRad(data.phiLength) : undefined,
-		data.thetaStart ? MathUtils.degToRad(data.thetaStart) : undefined,
-		data.thetaLength ? MathUtils.degToRad(data.thetaLength) : undefined
+		data.value.radius,
+		data.value.widthSegments,
+		data.value.heightSegments,
+		data.value.phiStart ? MathUtils.degToRad(data.value.phiStart) : undefined,
+		data.value.phiLength ? MathUtils.degToRad(data.value.phiLength) : undefined,
+		data.value.thetaStart ? MathUtils.degToRad(data.value.thetaStart) : undefined,
+		data.value.thetaLength ? MathUtils.degToRad(data.value.thetaLength) : undefined
 	)
 
 	emits('update:geometry', newGeometry)

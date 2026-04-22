@@ -7,7 +7,7 @@
 
 <script lang="ts" setup>
 import THREE from '@/three'
-import { computed, reactive } from 'vue'
+import { computed, ref } from 'vue'
 import type { GeometryField } from './utils/types'
 import { MathUtils } from 'three'
 
@@ -24,7 +24,7 @@ const geometryParameters = computed(() => {
 	return null
 })
 
-const data = reactive<CylinderGeometrySettings>({
+const data = ref<CylinderGeometrySettings>({
 	radiusTop: geometryParameters.value?.radiusTop ?? 1,
 	radiusBottom: geometryParameters.value?.radiusBottom ?? 1,
 	height: geometryParameters.value?.height ?? 1,
@@ -37,14 +37,14 @@ const data = reactive<CylinderGeometrySettings>({
 
 function onApply() {
 	const newGeometry = new THREE.CylinderGeometry(
-		data.radiusTop,
-		data.radiusBottom,
-		data.height,
-		data.radialSegments,
-		data.heightSegments,
-		data.openEnded,
-		data.thetaStart ? MathUtils.degToRad(data.thetaStart) : 0,
-		data.thetaLength ? MathUtils.degToRad(data.thetaLength) : Math.PI * 2
+		data.value.radiusTop,
+		data.value.radiusBottom,
+		data.value.height,
+		data.value.radialSegments,
+		data.value.heightSegments,
+		data.value.openEnded,
+		data.value.thetaStart ? MathUtils.degToRad(data.value.thetaStart) : 0,
+		data.value.thetaLength ? MathUtils.degToRad(data.value.thetaLength) : Math.PI * 2
 	)
 
 	emits('update:geometry', newGeometry)

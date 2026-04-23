@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - `ViewportShadingControls`: Fixed tooltip `options` prop usage to properly pass reka-ui content configuration
+- Modals/popover incorrect overlap
 
 ## [0.17.1] - 2026-04-22
 

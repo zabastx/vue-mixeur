@@ -1,0 +1,13 @@
+@theme {
+	--color-ui-select-text: #e6e6e6;
+	--color-ui-select-text-selected: #ffffff;
+	--color-ui-select-bg: #282828ff;
+	--color-ui-select-bg-selected: #282828ff;
+	--color-ui-select-outline: #3d3d3dff;
+	--color-ui-select-menu-bg: #181818ff;
+	--color-ui-select-menu-outline: #242424ff;
+	--ui-select-roundness: 0.4;
+	--radius-ui-select: calc(var(--ui-select-roundness) * 1rem * 0.75);
+	--ui-select-menu-roundness: 0.4;
+	--radius-ui-select-menu: calc(var(--ui-select-menu-roundness) * 1rem * 0.75);
+}

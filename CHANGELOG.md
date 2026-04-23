@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Number field styling: Refactored CSS variables
+- Input Select styling: Refactored CSS variables
 - Component folder structure
 
 ### Fixed

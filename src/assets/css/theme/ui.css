@@ -1,5 +1,6 @@
 @import './ui/button.css';
 @import './ui/number-field.css';
+@import './ui/select.css';
 
 @theme {
 	/* Box */

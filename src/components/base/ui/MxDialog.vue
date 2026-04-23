@@ -13,7 +13,7 @@
 				<div
 					ref="dialogContentRef"
 					:style="style"
-					class="fixed overflow-hidden p-0 z-1000"
+					class="fixed overflow-hidden p-0 z-1000 focus-within:z-2000"
 					:class="[$attrs.class, { resize, rounded: !title }]"
 				>
 					<Dialog.Title
@@ -82,7 +82,6 @@ const dialogContentRef = useTemplateRef('dialogContentRef')
 const handleRef = useTemplateRef('handleRef')
 
 const { style, x, y } = useDraggable(dialogContentRef, {
-	preventDefault: true,
 	handle: handleRef,
 	containerElement: document.body
 })

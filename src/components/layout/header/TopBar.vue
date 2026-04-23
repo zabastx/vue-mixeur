@@ -106,6 +106,20 @@ const menuItems: IMenubarMenu[] = [
 		]
 	},
 	{
+		label: 'Edit',
+		items: [
+			{
+				label: 'Preferences',
+				type: 'item',
+				key: 'preferences',
+				icon: 'misc/preferences',
+				onClick() {
+					open('preferences')
+				}
+			}
+		]
+	},
+	{
 		label: 'Render',
 		items: [
 			{

@@ -14,7 +14,7 @@
 				<MxIcon name="ui/arrow-right" class="rotate-180 text-[0.75em]" />
 			</NumberFieldDecrement>
 
-			<div class="relative">
+			<div class="relative w-full">
 				<NumberFieldInput
 					ref="inputRef"
 					class="grow w-full text-center outline-none group-hover:brightness-110 py-0.5 select-none

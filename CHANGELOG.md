@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Custom button component
+- Preferences modal with theme customization (colors, roundness) via CSS custom properties
 
 ### Changed
 
@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - `ViewportShadingControls`: Fixed tooltip `options` prop usage to properly pass reka-ui content configuration
+- Modals/popover incorrect overlap
+- Number Input styling
+- Color input transparency display
 
 ## [0.17.1] - 2026-04-22
 

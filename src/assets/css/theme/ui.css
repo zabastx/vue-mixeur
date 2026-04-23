@@ -1,4 +1,5 @@
 @import './ui/button.css';
+@import './ui/number-field.css';
 
 @theme {
 	/* Box */
@@ -51,17 +52,6 @@
 	--color-ui-menu-item-outline: #3d3d3d00;
 	--ui-menu-item-roundness: 0.4;
 	--radius-ui-menu-item: calc(var(--ui-menu-item-roundness) * 1rem * 0.75);
-
-	/* Number Field */
-	--color-ui-number-text: #e6e6e6;
-	--color-ui-number-text-selected: #ffffff;
-	--color-ui-number-item: #4772b3ff;
-	--color-ui-number-inner: #545454ff;
-	--color-ui-number-inner-selected: #222222ff;
-	--color-ui-number-outline: #3d3d3dff;
-	--color-ui-number-outline-selected: #3d3d3dff;
-	--ui-number-roundness: 0.4;
-	--radius-ui-number: calc(var(--ui-number-roundness) * 1rem * 0.75);
 
 	/* Option */
 	--color-ui-option-text: #e6e6e6;

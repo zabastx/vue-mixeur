@@ -3,12 +3,10 @@
 		v-bind="props"
 		v-model="model"
 		class="flex justify-end border rounded-ui-number border-ui-number-outline overflow-hidden
-			focus-within:border-ui-number-outline-selected text-ui-number-text
-			focus-within:text-ui-number-text-selected"
+			focus-within:border-ui-number-outline-focused text-ui-number-text
+			focus-within:text-ui-number-text-focused selection:bg-ui-number-selection"
 	>
-		<div
-			class="group flex grow max-w-full bg-ui-number-inner focus-within:bg-ui-number-inner-selected"
-		>
+		<div class="group flex grow max-w-full bg-ui-number-bg focus-within:bg-ui-number-bg-focused">
 			<NumberFieldDecrement
 				class="cursor-pointer shrink-0 grow-0 px-0.5 opacity-0 group-hover:opacity-100
 					hover:brightness-125"
@@ -28,7 +26,7 @@
 					@blur="isInputFocused = false"
 				/>
 				<div
-					class="bg-ui-number-item h-full absolute top-0 left-0"
+					class="bg-ui-number-slider h-full absolute top-0 left-0"
 					:style="{ width: barFillWidth }"
 				></div>
 			</div>

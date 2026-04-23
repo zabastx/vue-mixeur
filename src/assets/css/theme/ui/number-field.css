@@ -1,0 +1,12 @@
+@theme {
+	--color-ui-number-text: #e6e6e6;
+	--color-ui-number-text-focused: #ffffff;
+	--color-ui-number-selection: #4772b3ff;
+	--color-ui-number-slider: #4772b3ff;
+	--color-ui-number-bg: #545454ff;
+	--color-ui-number-bg-focused: #222222ff;
+	--color-ui-number-outline: #3d3d3dff;
+	--color-ui-number-outline-focused: #3d3d3dff;
+	--ui-number-roundness: 0.4;
+	--radius-ui-number: calc(var(--ui-number-roundness) * 1rem * 0.75);
+}

@@ -7,6 +7,7 @@
 	/>
 	<RenderImageModal v-model="openModals.renderImage" />
 	<ImportSceneModal v-model="openModals.importScene" />
+	<PreferencesModal v-model="openModals.preferences" />
 </template>
 
 <script lang="ts" setup>

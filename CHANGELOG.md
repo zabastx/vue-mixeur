@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Custom button component
+- Preferences modal with theme customization (colors, roundness) via CSS custom properties
 
 ### Changed
 

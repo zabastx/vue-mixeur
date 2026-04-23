@@ -47,7 +47,7 @@
 		</template>
 		<div class="contents" @click.stop>
 			<CheckboxRoot v-model="visibility" class="ml-auto">
-				<MxIcon :name="visibility ? 'misc/visibility-visible' : 'misc/visibility-hidden'" />
+				<MxIcon :name="visibility ? 'outliner/visibility-visible' : 'outliner/visibility-hidden'" />
 			</CheckboxRoot>
 		</div>
 	</li>

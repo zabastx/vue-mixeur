@@ -242,5 +242,5 @@
 	/* Transparent Checkerboard */
 	--color-checkerboard-primary: #333333;
 	--color-checkerboard-secondary: #262626;
-	--checkerboard-size: 8px;
+	--checkerboard-size: 16px;
 }

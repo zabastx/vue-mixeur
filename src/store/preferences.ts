@@ -1,11 +1,11 @@
 import { useToast } from '@/composables/toast'
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { computed, shallowRef, triggerRef } from 'vue'
+import { computed, ref, shallowRef } from 'vue'
 
 export const usePreferencesStore = defineStore('preferences', () => {
 	const computedStyle = computed(() => getComputedStyle(document.documentElement))
 
-	const customThemeVars = shallowRef<Record<string, string>>({})
+	const customThemeVars = ref<Record<string, string>>({})
 	const defaultVars = shallowRef<Record<string, string>>({})
 
 	const getPropertyValue = (key: string) => {
@@ -14,23 +14,22 @@ export const usePreferencesStore = defineStore('preferences', () => {
 	}
 
 	const setProperty = (key: string, val: string | number) => {
-		const newVal = val.toString()
+		const newVal = typeof val === 'number' ? val.toPrecision(3) : val
+
 		if (!defaultVars.value[key]) {
 			defaultVars.value[key] = computedStyle.value.getPropertyValue(key)
 		}
 		document.documentElement.style.setProperty(key, newVal)
 		customThemeVars.value[key] = newVal
-		triggerRef(customThemeVars)
 		localStorage.setItem('theme-vars', JSON.stringify(customThemeVars.value))
 	}
 
 	const reset = () => {
 		customThemeVars.value = {}
-		localStorage.removeItem('theme-vars')
-		triggerRef(customThemeVars)
 		Object.entries<string>(defaultVars.value).forEach(([key, val]) => {
 			setProperty(key, val)
 		})
+		localStorage.removeItem('theme-vars')
 	}
 
 	const init = () => {

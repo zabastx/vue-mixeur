@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Refactor store: Extract raycasting logic into dedicated store (`raycast.ts`)
+- Refactor store: Replace event-based communication with direct function calls
+- Refactor store: Centralize `outlinePassRef` access to composer store
+- Refactor store: Obtain scene from three store instead of parameter
+- Refactor store: Move controls store initialization to function scope
+- Refactor store: Update `addGroup` function
+- Refactor store: Change `deleteFromScene` to accept uuid instead of object
+
+### Fixed
+
+- Update scene after moving object to group
+
 ## [0.18.0] - 2026-04-23
 
 ### Added

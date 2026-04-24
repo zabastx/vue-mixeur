@@ -24,6 +24,7 @@ type ComposerPass = ShaderPass | TAARenderPass | RenderPass
 export const useComposerStore = defineStore('composer', () => {
 	const rendererRef = shallowRef<THREE.WebGLRenderer>()
 	const composerRef = shallowRef<EffectComposer>()
+	const outlinePassRef = shallowRef<OutlinePass>()
 
 	const composerPasses = shallowRef<ComposerPass[]>([])
 
@@ -78,6 +79,7 @@ export const useComposerStore = defineStore('composer', () => {
 		outlinePass.visibleEdgeColor.set('#ffaa00')
 		outlinePass.hiddenEdgeColor.set('#ffaa00')
 		composer.addPass(outlinePass)
+		outlinePassRef.value = outlinePass
 
 		const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader)
 		composer.addPass(gammaCorrectionPass)
@@ -149,7 +151,8 @@ export const useComposerStore = defineStore('composer', () => {
 		composerPasses,
 		init,
 		setupRenderImageComposer,
-		rendererRef
+		rendererRef,
+		outlinePassRef
 	}
 })
 

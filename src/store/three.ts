@@ -2,7 +2,6 @@ import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia'
 import { computed, ref, shallowRef, triggerRef, type ShallowRef } from 'vue'
 import THREE from '@/three'
 import { setGridHelper } from '@/three/modules/helpers/grid'
-import { useControlsStore } from './controls'
 import { OutlinePass, RectAreaLightUniformsLib } from 'three/examples/jsm/Addons.js'
 import { disposeModel } from '@/three/modules/core/dispose'
 import { getLightHelper, type LightHelper } from '@/three/modules/light'
@@ -14,11 +13,11 @@ import { getUserData, enableBVH } from '@/three/utils'
 import { useCameraStore } from './camera'
 import { useRaycastStore } from './raycast'
 import { usePreferencesStore } from './preferences'
+import { useControlsStore } from './controls'
 
 export const useThreeStore = defineStore('three', () => {
 	const isInitiated = ref(false)
 	const composerStore = useComposerStore()
-	const controlsStore = useControlsStore()
 
 	const scene = new THREE.Scene()
 	const helperScene = new THREE.Scene()
@@ -49,21 +48,23 @@ export const useThreeStore = defineStore('three', () => {
 		updateScene()
 	}
 
-	const { controls, gizmo, transformControls } = storeToRefs(controlsStore)
-
 	// ----------------------------------------
 	const outlinePassRef = shallowRef<OutlinePass>()
 
 	const { setFPSCounter, monitor, updateMonitor } = useStats()
 
 	function initScene(canvasRef: ShallowRef<HTMLCanvasElement | null>) {
-		const { initTheme } = usePreferencesStore()
-		initTheme()
-
 		if (!canvasRef.value) return
-		const canvas = canvasRef.value
 
 		const shadingStore = useShadingStore()
+		const { initTheme } = usePreferencesStore()
+		const controlsStore = useControlsStore()
+		const { gizmo, controls } = storeToRefs(controlsStore)
+
+		initTheme()
+
+		const canvas = canvasRef.value
+
 		shadingStore.init()
 		RectAreaLightUniformsLib.init()
 
@@ -130,6 +131,8 @@ export const useThreeStore = defineStore('three', () => {
 	const selectedObject = ref<THREE.Object3D | THREE.Light | THREE.Mesh | null>(null)
 
 	function selectObject(uuid?: string, raycasted?: boolean) {
+		const { transformControls } = useControlsStore()
+
 		if (!uuid || !outlinePassRef.value)
 			return console.warn('selectObject: outlinePassRef is undefined')
 
@@ -138,7 +141,7 @@ export const useThreeStore = defineStore('three', () => {
 		if (!object || (raycasted && !getUserData(object).isSelectable)) return
 
 		if (object instanceof THREE.Light) {
-			transformControls.value?.attach(object)
+			transformControls?.attach(object)
 			selectedObject.value = object
 			const helper = scene.getObjectByProperty('light', object)
 			if (helper) {
@@ -148,7 +151,7 @@ export const useThreeStore = defineStore('three', () => {
 		}
 
 		if (object instanceof THREE.Camera) {
-			transformControls.value?.attach(object)
+			transformControls?.attach(object)
 			selectedObject.value = object
 			const helper = scene.getObjectByProperty('camera', object)
 			if (helper) {
@@ -159,7 +162,7 @@ export const useThreeStore = defineStore('three', () => {
 
 		if ('light' in object) {
 			const light = object.light as THREE.Light
-			transformControls.value?.attach(light)
+			transformControls?.attach(light)
 			outlinePassRef.value.selectedObjects = [object]
 			selectedObject.value = light
 			return
@@ -167,25 +170,25 @@ export const useThreeStore = defineStore('three', () => {
 
 		if ('camera' in object) {
 			const camera = object.camera as THREE.Camera
-			transformControls.value?.attach(camera)
+			transformControls?.attach(camera)
 			outlinePassRef.value.selectedObjects = [object]
 			selectedObject.value = camera
 			return
 		}
 
-		transformControls.value?.attach(object)
+		transformControls?.attach(object)
 		outlinePassRef.value.selectedObjects = [object]
 		selectedObject.value = object
 	}
 
 	function setupTransformControlsListener() {
-		if (!transformControls.value) return
+		const { transformControls } = useControlsStore()
 
-		transformControls.value.addEventListener('objectChange', () => {
+		transformControls?.addEventListener('objectChange', () => {
 			triggerRef(selectedObject)
 		})
 
-		transformControls.value.addEventListener('object-changed', (e) => {
+		transformControls?.addEventListener('object-changed', (e) => {
 			const object = e.target.object as unknown as THREE.Object3D | LightHelper | undefined
 			if (!object) {
 				if (!outlinePassRef.value) return
@@ -194,13 +197,13 @@ export const useThreeStore = defineStore('three', () => {
 			}
 
 			if ('light' in object) {
-				transformControls.value?.attach(object.light)
+				transformControls?.attach(object.light)
 				selectedObject.value = object.light
 				return
 			}
 
 			if (getUserData(object).skipRaycast && object.parent) {
-				transformControls.value?.attach(object.parent)
+				transformControls?.attach(object.parent)
 				selectedObject.value = object.parent
 			}
 		})
@@ -278,9 +281,11 @@ export const useThreeStore = defineStore('three', () => {
 	}
 
 	function deleteFromScene(object: THREE.Object3D) {
-		transformControls.value?.detach()
+		const { transformControls } = useControlsStore()
 		const { removeFromRaycaster } = useRaycastStore()
 		const { clearMaterialCache } = useShadingStore()
+
+		transformControls?.detach()
 
 		const helperUUID = getUserData(object).helperUUID
 		if (helperUUID) {
@@ -344,10 +349,8 @@ export const useThreeStore = defineStore('three', () => {
 		initScene,
 		outlinePassRef,
 		selectedObject,
-		controls,
 		addObjectToScene,
 		deleteFromScene,
-		transformControls,
 		monitor,
 		selectObject,
 		sceneChildren,

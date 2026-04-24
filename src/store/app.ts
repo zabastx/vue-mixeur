@@ -70,7 +70,7 @@ export const useAppStore = defineStore('app', () => {
 				case 'Delete':
 					e.preventDefault()
 					if (sceneStore.selectedObject instanceof THREE.Object3D) {
-						sceneStore.deleteFromScene(sceneStore.selectedObject)
+						sceneStore.deleteFromScene(sceneStore.selectedObject.uuid)
 					}
 					break
 			}

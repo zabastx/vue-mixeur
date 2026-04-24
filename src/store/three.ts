@@ -250,12 +250,15 @@ export const useThreeStore = defineStore('three', () => {
 		updateScene()
 	}
 
-	function deleteFromScene(object: THREE.Object3D) {
+	function deleteFromScene(uuid: string) {
 		const { transformControls } = useControlsStore()
 		const { removeFromRaycaster } = useRaycastStore()
 		const { clearMaterialCache } = useShadingStore()
 
 		transformControls?.detach()
+		const object = scene.getObjectByProperty('uuid', uuid)
+
+		if (!object) return console.warn('deleteFromScene: object is undefined')
 
 		const helperUUID = getUserData(object).helperUUID
 		if (helperUUID) {

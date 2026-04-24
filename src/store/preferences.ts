@@ -32,7 +32,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
 		localStorage.removeItem('theme-vars')
 	}
 
-	const init = () => {
+	const initTheme = () => {
 		const preset = localStorage.getItem('theme-vars')
 		if (!preset) return
 		try {
@@ -54,7 +54,7 @@ export const usePreferencesStore = defineStore('preferences', () => {
 		}
 	}
 
-	return { getPropertyValue, setProperty, init, reset }
+	return { getPropertyValue, setProperty, initTheme, reset }
 })
 
 if (import.meta.hot) {

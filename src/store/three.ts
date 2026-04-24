@@ -12,13 +12,12 @@ import { exportModel } from '@/three/modules/addons/exporter'
 import { useComposerStore } from './composer'
 import { getUserData, enableBVH } from '@/three/utils'
 import { useCameraStore } from './camera'
-import { emitCustomEvent, listenCustomEvent } from '@/utils/events'
 import { useRaycastStore } from './raycast'
+import { usePreferencesStore } from './preferences'
 
 export const useThreeStore = defineStore('three', () => {
 	const isInitiated = ref(false)
 	const composerStore = useComposerStore()
-	const shadingStore = useShadingStore()
 	const controlsStore = useControlsStore()
 
 	const scene = new THREE.Scene()
@@ -33,16 +32,6 @@ export const useThreeStore = defineStore('three', () => {
 
 	function updateScene() {
 		triggerRef(sceneChildren)
-	}
-
-	const customEvents = [
-		listenCustomEvent('shading:modeChange', updateScene),
-		listenCustomEvent('scene:objectDeleted', updateScene),
-		listenCustomEvent('scene:objectAdded', updateScene)
-	]
-
-	function disposeEvents() {
-		customEvents.forEach((cleanup) => cleanup())
 	}
 
 	function addGroup() {
@@ -68,8 +57,13 @@ export const useThreeStore = defineStore('three', () => {
 	const { setFPSCounter, monitor, updateMonitor } = useStats()
 
 	function initScene(canvasRef: ShallowRef<HTMLCanvasElement | null>) {
+		const { initTheme } = usePreferencesStore()
+		initTheme()
+
 		if (!canvasRef.value) return
 		const canvas = canvasRef.value
+
+		const shadingStore = useShadingStore()
 		shadingStore.init()
 		RectAreaLightUniformsLib.init()
 
@@ -217,6 +211,8 @@ export const useThreeStore = defineStore('three', () => {
 	function addObjectToScene(object: THREE.Object3D) {
 		const helpers: THREE.Object3D[] = []
 		const { addToRaycaster } = useRaycastStore()
+		const { shadingMode, cacheNewObjectMaterials } = useShadingStore()
+
 		object.traverse((obj) => {
 			const userData = getUserData(obj)
 			userData.userVisible = obj.visible
@@ -237,7 +233,7 @@ export const useThreeStore = defineStore('three', () => {
 
 				if (!helper) return
 
-				if (shadingStore.shadingMode !== 'rendered') {
+				if (shadingMode !== 'rendered') {
 					helper.light.visible = false
 				}
 
@@ -275,15 +271,16 @@ export const useThreeStore = defineStore('three', () => {
 		scene.add(object)
 		helpers.forEach((obj) => scene.add(obj))
 
-		shadingStore.cacheNewObjectMaterials(object)
+		cacheNewObjectMaterials(object)
 
 		selectObject(object.uuid)
-		emitCustomEvent('scene:objectAdded', object)
+		updateScene()
 	}
 
 	function deleteFromScene(object: THREE.Object3D) {
 		transformControls.value?.detach()
 		const { removeFromRaycaster } = useRaycastStore()
+		const { clearMaterialCache } = useShadingStore()
 
 		const helperUUID = getUserData(object).helperUUID
 		if (helperUUID) {
@@ -308,8 +305,8 @@ export const useThreeStore = defineStore('three', () => {
 		removeFromRaycaster(object.uuid)
 
 		disposeModel(object)
-		shadingStore.clearMaterialCache(object.uuid)
-		emitCustomEvent('scene:objectDeleted', null)
+		clearMaterialCache(object.uuid)
+		updateScene()
 	}
 
 	function removeFromOutline(uuid: string) {
@@ -321,12 +318,14 @@ export const useThreeStore = defineStore('three', () => {
 	}
 
 	function objectVisibilityUpdate(uuid: string, val: boolean) {
+		const { shadingMode } = useShadingStore()
 		const obj = scene.getObjectByProperty('uuid', uuid)
+
 		if (obj) {
 			const userData = getUserData(obj)
 			userData.userVisible = val
 			if (userData.helperUUID) objectVisibilityUpdate(userData.helperUUID, val)
-			if (!userData.hideInModes?.includes(shadingStore.shadingMode)) {
+			if (!userData.hideInModes?.includes(shadingMode)) {
 				obj.visible = val
 			}
 			updateScene()
@@ -334,10 +333,11 @@ export const useThreeStore = defineStore('three', () => {
 	}
 
 	function exportScene() {
-		const mode = shadingStore.shadingMode
-		shadingStore.setMode('export')
+		const { shadingMode, setMode } = useShadingStore()
+		const mode = shadingMode
+		setMode('export')
 		exportModel(scene)
-		shadingStore.setMode(mode)
+		setMode(mode)
 	}
 
 	return {
@@ -357,12 +357,10 @@ export const useThreeStore = defineStore('three', () => {
 		scene,
 		addGroup,
 		moveToGroup,
-		isInitiated,
-		disposeEvents
+		isInitiated
 	}
 })
 
 if (import.meta.hot) {
 	import.meta.hot.accept(acceptHMRUpdate(useThreeStore, import.meta.hot))
-	import.meta.hot.dispose(() => useThreeStore().disposeEvents())
 }

@@ -32,7 +32,6 @@ import { createLight } from '@/three/modules/light'
 import { createMesh } from '@/three/modules/mesh'
 import { createCamera } from '@/three/modules/camera/create'
 import { useCameraStore } from '@/store/camera'
-import { usePreferencesStore } from '@/store/preferences'
 
 const appStore = useAppStore()
 const canvasRef = useTemplateRef('canvasRef')
@@ -41,8 +40,6 @@ appStore.useHotKeys(canvasRef)
 const sceneStore = useThreeStore()
 const webglErrorRef = useTemplateRef('webglErrorRef')
 const isError = ref(false)
-
-const prefStore = usePreferencesStore()
 
 onMounted(() => {
 	if (!WebGL.isWebGL2Available()) {
@@ -53,7 +50,6 @@ onMounted(() => {
 		return
 	}
 
-	prefStore.init()
 	sceneStore.initScene(canvasRef)
 	setInitialObjects()
 })

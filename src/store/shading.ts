@@ -5,7 +5,6 @@ import { getUserData } from '@/three/utils'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { computed, ref, shallowRef } from 'vue'
 import type { MaterialCache, ShadingMode } from './types/shading'
-import { emitCustomEvent } from '@/utils/events'
 import { useThreeStore } from './three'
 
 export const useShadingStore = defineStore('shading', () => {
@@ -91,7 +90,7 @@ export const useShadingStore = defineStore('shading', () => {
 	function setMode(mode: ShadingMode) {
 		if (mode === shadingMode.value) return
 		currentMode.value = mode
-		const { scene } = useThreeStore()
+		const { scene, updateScene } = useThreeStore()
 
 		if (mode === 'preview') {
 			scene.environment = environmentMap.value
@@ -132,7 +131,7 @@ export const useShadingStore = defineStore('shading', () => {
 			}
 		})
 
-		emitCustomEvent('shading:modeChange', mode)
+		updateScene()
 	}
 
 	function setEnvironmentMap(map: THREE.Texture) {

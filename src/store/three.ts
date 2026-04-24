@@ -36,7 +36,12 @@ export const useThreeStore = defineStore('three', () => {
 	function addGroup() {
 		const group = new THREE.Group()
 		group.name = 'Group'
-		addObjectToScene(group)
+		const userData = getUserData(group)
+		userData.userVisible = group.visible
+		group.castShadow = true
+		group.receiveShadow = true
+		scene.add(group)
+		updateScene()
 		return group
 	}
 

@@ -1,9 +1,13 @@
 import { ViewportGizmo, type GizmoOptions } from 'three-viewport-gizmo'
-import { acceptHMRUpdate, defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia'
 import { ref, shallowRef, watch, type Ref } from 'vue'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { TransformControls, type TransformControlsMode } from 'three/examples/jsm/Addons.js'
 import THREE from '@/three'
+import { useComposerStore } from './composer'
+import type { LightHelper } from '@/three/modules/light'
+import { useThreeStore } from './three'
+import { getUserData } from '@/three/utils'
 
 export const useControlsStore = defineStore('controls', () => {
 	const controls = shallowRef<OrbitControls>()
@@ -23,15 +27,16 @@ export const useControlsStore = defineStore('controls', () => {
 
 	function setupControls({
 		cameraRef,
-		renderer,
 		helperScene
 	}: {
 		cameraRef: Ref<THREE.PerspectiveCamera | THREE.OrthographicCamera>
-		renderer: THREE.WebGLRenderer
 		helperScene: THREE.Scene
 	}) {
-		controls.value = new OrbitControls(cameraRef.value, renderer.domElement)
-		transformControls.value = new TransformControls(cameraRef.value, renderer.domElement)
+		const { rendererRef } = useComposerStore()
+		if (!rendererRef) return console.warn('setupControls: renderer is undefined')
+
+		controls.value = new OrbitControls(cameraRef.value, rendererRef.domElement)
+		transformControls.value = new TransformControls(cameraRef.value, rendererRef.domElement)
 		transformControls.value.setMode(currentTransformMode.value)
 		const transformHelper = transformControls.value.getHelper()
 		transformHelper.name = 'TransformHelper'
@@ -51,7 +56,7 @@ export const useControlsStore = defineStore('controls', () => {
 			TWO: THREE.TOUCH.PAN
 		}
 
-		gizmo.value = new ViewportGizmo(cameraRef.value, renderer, getGizmoConfig())
+		gizmo.value = new ViewportGizmo(cameraRef.value, rendererRef, getGizmoConfig())
 		gizmo.value.attachControls(controls.value)
 
 		watch(cameraRef, (newCamera) => {
@@ -63,6 +68,30 @@ export const useControlsStore = defineStore('controls', () => {
 
 		transformControls.value.addEventListener('dragging-changed', (e) => {
 			wasDragging.value = !e.value
+		})
+
+		transformControls.value?.addEventListener('object-changed', (e) => {
+			const { outlinePassRef } = useComposerStore()
+			const { selectedObject } = storeToRefs(useThreeStore())
+
+			const object = e.target.object as unknown as THREE.Object3D | LightHelper | undefined
+
+			if (!object) {
+				if (!outlinePassRef) return
+				outlinePassRef.selectedObjects = []
+				return
+			}
+
+			if ('light' in object) {
+				transformControls.value?.attach(object.light)
+				selectedObject.value = object.light
+				return
+			}
+
+			if (getUserData(object).skipRaycast && object.parent) {
+				transformControls.value?.attach(object.parent)
+				selectedObject.value = object.parent
+			}
 		})
 
 		return {

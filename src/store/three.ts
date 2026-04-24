@@ -3,8 +3,6 @@ import { computed, ref, shallowRef, triggerRef, type ShallowRef } from 'vue'
 import THREE from '@/three'
 import { setGridHelper } from '@/three/modules/helpers/grid'
 import { useControlsStore } from './controls'
-import { setRaycaster } from '@/three/modules/core/raycaster'
-import { useEventListener } from '@vueuse/core'
 import { OutlinePass, RectAreaLightUniformsLib } from 'three/examples/jsm/Addons.js'
 import { disposeModel } from '@/three/modules/core/dispose'
 import { getLightHelper, type LightHelper } from '@/three/modules/light'
@@ -15,6 +13,7 @@ import { useComposerStore } from './composer'
 import { getUserData, enableBVH } from '@/three/utils'
 import { useCameraStore } from './camera'
 import { emitCustomEvent, listenCustomEvent } from '@/utils/events'
+import { useRaycastStore } from './raycast'
 
 export const useThreeStore = defineStore('three', () => {
 	const isInitiated = ref(false)
@@ -28,7 +27,6 @@ export const useThreeStore = defineStore('three', () => {
 
 	const grid = setGridHelper(scene)
 
-	const raycasterObjects: THREE.Object3D[] = []
 	const lightHelperObjects: LightHelper[] = []
 
 	const sceneChildren = computed(() => scene.children)
@@ -97,25 +95,8 @@ export const useThreeStore = defineStore('three', () => {
 
 		setupTransformControlsListener()
 
-		// Raycasting
-		const { pointer, raycaster } = setRaycaster(canvasRef)
-
-		useEventListener(canvasRef, 'click', () => {
-			if (!outlinePassRef.value) return
-			if (controlsStore.wasDragging) return (controlsStore.wasDragging = false)
-
-			raycaster.setFromCamera(pointer, activeCamera.value)
-			const intersects = raycaster.intersectObjects(raycasterObjects, true)
-
-			if (!intersects[0]) {
-				outlinePassRef.value.selectedObjects = []
-				transformControls.value?.detach()
-				return
-			}
-
-			selectObject(intersects[0].object.uuid, true)
-		})
-		// -----------------------------
+		const raycastStore = useRaycastStore()
+		raycastStore.init(canvasRef)
 
 		const targetFPS = 30
 		const frameDelay = 1000 / targetFPS
@@ -233,6 +214,7 @@ export const useThreeStore = defineStore('three', () => {
 
 	function addObjectToScene(object: THREE.Object3D) {
 		const helpers: THREE.Object3D[] = []
+		const { addToRaycaster } = useRaycastStore()
 		object.traverse((obj) => {
 			const userData = getUserData(obj)
 			userData.userVisible = obj.visible
@@ -259,7 +241,7 @@ export const useThreeStore = defineStore('three', () => {
 
 				helpers.push(helper)
 				lightHelperObjects.push(helper)
-				raycasterObjects.push(helper)
+				addToRaycaster(helper)
 				return
 			}
 
@@ -278,12 +260,12 @@ export const useThreeStore = defineStore('three', () => {
 				userData.isRenderCamera = true
 
 				helpers.push(helper)
-				raycasterObjects.push(helper)
+				addToRaycaster(helper)
 				return
 			}
 
 			userData.isSelectable = true
-			raycasterObjects.push(obj)
+			addToRaycaster(obj)
 		})
 
 		enableBVH(object)
@@ -299,6 +281,7 @@ export const useThreeStore = defineStore('three', () => {
 
 	function deleteFromScene(object: THREE.Object3D) {
 		transformControls.value?.detach()
+		const { removeFromRaycaster } = useRaycastStore()
 
 		const helperUUID = getUserData(object).helperUUID
 		if (helperUUID) {
@@ -325,13 +308,6 @@ export const useThreeStore = defineStore('three', () => {
 		disposeModel(object)
 		shadingStore.clearMaterialCache(object.uuid)
 		emitCustomEvent('scene:objectDeleted', null)
-	}
-
-	function removeFromRaycaster(uuid: string) {
-		const idx = raycasterObjects.findIndex((obj) => obj.uuid === uuid)
-		if (idx >= 0) {
-			raycasterObjects.splice(idx, 1)
-		}
 	}
 
 	function removeFromOutline(uuid: string) {
@@ -372,7 +348,6 @@ export const useThreeStore = defineStore('three', () => {
 		transformControls,
 		monitor,
 		selectObject,
-		raycasterObjects,
 		sceneChildren,
 		objectVisibilityUpdate,
 		updateScene,

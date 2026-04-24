@@ -70,7 +70,7 @@ export const useThreeStore = defineStore('three', () => {
 	function initScene(canvasRef: ShallowRef<HTMLCanvasElement | null>) {
 		if (!canvasRef.value) return
 		const canvas = canvasRef.value
-		shadingStore.init(scene)
+		shadingStore.init()
 		RectAreaLightUniformsLib.init()
 
 		if (import.meta.env.DEV) setFPSCounter(canvas.parentElement)

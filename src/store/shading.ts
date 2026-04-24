@@ -6,9 +6,9 @@ import { acceptHMRUpdate, defineStore } from 'pinia'
 import { computed, ref, shallowRef } from 'vue'
 import type { MaterialCache, ShadingMode } from './types/shading'
 import { emitCustomEvent } from '@/utils/events'
+import { useThreeStore } from './three'
 
 export const useShadingStore = defineStore('shading', () => {
-	let scene: THREE.Scene | null = null
 	const solidModeLights = getSolidShadingLights()
 	const currentMode = ref<ShadingMode>('solid')
 	const environmentMap = shallowRef<THREE.Texture | null>(null)
@@ -36,7 +36,7 @@ export const useShadingStore = defineStore('shading', () => {
 	 * Only caches materials for objects marked as shadable.
 	 */
 	function cacheOriginalMaterials() {
-		if (!scene) return
+		const { scene } = useThreeStore()
 		scene.traverse((object) => {
 			if (object instanceof THREE.Mesh && object.material && shouldShadeObject(object)) {
 				cacheMeshMaterials(object)
@@ -89,8 +89,9 @@ export const useShadingStore = defineStore('shading', () => {
 	 * @param mode - The shading mode to apply
 	 */
 	function setMode(mode: ShadingMode) {
-		if (!scene || mode === shadingMode.value) return
+		if (mode === shadingMode.value) return
 		currentMode.value = mode
+		const { scene } = useThreeStore()
 
 		if (mode === 'preview') {
 			scene.environment = environmentMap.value
@@ -135,8 +136,9 @@ export const useShadingStore = defineStore('shading', () => {
 	}
 
 	function setEnvironmentMap(map: THREE.Texture) {
+		const { scene } = useThreeStore()
 		environmentMap.value = map
-		if (shadingMode.value === 'preview' && scene) {
+		if (shadingMode.value === 'preview') {
 			scene.environment = environmentMap.value
 		}
 	}
@@ -230,8 +232,8 @@ export const useShadingStore = defineStore('shading', () => {
 		return solidMat
 	}
 
-	function init(newScene: THREE.Scene) {
-		scene = newScene
+	function init() {
+		const { scene } = useThreeStore()
 		solidModeLights.forEach((item) => scene?.add(item))
 		cacheOriginalMaterials()
 
@@ -243,7 +245,7 @@ export const useShadingStore = defineStore('shading', () => {
 	}
 
 	function setSceneLightsVisibility(val: boolean) {
-		if (!scene) return
+		const { scene } = useThreeStore()
 		scene.traverse((obj: LightHelper | THREE.Object3D) => {
 			if ('light' in obj && getUserData(obj).isSceneLight) {
 				obj.light.visible = val

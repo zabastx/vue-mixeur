@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Modals/popover incorrect overlap
 - Number Input styling
 - Color input transparency display
+- Fixed outliner is not being updated on moving object to a group
 
 ## [0.17.1] - 2026-04-22
 

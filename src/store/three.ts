@@ -51,11 +51,13 @@ export const useThreeStore = defineStore('three', () => {
 		addObjectToScene(group)
 		return group
 	}
+
 	function moveToGroup(objUUID: string, groupUUID: string) {
 		const group = scene.getObjectByProperty('uuid', groupUUID)
 		const object = scene.getObjectByProperty('uuid', objUUID)
 		if (!(group instanceof THREE.Group) || !object) return
 		group.add(object)
+		updateScene()
 	}
 
 	const { controls, gizmo, transformControls } = storeToRefs(controlsStore)

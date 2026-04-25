@@ -41,7 +41,8 @@ export function createMesh(type: GeometryTypes) {
 		default:
 			throw new Error(`Unsupported geometry type: ${type}`)
 	}
-	const material = new THREE.MeshPhysicalMaterial()
+	const material = new THREE.MeshStandardMaterial()
+	material.side = THREE.DoubleSide
 	const mesh = new THREE.Mesh(geometry, material)
 	meshCountMap.set(type, (meshCountMap.get(type) ?? 0) + 1)
 	const count = meshCountMap.get(type) ?? 0

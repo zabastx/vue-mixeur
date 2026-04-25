@@ -30,7 +30,6 @@
 					:key="item._id"
 					v-slot="{ isExpanded }"
 					:data-testid="item.value.uuid === selectedItem?.uuid ? 'outliner-selected' : undefined"
-					as-child
 					@select.prevent="store.selectObject($event.detail.value?.uuid)"
 					@toggle="onToggle"
 				>

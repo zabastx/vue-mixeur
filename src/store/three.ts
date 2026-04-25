@@ -29,6 +29,18 @@ export const useThreeStore = defineStore('three', () => {
 
 	const sceneChildren = computed(() => scene.children)
 
+	const sceneGroups = computed<THREE.Object3D[]>(() => {
+		const groups: THREE.Object3D[] = []
+		sceneChildren.value.forEach((item) => {
+			item.traverse((obj) => {
+				const isGroup = obj instanceof THREE.Group || obj instanceof THREE.Scene
+				const userData = getUserData(obj)
+				if (isGroup && !userData.hideInOutliner) groups.push(obj)
+			})
+		})
+		return groups
+	})
+
 	function updateScene() {
 		triggerRef(sceneChildren)
 	}
@@ -45,11 +57,12 @@ export const useThreeStore = defineStore('three', () => {
 		return group
 	}
 
-	function moveToGroup(objUUID: string, groupUUID: string) {
-		const group = scene.getObjectByProperty('uuid', groupUUID)
+	function moveObjectToTarget(objUUID: string, targetUUID: string) {
+		const target = scene.getObjectByProperty('uuid', targetUUID)
 		const object = scene.getObjectByProperty('uuid', objUUID)
-		if (!(group instanceof THREE.Group) || !object) return
-		group.add(object)
+		if (!target || !object) return
+		if (object.parent?.uuid === target.uuid) return
+		target.add(object)
 		updateScene()
 	}
 
@@ -342,8 +355,9 @@ export const useThreeStore = defineStore('three', () => {
 		exportScene,
 		scene,
 		addGroup,
-		moveToGroup,
-		isInitiated
+		moveObjectToTarget,
+		isInitiated,
+		sceneGroups
 	}
 })
 

@@ -25,7 +25,8 @@ export default defineConfig(
 		rules: {
 			'@typescript-eslint/ban-ts-comment': 'warn',
 			'no-undef': 'off',
-			'no-useless-assignment': 'off'
+			'no-useless-assignment': 'off',
+			'vue/require-default-prop': 'off'
 		}
 	},
 	eslintConfigPrettier

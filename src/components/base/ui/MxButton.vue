@@ -25,7 +25,7 @@ defineOptions({
 	inheritAttrs: false
 })
 
-const { type = 'button', disabled = false, tooltip = undefined } = defineProps<MxButtonProps>()
+const { type = 'button' } = defineProps<MxButtonProps>()
 
 type MxButtonProps = {
 	type?: ButtonHTMLAttributes['type']

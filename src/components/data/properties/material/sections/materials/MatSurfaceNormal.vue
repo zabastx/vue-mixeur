@@ -23,18 +23,7 @@ import type { MaterialInputField } from '../../utils/types'
 
 type Mat = THREE.MeshNormalMaterial
 
-const surfaceFields: MaterialInputField<Mat>[] = [
-	{ type: 'checkbox', label: 'Transparent', prop: 'transparent' },
-	{
-		type: 'number',
-		label: 'Opacity',
-		prop: 'opacity',
-		min: 0,
-		max: 1,
-		step: 0.01,
-		showIf: 'transparent'
-	}
-]
+const surfaceFields: MaterialInputField<Mat>[] = []
 
 const fieldGroups: {
 	label: string
@@ -62,6 +51,35 @@ const fieldGroups: {
 	// 		}
 	// 	]
 	// },
+	{
+		label: 'Alpha',
+		value: 'alpha',
+		fields: [
+			{ type: 'checkbox', label: 'Transparent', prop: 'transparent' },
+			{
+				type: 'number',
+				label: 'Opacity',
+				prop: 'opacity',
+				min: 0,
+				max: 1,
+				step: 0.01,
+				showIf: 'transparent'
+			},
+			{
+				type: 'number',
+				label: 'Alpha Test',
+				prop: 'alphaTest',
+				min: 0,
+				max: 1,
+				step: 0.01
+			},
+			{
+				type: 'checkbox',
+				label: 'Alpha to coverage',
+				prop: 'alphaToCoverage'
+			}
+		]
+	},
 	{
 		label: 'Normal & Bump',
 		value: 'normal',

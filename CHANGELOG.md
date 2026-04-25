@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Custom context menu: added icon support, updated styling
+- Material properties: group alpha properties into a dedicated section
 
 ### Fixed
 

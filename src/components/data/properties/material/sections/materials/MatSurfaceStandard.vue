@@ -37,23 +37,7 @@ const surfaceFields: MaterialInputField<Mat>[] = [
 	{ type: 'number', label: 'Metalness', prop: 'metalness', min: 0, max: 1, step: 0.01 },
 	{ type: 'map', label: 'Metalness Map', prop: 'metalnessMap' },
 	{ type: 'number', label: 'Roughness', prop: 'roughness', min: 0, max: 1, step: 0.01 },
-	{ type: 'map', label: 'Roughness Map', prop: 'roughnessMap' },
-	{ type: 'checkbox', label: 'Transparent', prop: 'transparent' },
-	{
-		type: 'number',
-		label: 'Opacity',
-		prop: 'opacity',
-		min: 0,
-		max: 1,
-		step: 0.01,
-		showIf: 'transparent'
-	},
-	{
-		type: 'map',
-		label: 'Alpha Map',
-		prop: 'alphaMap',
-		showIf: 'transparent'
-	}
+	{ type: 'map', label: 'Roughness Map', prop: 'roughnessMap' }
 ]
 
 const fieldGroups: {
@@ -82,6 +66,40 @@ const fieldGroups: {
 	// 		}
 	// 	]
 	// },
+	{
+		label: 'Alpha',
+		value: 'alpha',
+		fields: [
+			{ type: 'checkbox', label: 'Transparent', prop: 'transparent' },
+			{
+				type: 'number',
+				label: 'Opacity',
+				prop: 'opacity',
+				min: 0,
+				max: 1,
+				step: 0.01,
+				showIf: 'transparent'
+			},
+			{
+				type: 'map',
+				label: 'Alpha Map',
+				prop: 'alphaMap'
+			},
+			{
+				type: 'number',
+				label: 'Alpha Test',
+				prop: 'alphaTest',
+				min: 0,
+				max: 1,
+				step: 0.01
+			},
+			{
+				type: 'checkbox',
+				label: 'Alpha to coverage',
+				prop: 'alphaToCoverage'
+			}
+		]
+	},
 	{
 		label: 'Emission',
 		value: 'emission',

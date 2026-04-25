@@ -38,22 +38,6 @@ const surfaceFields: MaterialInputField<Mat>[] = [
 		type: 'map',
 		label: 'Gradient Map',
 		prop: 'gradientMap'
-	},
-	{ type: 'checkbox', label: 'Transparent', prop: 'transparent' },
-	{
-		type: 'number',
-		label: 'Opacity',
-		prop: 'opacity',
-		min: 0,
-		max: 1,
-		step: 0.01,
-		showIf: 'transparent'
-	},
-	{
-		type: 'map',
-		label: 'Alpha Map',
-		prop: 'alphaMap',
-		showIf: 'transparent'
 	}
 ]
 
@@ -83,6 +67,40 @@ const fieldGroups: {
 	// 		}
 	// 	]
 	// },
+	{
+		label: 'Alpha',
+		value: 'alpha',
+		fields: [
+			{ type: 'checkbox', label: 'Transparent', prop: 'transparent' },
+			{
+				type: 'number',
+				label: 'Opacity',
+				prop: 'opacity',
+				min: 0,
+				max: 1,
+				step: 0.01,
+				showIf: 'transparent'
+			},
+			{
+				type: 'map',
+				label: 'Alpha Map',
+				prop: 'alphaMap'
+			},
+			{
+				type: 'number',
+				label: 'Alpha Test',
+				prop: 'alphaTest',
+				min: 0,
+				max: 1,
+				step: 0.01
+			},
+			{
+				type: 'checkbox',
+				label: 'Alpha to coverage',
+				prop: 'alphaToCoverage'
+			}
+		]
+	},
 	{
 		label: 'Emission',
 		value: 'emission',

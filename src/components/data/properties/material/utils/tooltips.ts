@@ -10,6 +10,20 @@ export const materialTooltipMap: ReadonlyMap<string, MxTooltipContent> = new Map
 		}
 	],
 	[
+		'alphaTest',
+		{
+			text: `Sets the alpha value to be used when running an alpha test.
+			The material will not be rendered if the opacity is lower than this value`
+		}
+	],
+	[
+		'alphaToCoverage',
+		{
+			text: `Whether alpha to coverage should be enabled or not.
+			Enabling this will smooth aliasing on clip plane edges and alphaTest-clipped edges`
+		}
+	],
+	[
 		'metalness',
 		{
 			text: `How much the material is like a metal.

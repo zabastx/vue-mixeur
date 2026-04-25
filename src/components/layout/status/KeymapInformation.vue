@@ -14,11 +14,11 @@ import { useAppStore } from '@/store/app'
 const appStore = useAppStore()
 
 const keymapList: KeymapOption[] = [
-	{ icon: 'keys/lmb', text: 'Select', key: null },
-	{ icon: 'keys/mmb', text: 'Rotate View', key: null },
-	{ icon: 'keys/lmb', text: 'Select Toggle', key: 'shift' },
-	{ icon: 'keys/mmb', text: 'Screen Space Pan View', key: 'shift' },
-	{ icon: 'keys/mmb', text: 'Pan View', key: 'ctrl' }
+	{ icon: 'input/lmb', text: 'Select', key: null },
+	{ icon: 'input/mmb', text: 'Rotate View', key: null },
+	{ icon: 'input/lmb', text: 'Select Toggle', key: 'shift' },
+	{ icon: 'input/mmb', text: 'Screen Space Pan View', key: 'shift' },
+	{ icon: 'input/mmb', text: 'Pan View', key: 'ctrl' }
 ]
 
 const activeHints = computed(() => {

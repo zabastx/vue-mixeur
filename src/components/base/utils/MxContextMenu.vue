@@ -1,7 +1,7 @@
 <template>
 	<ContextMenu.Root v-bind="root">
-		<ContextMenu.Trigger as-child v-bind="trigger">
-			<slot name="trigger"></slot>
+		<ContextMenu.Trigger v-bind="trigger" as-child>
+			<slot></slot>
 		</ContextMenu.Trigger>
 		<ContextMenu.Portal>
 			<ContextMenu.Content

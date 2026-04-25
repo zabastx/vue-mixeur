@@ -131,9 +131,9 @@ export const useThreeStore = defineStore('three', () => {
 
 	function selectObject(uuid?: string, raycasted?: boolean) {
 		const { transformControls } = useControlsStore()
-		const { outlinePassRef } = useComposerStore()
+		const { setOutlineObjects } = useComposerStore()
 
-		if (!uuid || !outlinePassRef) return console.warn('selectObject: outlinePassRef is undefined')
+		if (!uuid) return
 
 		const object = scene.getObjectByProperty('uuid', uuid)
 
@@ -144,7 +144,7 @@ export const useThreeStore = defineStore('three', () => {
 			selectedObject.value = object
 			const helper = scene.getObjectByProperty('light', object)
 			if (helper) {
-				outlinePassRef.selectedObjects = [helper]
+				setOutlineObjects([helper])
 			}
 			return
 		}
@@ -154,7 +154,7 @@ export const useThreeStore = defineStore('three', () => {
 			selectedObject.value = object
 			const helper = scene.getObjectByProperty('camera', object)
 			if (helper) {
-				outlinePassRef.selectedObjects = [helper]
+				setOutlineObjects([helper])
 			}
 			return
 		}
@@ -162,7 +162,7 @@ export const useThreeStore = defineStore('three', () => {
 		if ('light' in object) {
 			const light = object.light as THREE.Light
 			transformControls?.attach(light)
-			outlinePassRef.selectedObjects = [object]
+			setOutlineObjects([object])
 			selectedObject.value = light
 			return
 		}
@@ -170,13 +170,13 @@ export const useThreeStore = defineStore('three', () => {
 		if ('camera' in object) {
 			const camera = object.camera as THREE.Camera
 			transformControls?.attach(camera)
-			outlinePassRef.selectedObjects = [object]
+			setOutlineObjects([object])
 			selectedObject.value = camera
 			return
 		}
 
 		transformControls?.attach(object)
-		outlinePassRef.selectedObjects = [object]
+		setOutlineObjects([object])
 		selectedObject.value = object
 	}
 	// -------------------------
@@ -254,6 +254,7 @@ export const useThreeStore = defineStore('three', () => {
 		const { transformControls } = useControlsStore()
 		const { removeFromRaycaster } = useRaycastStore()
 		const { clearMaterialCache } = useShadingStore()
+		const { removeFromOutline } = useComposerStore()
 
 		transformControls?.detach()
 		const object = scene.getObjectByProperty('uuid', uuid)
@@ -285,15 +286,6 @@ export const useThreeStore = defineStore('three', () => {
 		disposeModel(object)
 		clearMaterialCache(object.uuid)
 		updateScene()
-	}
-
-	function removeFromOutline(uuid: string) {
-		const { outlinePassRef } = useComposerStore()
-		if (!outlinePassRef) return
-		const idx = outlinePassRef.selectedObjects.findIndex((obj) => obj.uuid === uuid)
-		if (idx >= 0) {
-			outlinePassRef.selectedObjects.splice(idx, 1)
-		}
 	}
 
 	function objectVisibilityUpdate(uuid: string, val: boolean) {

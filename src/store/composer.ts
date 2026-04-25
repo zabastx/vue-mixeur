@@ -147,12 +147,27 @@ export const useComposerStore = defineStore('composer', () => {
 		}
 	}
 
+	function setOutlineObjects(objects: THREE.Object3D[]) {
+		if (!outlinePassRef.value) return console.warn('setOutlineObjects: outlinepass is undefined')
+		outlinePassRef.value.selectedObjects = objects
+	}
+
+	function removeFromOutline(uuid: string) {
+		if (!outlinePassRef.value) return console.warn('removeFromOutline: outlinepass is undefined')
+		const idx = outlinePassRef.value.selectedObjects.findIndex((obj) => obj.uuid === uuid)
+		if (idx >= 0) {
+			outlinePassRef.value.selectedObjects.splice(idx, 1)
+		}
+	}
+
 	return {
 		composerPasses,
 		init,
 		setupRenderImageComposer,
 		rendererRef,
-		outlinePassRef
+		outlinePassRef,
+		setOutlineObjects,
+		removeFromOutline
 	}
 })
 

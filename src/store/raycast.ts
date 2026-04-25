@@ -33,7 +33,9 @@ export const useRaycastStore = defineStore('raycast', () => {
 
 			raycaster.setFromCamera(pointer, activeCamera.value)
 
-			const intersects = raycaster.intersectObjects(raycastObjects.value, true)
+			const objects = raycastObjects.value.filter((obj) => obj.visible)
+
+			const intersects = raycaster.intersectObjects(objects, true)
 
 			if (!intersects[0]) {
 				outlinePassRef.value.selectedObjects = []

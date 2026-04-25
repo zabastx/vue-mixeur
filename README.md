@@ -1,11 +1,8 @@
 # Mixeur
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Vue](https://img.shields.io/badge/Vue-3.5.32-4FC08D.svg)](https://vuejs.org/)
-[![Three.js](https://img.shields.io/badge/Three.js-0.184-049EF4.svg)](https://threejs.org/)
-[![Vite](https://img.shields.io/badge/Vite-8.0.8-646CFF.svg)](https://vitejs.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-6.0.2-3178C6.svg)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.2.2-06B6D4.svg)](https://tailwindcss.com/)
+[![Vue](https://img.shields.io/badge/Vue-3.5.33-4FC08D.svg)](https://vuejs.org/)
+[![Three.js](https://img.shields.io/badge/Three.js-0.184.0-049EF4.svg)](https://threejs.org/)
 
 A Blender-like web-based 3D editor built with Vue.js and Three.js. Mixeur provides an interface for 3D modeling, object manipulation, and scene management directly in the browser.
 
@@ -19,58 +16,33 @@ Try the live demo at [mixeur.zabastx.ru](https://mixeur.zabastx.ru)
 
 - **Selection & Transformation**: Click to select objects with transform gizmos (move, rotate, scale)
 - **BVH Acceleration**: Fast raycasting and collision detection using Bounding Volume Hierarchy
-- **Outline Highlighting**: Visual feedback for selected objects
-- **Blender-style Controls**: Familiar navigation and keyboard shortcuts
+- **Blender-style Controls**: Familiar navigation with viewport gizmo for orientation
+- **Properties Panel**: Edit transforms, geometry parameters, materials, lights, and camera properties
 
 ### Shading & Rendering
 
-- **Viewport Shading Modes**: Wireframe, solid, material preview, and rendered views
-- **Post-Processing Effects**: TAA (Temporal Anti-Aliasing), gamma correction, edge outlines
-- **HDR Environment Maps**: Built-in environments (city, courtyard, forest, interior, night, studio, sunrise, sunset)
-- **Image Rendering**: Export scenes to PNG, JPEG, or WebP with customizable resolution
+- **Viewport Shading Modes**: Wireframe, solid (flat grey), material preview (with HDRI), and rendered views
+- **HDR Environment Maps**: 8 built-in environments (city, courtyard, forest, interior, night, studio, sunrise, sunset)
+- **Image Rendering**: Export scenes to PNG, JPEG, or WebP with custom resolution and optional transparent background
 
 ### Content Creation
 
-- **Primitive Meshes**: Create planes, cubes, circles, spheres, icospheres, cylinders, cones, and torus shapes
-- **Text Objects**: 3D text with customizable fonts, size, depth, and bevel
-- **Lighting System**: Point, directional, spot, and area lights with property editing
-- **Material Editor**: Six material types (Physical, Standard, Phong, Toon, Lambert, Normal) with real-time editing, tooltips, and organized settings
+- **Primitive Meshes**: Planes, cubes, circles, spheres, icospheres, cylinders, cones, and torus shapes with parameter editing
+- **Text Objects**: 3D text with 6 built-in fonts, customizable size, depth, and material
+- **Lighting System**: Point, directional, spot, and rectarea lights with color, intensity, distance, and shadow settings
+- **Material Editor**: Six material types (Physical, Standard, Phong, Toon, Lambert, Normal) with real-time property editing
 
 ### Asset Management
 
-- **Model Import**: Support for GLTF/GLB, OBJ, and FBX formats with automatic format detection
-- **Model Export**: Export entire scenes to GLB format
-- **Models Library**: Browse and import free CC0 3D models from Poly Haven
-- **Texture Library**: Import and manage textures (diffuse, normal, roughness, AO, EXR, etc.)
+- **Model Import**: GLTF/GLB (with Draco and KTX2 support), OBJ (with MTL), and FBX formats
+- **Model Export**: Export scenes to GLB format excluding helper objects
+- **Models Library**: Browse and import free CC0 3D models from Poly Haven with category filtering and resolution selection
+- **Texture Library**: Import textures by type (AO, diffuse, normal, roughness, etc.) for material assignment
 
 ### Scene Management
 
-- **Outliner Panel**: Hierarchical tree view with visibility toggles
-- **Properties Panel**: Edit transforms, materials, lights, geometry, and object properties
-- **Loading Progress**: Visual indicators for model loading with percentage and ETA
-
-## Usage
-
-### Basic Controls
-
-- **Navigation**: Use mouse to orbit, pan, and zoom in the 3D viewport
-- **Selection**: Click on objects in the viewport to select them
-- **Transformation**: Use the transform gizmos to move, rotate, or scale selected objects
-- **Import Models**: Import models from the menu (File > Import > file format) or browse the Models Library
-- **Models Library**: Access free CC0 3D models from Poly Haven with category filtering and search
-
-### Keyboard Shortcuts
-
-| Key        | Action                                 |
-| ---------- | -------------------------------------- |
-| `G`        | Move mode                              |
-| `R`        | Rotate mode                            |
-| `S`        | Scale mode                             |
-| `Delete`   | Remove selected object                 |
-| `Numpad 5` | Toggle perspective/orthographic camera |
-| `Numpad 1` | Front view (Ctrl+1 for back view)      |
-| `Numpad 3` | Right view (Ctrl+3 for left view)      |
-| `Numpad 7` | Top view (Ctrl+7 for bottom view)      |
+- **Outliner Panel**: Hierarchical tree view with visibility toggles and group detection
+- **Properties Panel**: Edit transforms, geometry parameters, materials, lights, and camera properties
 
 ## Tech Stack
 

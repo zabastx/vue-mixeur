@@ -22,19 +22,19 @@ const { material, mesh, changeMaterial } = useMeshMaterial()
 
 const SURFACES = [
 	{
-		label: 'Physical Material',
-		value: 'MeshPhysicalMaterial',
-		component: MatSurfacePhysical,
-		tooltip: {
-			text: `An extension of the Standard Material, providing more advanced physically-based rendering properties`
-		}
-	},
-	{
 		label: 'Standard Material',
 		value: 'MeshStandardMaterial',
 		component: MatSurfaceStandard,
 		tooltip: {
 			text: 'A standard physically based material, using Metallic-Roughness workflow'
+		}
+	},
+	{
+		label: 'Physical Material',
+		value: 'MeshPhysicalMaterial',
+		component: MatSurfacePhysical,
+		tooltip: {
+			text: `An extension of the Standard Material, providing more advanced physically-based rendering properties`
 		}
 	},
 	{

@@ -73,6 +73,13 @@ export const useAppStore = defineStore('app', () => {
 						sceneStore.deleteFromScene(sceneStore.selectedObject.uuid)
 					}
 					break
+
+				case 'KeyD':
+					e.preventDefault()
+					if (sceneStore.selectedObject instanceof THREE.Object3D && e.shiftKey) {
+						sceneStore.cloneObject(sceneStore.selectedObject.uuid)
+					}
+					break
 			}
 		})
 

@@ -181,7 +181,7 @@ export const useThreeStore = defineStore('three', () => {
 	}
 	// -------------------------
 
-	function addObjectToScene(object: THREE.Object3D) {
+	function addObjectToScene(object: THREE.Object3D, parent?: THREE.Object3D | null) {
 		const helpers: THREE.Object3D[] = []
 		const { addToRaycaster } = useRaycastStore()
 		const { shadingMode, cacheNewObjectMaterials } = useShadingStore()
@@ -241,13 +241,30 @@ export const useThreeStore = defineStore('three', () => {
 
 		enableBVH(object)
 
-		scene.add(object)
-		helpers.forEach((obj) => scene.add(obj))
+		if (parent) {
+			parent.add(object)
+			helpers.forEach((obj) => parent.add(obj))
+		} else {
+			scene.add(object)
+			helpers.forEach((obj) => scene.add(obj))
+		}
 
 		cacheNewObjectMaterials(object)
 
 		selectObject(object.uuid)
 		updateScene()
+	}
+
+	function cloneObject(uuid: string) {
+		const { getMaterialCache } = useShadingStore()
+		const object = scene.getObjectByProperty('uuid', uuid)
+		if (!object) return console.warn('cloneObject: object is undefined')
+		const newObj = object.clone()
+		newObj.userData.mixeur = getUserData(object)
+		if (object instanceof THREE.Mesh && newObj instanceof THREE.Mesh) {
+			newObj.material = getMaterialCache(object)?.original
+		}
+		addObjectToScene(newObj, object.parent)
 	}
 
 	function deleteFromScene(uuid: string) {
@@ -315,6 +332,7 @@ export const useThreeStore = defineStore('three', () => {
 		initScene,
 		selectedObject,
 		addObjectToScene,
+		cloneObject,
 		deleteFromScene,
 		monitor,
 		selectObject,

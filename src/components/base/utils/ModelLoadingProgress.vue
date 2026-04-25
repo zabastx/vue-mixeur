@@ -7,20 +7,20 @@
 		<div
 			v-for="item in progressStore.progressItems"
 			:key="item.id"
-			class="rounded-lg border border-ui-menu-bg-outline bg-panel-background p-4 text-white
-				shadow-lg"
+			class="rounded-lg border border-ui-menu-bg-outline bg-ui-menu-bg-inner p-4
+				text-ui-menu-bg-text shadow-lg"
 		>
 			<div class="mb-2 flex items-center justify-between">
 				<h3 class="truncate text-sm font-medium">Loading...</h3>
 			</div>
 
-			<div class="mb-2 h-2 w-full rounded-full bg-ui-number-inner">
+			<div class="mb-2 h-2 w-full rounded-full bg-ui-menu-bg-item">
 				<div
 					v-if="item.total"
-					class="h-2 rounded-full bg-ui-radio-inner-selected transition-all duration-200"
+					class="h-2 rounded-full bg-ui-menu-bg-inner-selected transition-all duration-200"
 					:style="{ width: `${item.percentage}%` }"
 				></div>
-				<div v-else class="loader h-2 rounded-full bg-ui-radio-inner-selected"></div>
+				<div v-else class="loader h-2 rounded-full bg-ui-menu-bg-inner-selected"></div>
 			</div>
 
 			<div class="mb-2 flex items-center justify-between">

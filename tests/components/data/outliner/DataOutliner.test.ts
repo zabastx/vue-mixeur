@@ -5,6 +5,7 @@ import { ref } from 'vue'
 
 // Mock store return values - using refs for reactivity
 const mockSceneChildren = ref<unknown[]>([])
+const mockSceneGroups = ref<unknown[]>([])
 const mockSelectedObject = ref<unknown | null>(null)
 let mockObjectVisibilityUpdate = vi.fn()
 
@@ -25,6 +26,7 @@ vi.mock('@/store/camera', () => ({
 vi.mock('@/store/three', () => ({
 	useThreeStore: vi.fn(() => ({
 		sceneChildren: mockSceneChildren.value,
+		sceneGroups: mockSceneGroups.value,
 		selectedObject: mockSelectedObject.value,
 		objectVisibilityUpdate: mockObjectVisibilityUpdate
 	}))
@@ -93,7 +95,7 @@ describe('DataOutliner', () => {
 		render(DataOutliner)
 
 		// The item should have the highlight class when selected
-		const treeItem = screen.getByText('TestMesh').closest('li')
+		const treeItem = screen.getByText('TestMesh').closest('[data-testid="outliner-item"]')
 		expect(treeItem).toBeTruthy()
 		expect(treeItem?.className).toContain('bg-outliner-active-highlight')
 	})

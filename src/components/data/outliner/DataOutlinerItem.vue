@@ -7,6 +7,7 @@
 			:class="{
 				'bg-outliner-active-highlight text-outliner-active-object': isSelected
 			}"
+			data-testid="outliner-item"
 		>
 			<button
 				v-if="item.hasChildren"

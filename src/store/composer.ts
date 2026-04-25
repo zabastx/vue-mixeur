@@ -97,9 +97,9 @@ export const useComposerStore = defineStore('composer', () => {
 			const { clientWidth, clientHeight } = canvas
 
 			if (width !== clientWidth || height !== clientHeight) {
+				renderer.setPixelRatio(window.devicePixelRatio)
 				renderer.setSize(clientWidth, clientHeight, false)
 				composer.setSize(clientWidth, clientHeight)
-				renderer.setPixelRatio(window.devicePixelRatio)
 
 				if (camera.value instanceof THREE.PerspectiveCamera) {
 					camera.value.aspect = clientWidth / clientHeight

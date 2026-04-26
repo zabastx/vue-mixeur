@@ -5,7 +5,7 @@
 			:type
 			:disabled
 			class="text-ui-btn-text bg-ui-btn-bg border-ui-btn-outline rounded-ui-btn hover:brightness-125
-				cursor-pointer border px-1 inline-flex"
+				cursor-pointer border px-1 inline-flex gap-1"
 			:class="{ 'bg-ui-btn-bg-highlight': highlighted }"
 		>
 			<MxIcon v-if="icon" :name="icon" class="grow-0" />

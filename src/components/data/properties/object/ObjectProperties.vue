@@ -11,9 +11,9 @@
 		</InputField>
 		<MxAccordionRoot collapsible type="multiple" class="flex gap-0.5 flex-col">
 			<MxAccordionItem label="Transform" :item="{ value: 'transform' }">
-				<div class="p-1">
+				<div class="p-1 space-y-2">
 					<TransformLocation />
-					<TransformRotation class="my-2" />
+					<TransformRotation />
 					<TransformScale />
 				</div>
 			</MxAccordionItem>

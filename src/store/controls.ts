@@ -1,6 +1,6 @@
 import { ViewportGizmo, type GizmoOptions } from 'three-viewport-gizmo'
 import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia'
-import { ref, shallowRef, watch, type Ref } from 'vue'
+import { ref, shallowRef, triggerRef, watch, type Ref } from 'vue'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { TransformControls, type TransformControlsMode } from 'three/examples/jsm/Addons.js'
 import THREE from '@/three'
@@ -8,6 +8,7 @@ import { useComposerStore } from './composer'
 import type { LightHelper } from '@/three/modules/light'
 import { useThreeStore } from './three'
 import { getUserData } from '@/three/utils'
+import { useCameraStore } from './camera'
 
 export const useControlsStore = defineStore('controls', () => {
 	const controls = shallowRef<OrbitControls>()
@@ -59,11 +60,28 @@ export const useControlsStore = defineStore('controls', () => {
 		gizmo.value = new ViewportGizmo(cameraRef.value, rendererRef, getGizmoConfig())
 		gizmo.value.attachControls(controls.value)
 
+		const { viewportCameras } = useCameraStore()
+
 		watch(cameraRef, (newCamera) => {
 			if (!controls.value || !gizmo.value || !transformControls.value) return
-			controls.value.object = newCamera
 			gizmo.value.camera = newCamera
 			transformControls.value.camera = newCamera
+
+			if (
+				newCamera.uuid !== viewportCameras.perspective.uuid &&
+				newCamera.uuid !== viewportCameras.orthographic.uuid
+			) {
+				controls.value.enabled = false
+			} else {
+				controls.value.enabled = true
+				controls.value.object = newCamera
+			}
+		})
+
+		const { selectedObject } = storeToRefs(useThreeStore())
+
+		transformControls.value.addEventListener('objectChange', () => {
+			triggerRef(selectedObject)
 		})
 
 		transformControls.value.addEventListener('dragging-changed', (e) => {

@@ -60,6 +60,8 @@ export function useMeshMaterial<T extends THREE.Material>() {
 				return `#${getMaterialProp<THREE.Color>(prop)?.getHexString() ?? '000000'}` as FieldValueMap[TType]
 			case 'map':
 				return getMaterialProp<THREE.Texture>(prop) as FieldValueMap[TType]
+			case 'envMap':
+				return getMaterialProp<THREE.Texture>(prop) as FieldValueMap[TType]
 			case 'number':
 				return getMaterialProp<number>(prop) as FieldValueMap[TType]
 			case 'angle':

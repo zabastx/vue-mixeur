@@ -1,7 +1,8 @@
 import { useToast } from '@/composables/toast'
 import { useProgressStore } from '@/store/progress'
-import type THREE from '@/three'
+import THREE from '@/three'
 import { EXRLoader } from 'three/examples/jsm/Addons.js'
+import { textureToEnvMap } from '@/three/utils'
 
 /**
  * Loads an EXR file from a URL and returns a Three.js Texture.
@@ -14,7 +15,8 @@ import { EXRLoader } from 'three/examples/jsm/Addons.js'
 export async function loadEXR({
 	url,
 	filename,
-	size
+	size,
+	isEnvMap
 }: EXRLoaderParameters): Promise<THREE.Texture | null> {
 	const loader = new EXRLoader()
 
@@ -26,6 +28,9 @@ export async function loadEXR({
 		progressItem.start(size)
 		const texture = await loader.loadAsync(url, progressItem.onProgress)
 		texture.name = filename
+
+		if (isEnvMap) return textureToEnvMap(texture)
+
 		return texture
 	} catch (e) {
 		const message = e instanceof Error ? e.message : String(e)
@@ -45,4 +50,5 @@ type EXRLoaderParameters = {
 	url: string
 	filename: string
 	size?: number
+	isEnvMap?: boolean
 }

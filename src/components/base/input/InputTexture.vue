@@ -27,8 +27,9 @@ import { loadEXR } from '@/three/modules/loaders/exr'
 import { loadTexture } from '@/three/modules/loaders/textureLoader'
 import { useFileDialog } from '@vueuse/core'
 
-defineProps<{
+const { isEnvMap = false } = defineProps<{
 	disabled?: boolean
+	isEnvMap?: boolean
 }>()
 
 const model = defineModel<THREE.Texture | null>()
@@ -47,7 +48,8 @@ onChange(async (files) => {
 	const parameters = {
 		url,
 		filename: file.name,
-		size: file.size
+		size: file.size,
+		isEnvMap: isEnvMap
 	}
 
 	const texture = isEXR ? await loadEXR(parameters) : await loadTexture(parameters)
@@ -71,7 +73,8 @@ function openLibrary() {
 		const parameters = {
 			url: file.url,
 			filename,
-			size: file.size
+			size: file.size,
+			isEnvMap: isEnvMap
 		}
 		const texture = isEXR ? await loadEXR(parameters) : await loadTexture(parameters)
 		if (!texture) return

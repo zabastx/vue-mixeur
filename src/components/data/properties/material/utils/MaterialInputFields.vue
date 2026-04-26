@@ -20,6 +20,13 @@
 				:model-value="getPropValue(field.type, field.prop)"
 				@update:model-value="setPropValue(field.type, field.prop, $event)"
 			/>
+			<InputTexture
+				v-else-if="field.type === 'envMap'"
+				:disabled
+				is-env-map
+				:model-value="getPropValue(field.type, field.prop)"
+				@update:model-value="setPropValue(field.type, field.prop, $event)"
+			/>
 			<InputNumber
 				v-else-if="field.type === 'number'"
 				:disabled

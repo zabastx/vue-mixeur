@@ -1,6 +1,6 @@
 import THREE from '@/three'
 import { loadEXR } from './exr'
-import { pmremGenerator } from '../extras/pmremGenerator'
+import { textureToEnvMap } from '@/three/utils'
 
 const worldMapCache = new Map<string, THREE.Texture>()
 
@@ -28,14 +28,9 @@ export async function loadWorldTexture(name: (typeof DEFAULT_WORLD_MAPS)[number]
 
 	if (!texture) return null
 
-	texture.mapping = THREE.EquirectangularReflectionMapping
-	const envMap = pmremGenerator?.fromEquirectangular(texture).texture
-
-	texture.dispose()
+	const envMap = textureToEnvMap(texture)
 
 	if (!envMap) return null
-
-	envMap.name = name
 
 	worldMapCache.set(name, envMap)
 

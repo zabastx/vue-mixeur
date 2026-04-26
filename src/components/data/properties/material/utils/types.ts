@@ -10,6 +10,7 @@ export type MaterialProp<T extends THREE.Material> = NonNullable<NonMethodKeys<T
 export type FieldValueMap = {
 	color: string
 	map: THREE.Texture | undefined | null
+	envMap: THREE.Texture | undefined | null
 	number: number | undefined
 	angle: number | undefined
 	checkbox: boolean | 'indeterminate' | undefined
@@ -29,6 +30,9 @@ interface MaterialColorInput<T extends THREE.Material> extends MaterialInput<T> 
 
 interface MaterialMapInput<T extends THREE.Material> extends MaterialInput<T> {
 	type: 'map'
+}
+interface MaterialEnvMapInput<T extends THREE.Material> extends MaterialInput<T> {
+	type: 'envMap'
 }
 
 interface MaterialCheckInput<T extends THREE.Material> extends MaterialInput<T> {
@@ -61,6 +65,7 @@ export type MaterialInputField<T extends THREE.Material = THREE.Material> =
 	| MaterialCheckInput<T>
 	| MaterialSelectInput<T>
 	| MaterialRangeInput<T>
+	| MaterialEnvMapInput<T>
 
 export type MeshMaterials =
 	| THREE.MeshPhysicalMaterial

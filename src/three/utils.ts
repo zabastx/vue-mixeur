@@ -1,4 +1,5 @@
 import THREE from '.'
+import { pmremGenerator } from './modules/extras/pmremGenerator'
 import type { MxObjectUserData } from './three'
 
 /**
@@ -32,4 +33,13 @@ export function disposeBVH(object: THREE.Object3D) {
 export function getUserData(obj: THREE.Object3D): MxObjectUserData {
 	if (!obj.userData.mixeur) obj.userData.mixeur = {}
 	return obj.userData.mixeur
+}
+
+export function textureToEnvMap(texture: THREE.Texture) {
+	texture.mapping = THREE.EquirectangularReflectionMapping
+	const envMap = pmremGenerator?.fromEquirectangular(texture).texture
+	texture.dispose()
+	if (!envMap) return null
+	envMap.name = texture.name
+	return envMap
 }

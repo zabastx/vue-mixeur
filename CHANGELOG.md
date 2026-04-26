@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Object cloning functionality
+- Support for environment maps in texture input
 
 ### Changed
 

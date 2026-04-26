@@ -1,8 +1,9 @@
 import { useToast } from '@/composables/toast'
 import { useProgressStore } from '@/store/progress'
 import THREE from '@/three'
+import { textureToEnvMap } from '@/three/utils'
 
-export async function loadTexture({ url, filename, size }: TextureLoaderParameters) {
+export async function loadTexture({ url, filename, size, isEnvMap }: TextureLoaderParameters) {
 	const toast = useToast()
 	const loader = new THREE.TextureLoader()
 	const progressStore = useProgressStore()
@@ -12,6 +13,9 @@ export async function loadTexture({ url, filename, size }: TextureLoaderParamete
 		progressItem.start(size)
 		const texture = await loader.loadAsync(url)
 		texture.name = filename
+
+		if (isEnvMap) return textureToEnvMap(texture)
+
 		return texture
 	} catch (e) {
 		const error = e as Error
@@ -31,4 +35,5 @@ interface TextureLoaderParameters {
 	url: string
 	filename: string
 	size?: number
+	isEnvMap?: boolean
 }

@@ -1,5 +1,5 @@
 import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia'
-import { computed, ref, triggerRef, type ShallowRef } from 'vue'
+import { computed, ref, shallowRef, triggerRef, type ShallowRef } from 'vue'
 import THREE from '@/three'
 import { setGridHelper } from '@/three/modules/helpers/grid'
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/Addons.js'
@@ -17,7 +17,6 @@ import { useControlsStore } from './controls'
 
 export const useThreeStore = defineStore('three', () => {
 	const isInitiated = ref(false)
-	const composerStore = useComposerStore()
 
 	const scene = new THREE.Scene()
 	const helperScene = new THREE.Scene()
@@ -65,134 +64,6 @@ export const useThreeStore = defineStore('three', () => {
 		target.add(object)
 		updateScene()
 	}
-
-	// ----------------------------------------
-
-	const { setFPSCounter, monitor, updateMonitor } = useStats()
-
-	function initScene(canvasRef: ShallowRef<HTMLCanvasElement | null>) {
-		if (!canvasRef.value) return
-
-		const shadingStore = useShadingStore()
-		const { initTheme } = usePreferencesStore()
-		const controlsStore = useControlsStore()
-		const { gizmo, controls } = storeToRefs(controlsStore)
-
-		initTheme()
-
-		const canvas = canvasRef.value
-
-		shadingStore.init()
-		RectAreaLightUniformsLib.init()
-
-		if (import.meta.env.DEV) setFPSCounter(canvas.parentElement)
-
-		const { activeCamera } = storeToRefs(useCameraStore())
-
-		if (!(activeCamera.value instanceof THREE.PerspectiveCamera)) return
-		activeCamera.value.aspect = canvas.clientWidth / canvas.clientHeight
-
-		const { composer, handleResize, renderer } = composerStore.init({
-			camera: activeCamera,
-			canvas,
-			gizmo,
-			scene
-		})
-
-		controlsStore.setupControls({
-			cameraRef: activeCamera,
-			helperScene
-		})
-
-		const raycastStore = useRaycastStore()
-		raycastStore.init(canvasRef)
-
-		const targetFPS = 30
-		const frameDelay = 1000 / targetFPS
-		let lastFrameTime = 0
-
-		const timer = new THREE.Timer()
-		renderer.setAnimationLoop(render)
-
-		isInitiated.value = true
-
-		function render(currentTime: number) {
-			const deltaTime = currentTime - lastFrameTime
-			if (deltaTime < frameDelay) return
-			lastFrameTime = currentTime - (deltaTime % frameDelay)
-			timer.update()
-			const delta = timer.getDelta()
-
-			handleResize()
-
-			grid.update(activeCamera.value)
-			controls.value?.update(delta)
-			lightHelperObjects.forEach((item) => {
-				if ('update' in item) item.update()
-			})
-			composer.render(delta)
-			gizmo.value?.render()
-			renderer.clearDepth()
-			renderer.render(helperScene, activeCamera.value)
-
-			updateMonitor(renderer)
-		}
-	}
-
-	// Object selection
-	const selectedObject = ref<THREE.Object3D | THREE.Light | THREE.Mesh | null>(null)
-
-	function selectObject(uuid?: string, raycasted?: boolean) {
-		const { transformControls } = useControlsStore()
-		const { setOutlineObjects } = useComposerStore()
-
-		if (!uuid) return
-
-		const object = scene.getObjectByProperty('uuid', uuid)
-
-		if (!object || (raycasted && !getUserData(object).isSelectable)) return
-
-		if (object instanceof THREE.Light) {
-			transformControls?.attach(object)
-			selectedObject.value = object
-			const helper = scene.getObjectByProperty('light', object)
-			if (helper) {
-				setOutlineObjects([helper])
-			}
-			return
-		}
-
-		if (object instanceof THREE.Camera) {
-			transformControls?.attach(object)
-			selectedObject.value = object
-			const helper = scene.getObjectByProperty('camera', object)
-			if (helper) {
-				setOutlineObjects([helper])
-			}
-			return
-		}
-
-		if ('light' in object) {
-			const light = object.light as THREE.Light
-			transformControls?.attach(light)
-			setOutlineObjects([object])
-			selectedObject.value = light
-			return
-		}
-
-		if ('camera' in object) {
-			const camera = object.camera as THREE.Camera
-			transformControls?.attach(camera)
-			setOutlineObjects([object])
-			selectedObject.value = camera
-			return
-		}
-
-		transformControls?.attach(object)
-		setOutlineObjects([object])
-		selectedObject.value = object
-	}
-	// -------------------------
 
 	function addObjectToScene(object: THREE.Object3D, parent?: THREE.Object3D | null) {
 		const helpers: THREE.Object3D[] = []
@@ -339,6 +210,133 @@ export const useThreeStore = defineStore('three', () => {
 		setMode('export')
 		exportModel(scene)
 		setMode(mode)
+	}
+
+	// Object selection
+	const selectedObject = shallowRef<THREE.Object3D | THREE.Light | THREE.Mesh | null>(null)
+
+	function selectObject(uuid?: string, raycasted?: boolean) {
+		const { transformControls } = useControlsStore()
+		const { setOutlineObjects } = useComposerStore()
+
+		if (!uuid) return
+
+		const object = scene.getObjectByProperty('uuid', uuid)
+
+		if (!object || (raycasted && !getUserData(object).isSelectable)) return
+
+		if (object instanceof THREE.Light) {
+			transformControls?.attach(object)
+			selectedObject.value = object
+			const helper = scene.getObjectByProperty('light', object)
+			if (helper) {
+				setOutlineObjects([helper])
+			}
+			return
+		}
+
+		if (object instanceof THREE.Camera) {
+			transformControls?.attach(object)
+			selectedObject.value = object
+			const helper = scene.getObjectByProperty('camera', object)
+			if (helper) {
+				setOutlineObjects([helper])
+			}
+			return
+		}
+
+		if ('light' in object) {
+			const light = object.light as THREE.Light
+			transformControls?.attach(light)
+			setOutlineObjects([object])
+			selectedObject.value = light
+			return
+		}
+
+		if ('camera' in object) {
+			const camera = object.camera as THREE.Camera
+			transformControls?.attach(camera)
+			setOutlineObjects([object])
+			selectedObject.value = camera
+			return
+		}
+
+		transformControls?.attach(object)
+		setOutlineObjects([object])
+		selectedObject.value = object
+	}
+	// -------------------------
+
+	const { setFPSCounter, monitor, updateMonitor } = useStats()
+
+	function initScene(canvasRef: ShallowRef<HTMLCanvasElement | null>) {
+		if (!canvasRef.value) return
+
+		const shadingStore = useShadingStore()
+		const { initTheme } = usePreferencesStore()
+		const controlsStore = useControlsStore()
+		const composerStore = useComposerStore()
+		const { gizmo, controls } = storeToRefs(controlsStore)
+
+		initTheme()
+
+		const canvas = canvasRef.value
+
+		shadingStore.init()
+		RectAreaLightUniformsLib.init()
+
+		if (import.meta.env.DEV) setFPSCounter(canvas.parentElement)
+
+		const { activeCamera } = storeToRefs(useCameraStore())
+
+		if (!(activeCamera.value instanceof THREE.PerspectiveCamera)) return
+		activeCamera.value.aspect = canvas.clientWidth / canvas.clientHeight
+
+		const { composer, handleResize, renderer } = composerStore.init({
+			camera: activeCamera,
+			canvas,
+			gizmo,
+			scene
+		})
+
+		controlsStore.setupControls({
+			cameraRef: activeCamera,
+			helperScene
+		})
+
+		const raycastStore = useRaycastStore()
+		raycastStore.init(canvasRef)
+
+		const targetFPS = 30
+		const frameDelay = 1000 / targetFPS
+		let lastFrameTime = 0
+
+		const timer = new THREE.Timer()
+		renderer.setAnimationLoop(render)
+
+		isInitiated.value = true
+
+		function render(currentTime: number) {
+			const deltaTime = currentTime - lastFrameTime
+			if (deltaTime < frameDelay) return
+			lastFrameTime = currentTime - (deltaTime % frameDelay)
+			timer.update()
+			const delta = timer.getDelta()
+
+			handleResize()
+
+			grid.update(activeCamera.value)
+			controls.value?.update(delta)
+			lightHelperObjects.forEach((item) => {
+				if ('update' in item) item.update()
+			})
+			composer.render(delta)
+			gizmo.value?.render()
+			renderer.clearDepth()
+			renderer.render(helperScene, activeCamera.value)
+
+			updateMonitor(renderer)
+		}
 	}
 
 	return {

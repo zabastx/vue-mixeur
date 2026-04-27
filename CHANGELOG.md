@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - InputSelect: Added optional icons for select options
+- Viewport toolbar: added transform orientation selector (World/Local) with dedicated icons
 
 ### Fixed
 

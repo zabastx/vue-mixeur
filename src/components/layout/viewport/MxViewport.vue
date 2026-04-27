@@ -18,7 +18,7 @@
 				data-testid="viewport-canvas"
 			></canvas>
 		</div>
-		<ViewportToolbar v-if="sceneStore.isInitiated" />
+		<ViewportToolbar v-if="sceneStore.isInitiated" class="absolute top-10 left-2.5" />
 	</div>
 </template>
 

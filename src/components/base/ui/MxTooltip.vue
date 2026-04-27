@@ -29,6 +29,7 @@ import {
 	type TooltipContentProps,
 	type TooltipTriggerProps
 } from 'reka-ui'
+import type { MxTooltipContent } from '@/utils/types'
 
 defineProps<{
 	tooltipDisabled?: boolean
@@ -38,10 +39,4 @@ defineProps<{
 		content?: TooltipContentProps
 	}
 }>()
-
-export interface MxTooltipContent {
-	title?: string
-	text?: string
-	footer?: string
-}
 </script>

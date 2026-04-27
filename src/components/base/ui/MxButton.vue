@@ -18,7 +18,7 @@
 
 <script lang="ts" setup>
 import type { ButtonHTMLAttributes } from 'vue'
-import type { MxTooltipContent } from './MxTooltip.vue'
+import type { MxTooltipContent } from '@/utils/types'
 import MxIcon from './MxIcon.vue'
 
 defineOptions({

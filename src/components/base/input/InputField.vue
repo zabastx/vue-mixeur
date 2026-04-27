@@ -20,7 +20,7 @@
 
 <script lang="ts" setup>
 import { computed, useId } from 'vue'
-import type { MxTooltipContent } from '../ui/MxTooltip.vue'
+import type { MxTooltipContent } from '@/utils/types'
 
 const id = useId()
 

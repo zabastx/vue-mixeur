@@ -1,4 +1,4 @@
-import type { MxTooltipContent } from '@/components/base/ui/MxTooltip.vue'
+import type { MxTooltipContent } from '@/utils/types'
 
 export const materialTooltipMap: ReadonlyMap<string, MxTooltipContent> = new Map([
 	['color', { text: 'Color of the material' }],

@@ -45,7 +45,7 @@ import type { ShadingMode } from '@/store/types/shading'
 import { useShadingStore } from '@/store/shading'
 import { computed, type Component } from 'vue'
 import ShadingControlsSettingsPreview from './shading-controls/ShadingControlsSettingsPreview.vue'
-import type { MxTooltipContent } from '@/components/base/ui/MxTooltip.vue'
+import type { MxTooltipContent } from '@/utils/types'
 
 const shadingStore = useShadingStore()
 

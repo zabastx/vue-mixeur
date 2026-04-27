@@ -1,13 +1,13 @@
 <template>
-	<div class="flex flex-col items-end gap-0.5">
+	<div v-if="store.selectedObject" class="flex flex-col items-end gap-0.5">
 		<InputField label="Rotation X">
-			<InputNumber v-model="rotationX" label="Rotation X" :format-options="formatOptions" />
+			<InputNumber v-model="rotationX" :format-options="formatOptions" />
 		</InputField>
 		<InputField label="Y">
-			<InputNumber v-model="rotationY" label="Y" :format-options="formatOptions" />
+			<InputNumber v-model="rotationY" :format-options="formatOptions" />
 		</InputField>
 		<InputField label="Z">
-			<InputNumber v-model="rotationZ" label="Z" :format-options="formatOptions" />
+			<InputNumber v-model="rotationZ" :format-options="formatOptions" />
 		</InputField>
 	</div>
 </template>
@@ -16,37 +16,45 @@
 import { useThreeStore } from '@/store/three'
 import THREE from '@/three'
 import type { NumberFieldRootProps } from 'reka-ui'
-import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import { computed, triggerRef } from 'vue'
 
 const store = useThreeStore()
+const { selectedObject } = storeToRefs(store)
 
 const rotationX = computed({
 	get() {
-		return THREE.MathUtils.radToDeg(store.selectedObject!.rotation.x)
+		if (!selectedObject.value) return 0
+		return THREE.MathUtils.radToDeg(selectedObject.value.rotation.x)
 	},
-	set(val) {
-		if (!store.selectedObject) return
-		store.selectedObject.rotation.x = THREE.MathUtils.degToRad(val)
+	set(value: number) {
+		if (!selectedObject.value) return
+		selectedObject.value.rotation.x = THREE.MathUtils.degToRad(value)
+		triggerRef(selectedObject)
 	}
 })
 
 const rotationY = computed({
 	get() {
-		return THREE.MathUtils.radToDeg(store.selectedObject!.rotation.y)
+		if (!selectedObject.value) return 0
+		return THREE.MathUtils.radToDeg(selectedObject.value.rotation.y)
 	},
-	set(val) {
-		if (!store.selectedObject) return
-		store.selectedObject.rotation.y = THREE.MathUtils.degToRad(val)
+	set(value: number) {
+		if (!selectedObject.value) return
+		selectedObject.value.rotation.y = THREE.MathUtils.degToRad(value)
+		triggerRef(selectedObject)
 	}
 })
 
 const rotationZ = computed({
 	get() {
-		return THREE.MathUtils.radToDeg(store.selectedObject!.rotation.z)
+		if (!selectedObject.value) return 0
+		return THREE.MathUtils.radToDeg(selectedObject.value.rotation.z)
 	},
-	set(val) {
-		if (!store.selectedObject) return
-		store.selectedObject.rotation.z = THREE.MathUtils.degToRad(val)
+	set(value: number) {
+		if (!selectedObject.value) return
+		selectedObject.value.rotation.z = THREE.MathUtils.degToRad(value)
+		triggerRef(selectedObject)
 	}
 })
 

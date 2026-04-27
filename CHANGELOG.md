@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - InputSelect: Added optional icons for select options
 
+### Fixed
+
+- Object properties: fixed transform settings sync with transform controls
+
 ## [0.19.0] - 2026-04-25
 
 ### Added

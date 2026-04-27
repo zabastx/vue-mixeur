@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="grid grid-cols-[min-content_1fr] items-start gap-x-2.5 relative"
+		class="grid grid-cols-[min-content_1fr] items-start gap-x-1 relative"
 		:style="{ gridTemplateColumns: gridCols }"
 		:class="{ 'opacity-50': disabled }"
 	>

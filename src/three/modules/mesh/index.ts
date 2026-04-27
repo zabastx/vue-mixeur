@@ -41,6 +41,7 @@ export function createMesh(type: GeometryTypes) {
 		default:
 			throw new Error(`Unsupported geometry type: ${type}`)
 	}
+	geometry.setAttribute('uv1', geometry.attributes.uv)
 	const material = new THREE.MeshStandardMaterial()
 	material.side = THREE.DoubleSide
 	const mesh = new THREE.Mesh(geometry, material)

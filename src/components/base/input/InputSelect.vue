@@ -6,6 +6,9 @@
 				border-ui-select-outline bg-ui-select-bg px-1 py-0.5 text-ui-select-text"
 			:class="$attrs.class"
 		>
+			<Select.Icon v-if="valueIcon">
+				<MxIcon :name="valueIcon" />
+			</Select.Icon>
 			<Select.Value :placeholder class="h-[1.5em] truncate" />
 			<MxIcon name="ui/chevron-right" class="rotate-90" />
 		</Select.Trigger>
@@ -23,12 +26,15 @@
 							v-bind="item"
 							:key="'option_' + val.label"
 							:value="val.value"
-							class="rounded-ui-select p-1 text-xs data-highlighted:brightness-125
-								data-highlighted:bg-ui-select-bg-selected
+							class="flex gap-1 items-center rounded-ui-select p-1 text-xs
+								data-highlighted:brightness-125 data-highlighted:bg-ui-select-bg-selected
 								data-[state='checked']:bg-ui-select-bg-selected
 								data-[state='checked']:text-ui-select-text-selected cursor-pointer"
 						>
 							<MxTooltip :tooltip-disabled="!val.tooltip" :tooltip="val.tooltip">
+								<Select.Icon v-if="val.icon">
+									<MxIcon :name="val.icon" />
+								</Select.Icon>
 								<Select.ItemText>{{ val.label }}</Select.ItemText>
 							</MxTooltip>
 						</Select.Item>
@@ -48,10 +54,16 @@ import type {
 } from 'reka-ui'
 import { Select } from 'reka-ui/namespaced'
 import type { MxTooltipContent } from '../ui/MxTooltip.vue'
+import { computed } from 'vue'
 
-defineProps<SelectProps>()
+const { items } = defineProps<SelectProps>()
 
 const model = defineModel<T>()
+
+const valueIcon = computed(() => {
+	const icon = items.find((item) => item.value === model.value)
+	return icon?.icon
+})
 
 interface SelectProps {
 	root?: SelectRootProps
@@ -66,5 +78,6 @@ interface InputSelectOption {
 	value: T
 	label: string
 	tooltip?: MxTooltipContent
+	icon?: MxIconName
 }
 </script>

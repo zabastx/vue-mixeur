@@ -10,12 +10,14 @@ const fields: MaterialInputField<MeshMaterials>[] = [
 	{
 		type: 'number',
 		label: 'Scale',
-		prop: 'displacementScale'
+		prop: 'displacementScale',
+		step: 0.01
 	},
 	{
 		type: 'number',
 		label: 'Bias',
-		prop: 'displacementBias'
+		prop: 'displacementBias',
+		step: 0.01
 	}
 ]
 </script>

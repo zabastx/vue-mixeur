@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Transform controls: Ctrl-key snapping
 - Material properties: Enviroment map settings
 
+### Changed
+
+- Material properties: change number input steps
+
 ### Fixed
 
 - Object properties: fixed transform settings sync with transform controls

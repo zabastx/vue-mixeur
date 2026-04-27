@@ -41,27 +41,6 @@ const fieldGroups: {
 	value: string
 	fields: MaterialInputField<Mat>[]
 }[] = [
-	// {
-	// 	label: 'Environment',
-	// 	value: 'environment',
-	// 	fields: [
-	// 		{
-	// 			type: 'map',
-	// 			label: 'Map',
-	// 			prop: 'envMap'
-	// 		},
-	// 		{
-	// 			type: 'number',
-	// 			label: 'Map Intensity',
-	// 			prop: 'envMapIntensity'
-	// 		},
-	// 		{
-	// 			type: 'angle',
-	// 			label: 'Map Rotation',
-	// 			prop: 'envMapRotation'
-	// 		}
-	// 	]
-	// },
 	{
 		label: 'Alpha',
 		value: 'alpha',
@@ -93,6 +72,30 @@ const fieldGroups: {
 				type: 'checkbox',
 				label: 'Alpha to coverage',
 				prop: 'alphaToCoverage'
+			}
+		]
+	},
+	{
+		label: 'Environment',
+		value: 'environment',
+		fields: [
+			{
+				type: 'envMap',
+				label: 'Map',
+				prop: 'envMap'
+			},
+			{
+				type: 'number',
+				label: 'Map Intensity',
+				prop: 'envMapIntensity',
+				min: 0,
+				max: 1,
+				step: 0.01
+			},
+			{
+				type: 'euler',
+				label: 'Map Rotation',
+				prop: 'envMapRotation'
 			}
 		]
 	},

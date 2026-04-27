@@ -16,6 +16,7 @@ export type FieldValueMap = {
 	checkbox: boolean | 'indeterminate' | undefined
 	select: string | number | null | undefined
 	range: number[]
+	euler: THREE.Euler
 }
 
 interface MaterialInput<T extends THREE.Material> {
@@ -37,6 +38,10 @@ interface MaterialEnvMapInput<T extends THREE.Material> extends MaterialInput<T>
 
 interface MaterialCheckInput<T extends THREE.Material> extends MaterialInput<T> {
 	type: 'checkbox'
+}
+
+interface MaterialEulerInput<T extends THREE.Material> extends MaterialInput<T> {
+	type: 'euler'
 }
 
 interface MaterialNumberInput<T extends THREE.Material> extends MaterialInput<T> {
@@ -66,6 +71,7 @@ export type MaterialInputField<T extends THREE.Material = THREE.Material> =
 	| MaterialSelectInput<T>
 	| MaterialRangeInput<T>
 	| MaterialEnvMapInput<T>
+	| MaterialEulerInput<T>
 
 export type MeshMaterials =
 	| THREE.MeshPhysicalMaterial

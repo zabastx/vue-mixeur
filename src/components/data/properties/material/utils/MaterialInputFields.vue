@@ -50,6 +50,12 @@
 				}"
 				@update:model-value="setPropValue(field.type, field.prop, $event)"
 			/>
+			<InputEuler
+				v-else-if="field.type === 'euler'"
+				:disabled
+				:model-value="getPropValue(field.type, field.prop)"
+				@update:model-value="setPropValue(field.type, field.prop, $event)"
+			/>
 			<InputCheckbox
 				v-else-if="field.type === 'checkbox'"
 				:id

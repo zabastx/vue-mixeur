@@ -64,6 +64,8 @@ export function useMeshMaterial<T extends THREE.Material>() {
 				return getMaterialProp<THREE.Texture>(prop) as FieldValueMap[TType]
 			case 'number':
 				return getMaterialProp<number>(prop) as FieldValueMap[TType]
+			case 'euler':
+				return getMaterialProp<THREE.Euler>(prop) as FieldValueMap[TType]
 			case 'angle':
 				return THREE.MathUtils.radToDeg(getMaterialProp<number>(prop) || 0) as FieldValueMap[TType]
 			case 'checkbox':
@@ -74,6 +76,8 @@ export function useMeshMaterial<T extends THREE.Material>() {
 				const value = getMaterialProp<THREE.Vector2>(prop)
 				return (value instanceof THREE.Vector2 ? value.toArray() : value) as FieldValueMap[TType]
 			}
+			default:
+				return getMaterialProp(prop) as FieldValueMap[TType]
 		}
 	}
 
@@ -106,6 +110,10 @@ export function useMeshMaterial<T extends THREE.Material>() {
 				updateMaterialProp({ prop, value: value as unknown as T[MaterialProp<T>] })
 				break
 			}
+			case 'euler':
+				console.log('asdas', prop, value)
+				updateMaterialProp({ prop, value: value as unknown as T[MaterialProp<T>] })
+				break
 			default:
 				updateMaterialProp({ prop, value: value as unknown as T[MaterialProp<T>] })
 				break

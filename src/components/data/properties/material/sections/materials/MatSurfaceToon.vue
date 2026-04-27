@@ -46,27 +46,6 @@ const fieldGroups: {
 	value: string
 	fields: MaterialInputField<Mat>[]
 }[] = [
-	// {
-	// 	label: 'Environment',
-	// 	value: 'environment',
-	// 	fields: [
-	// 		{
-	// 			type: 'map',
-	// 			label: 'Map',
-	// 			prop: 'envMap'
-	// 		},
-	// 		{
-	// 			type: 'number',
-	// 			label: 'Map Intensity',
-	// 			prop: 'envMapIntensity'
-	// 		},
-	// 		{
-	// 			type: 'angle',
-	// 			label: 'Map Rotation',
-	// 			prop: 'envMapRotation'
-	// 		}
-	// 	]
-	// },
 	{
 		label: 'Alpha',
 		value: 'alpha',

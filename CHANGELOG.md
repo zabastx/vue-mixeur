@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - InputSelect: Added optional icons for select options
 - Viewport toolbar: added transform orientation selector (World/Local) with dedicated icons
 - Transform controls: Ctrl-key snapping
+- Material properties: Enviroment map settings
 
 ### Fixed
 

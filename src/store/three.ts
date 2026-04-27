@@ -144,7 +144,7 @@ export const useThreeStore = defineStore('three', () => {
 		const object = scene.getObjectByProperty('uuid', uuid)
 		if (!object) return console.warn('cloneObject: object is undefined')
 		const newObj = object.clone()
-		newObj.userData.mixeur = getUserData(object)
+		newObj.userData.mixeur = structuredClone(getUserData(object))
 		if (object instanceof THREE.Mesh && newObj instanceof THREE.Mesh) {
 			newObj.material = getMaterialCache(object)?.original
 		}

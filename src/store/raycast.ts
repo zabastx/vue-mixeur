@@ -6,6 +6,7 @@ import { useControlsStore } from './controls'
 import { useComposerStore } from './composer'
 import { useCameraStore } from './camera'
 import { useThreeStore } from './three'
+import { getUserData } from '@/three/utils'
 
 export const useRaycastStore = defineStore('raycast', () => {
 	const raycastObjects = shallowRef<THREE.Object3D[]>([])
@@ -33,7 +34,9 @@ export const useRaycastStore = defineStore('raycast', () => {
 
 			raycaster.setFromCamera(pointer, activeCamera.value)
 
-			const objects = raycastObjects.value.filter((obj) => obj.visible)
+			const objects = raycastObjects.value.filter(
+				(obj) => obj.visible && getUserData(obj).isSelectable
+			)
 
 			const intersects = raycaster.intersectObjects(objects, true)
 

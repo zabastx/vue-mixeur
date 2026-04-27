@@ -9,6 +9,8 @@ import type { LightHelper } from '@/three/modules/light'
 import { useThreeStore } from './three'
 import { getUserData } from '@/three/utils'
 import { useCameraStore } from './camera'
+import { useAppStore } from './app'
+import { MathUtils } from 'three'
 
 export const useControlsStore = defineStore('controls', () => {
 	const controls = shallowRef<OrbitControls>()
@@ -79,6 +81,19 @@ export const useControlsStore = defineStore('controls', () => {
 		})
 
 		const { selectedObject } = storeToRefs(useThreeStore())
+		const { isCtrlDown } = storeToRefs(useAppStore())
+
+		watch(isCtrlDown, (newVal) => {
+			if (newVal) {
+				transformControls.value?.setTranslationSnap(1)
+				transformControls.value?.setRotationSnap(MathUtils.degToRad(1))
+				transformControls.value?.setScaleSnap(1)
+			} else {
+				transformControls.value?.setTranslationSnap(null)
+				transformControls.value?.setRotationSnap(null)
+				transformControls.value?.setScaleSnap(null)
+			}
+		})
 
 		transformControls.value.addEventListener('objectChange', () => {
 			triggerRef(selectedObject)

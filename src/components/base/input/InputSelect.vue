@@ -53,8 +53,8 @@ import type {
 	SelectTriggerProps
 } from 'reka-ui'
 import { Select } from 'reka-ui/namespaced'
-import type { MxTooltipContent } from '../ui/MxTooltip.vue'
 import { computed } from 'vue'
+import type { InputSelectOption } from '@/utils/types'
 
 const { items } = defineProps<SelectProps>()
 
@@ -71,13 +71,6 @@ interface SelectProps {
 	trigger?: SelectTriggerProps
 	content?: SelectContentProps
 	item?: SelectItemProps
-	items: InputSelectOption[] | readonly InputSelectOption[]
-}
-
-interface InputSelectOption {
-	value: T
-	label: string
-	tooltip?: MxTooltipContent
-	icon?: MxIconName
+	items: InputSelectOption<T>[] | readonly InputSelectOption<T>[]
 }
 </script>

@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Object properties: fixed transform settings sync with transform controls
+- Object properties: fixed visibility settings sync
 
 ## [0.19.0] - 2026-04-25
 

@@ -1,18 +1,24 @@
 <template>
-	<div class="flex justify-center p-1">
+	<div v-if="selectedObject" class="flex justify-center p-1">
 		<div class="flex flex-col gap-1">
 			<InputField reverse label="Selectable">
-				<InputCheckbox v-model="getUserData(object).isSelectable" />
+				<InputCheckbox
+					v-model="getUserData(selectedObject).isSelectable"
+					@update:model-value="updateObject"
+				/>
 			</InputField>
 			<InputField reverse label="Frustum Culled">
-				<InputCheckbox v-model="object.frustumCulled" />
+				<InputCheckbox v-model="selectedObject.frustumCulled" @update:model-value="updateObject" />
 			</InputField>
-			<template v-if="!('isLight' in object)">
+			<template v-if="!('isLight' in selectedObject)">
 				<InputField reverse label="Cast shadow">
-					<InputCheckbox v-model="object.castShadow" />
+					<InputCheckbox v-model="selectedObject.castShadow" @update:model-value="updateObject" />
 				</InputField>
 				<InputField reverse label="Receive shadow">
-					<InputCheckbox v-model="object.receiveShadow" />
+					<InputCheckbox
+						v-model="selectedObject.receiveShadow"
+						@update:model-value="updateObject"
+					/>
 				</InputField>
 			</template>
 		</div>
@@ -21,11 +27,15 @@
 
 <script lang="ts" setup>
 import { useThreeStore } from '@/store/three'
-import type THREE from '@/three'
 import { getUserData } from '@/three/utils'
-import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import { triggerRef } from 'vue'
 
 const threeStore = useThreeStore()
 
-const object = computed(() => threeStore.selectedObject as THREE.Object3D | THREE.Light)
+const { selectedObject } = storeToRefs(threeStore)
+
+function updateObject() {
+	triggerRef(selectedObject)
+}
 </script>

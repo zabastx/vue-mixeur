@@ -80,6 +80,11 @@ export const useAppStore = defineStore('app', () => {
 						sceneStore.cloneObject(sceneStore.selectedObject.uuid)
 					}
 					break
+
+				case 'KeyT':
+					e.preventDefault()
+					showToolbar.value = !showToolbar.value
+					break
 			}
 		})
 
@@ -134,8 +139,19 @@ export const useAppStore = defineStore('app', () => {
 	}
 
 	const showStatusBar = ref(true)
+	const showToolSettings = ref(true)
+	const showToolbar = ref(true)
 
-	return { pointerOnCanvas, isCtrlDown, isShiftDown, useHotKeys, showStatusBar, setView }
+	return {
+		pointerOnCanvas,
+		isCtrlDown,
+		isShiftDown,
+		useHotKeys,
+		showStatusBar,
+		setView,
+		showToolSettings,
+		showToolbar
+	}
 })
 
 if (import.meta.hot) {

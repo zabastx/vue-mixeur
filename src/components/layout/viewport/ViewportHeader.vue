@@ -3,6 +3,7 @@
 		<MxIcon name="ui/viewport" />
 		<MenuBar :items="menuItems" />
 		<ViewportShadingControls class="ml-auto" />
+		<ViewportToolSettings v-if="showToolSettings" class="absolute top-full left-0 rounded-br" />
 	</div>
 </template>
 
@@ -13,8 +14,29 @@ import { createLight } from '@/three/modules/light'
 import { createText } from '@/three/modules/text'
 import { createCamera } from '@/three/modules/camera/create'
 import type { IMenubarMenu } from '@/components/base/ui/MenuBar.vue'
+import { storeToRefs } from 'pinia'
+import { useAppStore } from '@/store/app'
+
+const { showToolSettings, showToolbar } = storeToRefs(useAppStore())
 
 const menuItems: IMenubarMenu[] = [
+	{
+		label: 'View',
+		items: [
+			{
+				key: 'tool_bar',
+				label: 'Toolbar',
+				type: 'checkbox',
+				model: showToolbar
+			},
+			{
+				key: 'tool_settings',
+				label: 'Tool Settings',
+				type: 'checkbox',
+				model: showToolSettings
+			}
+		]
+	},
 	{
 		label: 'Add',
 		items: [

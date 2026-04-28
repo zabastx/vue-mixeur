@@ -18,7 +18,10 @@
 				data-testid="viewport-canvas"
 			></canvas>
 		</div>
-		<ViewportToolbar v-if="sceneStore.isInitiated" class="absolute top-10 left-2.5" />
+		<ViewportToolbar
+			v-if="sceneStore.isInitiated && appStore.showToolbar"
+			class="absolute top-20 left-2.5"
+		/>
 	</div>
 </template>
 

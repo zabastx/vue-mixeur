@@ -76,7 +76,7 @@ const fieldGroups: {
 					{ label: 'Object Space', value: THREE.ObjectSpaceNormalMap }
 				]
 			},
-			// { type: 'vector2', label: 'Normal Scale', prop: 'normalScale' },
+			{ type: 'vector2', label: 'Normal Scale', prop: 'normalScale', step: 0.01 },
 			{ type: 'map', label: 'Bump Map', prop: 'bumpMap' },
 			{
 				type: 'number',

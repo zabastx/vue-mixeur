@@ -17,6 +17,7 @@ export type FieldValueMap = {
 	select: string | number | null | undefined
 	range: number[]
 	euler: THREE.Euler
+	vector2: THREE.Vector2
 }
 
 interface MaterialInput<T extends THREE.Material> {
@@ -25,27 +26,12 @@ interface MaterialInput<T extends THREE.Material> {
 	showIf?: MaterialProp<T>
 }
 
-interface MaterialColorInput<T extends THREE.Material> extends MaterialInput<T> {
-	type: 'color'
-}
-
-interface MaterialMapInput<T extends THREE.Material> extends MaterialInput<T> {
-	type: 'map'
-}
-interface MaterialEnvMapInput<T extends THREE.Material> extends MaterialInput<T> {
-	type: 'envMap'
-}
-
-interface MaterialCheckInput<T extends THREE.Material> extends MaterialInput<T> {
-	type: 'checkbox'
-}
-
-interface MaterialEulerInput<T extends THREE.Material> extends MaterialInput<T> {
-	type: 'euler'
+interface MaterialGenericInput<T extends THREE.Material> extends MaterialInput<T> {
+	type: 'color' | 'map' | 'envMap' | 'checkbox' | 'euler' | 'checkbox'
 }
 
 interface MaterialNumberInput<T extends THREE.Material> extends MaterialInput<T> {
-	type: 'number' | 'angle'
+	type: 'number' | 'angle' | 'vector2'
 	min?: number
 	max?: number
 	step?: number
@@ -64,14 +50,10 @@ interface MaterialRangeInput<T extends THREE.Material> extends MaterialInput<T> 
 }
 
 export type MaterialInputField<T extends THREE.Material = THREE.Material> =
-	| MaterialColorInput<T>
-	| MaterialMapInput<T>
+	| MaterialGenericInput<T>
 	| MaterialNumberInput<T>
-	| MaterialCheckInput<T>
 	| MaterialSelectInput<T>
 	| MaterialRangeInput<T>
-	| MaterialEnvMapInput<T>
-	| MaterialEulerInput<T>
 
 export type MeshMaterials =
 	| THREE.MeshPhysicalMaterial

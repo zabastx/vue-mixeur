@@ -50,6 +50,15 @@
 				}"
 				@update:model-value="setPropValue(field.type, field.prop, $event)"
 			/>
+			<InputVector2
+				v-else-if="field.type === 'vector2'"
+				:disabled
+				:min="field.min"
+				:max="field.max"
+				:step="field.step"
+				:model-value="getPropValue(field.type, field.prop)"
+				@update:model-value="setPropValue(field.type, field.prop, $event)"
+			/>
 			<InputEuler
 				v-else-if="field.type === 'euler'"
 				:disabled

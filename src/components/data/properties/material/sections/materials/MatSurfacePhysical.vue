@@ -151,24 +151,30 @@ const fieldGroups: {
 		value: 'coat',
 		fields: [
 			{ type: 'number', label: 'Intensity', prop: 'clearcoat', min: 0, max: 1, step: 0.01 },
-			{ type: 'map', label: 'Coat Map', prop: 'clearcoatMap', showIf: 'clearcoat' },
-			{ type: 'map', label: 'Coat Normal Map', prop: 'clearcoatNormalMap', showIf: 'clearcoat' },
+			{ type: 'map', label: 'Coat Map', prop: 'clearcoatMap' },
+			{ type: 'map', label: 'Coat Normal Map', prop: 'clearcoatNormalMap' },
+			{
+				type: 'vector2',
+				label: 'Coat Normal Scale',
+				prop: 'clearcoatNormalScale',
+				showIf: 'clearcoatNormalMap',
+				min: 0,
+				max: 1,
+				step: 0.01
+			},
 			{
 				type: 'number',
 				label: 'Roughness',
 				prop: 'clearcoatRoughness',
 				min: 0,
 				max: 1,
-				step: 0.01,
-				showIf: 'clearcoat'
+				step: 0.01
 			},
 			{
 				type: 'map',
 				label: 'Roughness Map',
-				prop: 'clearcoatRoughnessMap',
-				showIf: 'clearcoat'
+				prop: 'clearcoatRoughnessMap'
 			}
-			// { type: 'vector2', label: 'Coat Normal Scale', prop: 'clearcoatNormalScale', showIf: 'clearcoat' },
 		]
 	},
 	{
@@ -245,7 +251,7 @@ const fieldGroups: {
 					{ label: 'Object Space', value: THREE.ObjectSpaceNormalMap }
 				]
 			},
-			// { type: 'vector2', label: 'Normal Scale', prop: 'normalScale' },
+			{ type: 'vector2', label: 'Normal Scale', prop: 'normalScale', step: 0.01 },
 			{ type: 'map', label: 'Bump Map', prop: 'bumpMap' },
 			{
 				type: 'number',

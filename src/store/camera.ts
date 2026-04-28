@@ -4,6 +4,7 @@ import { defineStore } from 'pinia'
 import { computed, ref, shallowRef, watch } from 'vue'
 import { useThreeStore } from './three'
 import { getUserData } from '@/three/utils'
+import { useEventListener } from '@vueuse/core'
 
 export const useCameraStore = defineStore('camera', () => {
 	const viewportCameras = {
@@ -48,6 +49,20 @@ export const useCameraStore = defineStore('camera', () => {
 
 	activeCamera.value.position.set(8, 8, 8)
 	activeCamera.value.lookAt(0, 0, 0)
+
+	useEventListener(window, 'keydown', (e) => {
+		switch (e.code) {
+			case 'Numpad5': // Perspective / Orthographic camera toggle
+				e.preventDefault()
+				toggleViewportCamera()
+				break
+
+			case 'Numpad0': // Render / Viewport camera toggle
+				e.preventDefault()
+				toggleCameraView()
+				break
+		}
+	})
 
 	function toggleViewportCamera() {
 		if (viewportCameraType.value === 'orthographic') {

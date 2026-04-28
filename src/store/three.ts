@@ -299,10 +299,7 @@ export const useThreeStore = defineStore('three', () => {
 			scene
 		})
 
-		controlsStore.setupControls({
-			cameraRef: activeCamera,
-			helperScene
-		})
+		controlsStore.initControls(helperScene)
 
 		const raycastStore = useRaycastStore()
 		raycastStore.init(canvasRef)

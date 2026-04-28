@@ -40,7 +40,7 @@ import { useCameraStore } from '@/store/camera'
 
 const appStore = useAppStore()
 const canvasRef = useTemplateRef('canvasRef')
-appStore.useHotKeys(canvasRef)
+appStore.initListeners(canvasRef)
 
 const sceneStore = useThreeStore()
 const webglErrorRef = useTemplateRef('webglErrorRef')

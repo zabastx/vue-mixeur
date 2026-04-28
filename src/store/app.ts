@@ -15,9 +15,7 @@ export const useAppStore = defineStore('app', () => {
 	const isCtrlDown = useKeyModifier('Control')
 	const isShiftDown = useKeyModifier('Shift')
 
-	function useHotKeys(canvas: ShallowRef<HTMLCanvasElement | null>) {
-		const { toggleViewportCamera, toggleCameraView } = useCameraStore()
-
+	function initListeners(canvas: ShallowRef<HTMLCanvasElement | null>) {
 		useEventListener(canvas, 'pointerenter', () => (pointerOnCanvas.value = true))
 		useEventListener(canvas, 'pointerleave', () => (pointerOnCanvas.value = false))
 
@@ -28,49 +26,22 @@ export const useAppStore = defineStore('app', () => {
 			}
 		})
 
+		const ignoredElements = ['input', 'textarea', 'select']
+
 		useEventListener(window, 'keydown', (e) => {
-			const controlsStore = useControlsStore()
 			const sceneStore = useThreeStore()
+
+			if (
+				e.target instanceof HTMLElement &&
+				ignoredElements.includes(e.target.tagName.toLowerCase())
+			) {
+				e.stopImmediatePropagation()
+				return
+			}
 
 			if (!pointerOnCanvas.value) return
 
 			switch (e.code) {
-				case 'Numpad5': // Perspective / Orthographic camera toggle
-					e.preventDefault()
-					toggleViewportCamera()
-					break
-
-				case 'Numpad0':
-					e.preventDefault()
-					toggleCameraView()
-					break
-
-				case 'Numpad1': // Front / Back view
-					e.preventDefault()
-					setView({ z: 1, invert: e.ctrlKey })
-					break
-				case 'Numpad3': // Right / Left view
-					e.preventDefault()
-					setView({ x: 1, invert: e.ctrlKey })
-					break
-				case 'Numpad7': // Top / Bottom view
-					e.preventDefault()
-					setView({ y: 1, invert: e.ctrlKey })
-					break
-
-				case 'KeyG':
-					e.preventDefault()
-					controlsStore.currentTransformMode = 'translate'
-					break
-				case 'KeyR':
-					e.preventDefault()
-					controlsStore.currentTransformMode = 'rotate'
-					break
-				case 'KeyS':
-					e.preventDefault()
-					controlsStore.currentTransformMode = 'scale'
-					break
-
 				case 'Delete':
 					e.preventDefault()
 					if (sceneStore.selectedObject instanceof THREE.Object3D) {
@@ -94,7 +65,7 @@ export const useAppStore = defineStore('app', () => {
 
 		// Moves perspective camera on scroll instead of zoom
 		useEventListener(canvas, 'wheel', (event) => {
-			if (event.ctrlKey) event.preventDefault()
+			event.preventDefault()
 
 			const { activeCamera } = useCameraStore()
 			const { controls } = useControlsStore()
@@ -146,7 +117,7 @@ export const useAppStore = defineStore('app', () => {
 		pointerOnCanvas,
 		isCtrlDown,
 		isShiftDown,
-		useHotKeys,
+		initListeners,
 		showStatusBar,
 		setView,
 		showToolSettings,

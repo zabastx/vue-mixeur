@@ -23,3 +23,31 @@ body {
 * {
 	@apply -outline-offset-[3px];
 }
+
+.slide-fade-left-enter-active {
+	transition: all 0.2s ease-in;
+}
+
+.slide-fade-left-leave-active {
+	transition: all 0.2s ease-out;
+}
+
+.slide-fade-left-enter-from,
+.slide-fade-left-leave-to {
+	transform: translateX(-100%);
+	opacity: 0;
+}
+
+.slide-fade-right-enter-active {
+	transition: all 0.2s ease-in;
+}
+
+.slide-fade-right-leave-active {
+	transition: all 0.2s ease-out;
+}
+
+.slide-fade-right-enter-from,
+.slide-fade-right-leave-to {
+	transform: translateX(100%);
+	opacity: 0;
+}

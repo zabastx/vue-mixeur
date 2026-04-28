@@ -18,10 +18,12 @@
 				data-testid="viewport-canvas"
 			></canvas>
 		</div>
-		<ViewportToolbar
-			v-if="sceneStore.isInitiated && appStore.showToolbar"
-			class="absolute top-20 left-2.5"
-		/>
+		<Transition name="slide-fade-left">
+			<ViewportToolbar
+				v-if="sceneStore.isInitiated && appStore.showToolbar"
+				class="absolute top-20 left-2.5"
+			/>
+		</Transition>
 	</div>
 </template>
 

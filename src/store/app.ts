@@ -7,12 +7,17 @@ import THREE from '@/three'
 import { useCameraStore } from './camera'
 
 export const useAppStore = defineStore('app', () => {
-	const pointerOnCanvas = ref(false)
+	const showStatusBar = ref(true)
+	const showToolSettings = ref(true)
+	const showToolbar = ref(true)
 
+	const pointerOnCanvas = ref(false)
 	const isCtrlDown = useKeyModifier('Control')
 	const isShiftDown = useKeyModifier('Shift')
 
 	function useHotKeys(canvas: ShallowRef<HTMLCanvasElement | null>) {
+		const { toggleViewportCamera, toggleCameraView } = useCameraStore()
+
 		useEventListener(canvas, 'pointerenter', () => (pointerOnCanvas.value = true))
 		useEventListener(canvas, 'pointerleave', () => (pointerOnCanvas.value = false))
 
@@ -26,9 +31,8 @@ export const useAppStore = defineStore('app', () => {
 		useEventListener(window, 'keydown', (e) => {
 			const controlsStore = useControlsStore()
 			const sceneStore = useThreeStore()
-			if (!pointerOnCanvas.value || !controlsStore.transformControls) return
 
-			const { toggleViewportCamera, toggleCameraView } = useCameraStore()
+			if (!pointerOnCanvas.value) return
 
 			switch (e.code) {
 				case 'Numpad5': // Perspective / Orthographic camera toggle
@@ -137,10 +141,6 @@ export const useAppStore = defineStore('app', () => {
 		activeCamera.lookAt(controls.target)
 		controls.update()
 	}
-
-	const showStatusBar = ref(true)
-	const showToolSettings = ref(true)
-	const showToolbar = ref(true)
 
 	return {
 		pointerOnCanvas,

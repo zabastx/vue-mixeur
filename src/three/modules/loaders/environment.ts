@@ -32,6 +32,8 @@ export async function loadWorldTexture(name: (typeof DEFAULT_WORLD_MAPS)[number]
 
 	if (!envMap) return null
 
+	envMap.name = name
+
 	worldMapCache.set(name, envMap)
 
 	return envMap

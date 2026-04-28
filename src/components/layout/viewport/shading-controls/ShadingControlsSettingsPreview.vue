@@ -42,20 +42,11 @@
 			</template>
 		</MxPopover>
 		<div class="text-xs space-y-0.5">
-			<InputField label="Rotation" label-width="80px">
-				<InputNumber
-					v-model="rotation"
-					:format-options="{
-						style: 'unit',
-						unitDisplay: 'narrow',
-						unit: 'degree'
-					}"
-					:min="-180"
-					:max="180"
-				/>
+			<InputField label="Intensity" input-width="175px">
+				<InputNumber v-model="threeStore.scene.environmentIntensity" :min="0" :step="0.01" />
 			</InputField>
-			<InputField label="Strength" label-width="80px">
-				<InputNumber v-model="threeStore.scene.environmentIntensity" :min="0" :step="0.1" />
+			<InputField label="Rotation" input-width="175px">
+				<InputEuler v-model="rotation" :min="-180" :max="180" />
 			</InputField>
 		</div>
 	</div>
@@ -65,8 +56,8 @@
 import { computed, ref } from 'vue'
 import { DEFAULT_WORLD_MAPS, loadWorldTexture } from '@/three/modules/loaders/environment'
 import { useShadingStore } from '@/store/shading'
-import { MathUtils } from 'three'
 import { useThreeStore } from '@/store/three'
+import type THREE from '@/three'
 
 const shadingStore = useShadingStore()
 
@@ -84,13 +75,5 @@ async function changeEnvMap(map: (typeof DEFAULT_WORLD_MAPS)[number]) {
 
 const threeStore = useThreeStore()
 
-const rotation = computed({
-	set(val) {
-		threeStore.scene.environmentRotation.set(0, MathUtils.degToRad(val), 0)
-	},
-	get() {
-		const envRotation = threeStore.scene.environmentRotation
-		return MathUtils.radToDeg(envRotation.y)
-	}
-})
+const rotation = computed<THREE.Euler>(() => threeStore.scene.environmentRotation)
 </script>

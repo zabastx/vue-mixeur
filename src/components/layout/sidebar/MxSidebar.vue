@@ -1,5 +1,5 @@
 <template>
-	<div class="sidebar grid min-h-0 grid-rows-(--side-rows) rounded">
+	<div ref="sidebarRef" class="sidebar grid min-h-0 grid-rows-(--side-rows) rounded">
 		<DataOutliner />
 		<div ref="divider" class="h-1 cursor-row-resize"></div>
 		<DataProperties />
@@ -7,11 +7,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, useTemplateRef } from 'vue'
+import { onMounted, ref, useTemplateRef } from 'vue'
 import { useEventListener } from '@vueuse/core'
 
 const divider = useTemplateRef('divider')
-const rowHeight = ref(500)
+const rowHeight = ref(window.innerHeight / 2)
 
 useEventListener(divider, 'pointerdown', (e: PointerEvent) => {
 	const startX = e.clientY
@@ -24,6 +24,14 @@ useEventListener(divider, 'pointerdown', (e: PointerEvent) => {
 
 	const cancel = useEventListener(window, 'pointermove', move)
 	useEventListener(window, 'pointerup', cancel)
+})
+
+const sidebarRef = useTemplateRef('sidebarRef')
+
+onMounted(() => {
+	if (sidebarRef.value) {
+		rowHeight.value = sidebarRef.value.clientHeight / 2
+	}
 })
 </script>
 

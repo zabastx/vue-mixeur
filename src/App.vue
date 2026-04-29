@@ -24,12 +24,10 @@
 import { defineAsyncComponent, ref, useTemplateRef } from 'vue'
 import { useEventListener } from '@vueuse/core'
 import { ToastProvider, TooltipProvider } from 'reka-ui'
-import { useAppStore } from './store/app'
-import { useThreeStore } from './store/three'
+import { useAppStore } from '@/app/model/app'
+import { useThreeStore } from '@/app/model/three'
 
-const ModalCollection = defineAsyncComponent(
-	() => import('./components/modals/ModalCollection.vue')
-)
+const ModalCollection = defineAsyncComponent(() => import('@/widgets/modals/ModalCollection.vue'))
 
 const appStore = useAppStore()
 const threeStore = useThreeStore()

@@ -15,6 +15,7 @@ export default defineConfig({
 		vue(),
 		tailwindcss(),
 		Components({
+			dirs: 'src',
 			dts: 'src/components.d.ts',
 			resolvers: [RekaResolver()]
 		}),

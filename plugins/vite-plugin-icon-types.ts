@@ -9,7 +9,7 @@ export interface IconTypesPluginOptions {
 }
 
 export function iconTypesPlugin(options: IconTypesPluginOptions = {}): Plugin {
-	const { iconsDir = 'src/assets/icons', outputPath = 'src/icons.d.ts', watch = true } = options
+	const { iconsDir = 'src/app/assets/icons', outputPath = 'src/icons.d.ts', watch = true } = options
 
 	let resolvedIconsDir: string
 	let resolvedOutputPath: string

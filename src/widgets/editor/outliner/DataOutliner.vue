@@ -1,0 +1,96 @@
+<template>
+	<div
+		class="block-border text-sm leading-6 flex flex-col overflow-hidden rounded bg-window-bg
+			alternate-rows relative"
+	>
+		<h2 class="flex items-center gap-1 px-1 text-[1rem]">
+			<MxIcon name="outliner/outliner" /> Outliner
+			<MxTooltip :tooltip="{ text: 'Add Group' }">
+				<button class="btn ml-auto" type="button" @click="store.addGroup">
+					<MxIcon name="outliner/group-new" />
+				</button>
+			</MxTooltip>
+		</h2>
+		<ScrollContainer>
+			<div class="flex justify-between items-center">
+				<h3 class="flex items-center gap-1 px-1">
+					<MxIcon name="ui/collection" /> Scene Collection
+				</h3>
+			</div>
+			<Tree.Root
+				v-slot="{ flattenItems }"
+				v-model="selectedItem"
+				:get-key="(val) => val.uuid"
+				:items="outlinerItems"
+				selection-behavior="replace"
+			>
+				<Tree.Item
+					v-for="item in flattenItems"
+					v-bind="item.bind"
+					:key="item._id"
+					v-slot="{ isExpanded }"
+					:data-testid="item.value.uuid === selectedItem?.uuid ? 'outliner-selected' : undefined"
+					@select.prevent="store.selectObject($event.detail.value?.uuid)"
+					@toggle="onToggle"
+				>
+					<DataOutlinerItem
+						:item
+						:is-expanded
+						:visibility="item.value.userData.userVisible"
+						:is-selected="item.value.uuid === selectedItem?.uuid"
+						@update:visibility="
+							($event: boolean | undefined) =>
+								store.objectVisibilityUpdate(item.value.uuid, !!$event)
+						"
+					/>
+				</Tree.Item>
+			</Tree.Root>
+		</ScrollContainer>
+	</div>
+</template>
+
+<script lang="ts" setup>
+import { useThreeStore } from '@/app/model/three'
+import THREE from '@/shared/three'
+import { Tree } from 'reka-ui/namespaced'
+import { computed, shallowRef, watch } from 'vue'
+import type { TreeItemToggleEvent } from 'reka-ui'
+import type { OutlinerItem } from './DataOutlinerItem.vue'
+import { getUserData } from '@/shared/three/utils'
+
+const store = useThreeStore()
+
+const selectedItem = shallowRef<THREE.Object3D | THREE.Light>()
+
+watch(
+	() => store.selectedObject,
+	(val) => {
+		selectedItem.value = val ?? undefined
+	},
+	{
+		immediate: true
+	}
+)
+
+const outlinerItems = computed(() => {
+	return store.sceneChildren.filter((item) => !getUserData(item).hideInOutliner).map(parseObject)
+})
+
+function parseObject(obj: THREE.Object3D): OutlinerItem {
+	return {
+		uuid: obj.uuid,
+		type: obj.type,
+		name: obj.name || obj.type,
+		userData: getUserData(obj),
+		isCamera: obj instanceof THREE.Camera,
+		children: obj.children.length > 0 ? obj.children.map(parseObject) : undefined
+	}
+}
+
+function onToggle(e: TreeItemToggleEvent<OutlinerItem>) {
+	const target = e.target as HTMLElement
+	const btn = target.closest('button')
+	if (btn && 'toggle' in btn.dataset) return
+	e.preventDefault()
+}
+</script>

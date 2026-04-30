@@ -14,10 +14,10 @@
 					/>
 				</InputField>
 				<InputField label="Size">
-					<InputNumber v-model="textData.size" :step="1" class="w-[150px]" />
+					<InputNumber v-model="textData.size" :step="0.1" class="w-[150px]" />
 				</InputField>
 				<InputField label="Depth">
-					<InputNumber v-model="textData.depth" :step="1" class="w-[150px]" />
+					<InputNumber v-model="textData.depth" :step="0.1" class="w-[150px]" />
 				</InputField>
 				<InputField label="Bevel enabled">
 					<div class="w-[150px]">
@@ -26,16 +26,20 @@
 				</InputField>
 				<template v-if="textData.bevelEnabled">
 					<InputField label="Bevel size">
-						<InputNumber v-model="textData.bevelSize" class="w-[150px]" />
+						<InputNumber v-model="textData.bevelSize" class="w-[150px]" :step="0.1" />
 					</InputField>
 					<InputField label="Bevel thickness">
-						<InputNumber v-model="textData.bevelThickness" class="w-[150px]" />
+						<InputNumber v-model="textData.bevelThickness" class="w-[150px]" :step="0.1" />
 					</InputField>
 					<InputField label="Bevel offset">
-						<InputNumber v-model="textData.bevelOffset" class="w-[150px]" />
+						<InputNumber v-model="textData.bevelOffset" class="w-[150px]" :step="0.1" />
 					</InputField>
 					<InputField label="Bevel segments">
-						<InputNumber v-model="textData.bevelSegments" class="w-[150px]" />
+						<InputNumber
+							v-model="textData.bevelSegments"
+							class="w-[150px]"
+							:format-options="{ maximumFractionDigits: 0 }"
+						/>
 					</InputField>
 				</template>
 				<button type="button" class="btn text-sm" @click="onApply">Apply</button>

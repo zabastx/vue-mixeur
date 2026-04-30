@@ -1,6 +1,6 @@
 export function emitCustomEvent<K extends keyof DocumentEventMap>(
 	type: K,
-	detail: DocumentEventMap[K] extends CustomEvent<infer D> ? D : never
+	detail?: DocumentEventMap[K] extends CustomEvent<infer D> ? D : never
 ) {
 	document.dispatchEvent(new CustomEvent(type, { detail }))
 }

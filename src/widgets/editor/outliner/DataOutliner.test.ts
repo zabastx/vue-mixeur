@@ -23,12 +23,17 @@ vi.mock('@/app/model/camera', () => ({
 }))
 
 // Setup before all tests
-vi.mock('@/app/model/three', () => ({
-	useThreeStore: vi.fn(() => ({
+vi.mock('@/app/model/scene', () => ({
+	useSceneStore: vi.fn(() => ({
 		sceneChildren: mockSceneChildren.value,
 		sceneGroups: mockSceneGroups.value,
-		selectedObject: mockSelectedObject.value,
 		objectVisibilityUpdate: mockObjectVisibilityUpdate
+	}))
+}))
+
+vi.mock('@/app/model/three', () => ({
+	useThreeStore: vi.fn(() => ({
+		selectedObject: mockSelectedObject.value
 	}))
 }))
 

@@ -89,37 +89,12 @@ export const useAppStore = defineStore('app', () => {
 		})
 	}
 
-	function setView({
-		x = 0,
-		y = 0,
-		z = 0,
-		invert = false
-	}: {
-		x?: number
-		y?: number
-		z?: number
-		invert?: boolean
-	}) {
-		const { activeCamera } = useCameraStore()
-		const { controls } = useControlsStore()
-
-		if (!controls || !activeCamera) return
-		const dir = invert ? -1 : 1
-		const distance = activeCamera.position.distanceTo(controls.target)
-		const newPos = new THREE.Vector3(x * dir, y * dir, z * dir).multiplyScalar(distance)
-		activeCamera.position.copy(controls.target).add(newPos)
-		activeCamera.up.set(0, 1, 0)
-		activeCamera.lookAt(controls.target)
-		controls.update()
-	}
-
 	return {
 		pointerOnCanvas,
 		isCtrlDown,
 		isShiftDown,
 		initListeners,
 		showStatusBar,
-		setView,
 		showToolSettings,
 		showToolbar
 	}

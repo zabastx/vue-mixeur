@@ -21,7 +21,7 @@ body {
 }
 
 * {
-	@apply -outline-offset-[3px];
+	@apply outline-offset-[-3px];
 }
 
 .slide-fade-left-enter-active {

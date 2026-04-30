@@ -1,4 +1,4 @@
-import { ViewportGizmo, type GizmoOptions } from 'three-viewport-gizmo'
+import { ViewportGizmo } from 'three-viewport-gizmo'
 import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia'
 import { ref, shallowRef, triggerRef, watch } from 'vue'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
@@ -9,9 +9,16 @@ import type { LightHelper } from '@/shared/three/modules/light'
 import { useThreeStore } from './three'
 import { getUserData } from '@/shared/three/utils'
 import { useCameraStore } from './camera'
-import { useAppStore } from './app'
+import { useInputStore } from './input'
 import { MathUtils } from 'three'
 import { useEventListener } from '@vueuse/core'
+import {
+	defaultKeymaps,
+	keyCodeToTransformMode,
+	keyCodeToTransformAxis,
+	keyCodeToViewDirection
+} from '@/app/config/keymaps'
+import { getGizmoConfig } from '../config/gizmo'
 
 export const useControlsStore = defineStore('controls', () => {
 	const controls = shallowRef<OrbitControls>()
@@ -78,19 +85,20 @@ export const useControlsStore = defineStore('controls', () => {
 		})
 
 		useEventListener(window, 'keydown', (e) => {
-			switch (e.code) {
-				case 'Numpad1': // Front / Back view
-					e.preventDefault()
-					setView({ z: 1, invert: e.ctrlKey })
-					break
-				case 'Numpad3': // Right / Left view
-					e.preventDefault()
-					setView({ x: 1, invert: e.ctrlKey })
-					break
-				case 'Numpad7': // Top / Bottom view
-					e.preventDefault()
-					setView({ y: 1, invert: e.ctrlKey })
-					break
+			const viewDir = keyCodeToViewDirection[e.code]
+			if (viewDir) {
+				e.preventDefault()
+				switch (viewDir) {
+					case 'front':
+						setView({ z: 1, invert: e.ctrlKey })
+						break
+					case 'right':
+						setView({ x: 1, invert: e.ctrlKey })
+						break
+					case 'top':
+						setView({ y: 1, invert: e.ctrlKey })
+						break
+				}
 			}
 		})
 	}
@@ -115,7 +123,7 @@ export const useControlsStore = defineStore('controls', () => {
 		})
 
 		const { selectedObject } = storeToRefs(useThreeStore())
-		const { isCtrlDown } = storeToRefs(useAppStore())
+		const { isCtrlDown } = storeToRefs(useInputStore())
 
 		watch(isCtrlDown, (newVal) => {
 			if (newVal) {
@@ -177,85 +185,38 @@ export const useControlsStore = defineStore('controls', () => {
 		useEventListener(window, 'keydown', (e) => {
 			if (!transformControls.value) return
 
-			switch (e.code) {
-				case 'KeyG':
-					e.preventDefault()
-					currentTransformMode.value = 'translate'
-					break
-				case 'KeyR':
-					e.preventDefault()
-					currentTransformMode.value = 'rotate'
-					break
-				case 'KeyS':
-					e.preventDefault()
-					currentTransformMode.value = 'scale'
-					break
-				case 'KeyZ':
-					e.preventDefault()
-					transformControls.value.axis = 'Z'
-					break
-				case 'KeyX':
-					e.preventDefault()
-					transformControls.value.axis = 'X'
-					break
-				case 'KeyY':
-					e.preventDefault()
-					transformControls.value.axis = 'Y'
-					break
-				case 'KeyC':
-					e.preventDefault()
-					transformControls.value.axis = 'XYZE'
-					break
-				case 'Escape': {
-					e.preventDefault()
-					if (!isTransformDrag.value) return
-					const { position, quaternion, scale } = transformControls.value.object
-					position.copy(stateBeforeDrag.position)
-					quaternion.copy(stateBeforeDrag.quaternion)
-					scale.copy(stateBeforeDrag.scale)
-					transformControls.value.pointerUp(null)
-					triggerRef(selectedObject)
-					break
+			const mode = keyCodeToTransformMode[e.code]
+			const axis = keyCodeToTransformAxis[e.code]
+
+			if (mode) {
+				e.preventDefault()
+				currentTransformMode.value = mode
+				return
+			}
+
+			if (axis) {
+				e.preventDefault()
+				const axisMap: Record<string, typeof transformControls.value.axis> = {
+					x: 'X',
+					y: 'Y',
+					z: 'Z',
+					clear: 'XYZE'
 				}
+				transformControls.value.axis = axisMap[axis]
+				return
+			}
+
+			if (e.code === defaultKeymaps.transform.cancel) {
+				e.preventDefault()
+				if (!isTransformDrag.value) return
+				const { position, quaternion, scale } = transformControls.value.object
+				position.copy(stateBeforeDrag.position)
+				quaternion.copy(stateBeforeDrag.quaternion)
+				scale.copy(stateBeforeDrag.scale)
+				transformControls.value.pointerUp(null)
+				triggerRef(selectedObject)
 			}
 		})
-	}
-
-	function getGizmoConfig(): GizmoOptions {
-		const rootStyle = getComputedStyle(document.documentElement)
-		const colorX = rootStyle.getPropertyValue('--color-axis-x')
-		const colorY = rootStyle.getPropertyValue('--color-axis-y')
-		const colorZ = rootStyle.getPropertyValue('--color-axis-z')
-
-		return {
-			container: '.gizmo-wrapper',
-			className: 'gizmo',
-			size: 100,
-			placement: 'top-right',
-			lineWidth: 3,
-			resolution: 128,
-			x: {
-				color: colorX,
-				hover: {
-					labelColor: '#fff',
-					color: colorX
-				}
-			},
-			y: {
-				color: colorY,
-				hover: {
-					labelColor: '#fff',
-					color: colorY
-				}
-			},
-			z: {
-				color: colorZ,
-				hover: {
-					labelColor: '#fff',
-					color: colorZ
-				}
-			}
-		}
 	}
 
 	function setView({

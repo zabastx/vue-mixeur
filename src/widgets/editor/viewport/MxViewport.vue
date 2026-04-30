@@ -33,14 +33,16 @@ import { onMounted, ref, useTemplateRef } from 'vue'
 import WebGL from 'three/addons/capabilities/WebGL.js'
 import ViewNavigationWidget from './ViewNavigationWidget.vue'
 import { useAppStore } from '@/app/model/app'
+import { useInputStore } from '@/app/model/input'
 import { createLight } from '@/shared/three/modules/light'
 import { createMesh } from '@/shared/three/modules/mesh'
 import { createCamera } from '@/shared/three/modules/camera/create'
 import { useCameraStore } from '@/app/model/camera'
 
 const appStore = useAppStore()
+const inputStore = useInputStore()
 const canvasRef = useTemplateRef('canvasRef')
-appStore.initListeners(canvasRef)
+inputStore.init(canvasRef)
 
 const sceneStore = useThreeStore()
 const webglErrorRef = useTemplateRef('webglErrorRef')

@@ -1,5 +1,5 @@
 <template>
-	<div v-show="appStore.pointerOnCanvas" class="flex items-center gap-2 text-xs select-none">
+	<div v-show="inputStore.pointerOnCanvas" class="flex items-center gap-2 text-xs select-none">
 		<div v-for="item in activeHints" :key="item.text" class="align-center flex gap-1">
 			<MxIcon v-if="item.icon" class="text-xl" :name="item.icon" />
 			<div v-if="item.textHint" class="space-x-0.5">
@@ -14,10 +14,10 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { useAppStore } from '@/app/model/app'
+import { useInputStore } from '@/app/model/input'
 import { useControlsStore } from '@/app/model/controls'
 
-const appStore = useAppStore()
+const inputStore = useInputStore()
 const controlsStore = useControlsStore()
 
 const keymapList: KeymapOption[] = [
@@ -54,10 +54,10 @@ const activeHints = computed(() => {
 	if (controlsStore.isTransformDrag) {
 		return transfromControlsHints
 	}
-	if (appStore.isCtrlDown) {
+	if (inputStore.isCtrlDown) {
 		return keymapList.filter((item) => item.key === 'ctrl')
 	}
-	if (appStore.isShiftDown) {
+	if (inputStore.isShiftDown) {
 		return keymapList.filter((item) => item.key === 'shift')
 	}
 	return keymapList.filter((item) => !item.key)

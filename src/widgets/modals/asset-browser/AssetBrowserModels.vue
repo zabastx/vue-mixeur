@@ -78,12 +78,12 @@
 </template>
 
 <script lang="ts" setup>
-import type { AssetFiles, ModelFiles } from '@/widgets/modals/asset-browser/types/polyhaven'
-import { useThreeStore } from '@/app/model/three'
 import { bytesToSize } from '@/shared/lib/format'
 import { CheckboxGroupRoot } from 'reka-ui'
 import { computed, ref, shallowRef, watch } from 'vue'
 import { usePolyHaven } from './polyhaven'
+import { useSceneStore } from '@/app/model/scene'
+import type { AssetFiles, ModelFiles } from './types/polyhaven'
 
 const isOpen = defineModel<boolean>({ default: false })
 
@@ -132,7 +132,7 @@ function setFilesData(files: AssetFiles) {
 	}
 }
 
-const threeStore = useThreeStore()
+const sceneStore = useSceneStore()
 const IS_DEV = import.meta.env.DEV
 
 async function importModel() {
@@ -166,6 +166,6 @@ async function importModel() {
 
 	if (!gltf) return
 
-	threeStore.addObjectToScene(gltf.scene)
+	sceneStore.addObjectToScene(gltf.scene)
 }
 </script>

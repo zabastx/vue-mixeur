@@ -2,6 +2,7 @@ import { useEventListener, useKeyModifier } from '@vueuse/core'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { ref, type ShallowRef } from 'vue'
 import { useThreeStore } from './three'
+import { useSceneStore } from './scene'
 import { useControlsStore } from './controls'
 import { useCameraStore } from './camera'
 import THREE from '@/shared/three'
@@ -34,7 +35,8 @@ export const useInputStore = defineStore('input', () => {
 		const ignoredElements = ['input', 'textarea', 'select']
 
 		useEventListener(window, 'keydown', (e) => {
-			const sceneStore = useThreeStore()
+			const threeStore = useThreeStore()
+			const sceneStore = useSceneStore()
 
 			if (
 				e.target instanceof HTMLElement &&
@@ -49,15 +51,15 @@ export const useInputStore = defineStore('input', () => {
 			switch (e.code) {
 				case 'Delete':
 					e.preventDefault()
-					if (sceneStore.selectedObject instanceof THREE.Object3D) {
-						sceneStore.deleteFromScene(sceneStore.selectedObject.uuid)
+					if (threeStore.selectedObject instanceof THREE.Object3D) {
+						sceneStore.deleteFromScene(threeStore.selectedObject.uuid)
 					}
 					break
 
 				case 'KeyD':
 					e.preventDefault()
-					if (sceneStore.selectedObject instanceof THREE.Object3D && e.shiftKey) {
-						sceneStore.cloneObject(sceneStore.selectedObject.uuid)
+					if (threeStore.selectedObject instanceof THREE.Object3D && e.shiftKey) {
+						sceneStore.cloneObject(threeStore.selectedObject.uuid)
 					}
 					break
 

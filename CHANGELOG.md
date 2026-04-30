@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Refactored store architecture: Split monolithic `three.ts` into focused stores
+  - Extracted `input.ts` for keyboard, pointer, and wheel event handling
+  - Simplified `app.ts` to only contain UI visibility state
+  - Extracted `scene.ts` for object lifecycle (add/delete/clone), groups, and export
+  - `three.ts` now only handles selection and render orchestration
+  - Moved keybindings to `config/keymaps.ts` for better maintainability
+
 ## [0.21.0] - 2026-04-28
 
 ### Added

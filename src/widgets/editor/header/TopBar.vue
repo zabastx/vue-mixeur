@@ -26,13 +26,13 @@
 <script lang="ts" setup>
 import { useAppStore } from '@/app/model/app'
 import { computed } from 'vue'
-import { useThreeStore } from '@/app/model/three'
+import { useSceneStore } from '@/app/model/scene'
 import { useModals } from '@/shared/lib/modals'
 import { usePWAUpdate } from '@/app/composables/usePWAUpdate'
 import type { IMenubarMenu } from '@/shared/ui/MenuBar.vue'
 
 const appStore = useAppStore()
-const threeStore = useThreeStore()
+const sceneStore = useSceneStore()
 const { open } = useModals()
 
 const { isUpdateAvailable, updateApp } = usePWAUpdate()
@@ -100,7 +100,7 @@ const menuItems: IMenubarMenu[] = [
 				label: 'Export',
 				icon: 'misc/export',
 				onClick() {
-					threeStore.exportScene()
+					sceneStore.exportScene()
 				}
 			}
 		]

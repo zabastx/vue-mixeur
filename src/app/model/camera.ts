@@ -2,7 +2,7 @@ import THREE from '@/shared/three'
 import { createCamera } from '@/shared/three/modules/camera/create'
 import { defineStore } from 'pinia'
 import { computed, ref, shallowRef, watch } from 'vue'
-import { useThreeStore } from './three'
+import { useSceneStore } from './scene'
 import { getUserData } from '@/shared/three/utils'
 import { useEventListener } from '@vueuse/core'
 
@@ -32,8 +32,8 @@ export const useCameraStore = defineStore('camera', () => {
 	const renderCamera = shallowRef<THREE.Camera | null>(null)
 
 	const renderCameraList = computed(() => {
-		const threeStore = useThreeStore()
-		return threeStore.sceneChildren.filter(
+		const sceneStore = useSceneStore()
+		return sceneStore.sceneChildren.filter(
 			(obj) => obj instanceof THREE.Camera && getUserData(obj).isRenderCamera
 		) as THREE.Camera[]
 	})
@@ -73,7 +73,7 @@ export const useCameraStore = defineStore('camera', () => {
 	}
 
 	function setRenderCamera(uuid: string) {
-		const { scene } = useThreeStore()
+		const { scene } = useSceneStore()
 		const camera = scene.getObjectByProperty('uuid', uuid)
 		if (!(camera instanceof THREE.Camera))
 			return console.warn('setRenderCamera: object is not a camera')

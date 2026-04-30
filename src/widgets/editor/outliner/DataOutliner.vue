@@ -6,7 +6,7 @@
 		<h2 class="flex items-center gap-1 px-1 text-[1rem]">
 			<MxIcon name="outliner/outliner" /> Outliner
 			<MxTooltip :tooltip="{ text: 'Add Group' }">
-				<button class="btn ml-auto" type="button" @click="store.addGroup">
+				<button class="btn ml-auto" type="button" @click="sceneStore.addGroup">
 					<MxIcon name="outliner/group-new" />
 				</button>
 			</MxTooltip>
@@ -30,7 +30,7 @@
 					:key="item._id"
 					v-slot="{ isExpanded }"
 					:data-testid="item.value.uuid === selectedItem?.uuid ? 'outliner-selected' : undefined"
-					@select.prevent="store.selectObject($event.detail.value?.uuid)"
+					@select.prevent="threeStore.selectObject($event.detail.value?.uuid)"
 					@toggle="onToggle"
 				>
 					<DataOutlinerItem
@@ -40,7 +40,7 @@
 						:is-selected="item.value.uuid === selectedItem?.uuid"
 						@update:visibility="
 							($event: boolean | undefined) =>
-								store.objectVisibilityUpdate(item.value.uuid, !!$event)
+								sceneStore.objectVisibilityUpdate(item.value.uuid, !!$event)
 						"
 					/>
 				</Tree.Item>
@@ -51,6 +51,7 @@
 
 <script lang="ts" setup>
 import { useThreeStore } from '@/app/model/three'
+import { useSceneStore } from '@/app/model/scene'
 import THREE from '@/shared/three'
 import { Tree } from 'reka-ui/namespaced'
 import { computed, shallowRef, watch } from 'vue'
@@ -58,12 +59,13 @@ import type { TreeItemToggleEvent } from 'reka-ui'
 import type { OutlinerItem } from './DataOutlinerItem.vue'
 import { getUserData } from '@/shared/three/utils'
 
-const store = useThreeStore()
+const threeStore = useThreeStore()
+const sceneStore = useSceneStore()
 
 const selectedItem = shallowRef<THREE.Object3D | THREE.Light>()
 
 watch(
-	() => store.selectedObject,
+	() => threeStore.selectedObject,
 	(val) => {
 		selectedItem.value = val ?? undefined
 	},
@@ -73,7 +75,9 @@ watch(
 )
 
 const outlinerItems = computed(() => {
-	return store.sceneChildren.filter((item) => !getUserData(item).hideInOutliner).map(parseObject)
+	return sceneStore.sceneChildren
+		.filter((item) => !getUserData(item).hideInOutliner)
+		.map(parseObject)
 })
 
 function parseObject(obj: THREE.Object3D): OutlinerItem {

@@ -1,12 +1,12 @@
 <template>
-	<template v-if="store.selectedObject">
+	<template v-if="threeStore.selectedObject">
 		<InputField v-slot="{ id }" label="Name" class="mb-2.5 text-sm">
 			<input
 				:id
-				v-model="store.selectedObject.name"
+				v-model="threeStore.selectedObject.name"
 				type="text"
 				class="input text-xs"
-				@change="store.updateScene"
+				@change="sceneStore.updateScene"
 			/>
 		</InputField>
 		<MxAccordionRoot collapsible type="multiple" class="flex gap-0.5 flex-col">
@@ -25,7 +25,9 @@
 </template>
 
 <script lang="ts" setup>
+import { useSceneStore } from '@/app/model/scene'
 import { useThreeStore } from '@/app/model/three'
 
-const store = useThreeStore()
+const threeStore = useThreeStore()
+const sceneStore = useSceneStore()
 </script>

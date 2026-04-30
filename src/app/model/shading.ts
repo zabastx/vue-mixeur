@@ -5,7 +5,7 @@ import { getUserData } from '@/shared/three/utils'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { computed, ref, shallowRef } from 'vue'
 import type { MaterialCache, ShadingMode } from './types/shading'
-import { useThreeStore } from './three'
+import { useSceneStore } from './scene'
 
 export const useShadingStore = defineStore('shading', () => {
 	const solidModeLights = getSolidShadingLights()
@@ -35,7 +35,7 @@ export const useShadingStore = defineStore('shading', () => {
 	 * Only caches materials for objects marked as shadable.
 	 */
 	function cacheOriginalMaterials() {
-		const { scene } = useThreeStore()
+		const { scene } = useSceneStore()
 		scene.traverse((object) => {
 			if (object instanceof THREE.Mesh && object.material && shouldShadeObject(object)) {
 				cacheMeshMaterials(object)
@@ -90,7 +90,7 @@ export const useShadingStore = defineStore('shading', () => {
 	function setMode(mode: ShadingMode) {
 		if (mode === shadingMode.value) return
 		currentMode.value = mode
-		const { scene, updateScene } = useThreeStore()
+		const { scene, updateScene } = useSceneStore()
 
 		if (mode === 'preview') {
 			scene.environment = environmentMap.value
@@ -135,7 +135,7 @@ export const useShadingStore = defineStore('shading', () => {
 	}
 
 	function setEnvironmentMap(map: THREE.Texture) {
-		const { scene } = useThreeStore()
+		const { scene } = useSceneStore()
 		environmentMap.value = map
 		if (shadingMode.value === 'preview') {
 			scene.environment = environmentMap.value
@@ -232,7 +232,7 @@ export const useShadingStore = defineStore('shading', () => {
 	}
 
 	function init() {
-		const { scene } = useThreeStore()
+		const { scene } = useSceneStore()
 		solidModeLights.forEach((item) => scene?.add(item))
 		cacheOriginalMaterials()
 
@@ -244,7 +244,7 @@ export const useShadingStore = defineStore('shading', () => {
 	}
 
 	function setSceneLightsVisibility(val: boolean) {
-		const { scene } = useThreeStore()
+		const { scene } = useSceneStore()
 		scene.traverse((obj: LightHelper | THREE.Object3D) => {
 			if ('light' in obj && getUserData(obj).isSceneLight) {
 				obj.light.visible = val

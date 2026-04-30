@@ -8,7 +8,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useThreeStore } from '@/app/model/three'
 import { createMesh } from '@/shared/three/modules/mesh'
 import { createLight } from '@/shared/three/modules/light'
 import { createText } from '@/shared/three/modules/text'
@@ -16,8 +15,10 @@ import { createCamera } from '@/shared/three/modules/camera/create'
 import type { IMenubarMenu } from '@/shared/ui/MenuBar.vue'
 import { storeToRefs } from 'pinia'
 import { useAppStore } from '@/app/model/app'
+import { useSceneStore } from '@/app/model/scene'
 
 const { showToolSettings, showToolbar } = storeToRefs(useAppStore())
+const sceneStore = useSceneStore()
 
 const menuItems: IMenubarMenu[] = [
 	{
@@ -128,7 +129,7 @@ const menuItems: IMenubarMenu[] = [
 				onClick() {
 					createText().then((text) => {
 						if (text) {
-							threeStore.addObjectToScene(text)
+							sceneStore.addObjectToScene(text)
 						}
 					})
 				}
@@ -196,22 +197,20 @@ const menuItems: IMenubarMenu[] = [
 						name: 'Camera'
 					})
 
-					threeStore.addObjectToScene(camera)
+					sceneStore.addObjectToScene(camera)
 				}
 			}
 		]
 	}
 ]
 
-const threeStore = useThreeStore()
-
 function addMesh(type: Parameters<typeof createMesh>[0]) {
 	const mesh = createMesh(type)
-	threeStore.addObjectToScene(mesh)
+	sceneStore.addObjectToScene(mesh)
 }
 
 function addLight(type: Parameters<typeof createLight>['0']['type']) {
 	const light = createLight({ type })
-	threeStore.addObjectToScene(light)
+	sceneStore.addObjectToScene(light)
 }
 </script>

@@ -83,7 +83,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useThreeStore } from '@/app/model/three'
+import { useSceneStore } from '@/app/model/scene'
 import { useShadingStore } from '@/app/model/shading'
 import { useTemplateRef, ref, computed, reactive } from 'vue'
 import THREE from '@/shared/three'
@@ -97,10 +97,11 @@ import { useCameraStore } from '@/app/model/camera'
 
 const isOpen = defineModel<boolean>({ default: false })
 
+const sceneStore = useSceneStore()
+
 const { close } = useModals()
 const toast = useToast()
 
-const threeStore = useThreeStore()
 const shadingStore = useShadingStore()
 const cameraStore = useCameraStore()
 
@@ -172,7 +173,7 @@ async function renderImage() {
 		try {
 			shadingStore.setMode('export')
 
-			const renderScene = createRenderScene(threeStore.scene as THREE.Scene)
+			const renderScene = createRenderScene(sceneStore.scene as THREE.Scene)
 			if (!background) {
 				renderScene.background = null
 			}

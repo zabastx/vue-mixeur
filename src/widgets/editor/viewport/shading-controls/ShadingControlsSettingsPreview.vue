@@ -43,7 +43,7 @@
 		</MxPopover>
 		<div class="text-xs space-y-0.5">
 			<InputField label="Intensity" input-width="175px">
-				<InputNumber v-model="threeStore.scene.environmentIntensity" :min="0" :step="0.01" />
+				<InputNumber v-model="sceneStore.scene.environmentIntensity" :min="0" :step="0.01" />
 			</InputField>
 			<InputField label="Rotation" input-width="175px">
 				<InputEuler v-model="rotation" :min="-180" :max="180" />
@@ -56,8 +56,8 @@
 import { computed, ref } from 'vue'
 import { DEFAULT_WORLD_MAPS, loadWorldTexture } from '@/shared/three/modules/loaders/environment'
 import { useShadingStore } from '@/app/model/shading'
-import { useThreeStore } from '@/app/model/three'
 import type THREE from '@/shared/three'
+import { useSceneStore } from '@/app/model/scene'
 
 const shadingStore = useShadingStore()
 
@@ -73,7 +73,7 @@ async function changeEnvMap(map: (typeof DEFAULT_WORLD_MAPS)[number]) {
 	isUpdating.value = false
 }
 
-const threeStore = useThreeStore()
+const sceneStore = useSceneStore()
 
-const rotation = computed<THREE.Euler>(() => threeStore.scene.environmentRotation)
+const rotation = computed<THREE.Euler>(() => sceneStore.scene.environmentRotation)
 </script>

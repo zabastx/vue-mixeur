@@ -80,11 +80,11 @@
 <script lang="ts" setup>
 import { computed, reactive, shallowRef, useTemplateRef, watch } from 'vue'
 import ImportSceneFiles from './ImportSceneFiles.vue'
-import { useThreeStore } from '@/app/model/three'
 import type { ModelFileItem } from './types'
 import type ImportSceneSettings from './ImportSceneSettings.vue'
 import { detectMTL } from './parse-scene'
 import { useToast } from '@/shared/lib/toast'
+import { useSceneStore } from '@/app/model/scene'
 
 const isOpen = defineModel<boolean>()
 const toast = useToast()
@@ -148,7 +148,7 @@ function onAssetSelect(sceneFileId: string, key: string, val?: string) {
 }
 
 const settingsRef = useTemplateRef<InstanceType<typeof ImportSceneSettings> | null>('settingsRef')
-const store = useThreeStore()
+const sceneStore = useSceneStore()
 
 // ── Shared urlModifier factory to avoid duplication and ensure blob cleanup ────
 
@@ -219,7 +219,7 @@ async function importGLTF(sceneFile: ModelFileItem) {
 
 		if (gltf) {
 			gltf.scene.name = sceneFile.file.name
-			store.addObjectToScene(gltf.scene)
+			sceneStore.addObjectToScene(gltf.scene)
 		}
 	} finally {
 		blobUrls.forEach((url) => URL.revokeObjectURL(url))
@@ -241,7 +241,7 @@ async function importFBX(sceneFile: ModelFileItem) {
 
 		if (fbx) {
 			fbx.name = sceneFile.file.name
-			store.addObjectToScene(fbx)
+			sceneStore.addObjectToScene(fbx)
 		}
 	} finally {
 		blobUrls.forEach((url) => URL.revokeObjectURL(url))
@@ -293,7 +293,7 @@ async function importOBJScene(sceneFile: ModelFileItem) {
 
 		if (obj) {
 			obj.name = sceneFile.file.name
-			store.addObjectToScene(obj)
+			sceneStore.addObjectToScene(obj)
 		}
 	} finally {
 		blobUrls.forEach((url) => URL.revokeObjectURL(url))

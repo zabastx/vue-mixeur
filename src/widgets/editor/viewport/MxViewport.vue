@@ -4,12 +4,12 @@
 		class="relative grid h-full w-full grid-rows-[1fr_min_content] overflow-hidden rounded"
 	>
 		<ViewportHeader
-			v-if="sceneStore.isInitiated"
+			v-if="threeStore.isInitiated"
 			class="absolute top-0 left-0 z-1 w-full bg-viewport-header-bg"
 		/>
 		<div class="relative overflow-hidden">
 			<div class="gizmo-wrapper absolute top-10 right-0"></div>
-			<ViewNavigationWidget v-if="sceneStore.isInitiated" class="absolute top-40 right-2.5" />
+			<ViewNavigationWidget v-if="threeStore.isInitiated" class="absolute top-40 right-2.5" />
 			<div v-if="isError" ref="webglErrorRef" class="webgl-error"></div>
 			<canvas
 				v-else
@@ -20,7 +20,7 @@
 		</div>
 		<Transition name="slide-fade-left">
 			<ViewportToolbar
-				v-if="sceneStore.isInitiated && appStore.showToolbar"
+				v-if="threeStore.isInitiated && appStore.showToolbar"
 				class="absolute top-20 left-2.5"
 			/>
 		</Transition>
@@ -38,13 +38,15 @@ import { createLight } from '@/shared/three/modules/light'
 import { createMesh } from '@/shared/three/modules/mesh'
 import { createCamera } from '@/shared/three/modules/camera/create'
 import { useCameraStore } from '@/app/model/camera'
+import { useSceneStore } from '@/app/model/scene'
 
 const appStore = useAppStore()
 const inputStore = useInputStore()
 const canvasRef = useTemplateRef('canvasRef')
 inputStore.init(canvasRef)
 
-const sceneStore = useThreeStore()
+const sceneStore = useSceneStore()
+const threeStore = useThreeStore()
 const webglErrorRef = useTemplateRef('webglErrorRef')
 const isError = ref(false)
 
@@ -57,7 +59,7 @@ onMounted(() => {
 		return
 	}
 
-	sceneStore.initScene(canvasRef)
+	threeStore.initScene(canvasRef)
 	setInitialObjects()
 })
 

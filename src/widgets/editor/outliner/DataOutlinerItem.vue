@@ -59,13 +59,13 @@
 <script lang="ts" setup>
 import type { MxContextMenuItem } from '@/shared/ui/MxContextMenu.vue'
 import { useCameraStore } from '@/app/model/camera'
-import { useThreeStore } from '@/app/model/three'
 import type { MxObjectUserData } from '@/shared/three/three'
 import type { FlattenedItem } from 'reka-ui'
 import { computed } from 'vue'
+import { useSceneStore } from '@/app/model/scene'
 
 const cameraStore = useCameraStore()
-const threeStore = useThreeStore()
+const sceneStore = useSceneStore()
 
 const visibility = defineModel<boolean>('visibility')
 
@@ -76,12 +76,12 @@ const props = defineProps<{
 }>()
 
 const groupOptions = computed<MxContextMenuItem[]>(() => {
-	const items: MxContextMenuItem[] = threeStore.sceneGroups.map((group) => ({
+	const items: MxContextMenuItem[] = sceneStore.sceneGroups.map((group) => ({
 		type: 'item',
 		key: group.uuid,
 		label: group.name,
 		onSelect() {
-			threeStore.moveObjectToTarget(props.item.value.uuid, group.uuid)
+			sceneStore.moveObjectToTarget(props.item.value.uuid, group.uuid)
 		}
 	}))
 
@@ -100,7 +100,7 @@ const contextMenuItems = computed(() => {
 					label: 'Scene Root',
 					icon: 'ui/collection',
 					onSelect() {
-						threeStore.moveObjectToTarget(uuid, threeStore.scene.uuid)
+						sceneStore.moveObjectToTarget(uuid, sceneStore.scene.uuid)
 					}
 				},
 				{
@@ -108,8 +108,8 @@ const contextMenuItems = computed(() => {
 					label: 'New Group',
 					icon: 'outliner/group-new',
 					onSelect() {
-						const group = threeStore.addGroup()
-						threeStore.moveObjectToTarget(uuid, group.uuid)
+						const group = sceneStore.addGroup()
+						sceneStore.moveObjectToTarget(uuid, group.uuid)
 					}
 				},
 				...groupOptions.value
@@ -120,7 +120,7 @@ const contextMenuItems = computed(() => {
 			label: 'Duplicate Object',
 			shortcut: 'Shift + D',
 			onSelect() {
-				threeStore.cloneObject(uuid)
+				sceneStore.cloneObject(uuid)
 			}
 		},
 		{
@@ -128,7 +128,7 @@ const contextMenuItems = computed(() => {
 			label: 'Delete',
 			shortcut: 'Del',
 			onSelect() {
-				threeStore.deleteFromScene(uuid)
+				sceneStore.deleteFromScene(uuid)
 			}
 		}
 	]

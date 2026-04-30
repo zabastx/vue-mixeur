@@ -257,9 +257,9 @@ export const useShadingStore = defineStore('shading', () => {
 		return cache
 	}
 
-	function updateMaterial<T extends THREE.Material = THREE.Material>(
+	function updateMaterial<T extends THREE.Material = THREE.Material, K extends keyof T = keyof T>(
 		mesh: THREE.Mesh,
-		data: { prop: keyof T; value: T[keyof T] }
+		data: { prop: K; value: T[K] }
 	) {
 		const cache = materialCache.get(mesh.uuid)
 		if (!cache) return

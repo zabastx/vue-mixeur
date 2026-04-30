@@ -2,11 +2,9 @@ import { useProgressStore } from '@/app/model/progress'
 import { useToast } from '@/shared/lib/toast'
 import { FontLoader } from 'three/examples/jsm/Addons.js'
 
-const toast = useToast()
-
-const fontLoader = new FontLoader()
-
 export async function loadFont(font: StdFontName | (string & {})) {
+	const toast = useToast()
+	const fontLoader = new FontLoader()
 	const progressStore = useProgressStore()
 	const progressItem = progressStore.initProgress(font)
 

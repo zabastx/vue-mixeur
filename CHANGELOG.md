@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `three.ts` now only handles selection and render orchestration
   - Moved keybindings to `config/keymaps.ts` for better maintainability
 
+### Fixed
+
+- Fixed enabling shadow in a light that does not support it
+
 ## [0.21.0] - 2026-04-28
 
 ### Added

@@ -3,7 +3,7 @@ import { computed, shallowRef, triggerRef } from 'vue'
 import THREE from '@/shared/three'
 import { setGridHelper } from '@/shared/three/modules/helpers/grid'
 import { disposeModel } from '@/shared/three/modules/core/dispose'
-import { getLightHelper, type LightHelper } from '@/shared/three/modules/light'
+import { getLightHelper, lightHasShadow, type LightHelper } from '@/shared/three/modules/light'
 import { exportModel } from '@/shared/three/modules/addons/exporter'
 import { getUserData, enableBVH } from '@/shared/three/utils'
 import { useShadingStore } from './shading'
@@ -69,20 +69,25 @@ export const useSceneStore = defineStore('scene', () => {
 		object.traverse((obj) => {
 			const userData = getUserData(obj)
 			userData.userVisible = obj.visible
-			obj.castShadow = true
-			obj.receiveShadow = true
 
 			if ('material' in obj) {
 				userData.isShadable = true
 				const material = obj.material as THREE.Material | THREE.Material[]
 				if (Array.isArray(material)) material.forEach((mat) => (mat.dithering = true))
 				else material.dithering = true
+
+				obj.castShadow = true
+				obj.receiveShadow = true
 			}
 
 			if (obj instanceof THREE.Light) {
 				const helper = getLightHelper(obj)
 				userData.hideInModes = ['wireframe', 'solid', 'preview']
 				userData.isSceneLight = true
+
+				if (lightHasShadow(obj)) {
+					obj.castShadow = true
+				}
 
 				if (!helper) return
 

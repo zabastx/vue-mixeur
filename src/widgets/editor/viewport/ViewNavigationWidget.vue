@@ -48,7 +48,7 @@
 				@click="cameraStore.toggleCameraView"
 			>
 				<MxIcon
-					v-if="cameraStore.activeCamera === cameraStore.renderCamera"
+					v-if="cameraStore.activeCamera.uuid === cameraStore.renderCamera?.uuid"
 					name="outliner/camera-obj"
 				/>
 				<MxIcon v-else name="outliner/camera" />

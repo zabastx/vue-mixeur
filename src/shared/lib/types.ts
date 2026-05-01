@@ -10,3 +10,7 @@ export interface MxTooltipContent {
 	text?: string
 	footer?: string
 }
+
+export type NonMethodKeys<T> = {
+	[K in keyof T & string]: T[K] extends (...args: never[]) => unknown ? never : K
+}[keyof T & string]

@@ -1,9 +1,5 @@
-import type { MxTooltipContent } from '@/shared/lib/types'
+import type { MxTooltipContent, NonMethodKeys } from '@/shared/lib/types'
 import type THREE from '@/shared/three'
-
-type NonMethodKeys<T> = {
-	[K in keyof T & string]: T[K] extends (...args: never[]) => unknown ? never : K
-}[keyof T & string]
 
 export type MaterialProp<T extends THREE.Material> = NonNullable<NonMethodKeys<T>>
 

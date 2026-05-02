@@ -35,13 +35,13 @@ import { Tabs } from 'reka-ui/namespaced'
 import { computed, ref, watch, type Component } from 'vue'
 import { useThreeStore } from '@/app/model/three'
 import THREE from '@/shared/three'
-import LightDataProperties from './light/LightDataProperties.vue'
 import { TextGeometry } from 'three/examples/jsm/Addons.js'
 import CameraProperties from './camera/CameraProperties.vue'
 import MaterialProperties from './material/MaterialProperties.vue'
 import { isThreeGeometry } from '@/shared/three/modules/mesh'
 import PropertiesGeometry from './geometry/PropertiesGeometry.vue'
 import TextDataProperties from './text/TextDataProperties.vue'
+import PropertiesLight from './light/PropertiesLight.vue'
 
 const store = useThreeStore()
 
@@ -80,7 +80,7 @@ const tabs = computed<DataTabItem[]>(() => {
 	if (obj instanceof THREE.Light) {
 		list.push({
 			icon: 'properties/light-properties',
-			content: LightDataProperties,
+			content: PropertiesLight,
 			title: 'Light Properties',
 			value: 'light'
 		})

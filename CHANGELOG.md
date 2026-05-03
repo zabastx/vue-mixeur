@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Reusable input fields: New `useInputField` composable for consistent input behavior
+- Reusable input fields: New `useInputFields` composable for consistent input behavior
 
 ### Changed
 

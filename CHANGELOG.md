@@ -7,20 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Reusable input fields: New `useInputField` composable for consistent input behavior
+
 ### Changed
 
-- Refactored store architecture: Split monolithic `three.ts` into focused stores
+- Architecture migration: Migrated to Feature-Sliced Design (FSD) v2.1 for improved code organization
+- Store architecture refactor: Split monolithic `three.ts` into focused stores
   - Extracted `input.ts` for keyboard, pointer, and wheel event handling
   - Simplified `app.ts` to only contain UI visibility state
   - Extracted `scene.ts` for object lifecycle (add/delete/clone), groups, and export
   - `three.ts` now only handles selection and render orchestration
   - Moved keybindings to `config/keymaps.ts` for better maintainability
+- Light properties: Refactored light property management for better type safety
+- Material updates: Improved type safety for material property updates
+- Font loading: Encapsulated font loader with toast notification hook
 
 ### Fixed
 
-- Fixed enabling shadow in a light that does not support it
-- Viewport Widget: fixed toggle camera view icon
-- Fixed visibility properties toggle
+- Shadow assignment: Prevented crash when enabling shadow on lights that don't support it
+- Camera view icon: Fixed toggle icon state in viewport widget
+- Visibility properties: Fixed toggle synchronization for object visibility
+- Text input increments: Refined increment step values for text property inputs
 
 ## [0.21.0] - 2026-04-28
 
@@ -43,3 +52,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Material Preview settings: fixed broken thumbnail url
+
+[0.22.0]: https://github.com/zabastx/mixeur/compare/v0.21.0...v0.22.0

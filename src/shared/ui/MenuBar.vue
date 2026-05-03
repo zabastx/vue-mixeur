@@ -18,6 +18,9 @@
 							<MxIcon v-if="item.icon" :name="item.icon" />
 						</span>
 						{{ item.label }}
+						<span v-if="item.shortcut" class="ml-auto text-xs text-ui-text-secondary opacity-60">{{
+							item.shortcut
+						}}</span>
 					</Menubar.Item>
 					<Menubar.CheckboxItem
 						v-else-if="item.type === 'checkbox'"
@@ -47,6 +50,11 @@
 									<MxIcon v-if="subitem.icon" :name="subitem.icon" />
 								</span>
 								{{ subitem.label }}
+								<span
+									v-if="subitem.shortcut"
+									class="ml-auto text-xs text-ui-text-secondary opacity-60"
+									>{{ subitem.shortcut }}</span
+								>
 							</Menubar.Item>
 						</Menubar.SubContent>
 					</Menubar.Sub>
@@ -77,6 +85,7 @@ export interface IMenubarMenu {
 interface IMenubarItem extends IMenubarCommon {
 	type: 'item'
 	icon?: MxIconName
+	shortcut?: string
 	onClick: () => void | Promise<void>
 }
 

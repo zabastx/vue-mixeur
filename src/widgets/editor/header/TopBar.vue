@@ -25,11 +25,11 @@
 
 <script lang="ts" setup>
 import { useAppStore } from '@/app/model/app'
-import { computed } from 'vue'
 import { useSceneStore } from '@/app/model/scene'
 import { useModals } from '@/shared/lib/modals'
 import { usePWAUpdate } from '@/app/composables/usePWAUpdate'
 import type { IMenubarMenu } from '@/shared/ui/MenuBar.vue'
+import { storeToRefs } from 'pinia'
 
 const appStore = useAppStore()
 const sceneStore = useSceneStore()
@@ -37,14 +37,7 @@ const { open } = useModals()
 
 const { isUpdateAvailable, updateApp } = usePWAUpdate()
 
-const showStatusBar = computed({
-	get() {
-		return appStore.showStatusBar
-	},
-	set(val) {
-		appStore.showStatusBar = val
-	}
-})
+const { showStatusBar } = storeToRefs(appStore)
 
 const menuItems: IMenubarMenu[] = [
 	{

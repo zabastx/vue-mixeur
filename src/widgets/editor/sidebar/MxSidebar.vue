@@ -1,8 +1,8 @@
 <template>
 	<div ref="sidebarRef" class="sidebar grid min-h-0 grid-rows-(--side-rows) rounded">
-		<DataOutliner />
+		<slot name="top"></slot>
 		<div ref="divider" class="h-1 cursor-row-resize"></div>
-		<DataProperties />
+		<slot name="bottom"></slot>
 	</div>
 </template>
 

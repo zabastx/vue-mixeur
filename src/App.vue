@@ -7,7 +7,14 @@
 				<main class="grid min-h-0 flex-1 grid-cols-(--main-cols) bg-editor-border p-1 select-none">
 					<MxViewport class="block-border" />
 					<div ref="divider" class="divider w-1 cursor-col-resize"></div>
-					<MxSidebar v-if="threeStore.isInitiated" />
+					<MxSidebar v-if="threeStore.isInitiated">
+						<template #top>
+							<DataOutlinerV2 />
+						</template>
+						<template #bottom>
+							<DataProperties />
+						</template>
+					</MxSidebar>
 				</main>
 
 				<StatusBar v-show="appStore.showStatusBar" />

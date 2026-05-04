@@ -1,5 +1,5 @@
 <template>
-	<ContextMenu.Root v-bind="root">
+	<ContextMenu.Root v-bind="root" @update:open="emits('update:open', $event)">
 		<ContextMenu.Trigger v-bind="trigger" as-child>
 			<slot></slot>
 		</ContextMenu.Trigger>
@@ -58,6 +58,7 @@
 <script lang="ts" setup>
 import type {
 	ContextMenuContentProps,
+	ContextMenuRootEmits,
 	ContextMenuRootProps,
 	ContextMenuSubContentProps,
 	ContextMenuTriggerProps
@@ -76,6 +77,8 @@ const {
 	subContent?: ContextMenuSubContentProps
 	items: MxContextMenuItem[]
 }>()
+
+const emits = defineEmits<ContextMenuRootEmits>()
 
 export interface MxContextMenuItem {
 	key: string

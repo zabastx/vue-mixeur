@@ -20,7 +20,7 @@ export const useSceneStore = defineStore('scene', () => {
 
 	const grid = setGridHelper(scene.value)
 
-	const lightHelperObjects: LightHelper[] = []
+	const lightHelperObjects = shallowRef<LightHelper[]>([])
 
 	const sceneChildren = computed(() => scene.value.children)
 
@@ -96,7 +96,7 @@ export const useSceneStore = defineStore('scene', () => {
 				}
 
 				helpers.push(helper)
-				lightHelperObjects.push(helper)
+				lightHelperObjects.value.push(helper)
 				addToRaycaster(helper)
 				return
 			}
@@ -158,11 +158,14 @@ export const useSceneStore = defineStore('scene', () => {
 		const { removeFromRaycaster } = useRaycastStore()
 		const { clearMaterialCache } = useShadingStore()
 		const { removeFromOutline } = useComposerStore()
+		const { selectObject, selectedObject } = useThreeStore()
 
 		transformControls?.detach()
 		const object = scene.value.getObjectByProperty('uuid', uuid)
 
 		if (!object) return console.warn('deleteFromScene: object is undefined')
+
+		if (selectedObject?.uuid === object.uuid) selectObject()
 
 		const helperUUID = getUserData(object).helperUUID
 		if (helperUUID) {

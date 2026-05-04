@@ -18,11 +18,11 @@ export const useThreeStore = defineStore('three', () => {
 	const selectedObject = shallowRef<THREE.Object3D | THREE.Light | THREE.Mesh | null>(null)
 
 	function selectObject(uuid?: string, raycasted?: boolean) {
+		if (!uuid) return (selectedObject.value = null)
+
 		const sceneStore = useSceneStore()
 		const { transformControls } = useControlsStore()
 		const { setOutlineObjects } = useComposerStore()
-
-		if (!uuid) return
 
 		const object = sceneStore.scene.getObjectByProperty('uuid', uuid)
 

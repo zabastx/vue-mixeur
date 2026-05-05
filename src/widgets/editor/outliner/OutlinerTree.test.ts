@@ -339,4 +339,15 @@ describe('OutlinerTree', () => {
 
 		expect(emitted('update:modelValue')).toEqual([[item]])
 	})
+
+	it('marks the selected row with the E2E selection test id', () => {
+		const item = createItem({ uuid: 'selected-mesh' })
+
+		const { getByTestId } = renderOutliner({
+			items: [item],
+			modelValue: item
+		})
+
+		expect(getByTestId('outliner-selected')).toBeTruthy()
+	})
 })

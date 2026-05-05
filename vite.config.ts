@@ -5,7 +5,6 @@ import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 import Components from 'unplugin-vue-components/vite'
 import RekaResolver from 'reka-ui/resolver'
-import svgLoader from 'vite-svg-loader'
 import { iconTypesPlugin } from './plugins/vite-plugin-icon-types'
 import { VitePWA } from 'vite-plugin-pwa'
 
@@ -19,7 +18,6 @@ export default defineConfig({
 			dts: 'src/components.d.ts',
 			resolvers: [RekaResolver()]
 		}),
-		svgLoader(),
 		iconTypesPlugin(),
 		VitePWA({
 			registerType: 'prompt',

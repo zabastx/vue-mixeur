@@ -9,7 +9,7 @@
 					<div ref="divider" class="divider w-1 cursor-col-resize"></div>
 					<MxSidebar v-if="threeStore.isInitiated">
 						<template #top>
-							<DataOutlinerV2 />
+							<DataOutliner />
 						</template>
 						<template #bottom>
 							<DataProperties />
@@ -18,11 +18,10 @@
 				</main>
 
 				<StatusBar v-show="appStore.showStatusBar" />
-
-				<ModelLoadingProgress />
-				<MxToast />
-				<ModalCollection />
 			</div>
+			<ModelLoadingProgress />
+			<MxToast />
+			<ModalCollection />
 		</TooltipProvider>
 	</ToastProvider>
 </template>

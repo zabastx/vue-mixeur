@@ -1,159 +1,267 @@
-import { render, screen } from '@testing-library/vue'
-import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { ref } from 'vue'
+/* eslint-disable vue/one-component-per-file */
+import { render } from '@testing-library/vue'
+import userEvent from '@testing-library/user-event'
+import { defineComponent, h, type PropType, type VNode } from 'vue'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import DataOutliner from './DataOutliner.vue'
+import type { OutlinerItem } from './types'
+import THREE from '@/shared/three'
+import { getUserData } from '@/shared/three/utils'
 
-// Mock store return values - using refs for reactivity
-const mockSceneChildren = ref<unknown[]>([])
-const mockSceneGroups = ref<unknown[]>([])
-const mockSelectedObject = ref<unknown | null>(null)
-let mockObjectVisibilityUpdate = vi.fn()
-
-// Mock getUserData to return the userData directly
-vi.mock('@/shared/three/utils', () => ({
-	getUserData: (obj: { userData: Record<string, unknown> }) => obj.userData
+const sceneStore = vi.hoisted(() => ({
+	sceneChildren: [] as THREE.Object3D[],
+	addGroup: vi.fn()
 }))
 
-// Mock camera store
-vi.mock('@/app/model/camera', () => ({
-	useCameraStore: vi.fn(() => ({
-		renderCamera: null,
-		setRenderCamera: vi.fn()
-	}))
+const cameraStore = vi.hoisted(() => ({
+	renderCamera: null as THREE.Camera | null,
+	setRenderCamera: vi.fn()
 }))
 
-// Setup before all tests
+const threeStore = vi.hoisted(() => ({
+	selectedObject: null as THREE.Object3D | null,
+	selectObject: vi.fn()
+}))
+
 vi.mock('@/app/model/scene', () => ({
-	useSceneStore: vi.fn(() => ({
-		sceneChildren: mockSceneChildren.value,
-		sceneGroups: mockSceneGroups.value,
-		objectVisibilityUpdate: mockObjectVisibilityUpdate
-	}))
+	useSceneStore: () => sceneStore
+}))
+
+vi.mock('@/app/model/camera', () => ({
+	useCameraStore: () => cameraStore
 }))
 
 vi.mock('@/app/model/three', () => ({
-	useThreeStore: vi.fn(() => ({
-		selectedObject: mockSelectedObject.value
-	}))
+	useThreeStore: () => threeStore
 }))
+
+function renderItems(items: OutlinerItem[]): VNode[] {
+	return items.flatMap((item) => [
+		h(
+			'button',
+			{
+				type: 'button',
+				'data-testid': `outliner-item-${item.uuid}`,
+				'data-camera': String(item.isCamera),
+				onClick: () => item
+			},
+			item.name
+		),
+		...renderItems(item.children ?? [])
+	])
+}
+
+const OutlinerTreeStub = defineComponent({
+	name: 'OutlinerTree',
+	props: {
+		items: {
+			type: Array as PropType<OutlinerItem[]>,
+			required: true
+		},
+		modelValue: {
+			type: Object as PropType<OutlinerItem | undefined>,
+			default: undefined
+		},
+		renderCameraId: {
+			type: String,
+			default: undefined
+		}
+	},
+	emits: ['update:modelValue', 'setActiveCamera'],
+	setup(props, { emit }) {
+		return () =>
+			h(
+				'div',
+				{
+					'data-testid': 'outliner-tree',
+					'data-render-camera-id': props.renderCameraId ?? '',
+					'data-selected-id': props.modelValue?.uuid ?? ''
+				},
+				[
+					...props.items.flatMap((item) => [
+						h(
+							'button',
+							{
+								type: 'button',
+								'data-testid': `select-${item.uuid}`,
+								onClick: () => emit('update:modelValue', item)
+							},
+							`Select ${item.name}`
+						),
+						...renderItems([item])
+					]),
+					h(
+						'button',
+						{
+							type: 'button',
+							'data-testid': 'set-active-camera',
+							onClick: () => emit('setActiveCamera', 'camera-1')
+						},
+						'Set active camera'
+					)
+				]
+			)
+	}
+})
+
+const EditorWrapperStub = defineComponent({
+	name: 'EditorWrapper',
+	setup(_props, { slots }) {
+		return () =>
+			h('section', { 'data-testid': 'editor-wrapper' }, [
+				h('header', slots.header?.()),
+				h('main', slots.default?.())
+			])
+	}
+})
+
+const ScrollContainerStub = defineComponent({
+	name: 'ScrollContainer',
+	setup(_props, { slots }) {
+		return () => h('div', { 'data-testid': 'scroll-container' }, slots.default?.())
+	}
+})
+
+const MxIconStub = defineComponent({
+	name: 'MxIcon',
+	props: {
+		name: {
+			type: String,
+			required: true
+		}
+	},
+	setup(props) {
+		return () => h('span', { 'data-testid': 'icon', 'data-icon': props.name })
+	}
+})
+
+const globalStubs = {
+	EditorWrapper: EditorWrapperStub,
+	ScrollContainer: ScrollContainerStub,
+	OutlinerTree: OutlinerTreeStub,
+	MxIcon: MxIconStub
+}
+
+function createObject<T extends THREE.Object3D>(
+	object: T,
+	options: {
+		uuid: string
+		name?: string
+		userVisible?: boolean
+		hideInOutliner?: boolean
+	} = { uuid: object.uuid }
+): T {
+	object.uuid = options.uuid
+	object.name = options.name ?? object.type
+	const userData = getUserData(object)
+	userData.userVisible = options.userVisible ?? true
+	userData.hideInOutliner = options.hideInOutliner
+
+	return object
+}
+
+function renderDataOutliner() {
+	return render(DataOutliner, {
+		global: {
+			stubs: globalStubs
+		}
+	})
+}
 
 describe('DataOutliner', () => {
 	beforeEach(() => {
-		vi.resetAllMocks()
-		mockSceneChildren.value = []
-		mockSelectedObject.value = null
-		mockObjectVisibilityUpdate = vi.fn()
+		vi.clearAllMocks()
+		sceneStore.sceneChildren = []
+		cameraStore.renderCamera = null
+		threeStore.selectedObject = null
 	})
 
-	it('renders outliner with header and scene collection', () => {
-		render(DataOutliner)
+	it('renders visible scene objects as outliner items and filters hidden objects', () => {
+		const group = createObject(new THREE.Group(), {
+			uuid: 'group-1',
+			name: 'Visible Group'
+		})
+		const child = createObject(new THREE.Mesh(), {
+			uuid: 'mesh-1',
+			name: 'Nested Mesh'
+		})
+		const hidden = createObject(new THREE.Mesh(), {
+			uuid: 'hidden-1',
+			name: 'Hidden Mesh',
+			hideInOutliner: true
+		})
+		const camera = createObject(new THREE.PerspectiveCamera(), {
+			uuid: 'camera-1',
+			name: 'Render Camera'
+		})
+		group.add(child)
+		sceneStore.sceneChildren = [group, hidden, camera]
+		cameraStore.renderCamera = camera
 
-		expect(screen.getByText('Outliner')).toBeTruthy()
-		expect(screen.getByText('Scene Collection')).toBeTruthy()
+		const { getByText, getByTestId, queryByText } = renderDataOutliner()
+
+		getByText('Outliner')
+		getByText('Scene')
+		getByText('Visible Group')
+		getByText('Nested Mesh')
+		getByText('Render Camera')
+		expect(queryByText('Hidden Mesh')).toBeNull()
+		expect(getByTestId('outliner-item-camera-1').getAttribute('data-camera')).toBe('true')
+		expect(getByTestId('outliner-tree').getAttribute('data-render-camera-id')).toBe('camera-1')
 	})
 
-	it('displays scene objects in the tree', () => {
-		const mesh = {
-			uuid: 'mesh-uuid-1',
-			name: 'TestMesh',
-			type: 'Mesh',
-			visible: true,
-			userData: { hideInOutliner: false },
-			children: []
-		}
-		mockSceneChildren.value = [mesh]
+	it('uses object type as the outliner name when an object has no name', () => {
+		const mesh = createObject(new THREE.Mesh(), {
+			uuid: 'mesh-without-name',
+			name: ''
+		})
+		sceneStore.sceneChildren = [mesh]
 
-		render(DataOutliner)
+		const { getByText } = renderDataOutliner()
 
-		expect(screen.getByText('TestMesh')).toBeTruthy()
+		getByText('Mesh')
 	})
 
-	it('filters out helper objects', () => {
-		const mesh = {
-			uuid: 'mesh-uuid-1',
-			name: 'TestMesh',
-			type: 'Mesh',
-			visible: true,
-			userData: { hideInOutliner: true },
-			children: []
-		}
-		mockSceneChildren.value = [mesh]
+	it('adds a group from the header action', async () => {
+		const { getByRole } = renderDataOutliner()
 
-		render(DataOutliner)
+		await userEvent.click(getByRole('button', { name: '' }))
 
-		expect(screen.queryByText('TestMesh')).toBeFalsy()
+		expect(sceneStore.addGroup).toHaveBeenCalledTimes(1)
 	})
 
-	it('highlights selected object', () => {
-		const mesh = {
-			uuid: 'mesh-uuid-1',
-			name: 'TestMesh',
-			type: 'Mesh',
-			visible: true,
-			userData: { hideInOutliner: false },
-			children: []
-		}
-		mockSceneChildren.value = [mesh]
-		// Set selectedObject to trigger the watch in the component
-		mockSelectedObject.value = mesh
+	it('forwards tree selection to the three store', async () => {
+		const mesh = createObject(new THREE.Mesh(), {
+			uuid: 'selected-mesh',
+			name: 'Selectable Mesh'
+		})
+		sceneStore.sceneChildren = [mesh]
 
-		render(DataOutliner)
+		const { getByTestId } = renderDataOutliner()
 
-		// The item should have the highlight class when selected
-		const treeItem = screen.getByText('TestMesh').closest('[data-testid="outliner-item"]')
-		expect(treeItem).toBeTruthy()
-		expect(treeItem?.className).toContain('bg-outliner-active-highlight')
+		await userEvent.click(getByTestId('select-selected-mesh'))
+
+		expect(threeStore.selectObject).toHaveBeenCalledWith('selected-mesh')
 	})
 
-	it('calls objectVisibilityUpdate when visibility checkbox is clicked', () => {
-		const mesh = {
-			uuid: 'mesh-uuid-1',
-			name: 'TestMesh',
-			type: 'Mesh',
-			visible: true,
-			userData: { userVisible: true },
-			children: []
-		}
-		mockSceneChildren.value = [mesh]
-		mockObjectVisibilityUpdate = vi.fn()
+	it('passes the selected store object back to the tree model', () => {
+		const mesh = createObject(new THREE.Mesh(), {
+			uuid: 'selected-mesh',
+			name: 'Selected Mesh'
+		})
+		sceneStore.sceneChildren = [mesh]
+		threeStore.selectedObject = mesh
 
-		render(DataOutliner)
+		const { getByTestId } = renderDataOutliner()
 
-		// Find and click the visibility checkbox
-		const checkbox = screen.getByRole('checkbox')
-		checkbox.click()
-
-		expect(mockObjectVisibilityUpdate).toHaveBeenCalledWith('mesh-uuid-1', false)
+		expect(getByTestId('outliner-tree').getAttribute('data-selected-id')).toBe('selected-mesh')
 	})
 
-	it('displays nested objects with parent and child', () => {
-		const child = {
-			uuid: 'child-uuid-1',
-			name: 'ChildMesh',
-			type: 'Mesh',
-			visible: true,
-			userData: { hideInOutliner: false },
-			children: []
-		}
+	it('forwards active-camera events to the camera store', async () => {
+		const { getByTestId } = renderDataOutliner()
 
-		const parent = {
-			uuid: 'parent-uuid-1',
-			name: 'ParentGroup',
-			type: 'Group',
-			visible: true,
-			userData: { hideInOutliner: false },
-			children: [child]
-		}
-		mockSceneChildren.value = [parent]
+		await userEvent.click(getByTestId('set-active-camera'))
 
-		render(DataOutliner)
-
-		expect(screen.getByText('ParentGroup')).toBeTruthy()
-		// Parent should have expand/collapse toggle since it has children
-		const toggleButton = screen
-			.getByText('ParentGroup')
-			.closest('li')
-			?.querySelector('[data-toggle]')
-		expect(toggleButton).toBeTruthy()
+		expect(cameraStore.setRenderCamera).toHaveBeenCalledWith('camera-1')
 	})
 })

@@ -1,78 +1,50 @@
 <template>
-	<div
-		class="block-border text-sm leading-6 flex flex-col overflow-hidden rounded bg-window-bg
-			alternate-rows relative"
-	>
-		<h2 class="flex items-center gap-1 px-1 text-[1rem]">
-			<MxIcon name="outliner/outliner" /> Outliner
-			<MxTooltip :tooltip="{ text: 'Add Group' }">
-				<button class="btn ml-auto" type="button" @click="sceneStore.addGroup">
-					<MxIcon name="outliner/group-new" />
-				</button>
-			</MxTooltip>
-		</h2>
+	<EditorWrapper title="Outliner" icon="outliner/outliner" class="alternate-rows">
+		<template #header>
+			<h2 class="flex items-center gap-1 px-1 text-base">
+				<MxIcon name="outliner/outliner" /> Outliner
+				<MxTooltip :tooltip="{ text: 'Add Group' }">
+					<button class="btn ml-auto" type="button" @click="sceneStore.addGroup">
+						<MxIcon name="outliner/group-new" />
+					</button>
+				</MxTooltip>
+			</h2>
+		</template>
 		<ScrollContainer>
 			<div class="flex justify-between items-center">
-				<h3 class="flex items-center gap-1 px-1">
-					<MxIcon name="ui/collection" /> Scene Collection
-				</h3>
+				<h3 class="flex items-center gap-1 px-1"><MxIcon name="ui/collection" /> Scene</h3>
 			</div>
-			<Tree.Root
-				v-slot="{ flattenItems }"
-				v-model="selectedItem"
-				:get-key="(val) => val.uuid"
+			<OutlinerTree
+				v-model="selectedObject"
 				:items="outlinerItems"
-				selection-behavior="replace"
-			>
-				<Tree.Item
-					v-for="item in flattenItems"
-					v-bind="item.bind"
-					:key="item._id"
-					v-slot="{ isExpanded }"
-					:data-testid="item.value.uuid === selectedItem?.uuid ? 'outliner-selected' : undefined"
-					@select.prevent="threeStore.selectObject($event.detail.value?.uuid)"
-					@toggle="onToggle"
-				>
-					<DataOutlinerItem
-						:item
-						:is-expanded
-						:visibility="item.value.userData.userVisible"
-						:is-selected="item.value.uuid === selectedItem?.uuid"
-						@update:visibility="
-							($event: boolean | undefined) =>
-								sceneStore.objectVisibilityUpdate(item.value.uuid, !!$event)
-						"
-					/>
-				</Tree.Item>
-			</Tree.Root>
+				:render-camera-id="cameraStore.renderCamera?.uuid"
+				@set-active-camera="cameraStore.setRenderCamera($event)"
+			/>
 		</ScrollContainer>
-	</div>
+	</EditorWrapper>
 </template>
 
 <script lang="ts" setup>
-import { useThreeStore } from '@/app/model/three'
 import { useSceneStore } from '@/app/model/scene'
-import THREE from '@/shared/three'
-import { Tree } from 'reka-ui/namespaced'
-import { computed, shallowRef, watch } from 'vue'
-import type { TreeItemToggleEvent } from 'reka-ui'
-import type { OutlinerItem } from './DataOutlinerItem.vue'
 import { getUserData } from '@/shared/three/utils'
+import { computed } from 'vue'
+import THREE from '@/shared/three'
+import { useCameraStore } from '@/app/model/camera'
+import { useThreeStore } from '@/app/model/three'
+import type { OutlinerItem } from './types'
 
-const threeStore = useThreeStore()
 const sceneStore = useSceneStore()
+const cameraStore = useCameraStore()
+const threeStore = useThreeStore()
 
-const selectedItem = shallowRef<THREE.Object3D | THREE.Light>()
-
-watch(
-	() => threeStore.selectedObject,
-	(val) => {
-		selectedItem.value = val ?? undefined
+const selectedObject = computed<OutlinerItem | undefined>({
+	set(obj) {
+		threeStore.selectObject(obj?.uuid)
 	},
-	{
-		immediate: true
+	get() {
+		return threeStore.selectedObject ? parseObject(threeStore.selectedObject) : undefined
 	}
-)
+})
 
 const outlinerItems = computed(() => {
 	return sceneStore.sceneChildren
@@ -89,12 +61,5 @@ function parseObject(obj: THREE.Object3D): OutlinerItem {
 		isCamera: obj instanceof THREE.Camera,
 		children: obj.children.length > 0 ? obj.children.map(parseObject) : undefined
 	}
-}
-
-function onToggle(e: TreeItemToggleEvent<OutlinerItem>) {
-	const target = e.target as HTMLElement
-	const btn = target.closest('button')
-	if (btn && 'toggle' in btn.dataset) return
-	e.preventDefault()
 }
 </script>

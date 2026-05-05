@@ -16,7 +16,7 @@
 				>
 					<div
 						class="relative flex items-center gap-1 pr-5 hover:bg-outliner-active-highlight group
-							w-full"
+							w-full h-6"
 						:style="{ paddingLeft: `${item.level * 1.25}rem` }"
 						:class="{
 							'bg-outliner-active-highlight text-outliner-active-object': isSelected
@@ -40,7 +40,7 @@
 							"
 							class="shrink-0 text-icon-object text-base"
 						/>
-						<span class="truncate">{{ item.value.name }}</span>
+						<span class="truncate text-sm">{{ item.value.name }}</span>
 						<button
 							v-if="item.value.isCamera"
 							type="button"
@@ -62,6 +62,7 @@
 								"
 							>
 								<MxIcon
+									class="cursor-pointer"
 									:name="
 										item.value.userData.userVisible
 											? 'outliner/visibility-visible'
@@ -78,11 +79,11 @@
 </template>
 
 <script lang="ts" setup>
-import type { OutlinerItem } from './DataOutlinerItem.vue'
 import { useSceneStore } from '@/app/model/scene'
 import { outlinerIconsMap } from './icons-map'
 import { computed, ref } from 'vue'
 import type { MxContextMenuItem } from '@/shared/ui/MxContextMenu.vue'
+import type { OutlinerItem } from './types'
 
 const sceneStore = useSceneStore()
 

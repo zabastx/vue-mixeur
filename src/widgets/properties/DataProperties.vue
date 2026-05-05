@@ -1,11 +1,8 @@
 <template>
-	<div class="block-border flex flex-col overflow-hidden rounded bg-window-bg">
-		<h2 class="flex items-center gap-1 p-1 leading-0">
-			<MxIcon name="properties/properties" /> Properties
-		</h2>
+	<EditorWrapper title="Properties" icon="properties/properties">
 		<Tabs.Root
 			v-model="activetab"
-			class="grid w-full grow grid-cols-[min-content_1fr] grid-rows-1 overflow-hidden"
+			class="grid w-full grow grid-cols-[min-content_1fr] grid-rows-1 overflow-hidden h-full"
 			orientation="vertical"
 			default-value="object"
 		>
@@ -26,7 +23,7 @@
 				</Tabs.Content>
 			</ScrollContainer>
 		</Tabs.Root>
-	</div>
+	</EditorWrapper>
 </template>
 
 <script lang="ts" setup>

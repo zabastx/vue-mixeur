@@ -1,30 +1,29 @@
 <template>
-	<div
-		ref="wrapper"
-		class="relative grid h-full w-full grid-rows-[1fr_min_content] overflow-hidden rounded"
-	>
-		<ViewportHeader
-			v-if="threeStore.isInitiated"
-			class="absolute top-0 left-0 z-1 w-full bg-viewport-header-bg"
-		/>
-		<div class="relative overflow-hidden">
-			<div class="gizmo-wrapper absolute top-10 right-0"></div>
-			<ViewNavigationWidget v-if="threeStore.isInitiated" class="absolute top-40 right-2.5" />
-			<div v-if="isError" ref="webglErrorRef" class="webgl-error"></div>
-			<canvas
-				v-else
-				ref="canvasRef"
-				class="block h-full w-full"
-				data-testid="viewport-canvas"
-			></canvas>
-		</div>
-		<Transition name="slide-fade-left">
-			<ViewportToolbar
-				v-if="threeStore.isInitiated && appStore.showToolbar"
-				class="absolute top-20 left-2.5"
+	<EditorWrapper>
+		<div ref="wrapper" class="grid h-full grid-rows-[1fr_min_content]">
+			<ViewportHeader
+				v-if="threeStore.isInitiated"
+				class="absolute top-0 left-0 z-1 w-full bg-viewport-header-bg"
 			/>
-		</Transition>
-	</div>
+			<div class="relative overflow-hidden">
+				<div class="gizmo-wrapper absolute top-10 right-0"></div>
+				<ViewNavigationWidget v-if="threeStore.isInitiated" class="absolute top-40 right-2.5" />
+				<div v-if="isError" ref="webglErrorRef" class="webgl-error"></div>
+				<canvas
+					v-else
+					ref="canvasRef"
+					class="block h-full w-full"
+					data-testid="viewport-canvas"
+				></canvas>
+			</div>
+			<Transition name="slide-fade-left">
+				<ViewportToolbar
+					v-if="threeStore.isInitiated && appStore.showToolbar"
+					class="absolute top-20 left-2.5"
+				/>
+			</Transition>
+		</div>
+	</EditorWrapper>
 </template>
 
 <script lang="ts" setup>

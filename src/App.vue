@@ -18,10 +18,11 @@
 				</main>
 
 				<StatusBar v-show="appStore.showStatusBar" />
+
+				<ModelLoadingProgress />
+				<MxToast />
+				<ModalCollection />
 			</div>
-			<ModelLoadingProgress />
-			<MxToast />
-			<ModalCollection />
 		</TooltipProvider>
 	</ToastProvider>
 </template>

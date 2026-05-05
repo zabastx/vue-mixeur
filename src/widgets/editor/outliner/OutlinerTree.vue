@@ -3,12 +3,12 @@
 		v-model="model"
 		v-model:expanded="expandedRef"
 		:items
-		:get-key="(item) => item.uuid"
+		:get-key="getItemKey"
 		selection-behavior="replace"
 	>
 		<OutlinerTreeVirtualizer
 			v-slot="{ item }"
-			:text-content="(item) => item.name"
+			:text-content="getItemTextContent"
 			:estimate-size="24"
 		>
 			<MxContextMenu :items="contextMenuItems" @update:open="onToggleContext($event, item._id)">
@@ -103,6 +103,14 @@ defineEmits<{
 const model = defineModel<OutlinerItem>()
 
 const currentContextTarget = ref<string | null>(null)
+
+function getItemKey(item: OutlinerItem) {
+	return item.uuid
+}
+
+function getItemTextContent(item: OutlinerItem) {
+	return item.name
+}
 
 function onToggleContext(val: boolean, uuid: string) {
 	if (!val) return (currentContextTarget.value = null)

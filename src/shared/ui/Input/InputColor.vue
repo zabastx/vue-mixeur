@@ -3,7 +3,7 @@
 		<template #trigger>
 			<div
 				class="inline-grid rounded grid-cols-2 grid-rows-1 w-full checkerboard h-full
-					overflow-hidden"
+					overflow-hidden border border-ui-menu-outline"
 				:style="{ '--color-value': displayColor, '--alpha': modelAlpha }"
 			>
 				<div class="bg-(--color-value)"></div>

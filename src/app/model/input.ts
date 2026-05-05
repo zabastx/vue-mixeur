@@ -6,6 +6,7 @@ import { useSceneStore } from './scene'
 import { useControlsStore } from './controls'
 import { useCameraStore } from './camera'
 import THREE from '@/shared/three'
+import { useAppStore } from './app'
 
 export const useInputStore = defineStore('input', () => {
 	const isCtrlDown = useKeyModifier('Control')
@@ -37,6 +38,7 @@ export const useInputStore = defineStore('input', () => {
 		useEventListener(window, 'keydown', (e) => {
 			const threeStore = useThreeStore()
 			const sceneStore = useSceneStore()
+			const appStore = useAppStore()
 
 			if (
 				e.target instanceof HTMLElement &&
@@ -65,6 +67,7 @@ export const useInputStore = defineStore('input', () => {
 
 				case 'KeyT':
 					e.preventDefault()
+					appStore.showToolbar = !appStore.showToolbar
 					break
 			}
 		})

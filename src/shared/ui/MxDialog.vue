@@ -18,7 +18,7 @@
 				>
 					<Dialog.Title
 						v-if="title"
-						class="grid grid-cols-[1fr_min-content] bg-black text-ui-text-text"
+						class="grid grid-cols-[1fr_min-content] bg-black text-ui-text-text select-none"
 					>
 						<div ref="handleRef" class="flex items-center gap-1 cursor-move py-1 px-2">
 							<MxIcon v-if="icon" :name="icon" />

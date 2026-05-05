@@ -3,10 +3,14 @@
 		v-model="model"
 		v-model:expanded="expandedRef"
 		:items
-		:get-key="(val) => val.uuid"
+		:get-key="(item) => item.uuid"
 		selection-behavior="replace"
 	>
-		<TreeVirtualizer v-slot="{ item }" :text-content="(item) => item.name" :estimate-size="24">
+		<OutlinerTreeVirtualizer
+			v-slot="{ item }"
+			:text-content="(item) => item.name"
+			:estimate-size="24"
+		>
 			<MxContextMenu :items="contextMenuItems" @update:open="onToggleContext($event, item._id)">
 				<TreeItem
 					v-slot="{ isExpanded, isSelected, handleToggle }"
@@ -57,10 +61,7 @@
 							<CheckboxRoot
 								:model-value="item.value.userData.userVisible"
 								class="ml-auto"
-								@update:model-value="
-									($event: boolean | undefined) =>
-										sceneStore.objectVisibilityUpdate(item.value.uuid, !!$event)
-								"
+								@update:model-value="sceneStore.objectVisibilityUpdate(item.value.uuid, !!$event)"
 							>
 								<MxIcon
 									class="cursor-pointer"
@@ -75,7 +76,7 @@
 					</div>
 				</TreeItem>
 			</MxContextMenu>
-		</TreeVirtualizer>
+		</OutlinerTreeVirtualizer>
 	</TreeRoot>
 </template>
 

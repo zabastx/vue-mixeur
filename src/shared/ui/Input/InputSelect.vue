@@ -9,7 +9,7 @@
 			<Select.Icon v-if="valueIcon">
 				<MxIcon :name="valueIcon" />
 			</Select.Icon>
-			<Select.Value :placeholder class="h-[1.5em] truncate" />
+			<Select.Value v-if="!trigger?.onlyIcon" :placeholder class="h-[1.5em] truncate" />
 			<MxIcon name="ui/chevron-right" class="rotate-90" />
 		</Select.Trigger>
 
@@ -68,7 +68,7 @@ const valueIcon = computed(() => {
 interface SelectProps {
 	root?: SelectRootProps
 	placeholder?: string
-	trigger?: SelectTriggerProps
+	trigger?: SelectTriggerProps & { onlyIcon: boolean }
 	content?: SelectContentProps
 	item?: SelectItemProps
 	items: InputSelectOption<T>[] | readonly InputSelectOption<T>[]

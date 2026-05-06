@@ -10,8 +10,8 @@
 </template>
 
 <script lang="ts" setup>
-import type THREE from '@/shared/three'
-import { computed, triggerRef } from 'vue'
+import THREE from '@/shared/three'
+import { computed } from 'vue'
 
 defineProps<{
 	min?: number
@@ -26,8 +26,7 @@ const model = defineModel<THREE.Vector2>({
 
 const x = computed<number>({
 	set(val) {
-		model.value.x = val
-		triggerRef(model)
+		model.value = new THREE.Vector2(val, y.value)
 	},
 	get() {
 		return model.value.x
@@ -36,8 +35,7 @@ const x = computed<number>({
 
 const y = computed<number>({
 	set(val) {
-		model.value.y = val
-		triggerRef(model)
+		model.value = new THREE.Vector2(x.value, val)
 	},
 	get() {
 		return model.value.y

@@ -4,11 +4,11 @@ import { acceptHMRUpdate, defineStore } from 'pinia'
 import type { ViewportGizmo } from 'three-viewport-gizmo'
 import {
 	EffectComposer,
-	GammaCorrectionShader,
 	OutlinePass,
+	OutputPass,
+	Pass,
 	RenderPass,
-	ShaderPass,
-	TAARenderPass
+	SSAARenderPass
 } from 'three/examples/jsm/Addons.js'
 import { shallowRef, watch, type Ref, type ShallowRef } from 'vue'
 
@@ -19,14 +19,12 @@ interface ComposerParameters {
 	gizmo: ShallowRef<ViewportGizmo | undefined>
 }
 
-type ComposerPass = ShaderPass | TAARenderPass | RenderPass
-
 export const useComposerStore = defineStore('composer', () => {
 	const rendererRef = shallowRef<THREE.WebGLRenderer>()
 	const composerRef = shallowRef<EffectComposer>()
 	const outlinePassRef = shallowRef<OutlinePass>()
 
-	const composerPasses = shallowRef<ComposerPass[]>([])
+	const composerPasses = shallowRef<Pass[]>([])
 
 	function setupRenderer({ canvas }: { canvas: HTMLCanvasElement }) {
 		const renderer = new THREE.WebGLRenderer({
@@ -64,10 +62,6 @@ export const useComposerStore = defineStore('composer', () => {
 		const renderPass = new RenderPass(scene, camera.value)
 		composer.addPass(renderPass)
 
-		const taaPass = new TAARenderPass(scene, camera.value)
-		taaPass.sampleLevel = 2
-		composer.addPass(taaPass)
-
 		const outlinePass = new OutlinePass(
 			new THREE.Vector2(canvas.clientWidth, canvas.clientHeight),
 			scene,
@@ -81,15 +75,12 @@ export const useComposerStore = defineStore('composer', () => {
 		composer.addPass(outlinePass)
 		outlinePassRef.value = outlinePass
 
-		const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader)
-		composer.addPass(gammaCorrectionPass)
-
-		composerPasses.value.push(renderPass, taaPass, gammaCorrectionPass)
+		const outputPass = new OutputPass()
+		composer.addPass(outputPass)
 
 		watch(camera, (newCamera) => {
 			renderPass.camera = newCamera
 			outlinePass.renderCamera = newCamera
-			taaPass.camera = newCamera
 		})
 
 		function handleResize() {
@@ -113,14 +104,26 @@ export const useComposerStore = defineStore('composer', () => {
 		return { composer, outlinePass, handleResize }
 	}
 
-	function setupRenderImageComposer() {
-		if (!rendererRef.value) return console.warn('RendererRef is undefined')
-		const composer = new EffectComposer(rendererRef.value)
-		composerPasses.value.forEach((pass) => {
-			composer.addPass(pass)
-		})
+	function setupRenderImageComposer({
+		camera,
+		canvas,
+		scene
+	}: {
+		canvas: HTMLCanvasElement
+		camera: THREE.Camera
+		scene: THREE.Scene
+	}) {
+		const renderer = setupRenderer({ canvas })
+		const composer = new EffectComposer(renderer)
+		composer.setPixelRatio(window.devicePixelRatio)
 
-		return { composer }
+		const ssaaPass = new SSAARenderPass(scene, camera)
+		composer.addPass(ssaaPass)
+
+		const outputPass = new OutputPass()
+		composer.addPass(outputPass)
+
+		return { composer, renderer }
 	}
 
 	function init({ camera, canvas, gizmo, scene }: ComposerParameters) {

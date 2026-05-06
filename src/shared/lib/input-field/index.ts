@@ -21,6 +21,14 @@ export function useInputFields<T extends THREE.Object3D | THREE.LightShadow>(obj
 			default:
 				object[prop] = value as unknown as T[Prop]
 		}
+
+		if (prop === 'mapSize' && 'map' in object) {
+			if (object.map) {
+				object.map.dispose()
+			}
+			object.map = null
+		}
+
 		triggerRef(objectRef)
 	}
 

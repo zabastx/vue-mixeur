@@ -16,10 +16,9 @@
 					class="relative flex grow justify-center items-center border border-ui-box-outline rounded
 						overflow-hidden"
 				>
-					<canvas ref="canvasRef" class="max-w-full max-h-full m-auto opacity-0 hidden" />
 					<img
 						ref="previewRef"
-						class="max-w-full max-h-full m-auto block object-contain"
+						class="max-w-full max-h-full m-auto block object-contain checkerboard"
 						@load="() => (isRendering = false)"
 						@error="() => (isRendering = false)"
 					/>
@@ -87,13 +86,13 @@ import { useSceneStore } from '@/app/model/scene'
 import { useShadingStore } from '@/app/model/shading'
 import { useTemplateRef, ref, computed, reactive } from 'vue'
 import THREE from '@/shared/three'
-import { createRenderComposer } from '@/shared/three/modules/postprocess/composer'
 import { useModals } from '@/shared/lib/modals'
 import { downloadFile } from '@/shared/lib/files'
 import type { RenderSettings } from './RenderImageSettings.vue'
 import { useToast } from '@/shared/lib/toast'
 import { getUserData } from '@/shared/three/utils'
 import { useCameraStore } from '@/app/model/camera'
+import { useComposerStore } from '@/app/model/composer'
 
 const isOpen = defineModel<boolean>({ default: false })
 
@@ -110,7 +109,8 @@ const renderSettings = ref<RenderSettings>({
 	height: 1080,
 	selectedFormat: 'webp',
 	quality: 100,
-	background: true
+	background: true,
+	backgroundColor: '#3D3D3D'
 })
 
 const renderedImageData = reactive({
@@ -123,7 +123,6 @@ const isRendering = ref(false)
 const actualWidth = ref(1920)
 const actualHeight = ref(1080)
 
-const canvasRef = useTemplateRef('canvasRef')
 const previewRef = useTemplateRef('previewRef')
 
 const canSaveImage = computed(() => {
@@ -151,6 +150,8 @@ function createRenderScene(sourceScene: THREE.Scene): THREE.Scene {
 	return renderScene
 }
 
+const displayCanvas = document.createElement('canvas')
+
 /**
  * Renders the scene to the canvas.
  */
@@ -158,13 +159,8 @@ async function renderImage() {
 	const originalMode = shadingStore.shadingMode
 	isRendering.value = true
 
-	const displayCanvas = canvasRef.value
-	if (!displayCanvas) {
-		isRendering.value = false
-		return
-	}
-
-	const { width, height, background, quality, selectedFormat } = renderSettings.value
+	const { width, height, background, quality, selectedFormat, backgroundColor } =
+		renderSettings.value
 
 	actualWidth.value = width
 	actualHeight.value = height
@@ -176,17 +172,25 @@ async function renderImage() {
 			const renderScene = createRenderScene(sceneStore.scene as THREE.Scene)
 			if (!background) {
 				renderScene.background = null
+			} else {
+				renderScene.background = new THREE.Color(backgroundColor)
 			}
 
 			displayCanvas.width = width
 			displayCanvas.height = height
 
 			// Create render composer and render directly to display canvas
-			const { composer, renderer } = createRenderComposer({
+			const composerStore = useComposerStore()
+
+			const imageComposer = composerStore.setupRenderImageComposer({
 				scene: renderScene,
 				camera: cameraStore.renderCamera ?? cameraStore.activeCamera,
 				canvas: displayCanvas
 			})
+
+			if (!imageComposer) throw new Error('Renderer initiation error')
+
+			const { composer, renderer } = imageComposer
 
 			renderer.setSize(width, height, false)
 			composer.setSize(width, height)
@@ -231,14 +235,11 @@ async function renderImage() {
  * Saves the rendered image to a file.
  */
 async function saveImage() {
-	const canvas = canvasRef.value
-	if (!canvas) return console.warn('saveImage: canvas is undefined')
-
 	try {
 		const { selectedFormat, quality, width, height } = renderSettings.value
 
 		const blob = await new Promise<Blob | null>((resolve) => {
-			canvas.toBlob(
+			displayCanvas.toBlob(
 				(blob: Blob | null) => {
 					resolve(blob)
 				},

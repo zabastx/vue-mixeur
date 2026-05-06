@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.24.0] - 2026-05-06
+
+### Added
+
+- Image rendering: Added fullscreen toggle to rendered image preview
+- Image rendering: Added background color support for exported images
+- Viewport: Implemented window resize tracking with automatic camera view synchronization
+- Rendering: Updated rendering pipeline with SSAA (Super Sample Anti-Aliasing) and OutputPass for better visual quality
+
+### Changed
+
+- Input fields: Enforced TypeScript constraints on Three.js object types for better type safety
+- Input fields: Updated InputVector2 to use immutable Vector2 updates
+- UI components: Enhanced MxButton with improved tooltip handling and flexible slot rendering
+- UI components: Added border to color input trigger for better visibility
+- Camera: Switched to reactive state management for camera settings
+- Shared utilities: Moved isPerspectiveCamera to types and updated default color value
+
+### Fixed
+
+- Image rendering: Fixed memory leak by properly disposing composer and renderer after rendering
+- Shadow maps: Fixed shadow map not updating when changing shadow map size in properties panel
+- UI: Fixed window scroll behavior on Chromium-based browsers
+- Outliner: Fixed TypeScript types for outliner components
+
+### Removed
+
+- Dependencies: Removed deprecated postprocess module
+
 ## [0.23.0] - 2026-05-05
 
 ### Added
@@ -88,7 +117,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Material Preview settings: fixed broken thumbnail url
 
-[Unreleased]: https://github.com/zabastx/mixeur/compare/v0.23.0...HEAD
+[Unreleased]: https://github.com/zabastx/mixeur/compare/v0.24.0...HEAD
+[0.24.0]: https://github.com/zabastx/mixeur/compare/v0.23.0...v0.24.0
 [0.23.0]: https://github.com/zabastx/mixeur/compare/v0.22.0...v0.23.0
 [0.22.0]: https://github.com/zabastx/mixeur/compare/v0.21.0...v0.22.0
 [0.21.0]: https://github.com/zabastx/mixeur/compare/v0.20.0...v0.21.0

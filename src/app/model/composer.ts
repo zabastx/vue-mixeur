@@ -1,5 +1,6 @@
 import THREE from '@/shared/three'
 import { initPMREMGenerator } from '@/shared/three/modules/extras/pmremGenerator'
+import { useResizeObserver } from '@vueuse/core'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import type { ViewportGizmo } from 'three-viewport-gizmo'
 import {
@@ -10,7 +11,7 @@ import {
 	RenderPass,
 	SSAARenderPass
 } from 'three/examples/jsm/Addons.js'
-import { shallowRef, watch, type Ref, type ShallowRef } from 'vue'
+import { ref, shallowRef, watch, type Ref, type ShallowRef } from 'vue'
 
 interface ComposerParameters {
 	canvas: HTMLCanvasElement
@@ -23,6 +24,7 @@ export const useComposerStore = defineStore('composer', () => {
 	const rendererRef = shallowRef<THREE.WebGLRenderer>()
 	const composerRef = shallowRef<EffectComposer>()
 	const outlinePassRef = shallowRef<OutlinePass>()
+	const needsResize = ref(true)
 
 	const composerPasses = shallowRef<Pass[]>([])
 
@@ -83,22 +85,26 @@ export const useComposerStore = defineStore('composer', () => {
 			outlinePass.renderCamera = newCamera
 		})
 
+		useResizeObserver(canvas, () => {
+			needsResize.value = true
+		})
+
 		function handleResize() {
-			const { width, height } = renderer.getSize(new THREE.Vector2())
+			if (!needsResize.value) return
 			const { clientWidth, clientHeight } = canvas
 
-			if (width !== clientWidth || height !== clientHeight) {
-				renderer.setPixelRatio(window.devicePixelRatio)
-				renderer.setSize(clientWidth, clientHeight, false)
-				composer.setSize(clientWidth, clientHeight)
+			renderer.setPixelRatio(window.devicePixelRatio)
+			renderer.setSize(clientWidth, clientHeight, false)
+			composer.setSize(clientWidth, clientHeight)
 
-				if (camera.value instanceof THREE.PerspectiveCamera) {
-					camera.value.aspect = clientWidth / clientHeight
-				}
-
-				camera.value.updateProjectionMatrix()
-				gizmo.value?.update()
+			if (camera.value instanceof THREE.PerspectiveCamera) {
+				camera.value.aspect = clientWidth / clientHeight
 			}
+
+			camera.value.updateProjectionMatrix()
+			gizmo.value?.update()
+
+			needsResize.value = false
 		}
 
 		return { composer, outlinePass, handleResize }
@@ -170,7 +176,8 @@ export const useComposerStore = defineStore('composer', () => {
 		rendererRef,
 		outlinePassRef,
 		setOutlineObjects,
-		removeFromOutline
+		removeFromOutline,
+		needsResize
 	}
 })
 

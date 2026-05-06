@@ -5,6 +5,7 @@ import { computed, ref, shallowRef, watch } from 'vue'
 import { useSceneStore } from './scene'
 import { getUserData } from '@/shared/three/utils'
 import { useEventListener } from '@vueuse/core'
+import { useComposerStore } from './composer'
 
 export const useCameraStore = defineStore('camera', () => {
 	const viewportCameras = {
@@ -83,10 +84,11 @@ export const useCameraStore = defineStore('camera', () => {
 	function toggleCameraView() {
 		if (!renderCamera.value || renderCamera.value.uuid === activeCamera.value.uuid) {
 			activeCamera.value = viewportCameras[viewportCameraType.value]
-			return
+		} else {
+			activeCamera.value = renderCamera.value as THREE.PerspectiveCamera | THREE.OrthographicCamera
 		}
-
-		activeCamera.value = renderCamera.value as THREE.PerspectiveCamera | THREE.OrthographicCamera
+		const composerStore = useComposerStore()
+		composerStore.needsResize = true
 	}
 
 	return {

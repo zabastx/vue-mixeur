@@ -13,6 +13,7 @@
 			<!-- Left Side: Render Preview -->
 			<div class="flex flex-col flex-1">
 				<div
+					ref="imageWrapperRef"
 					class="relative flex grow justify-center items-center border border-ui-box-outline rounded
 						overflow-hidden"
 				>
@@ -33,6 +34,12 @@
 					>
 						Render Image
 					</button>
+
+					<MxButton
+						icon="misc/full-screen"
+						class="absolute bottom-2 right-2 text-xl p-1"
+						@click="imageFullscreenToggle"
+					/>
 				</div>
 
 				<!-- Render Metadata -->
@@ -264,6 +271,16 @@ async function saveImage() {
 			message: error.message
 		})
 		if (import.meta.env.DEV) console.error('saveImage:\n', error)
+	}
+}
+
+const imageWrapperRef = useTemplateRef('imageWrapperRef')
+
+function imageFullscreenToggle() {
+	if (document.fullscreenElement) {
+		document.exitFullscreen()
+	} else {
+		imageWrapperRef.value?.requestFullscreen()
 	}
 }
 </script>

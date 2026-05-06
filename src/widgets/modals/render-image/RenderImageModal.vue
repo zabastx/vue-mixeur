@@ -100,6 +100,7 @@ import { useToast } from '@/shared/lib/toast'
 import { getUserData } from '@/shared/three/utils'
 import { useCameraStore } from '@/app/model/camera'
 import { useComposerStore } from '@/app/model/composer'
+import type { EffectComposer } from 'three/examples/jsm/Addons.js'
 
 const isOpen = defineModel<boolean>({ default: false })
 
@@ -173,6 +174,8 @@ async function renderImage() {
 	actualHeight.value = height
 
 	setTimeout(() => {
+		let composer: EffectComposer | undefined = undefined
+		let renderer: THREE.WebGLRenderer | undefined = undefined
 		try {
 			shadingStore.setMode('export')
 
@@ -197,7 +200,8 @@ async function renderImage() {
 
 			if (!imageComposer) throw new Error('Renderer initiation error')
 
-			const { composer, renderer } = imageComposer
+			renderer = imageComposer.renderer
+			composer = imageComposer.composer
 
 			renderer.setSize(width, height, false)
 			composer.setSize(width, height)
@@ -234,6 +238,8 @@ async function renderImage() {
 			isRendering.value = false
 		} finally {
 			shadingStore.setMode(originalMode)
+			composer?.dispose()
+			renderer?.dispose()
 		}
 	}, 10)
 }

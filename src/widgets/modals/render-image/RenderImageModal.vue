@@ -110,7 +110,7 @@ const renderSettings = ref<RenderSettings>({
 	selectedFormat: 'webp',
 	quality: 100,
 	background: true,
-	backgroundColor: '#3D3D3D'
+	backgroundColor: '#000000'
 })
 
 const renderedImageData = reactive({

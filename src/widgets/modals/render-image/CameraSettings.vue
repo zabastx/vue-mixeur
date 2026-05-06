@@ -43,6 +43,7 @@
 
 <script lang="ts" setup>
 import { useCameraStore } from '@/app/model/camera'
+import { isPerspectiveCamera } from '@/shared/lib/types'
 import THREE from '@/shared/three'
 import { computed, reactive, watch } from 'vue'
 
@@ -81,9 +82,5 @@ const renderCameraOptions = computed(() =>
 function onCameraChange(uuid?: string) {
 	if (!uuid) return
 	cameraStore.setRenderCamera(uuid)
-}
-
-function isPerspectiveCamera(camera: THREE.Camera | null): camera is THREE.PerspectiveCamera {
-	return camera instanceof THREE.PerspectiveCamera
 }
 </script>

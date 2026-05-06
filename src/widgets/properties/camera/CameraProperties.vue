@@ -73,7 +73,8 @@
 
 <script lang="ts" setup>
 import { useCameraStore } from '@/app/model/camera'
-import THREE from '@/shared/three'
+import { isPerspectiveCamera } from '@/shared/lib/types'
+import type THREE from '@/shared/three'
 import { computed, ref } from 'vue'
 
 const cameraStore = useCameraStore()
@@ -81,12 +82,6 @@ const cameraStore = useCameraStore()
 const currentViewportCamera = computed<THREE.PerspectiveCamera | THREE.OrthographicCamera>(
 	() => cameraStore.viewportCameras[cameraStore.viewportCameraType]
 )
-
-function isPerspectiveCamera(
-	camera: THREE.PerspectiveCamera | THREE.OrthographicCamera
-): camera is THREE.PerspectiveCamera {
-	return camera.type === 'PerspectiveCamera'
-}
 
 const TYPE_OPTIONS = [
 	{

@@ -1,5 +1,5 @@
 <template>
-	<MxTooltip :tooltip :tooltip-disabled="!tooltip">
+	<MxTooltip :tooltip="tooltipContent" :tooltip-disabled="!tooltip">
 		<button
 			v-bind="$attrs"
 			:type
@@ -9,7 +9,7 @@
 			:class="{ 'bg-ui-btn-bg-highlight': highlighted }"
 		>
 			<MxIcon v-if="icon" :name="icon" class="grow-0" />
-			<div class="mx-auto">
+			<div v-if="$slots.default" class="mx-auto">
 				<slot></slot>
 			</div>
 		</button>
@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { ButtonHTMLAttributes } from 'vue'
+import { computed, type ButtonHTMLAttributes } from 'vue'
 import type { MxTooltipContent } from '@/shared/lib/types'
 import MxIcon from './MxIcon.vue'
 
@@ -25,13 +25,18 @@ defineOptions({
 	inheritAttrs: false
 })
 
-const { type = 'button' } = defineProps<MxButtonProps>()
+const { type = 'button', tooltip } = defineProps<MxButtonProps>()
+
+const tooltipContent = computed<MxTooltipContent | undefined>(() => {
+	if (typeof tooltip === 'string') return { text: tooltip }
+	return tooltip
+})
 
 type MxButtonProps = {
 	type?: ButtonHTMLAttributes['type']
 	highlighted?: boolean
 	disabled?: ButtonHTMLAttributes['disabled']
-	tooltip?: MxTooltipContent
+	tooltip?: MxTooltipContent | string
 	icon?: MxIconName
 }
 </script>

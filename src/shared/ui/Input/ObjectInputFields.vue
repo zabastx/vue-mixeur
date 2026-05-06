@@ -86,10 +86,11 @@
 	</InputField>
 </template>
 
-<script lang="ts" setup generic="T">
+<script lang="ts" setup generic="T extends THREE.Object3D | THREE.LightShadow">
 import { useInputFields } from '@/shared/lib/input-field'
 import type { InputField } from '@/shared/lib/input-field/types'
 import type { MxTooltipContent } from '@/shared/lib/types'
+import type THREE from '@/shared/three'
 
 const { object } = defineProps<{
 	fieldsList: InputField<T>[]

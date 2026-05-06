@@ -3,7 +3,7 @@ import type { InputFieldValueMap, ObjectProp } from './types'
 import { MathUtils } from 'three'
 import { shallowRef, triggerRef } from 'vue'
 
-export function useInputFields<T>(object: T) {
+export function useInputFields<T extends THREE.Object3D | THREE.LightShadow>(object: T) {
 	const objectRef = shallowRef<T>(object)
 
 	function setProp<Prop extends ObjectProp<T>>(

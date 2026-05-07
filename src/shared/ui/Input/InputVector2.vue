@@ -11,7 +11,7 @@
 
 <script lang="ts" setup>
 import THREE from '@/shared/three'
-import { computed } from 'vue'
+import { computed, triggerRef } from 'vue'
 
 defineProps<{
 	min?: number
@@ -20,13 +20,19 @@ defineProps<{
 	formatOptions?: Intl.NumberFormatOptions
 }>()
 
+const emit = defineEmits<{
+	'update:modelValue': [value: THREE.Vector2]
+}>()
+
 const model = defineModel<THREE.Vector2>({
 	required: true
 })
 
 const x = computed<number>({
 	set(val) {
-		model.value = new THREE.Vector2(val, y.value)
+		model.value.x = val
+		triggerRef(model)
+		emit('update:modelValue', model.value)
 	},
 	get() {
 		return model.value.x
@@ -35,7 +41,9 @@ const x = computed<number>({
 
 const y = computed<number>({
 	set(val) {
-		model.value = new THREE.Vector2(x.value, val)
+		model.value.y = val
+		triggerRef(model)
+		emit('update:modelValue', model.value)
 	},
 	get() {
 		return model.value.y

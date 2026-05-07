@@ -61,7 +61,7 @@
 			:step="field.step"
 			:model-value="getProp(field.type, field.prop)"
 			:format-options="field.formatOptions"
-			@update:model-value="setProp(field.type, field.prop, $event)"
+			@update:model-value="setProp(field.type, field.prop, $event as THREE.Vector2)"
 		/>
 		<InputEuler
 			v-else-if="field.type === 'euler'"

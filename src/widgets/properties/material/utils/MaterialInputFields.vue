@@ -57,7 +57,7 @@
 				:max="field.max"
 				:step="field.step"
 				:model-value="getPropValue(field.type, field.prop)"
-				@update:model-value="setPropValue(field.type, field.prop, $event)"
+				@update:model-value="setPropValue(field.type, field.prop, $event as THREE.Vector2)"
 			/>
 			<InputEuler
 				v-else-if="field.type === 'euler'"

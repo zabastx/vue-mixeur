@@ -4,9 +4,11 @@
 
 - **DO NOT start dev server unless explicitly requested** - assume user is already running it
 
+**Run linter and types check after code changes**
+
 ### Three.js Integration
 
-- Import from `@/three` wrapper (includes BVH acceleration)
+- Import from `@/shared/three` wrapper (includes BVH acceleration)
 - Use `shallowRef` for Three.js objects
 
 ## Clarification and Correction Rules

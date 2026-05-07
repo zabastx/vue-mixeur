@@ -11,6 +11,10 @@ vi.mock('@/shared/ui/MxTooltip.vue', () => ({
 	}
 }))
 
+vi.mock('/favicon-96x96.png', () => ({
+	default: ''
+}))
+
 Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
 	value(type: string, attrs?: object) {
 		if (type === 'webgl' || type === 'webgl2' || type === 'experimental-webgl') {

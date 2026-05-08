@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.25.0] - 2026-05-09
 
 ### Added
 
@@ -13,8 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Outliner: fixed content overflow
-- Properties: fixed content overflow
+- Outliner: fixed content overflow in tree view
+- Properties: fixed content overflow in property panels
+- InputVector2: restored in-place mutation to preserve material references during updates
 
 ## [0.24.0] - 2026-05-06
 
@@ -126,7 +127,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Material Preview settings: fixed broken thumbnail url
 
-[Unreleased]: https://github.com/zabastx/mixeur/compare/v0.24.0...HEAD
+[Unreleased]: https://github.com/zabastx/mixeur/compare/v0.25.0...HEAD
+[0.25.0]: https://github.com/zabastx/mixeur/compare/v0.24.0...v0.25.0
 [0.24.0]: https://github.com/zabastx/mixeur/compare/v0.23.0...v0.24.0
 [0.23.0]: https://github.com/zabastx/mixeur/compare/v0.22.0...v0.23.0
 [0.22.0]: https://github.com/zabastx/mixeur/compare/v0.21.0...v0.22.0

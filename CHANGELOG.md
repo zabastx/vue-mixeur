@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Material Properties: added support for Basic Material
+
 ### Fixed
 
 - Outliner: fixed content overflow

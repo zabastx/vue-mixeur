@@ -17,6 +17,7 @@ import MatSurfacePhong from './materials/MatSurfacePhong.vue'
 import MatSurfaceToon from './materials/MatSurfaceToon.vue'
 import MatSurfaceLambert from './materials/MatSurfaceLambert.vue'
 import MatSurfaceNormal from './materials/MatSurfaceNormal.vue'
+import MatSurfaceBasic from './materials/MatSurfaceBasic.vue'
 
 const { material, mesh, changeMaterial } = useMeshMaterial()
 
@@ -68,6 +69,15 @@ const SURFACES = [
 		tooltip: {
 			text: 'A material that maps the normal vectors to RGB colors'
 		}
+	},
+	{
+		label: 'Basic Material',
+		value: 'MeshBasicMaterial',
+		component: MatSurfaceBasic,
+		tooltip: {
+			text: `A material for drawing geometries in a simple shaded way.
+			This material is not affected by lights`
+		}
 	}
 ] as const
 
@@ -94,6 +104,9 @@ watch(matType, (val) => {
 			break
 		case 'MeshNormalMaterial':
 			newMat = new THREE.MeshNormalMaterial()
+			break
+		case 'MeshBasiclMaterial':
+			newMat = new THREE.MeshBasicMaterial()
 			break
 		default:
 			return

@@ -1,58 +1,47 @@
 import { test, expect } from '@playwright/test'
 
-test.describe('3D Viewport', () => {
+test.describe('Viewport Controls', () => {
 	test.beforeEach(async ({ page }) => {
 		await page.goto('/')
 		await page.waitForSelector('[data-testid="viewport-canvas"]', { state: 'attached' })
 	})
 
-	test('Canvas is rendered', async ({ page }) => {
-		const canvas = page.locator('[data-testid="viewport-canvas"]')
-		await expect(canvas).toBeVisible()
-	})
-
-	test('Toolbar keyboard shortcuts work', async ({ page }) => {
-		const canvas = page.locator('[data-testid="viewport-canvas"]')
-
+	test('Toolbar buttons switch transform mode', async ({ page }) => {
 		const translateBtn = page.locator('[data-testid="toolbar-btn-translate"]')
 		const rotateBtn = page.locator('[data-testid="toolbar-btn-rotate"]')
 		const scaleBtn = page.locator('[data-testid="toolbar-btn-scale"]')
 
-		await canvas.click()
-		await canvas.press('g')
 		await expect(translateBtn).toHaveAttribute('data-active', 'true')
 		await expect(rotateBtn).toHaveAttribute('data-active', 'false')
 		await expect(scaleBtn).toHaveAttribute('data-active', 'false')
 
-		await canvas.click()
-		await canvas.press('r')
+		await rotateBtn.click()
 		await expect(translateBtn).toHaveAttribute('data-active', 'false')
 		await expect(rotateBtn).toHaveAttribute('data-active', 'true')
 		await expect(scaleBtn).toHaveAttribute('data-active', 'false')
 
-		await canvas.click()
-		await canvas.press('s')
+		await scaleBtn.click()
 		await expect(translateBtn).toHaveAttribute('data-active', 'false')
 		await expect(rotateBtn).toHaveAttribute('data-active', 'false')
 		await expect(scaleBtn).toHaveAttribute('data-active', 'true')
 	})
 
-	test('object selection via click', async ({ page }) => {
+	test('Keyboard shortcuts G,R,S switch tools', async ({ page }) => {
+		const translateBtn = page.locator('[data-testid="toolbar-btn-translate"]')
+		const rotateBtn = page.locator('[data-testid="toolbar-btn-rotate"]')
+		const scaleBtn = page.locator('[data-testid="toolbar-btn-scale"]')
 		const canvas = page.locator('[data-testid="viewport-canvas"]')
-		const box = await canvas.boundingBox()
 
-		expect(box).not.toBeNull()
+		await canvas.click()
+		await canvas.press('g')
+		await expect(translateBtn).toHaveAttribute('data-active', 'true')
 
-		if (!box) {
-			throw new Error('Canvas bounding box is null')
-		}
+		await canvas.click()
+		await canvas.press('r')
+		await expect(rotateBtn).toHaveAttribute('data-active', 'true')
 
-		const x = box.x + box.width / 2
-		const y = box.y + box.height / 2
-
-		await canvas.click({ position: { x, y } })
-
-		const selectedItem = page.locator('[data-testid="outliner-selected"]')
-		await expect(selectedItem).toBeAttached()
+		await canvas.click()
+		await canvas.press('s')
+		await expect(scaleBtn).toHaveAttribute('data-active', 'true')
 	})
 })

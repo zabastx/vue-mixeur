@@ -39,7 +39,7 @@ watch(matType, (val) => {
 		case 'MeshNormalMaterial':
 			newMat = new THREE.MeshNormalMaterial()
 			break
-		case 'MeshBasiclMaterial':
+		case 'MeshBasicMaterial':
 			newMat = new THREE.MeshBasicMaterial()
 			break
 		default:

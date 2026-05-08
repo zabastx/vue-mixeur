@@ -1,5 +1,5 @@
 <template>
-	<EditorWrapper title="Properties" icon="properties/properties">
+	<EditorWrapper title="Properties" icon="properties/properties" class="grid grid-rows-[auto_1fr]">
 		<Tabs.Root
 			v-model="activetab"
 			class="grid w-full grow grid-cols-[min-content_1fr] grid-rows-1 overflow-hidden h-full"

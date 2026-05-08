@@ -1,5 +1,9 @@
 <template>
-	<EditorWrapper title="Outliner" icon="outliner/outliner" class="alternate-rows">
+	<EditorWrapper
+		title="Outliner"
+		icon="outliner/outliner"
+		class="alternate-rows grid grid-rows-[auto_1fr]"
+	>
 		<template #header>
 			<h2 class="flex items-center gap-1 px-1 text-base">
 				<MxIcon name="outliner/outliner" /> Outliner

@@ -10,6 +10,7 @@
 				<MxTooltip v-for="item in tabs" :key="item.value" :tooltip="{ text: item.title }">
 					<Tabs.Trigger
 						:value="item.value"
+						:data-testid="`properties-tab-${item.value}`"
 						class="cursor-pointer rounded-l-sm p-1 text-lg hover:bg-ui-tab-inner-selected
 							data-[state='active']:bg-ui-tab-inner-selected"
 					>

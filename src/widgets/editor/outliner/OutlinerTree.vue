@@ -21,7 +21,8 @@
 					<div
 						class="relative flex items-center gap-1 pr-5 hover:bg-outliner-active-highlight group
 							w-full h-6"
-						:data-testid="isSelected ? 'outliner-selected' : undefined"
+						data-testid="outliner-item"
+						:data-selected="isSelected"
 						:style="{ paddingLeft: `${item.level * 1.25}rem` }"
 						:class="{
 							'bg-outliner-active-highlight text-outliner-active-object': isSelected

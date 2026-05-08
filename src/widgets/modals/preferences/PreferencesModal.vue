@@ -9,6 +9,7 @@
 		}"
 		outside-interaction
 		icon="misc/preferences"
+		data-testid="modal-preferences"
 	>
 		<Tabs.Root
 			v-model="section"

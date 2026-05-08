@@ -1,5 +1,5 @@
 <template>
-	<MxDialog v-model="isOpen" class="max-w-xl bg-editor-border">
+	<MxDialog v-model="isOpen" class="max-w-xl bg-editor-border" data-testid="modal-about">
 		<div class="flex max-w-xl flex-col text-ui-menu-bg-text">
 			<!-- Header -->
 			<div class="flex items-center gap-4 p-4">

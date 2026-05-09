@@ -1,11 +1,9 @@
 <template>
 	<template v-if="threeStore.selectedObject">
-		<InputField v-slot="{ id }" label="Name" class="mb-2.5 text-sm">
-			<input
-				:id
+		<InputField v-slot="{ id }" label="Name" class="mb-2.5 text-xs">
+			<InputText
 				v-model="threeStore.selectedObject.name"
-				type="text"
-				class="input text-xs"
+				:input-id="id"
 				@change="sceneStore.updateScene"
 			/>
 		</InputField>

@@ -28,7 +28,7 @@
 						</CheckboxGroupRoot>
 					</ScrollContainer>
 				</div>
-				<input v-model="search" type="text" class="input" placeholder="Search textures" />
+				<InputText v-model="search" placeholder="Search textures" icon="ui/search" />
 				<PolyhavenLicense class="mt-auto" />
 			</div>
 			<div class="overflow-hidden bg-ui-box-inner rounded grow">

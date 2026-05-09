@@ -2,7 +2,7 @@
 	.input {
 		@apply inline-block w-full max-w-full;
 		@apply border-ui-text-outline bg-ui-text-inner rounded border px-1 py-0.5;
-		@apply text-ui-text-text outline-none focus:brightness-125;
+		@apply text-ui-text-text outline-none focus-within:brightness-125;
 	}
 
 	.btn {

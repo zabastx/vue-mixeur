@@ -2,7 +2,7 @@
 	<MxDialog
 		v-model="isOpen"
 		title="File Browser"
-		class="max-w-6xl w-full h-2/3 text-ui-text-text block-border bg-window-bg flex flex-col"
+		class="w-6xl h-2/3 text-ui-text-text block-border bg-window-bg flex flex-col"
 		resize
 		:root="{
 			modal: false
@@ -14,7 +14,7 @@
 			class="h-full p-2 grid grid-rows-[1fr_min-content] gap-1 overflow-hidden"
 			data-testid="import-scene"
 		>
-			<div class="grid grid-cols-[300px_1fr_250px] gap-1 overflow-hidden">
+			<div class="grid grid-cols-[minmax(275px,1fr)_3fr_auto] gap-1 overflow-hidden">
 				<ScrollContainer>
 					<ImportSceneFiles
 						ref="sceneFilesRef"
@@ -66,7 +66,7 @@
 						<p v-else>No additional assets required</p>
 					</template>
 				</div>
-				<ImportSceneSettings ref="settingsRef" :selected-file="selectedFile" />
+				<ImportSceneSettings ref="settingsRef" class="w-[275px]" :selected-file="selectedFile" />
 			</div>
 
 			<div class="flex gap-1 justify-end">

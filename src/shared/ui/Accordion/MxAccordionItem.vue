@@ -10,7 +10,7 @@
 			v-bind="header"
 		>
 			<Accordion.Trigger
-				class="group flex w-full cursor-pointer items-center gap-1 px-2 py-1"
+				class="group flex w-full cursor-pointer items-center gap-1 px-2 py-1 truncate"
 				:class="{ 'pl-4': nested }"
 				v-bind="trigger"
 			>
@@ -21,6 +21,14 @@
 				<InputCheckbox v-if="showCheckbox" v-model="model" @click.stop />
 				<MxIcon v-if="icon" :name="icon" />
 				<span class="font-panel-title">{{ label }}</span>
+				<InputText
+					v-if="showSearch"
+					v-model="search"
+					icon="ui/search"
+					placeholder="Search"
+					class="ml-auto text-xs max-w-[150px]"
+					@click.stop
+				/>
 			</Accordion.Trigger>
 		</Accordion.Header>
 		<Accordion.Content
@@ -49,6 +57,7 @@ import type {
 import { Accordion } from 'reka-ui/namespaced'
 
 const model = defineModel<boolean>()
+const search = defineModel<string | undefined>('search')
 
 defineProps<{
 	item: AccordionItemProps
@@ -59,5 +68,6 @@ defineProps<{
 	nested?: boolean
 	showCheckbox?: boolean
 	icon?: MxIconName
+	showSearch?: boolean
 }>()
 </script>

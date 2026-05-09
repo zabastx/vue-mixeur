@@ -5,14 +5,19 @@
 			<MxButton icon="file/folder" @click="openDirPicker()">Upload a folder</MxButton>
 		</div>
 		<MxAccordionRoot type="multiple" :default-value="['models', 'assets']" class="space-y-1">
-			<MxAccordionItem label="Models" :item="{ value: 'models' }">
+			<MxAccordionItem
+				v-model:search="modelSearch"
+				label="Models"
+				:item="{ value: 'models' }"
+				show-search
+			>
 				<div
 					class="flex flex-col gap-1 bg-ui-box-inner border border-ui-box-outline rounded-ui-box
-						text-sm grow text-ui-list-text overflow-hidden h-40 resize-y pb-2"
+						text-sm grow text-ui-list-text overflow-hidden h-40 resize-y p-1 pb-2"
 				>
-					<ScrollContainer class="p-1">
+					<ScrollContainer class="pr-3">
 						<div
-							v-for="item in sceneFiles"
+							v-for="item in filteredSceneFilesList"
 							:key="item.id"
 							class="px-1 rounded cursor-default truncate"
 							data-testid="model-file"
@@ -33,14 +38,19 @@
 					</ScrollContainer>
 				</div>
 			</MxAccordionItem>
-			<MxAccordionItem label="Assets" :item="{ value: 'assets' }">
+			<MxAccordionItem
+				v-model:search="assetSearch"
+				label="Assets"
+				:item="{ value: 'assets' }"
+				show-search
+			>
 				<div
 					class="flex flex-col gap-1 bg-ui-box-inner border border-ui-box-outline rounded-ui-box
-						text-sm grow text-ui-list-text overflow-hidden h-40 resize-y pb-2"
+						text-sm grow text-ui-list-text overflow-hidden h-40 resize-y p-1 pb-2"
 				>
-					<ScrollContainer class="p-1 space-y-2">
+					<ScrollContainer class="pr-3 space-y-2">
 						<div
-							v-for="item in assetFiles"
+							v-for="item in filteredAssetFilesList"
 							:key="item.id"
 							data-testid="asset-file"
 							class="px-1 rounded cursor-default"
@@ -88,7 +98,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, shallowRef, watch } from 'vue'
+import { computed, reactive, ref, shallowRef, watch } from 'vue'
 import { analyzeModelFile } from './parse-scene'
 import { useFileDialog } from '@vueuse/core'
 import type { ModelFileItem, FileListItem, AssetFileItem } from './types'
@@ -102,8 +112,31 @@ defineEmits<{
 }>()
 
 const fileList = reactive<FileListItem[]>([])
-const sceneFiles = computed<ModelFileItem[]>(() => fileList.filter((item) => item.type !== 'asset'))
-const assetFiles = computed<AssetFileItem[]>(() => fileList.filter((item) => item.type === 'asset'))
+const sceneFiles = computed<ModelFileItem[]>(() =>
+	fileList
+		.filter((item) => item.type !== 'asset')
+		.toSorted((a, b) => a.file.name.localeCompare(b.file.name))
+)
+const assetFiles = computed<AssetFileItem[]>(() =>
+	fileList
+		.filter((item) => item.type === 'asset')
+		.toSorted((a, b) => a.file.name.localeCompare(b.file.name))
+)
+
+const modelSearch = ref('')
+const assetSearch = ref('')
+
+const filteredSceneFilesList = computed(() =>
+	sceneFiles.value.filter((item) =>
+		item.file.name.toLowerCase().includes(modelSearch.value.toLowerCase())
+	)
+)
+
+const filteredAssetFilesList = computed(() =>
+	assetFiles.value.filter((item) =>
+		item.file.name.toLowerCase().includes(assetSearch.value.toLowerCase())
+	)
+)
 
 defineExpose({
 	sceneFiles,

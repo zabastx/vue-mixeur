@@ -1,5 +1,5 @@
 <template>
-	<Popover.Root v-bind="root">
+	<Popover.Root v-bind="root" @update:open="$emit('update:open', $event)">
 		<Popover.Trigger v-bind="trigger" as-child>
 			<slot name="trigger"></slot>
 		</Popover.Trigger>
@@ -23,6 +23,7 @@ import type {
 	PopoverArrowProps,
 	PopoverContentProps,
 	PopoverPortalProps,
+	PopoverRootEmits,
 	PopoverRootProps,
 	PopoverTriggerProps
 } from 'reka-ui'
@@ -36,4 +37,6 @@ defineProps<{
 	arrow?: PopoverArrowProps
 	showArrow?: boolean
 }>()
+
+defineEmits<PopoverRootEmits>()
 </script>

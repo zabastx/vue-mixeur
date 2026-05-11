@@ -565,7 +565,15 @@ var e=`<svg height="1em" viewBox="0 0 700 1100" width="0.64em" xmlns="http://www
 			transform="matrix(100 0 0 100 -21500 -47100.0012)"
 		/>
 	</g>
-</svg>`,ve=`<svg height="1em" viewBox="0 0 1600 1600" width="1em" xmlns="http://www.w3.org/2000/svg">
+</svg>`,ve=`<svg height="1em" viewBox="0 0 1600 1600" width="1em" version="1.1" id="svg1"
+	xmlns="http://www.w3.org/2000/svg"
+	xmlns:svg="http://www.w3.org/2000/svg">
+	<defs id="defs1" />
+	<g fill="currentColor" id="g1" transform="matrix(-1,0,0,1,1599.9999,0)">
+		<path d="m 99,599 c -2.74773,0 -5,2.25226 -5,5 0,1.1945 0.441488,2.28163 1.148438,3.14453 l -5.001954,5.00195 a 0.50005,0.50005 0 1 0 0.707032,0.70704 l 5.001953,-5.00196 C 96.718369,608.55851 97.805503,609 99,609 c 2.74773,0 5,-2.25227 5,-5 0,-2.74774 -2.25227,-5 -5,-5 z m 0,1 c 2.20227,0 4,1.79773 4,4 0,2.20226 -1.79773,4 -4,4 -2.20227,0 -4,-1.79774 -4,-4 0,-2.20227 1.79773,-4 4,-4 z" transform="matrix(100,0,0,100,-8899.6439,-59800.356)" id="path1" />
+	</g>
+</svg>
+`,ye=`<svg height="1em" viewBox="0 0 1600 1600" width="1em" xmlns="http://www.w3.org/2000/svg">
 	<g fill="currentColor">
 		<g enable-background="new" transform="matrix(100 0 0 100 -500 -53500.018)">
 			<path
@@ -579,23 +587,23 @@ var e=`<svg height="1em" viewBox="0 0 700 1100" width="0.64em" xmlns="http://www
 			/>
 		</g>
 	</g>
-</svg>`,ye=`<svg height="1em" viewBox="0 0 1600 1600" width="1em"
+</svg>`,be=`<svg height="1em" viewBox="0 0 1600 1600" width="1em"
 	xmlns="http://www.w3.org/2000/svg">
 	<g fill="currentColor">
 		<path d="m27.492188 598.99219a.50005.50005 0 0 0 -.5.5v9a.50005.50005 0 0 0 .5.5h13a.50005.50005 0 0 0 .5-.49805l.007812-3.49414-1-.002-.0059 2.99414h-12.001912v-8h8v3.5c.000029.27613.223869.49997.5.5h4c.44533-.00017.668305-.53852.353515-.85352l-4-4c-.09376-.0938-.22116-.14439-.353515-.14453v-.002h-.0078zm7.507812 11.00781-2 .004v1.98828h-2.507812c-.67616-.01-.67616 1.00956 0 1h7c.676159.01.676159-1.00956 0-1h-2.492188z" fill-rule="evenodd" transform="matrix(100 0 0 100 -2599.609 -59799.22200000001)"/>
 	</g>
-</svg>`,be=`<svg height="1em" viewBox="0 0 1800 1800" width="1em" xmlns="http://www.w3.org/2000/svg">
+</svg>`,xe=`<svg height="1em" viewBox="0 0 1800 1800" width="1em" xmlns="http://www.w3.org/2000/svg">
 	<g stroke="currentColor" fill="currentColor">
 		<path
 			d="m467.5 10.000005a.50005006.50005006 0 0 0 -.5.5v15a.50005006.50005006 0 0 0 .5.5h15a.50005006.50005006 0 0 0 .5-.5v-15a.50005006.50005006 0 0 0 -.5-.5zm.5.999999h4v4h-4zm5 0h4v4h-4zm5 0h4v4h-4zm-10 5h4v4.000001h-4zm5 0h4v4.000001h-4zm5 0h4v4.000001h-4zm-10 5.000001h4v4h-4zm5 0h4v4h-4zm5 0h4v4h-4z"
 			transform="matrix(100 0 0 100 -46599.99999999999 -900)"
 		/>
 	</g>
-</svg>`,xe=`<svg height="1em" viewBox="0 0 1800 1500" width="1em" xmlns="http://www.w3.org/2000/svg">
+</svg>`,Se=`<svg height="1em" viewBox="0 0 1800 1500" width="1em" xmlns="http://www.w3.org/2000/svg">
 	<g stroke="currentColor" stroke-width="0.5" fill="currentColor">
 		<path
 			d="m449.75 12.000004a.50005006.50005006 0 0 0 -.4824.36914l-3.25 12.000001a.50005006.50005006 0 0 0 .4824.63086h15a.50005006.50005006 0 0 0 .4824-.63086l-3.25-12.000001a.50005006.50005006 0 0 0 -.4824-.36914zm.3828 1h2.086l-.2169 2h-2.4121zm3.0938 0h1.5468l.2168 2h-1.9804zm2.5547 0h2.0859l.541 2h-2.4101zm-6.461 3h2.5723l-.3262 3h-3.0586zm3.5801 0h2.1992l.3262 3h-2.8516zm3.207 0h2.5723l.8125 3h-3.0586zm-7.8711 4.000001h3.2207l-.4336 4h-3.8711zm4.2305 0h3.0664l.4356 4h-3.9375zm4.0762 0h3.2207l1.084 4h-3.8711z"
 			transform="matrix(100 0 0 100 -44500 -1100)"
 		/>
 	</g>
-</svg>`;export{C as $,K as A,I as B,$ as C,Y as D,X as E,V as F,j as G,P as H,B as I,O as J,A as K,z as L,W as M,U as N,J as O,H as P,w as Q,R,ee as S,e as St,Z as T,N as U,F as V,M as W,E as X,D as Y,T as Z,ae as _,a as _t,_e as a,_ as at,ne as b,n as bt,me as c,m as ct,de as d,d as dt,S as et,ue as f,u as ft,oe as g,o as gt,se as h,s as ht,ve as i,v as it,G as j,q as k,pe as l,p as lt,ce as m,c as mt,be as n,b as nt,ge as o,g as ot,le as p,l as pt,k as q,ye as r,y as rt,he as s,h as st,xe as t,x as tt,fe as u,f as ut,ie as v,i as vt,Q as w,te as x,t as xt,re as y,r as yt,L as z};
+</svg>`;export{w as $,q as A,L as B,ee as C,e as Ct,X as D,Z as E,H as F,M as G,F as H,V as I,k as J,j as K,B as L,G as M,W as N,Y as O,U as P,T as Q,z as R,te as S,t as St,Q as T,P as U,I as V,N as W,D as X,O as Y,E as Z,oe as _,o as _t,ve as a,v as at,re as b,r as bt,he as c,h as ct,fe as d,f as dt,C as et,de as f,d as ft,se as g,s as gt,ce as h,c as ht,ye as i,y as it,K as j,J as k,me as l,m as lt,le as m,l as mt,xe as n,x as nt,_e as o,_ as ot,ue as p,u as pt,A as q,be as r,b as rt,ge as s,g as st,Se as t,S as tt,pe as u,p as ut,ae as v,a as vt,$ as w,ne as x,n as xt,ie as y,i as yt,R as z};

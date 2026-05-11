@@ -41,20 +41,8 @@ Try the live demo at [mixeur.zabastx.ru](https://mixeur.zabastx.ru)
 
 ### Scene Management
 
-- **Outliner Panel**: Hierarchical tree view with visibility toggles and group detection
-- **Properties Panel**: Edit transforms, geometry parameters, materials, lights, and camera properties
-
-## Tech Stack
-
-- **Frontend**: Vue 3 with Composition API
-- **3D Engine**: Three.js with BVH acceleration for fast raycasting
-- **State Management**: Pinia 3
-- **Styling**: Tailwind CSS v4
-- **Build Tool**: Vite 8
-- **TypeScript**: Full type safety
-- **UI Components**: Reka UI
-- **Icons**: Custom SVG icon system
-- **Testing**: Vitest (unit), Playwright (E2E)
+- **Outliner**: Hierarchical tree view with visibility toggles and group detection
+- **Properties**: Edit transforms, geometry parameters, materials, lights, and camera properties
 
 ## Core Dependencies
 
@@ -67,7 +55,7 @@ Try the live demo at [mixeur.zabastx.ru](https://mixeur.zabastx.ru)
 - `@jaames/iro`: Color picker library
 - `reka-ui`: Vue component primitives
 
-## Acknowledgments
+## Credits
 
 - [Three.js](https://threejs.org/) - 3D graphics library
 - [Vue.js](https://vuejs.org/) - Progressive JavaScript framework

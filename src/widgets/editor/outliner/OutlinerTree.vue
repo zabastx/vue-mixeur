@@ -170,6 +170,13 @@ const contextMenuItems = computed<MxContextMenuItem[]>(() => {
 			}
 		},
 		{
+			key: 'tojson',
+			label: 'Save to JSON',
+			onSelect() {
+				sceneStore.objectToJSON(uuid)
+			}
+		},
+		{
 			key: 'delete',
 			label: 'Delete',
 			shortcut: 'Del',

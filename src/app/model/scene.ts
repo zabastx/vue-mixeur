@@ -12,6 +12,7 @@ import { useControlsStore } from './controls'
 import { useComposerStore } from './composer'
 import { useCameraStore } from './camera'
 import { useThreeStore } from './three'
+import { downloadFile } from '@/shared/lib/files'
 
 export const useSceneStore = defineStore('scene', () => {
 	const scene = shallowRef(new THREE.Scene())
@@ -205,6 +206,21 @@ export const useSceneStore = defineStore('scene', () => {
 		}
 	}
 
+	function objectToJSON(uuid: string) {
+		const object = scene.value.getObjectByProperty('uuid', uuid)
+		if (!object) return
+
+		if (object instanceof THREE.Mesh) {
+			const { getMaterialCache } = useShadingStore()
+			object.material = getMaterialCache(object)?.original
+		}
+
+		const json = object.toJSON()
+		json.object.userData = {}
+		const blob = new Blob([JSON.stringify(json)], { type: 'application/json' })
+		downloadFile(blob, `${object.name}.json`)
+	}
+
 	function exportScene() {
 		const { shadingMode, setMode } = useShadingStore()
 		const mode = shadingMode
@@ -227,6 +243,7 @@ export const useSceneStore = defineStore('scene', () => {
 		cloneObject,
 		deleteFromScene,
 		objectVisibilityUpdate,
+		objectToJSON,
 		exportScene
 	}
 })

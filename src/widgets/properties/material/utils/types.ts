@@ -60,3 +60,4 @@ export type MeshMaterials =
 	| THREE.MeshDepthMaterial
 	| THREE.MeshLambertMaterial
 	| THREE.MeshMatcapMaterial
+	| THREE.MeshBasicMaterial

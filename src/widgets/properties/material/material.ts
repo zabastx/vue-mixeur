@@ -1,65 +1,57 @@
 import { useShadingStore } from '@/app/model/shading'
 import { useThreeStore } from '@/app/model/three'
 import THREE from '@/shared/three'
-import { computed, ref } from 'vue'
-import type { FieldValueMap, MaterialProp } from './utils/types'
+import { computed, triggerRef } from 'vue'
+import type { FieldValueMap, MaterialProp, MeshMaterials } from './utils/types'
+import { storeToRefs } from 'pinia'
+
+const mesh = computed(() => {
+	const { selectedObject } = storeToRefs(useThreeStore())
+	if (selectedObject.value instanceof THREE.Mesh) {
+		return selectedObject.value
+	}
+	return null
+})
+
+const material = computed<MeshMaterials | null>(() => {
+	const shadingStore = useShadingStore()
+
+	if (mesh.value) {
+		const mat = shadingStore.getMaterialCache(mesh.value)?.original
+		if (mat instanceof THREE.Material) return mat as MeshMaterials
+	}
+	return null
+})
 
 export function useMeshMaterial<T extends THREE.Material>() {
-	const threeStore = useThreeStore()
 	const shadingStore = useShadingStore()
-	const manualTrigger = ref(0)
-
-	const mesh = computed(() => {
-		if (threeStore.selectedObject instanceof THREE.Mesh) {
-			return threeStore.selectedObject
-		}
-		return null
-	})
-
-	const material = computed<T | null>(() => {
-		// oxlint-disable-next-line no-unused-expressions
-		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-		manualTrigger.value
-
-		if (mesh.value) {
-			const mat = shadingStore.getMaterialCache(mesh.value)?.original
-			if (mat instanceof THREE.Material) return mat as T
-		}
-		return null
-	})
 
 	function updateMaterialProp(data: { prop: MaterialProp<T>; value: T[MaterialProp<T>] }) {
 		if (!mesh.value) return
 		shadingStore.updateMaterial<T>(mesh.value, data)
-		manualTrigger.value++
+		triggerRef(material)
 	}
 
 	function getMaterialProp<PropVal>(prop: MaterialProp<T>) {
 		if (!material.value) return
-		// oxlint-disable-next-line no-unused-expressions
-		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-		manualTrigger.value
-		return material.value[prop] as PropVal
+		return material.value[prop as MaterialProp<MeshMaterials>] as PropVal
 	}
 
 	function changeMaterial(newMaterial: THREE.Material) {
 		if (!mesh.value) return
 		shadingStore.changeMaterial(mesh.value, newMaterial)
-		manualTrigger.value++
+		triggerRef(mesh)
 	}
 
 	function getPropValue<TType extends keyof FieldValueMap>(
 		type: TType,
 		prop: MaterialProp<T>
 	): FieldValueMap[TType] {
-		// oxlint-disable-next-line no-unused-expressions
-		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-		manualTrigger.value
 		switch (type) {
 			case 'color':
 				return `#${getMaterialProp<THREE.Color>(prop)?.getHexString() ?? '000000'}` as FieldValueMap[TType]
 			case 'angle':
-				return THREE.MathUtils.radToDeg(getMaterialProp<number>(prop) || 0) as FieldValueMap[TType]
+				return THREE.MathUtils.radToDeg(getMaterialProp<number>(prop) ?? 0) as FieldValueMap[TType]
 			default:
 				return getMaterialProp(prop) as FieldValueMap[TType]
 		}
@@ -98,6 +90,7 @@ export function useMeshMaterial<T extends THREE.Material>() {
 				updateMaterialProp({ prop, value: value as unknown as T[MaterialProp<T>] })
 				break
 		}
+		triggerRef(material)
 	}
 
 	return {

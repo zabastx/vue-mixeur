@@ -4,8 +4,13 @@ export function downloadFile(
 	options?: { mimeType?: string }
 ) {
 	try {
-		const mimeType = options?.mimeType || 'application/octet-stream'
-		const blob = data instanceof Blob ? data : new Blob([data], { type: mimeType })
+		let blob: Blob
+		if (data instanceof ArrayBuffer) {
+			const mimeType = options?.mimeType ?? 'application/octet-stream'
+			blob = new Blob([data], { type: mimeType })
+		} else {
+			blob = data
+		}
 
 		const url = URL.createObjectURL(blob)
 		const a = document.createElement('a')

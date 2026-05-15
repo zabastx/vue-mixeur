@@ -100,9 +100,12 @@ async function onApply() {
 		})
 
 		obj.geometry = newGeometry
+
 		getUserData(obj).text = {
-			textValue: textData.text
+			textValue: textData.text,
+			parameters: newGeometry.parameters
 		}
+
 		enableBVH(obj)
 	}
 }

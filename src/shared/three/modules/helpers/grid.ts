@@ -10,6 +10,7 @@ export function setGridHelper(scene: THREE.Scene) {
 	const userData = getUserData(grid)
 	userData.isHelper = true
 	userData.hideInOutliner = true
+	userData.isSystemObj = true
 
 	scene.add(grid)
 
@@ -29,6 +30,7 @@ function getAxes() {
 	const userData = getUserData(axesGroup)
 	userData.isHelper = true
 	userData.hideInOutliner = true
+	userData.isSystemObj = true
 
 	axesGroup.children.forEach((child) => {
 		child.scale.y = 0

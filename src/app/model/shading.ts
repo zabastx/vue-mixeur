@@ -355,6 +355,7 @@ function getSolidShadingLights() {
 		const userData = getUserData(item)
 		userData.hideInOutliner = true
 		userData.isHelper = true
+		userData.isSystemObj = true
 		userData.hideInModes = ['wireframe', 'preview', 'rendered', 'export']
 	})
 

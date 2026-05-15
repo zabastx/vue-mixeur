@@ -6,9 +6,11 @@ import {
 	disposeBatchedBoundsTree,
 	acceleratedRaycast
 } from 'three-mesh-bvh'
+import type { TextGeometry } from 'three/examples/jsm/Addons.js'
 
 interface MxTextObjectData {
 	textValue: string
+	parameters: TextGeometry['parameters']
 }
 
 interface MxObjectUserData {
@@ -23,6 +25,8 @@ interface MxObjectUserData {
 	hideInOutliner?: boolean
 	userVisible?: boolean
 	text?: MxTextObjectData
+	isLightTarget?: boolean
+	isSystemObj?: boolean
 }
 
 declare module 'three' {

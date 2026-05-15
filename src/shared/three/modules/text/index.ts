@@ -17,7 +17,8 @@ export async function createText() {
 	const mesh = new THREE.Mesh(geometry, new THREE.MeshPhysicalMaterial())
 	mesh.name = 'Text'
 	getUserData(mesh).text = {
-		textValue: 'Text'
+		textValue: 'Text',
+		parameters: geometry.parameters
 	}
 	return mesh
 }

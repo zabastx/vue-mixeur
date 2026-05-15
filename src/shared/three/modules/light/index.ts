@@ -20,6 +20,7 @@ export function createLight<T extends CreateLightParams>({ type, parameters }: T
 			light.name = 'Directional Light'
 			light.target.name = 'Directional Light Target'
 			light.target.position.set(0, 0, -1)
+			getUserData(light.target).isLightTarget = true
 			light.add(light.target)
 			break
 
@@ -33,6 +34,7 @@ export function createLight<T extends CreateLightParams>({ type, parameters }: T
 			light.name = 'Spot Light'
 			light.target.name = 'Spot Light Target'
 			light.target.position.set(0, 0, -1)
+			getUserData(light.target).isLightTarget = true
 			light.add(light.target)
 			break
 

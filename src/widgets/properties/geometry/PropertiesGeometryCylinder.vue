@@ -7,44 +7,40 @@
 
 <script lang="ts" setup>
 import THREE from '@/shared/three'
-import { computed, ref } from 'vue'
+import { reactive } from 'vue'
 import type { GeometryField } from './utils/types'
 import { MathUtils } from 'three'
+import type { CylinderGeometry } from 'three'
 
-const { mesh } = defineProps<{
-	mesh: THREE.Mesh
+const { geometry } = defineProps<{
+	geometry: CylinderGeometry
 }>()
 
 const emits = defineEmits<{
 	'update:geometry': [geometry: THREE.CylinderGeometry]
 }>()
 
-const geometryParameters = computed(() => {
-	if (mesh.geometry instanceof THREE.CylinderGeometry) return mesh.geometry.parameters
-	return null
-})
-
-const data = ref<CylinderGeometrySettings>({
-	radiusTop: geometryParameters.value?.radiusTop ?? 1,
-	radiusBottom: geometryParameters.value?.radiusBottom ?? 1,
-	height: geometryParameters.value?.height ?? 1,
-	radialSegments: geometryParameters.value?.radialSegments ?? 1,
-	heightSegments: geometryParameters.value?.heightSegments ?? 1,
-	openEnded: geometryParameters.value?.openEnded ?? false,
-	thetaStart: MathUtils.radToDeg(geometryParameters.value?.thetaStart ?? 0),
-	thetaLength: MathUtils.radToDeg(geometryParameters.value?.thetaLength ?? Math.PI * 2)
+const data = reactive<CylinderGeometrySettings>({
+	radiusTop: geometry.parameters.radiusTop ?? 1,
+	radiusBottom: geometry.parameters.radiusBottom ?? 1,
+	height: geometry.parameters.height ?? 1,
+	radialSegments: geometry.parameters.radialSegments ?? 1,
+	heightSegments: geometry.parameters.heightSegments ?? 1,
+	openEnded: geometry.parameters.openEnded ?? false,
+	thetaStart: MathUtils.radToDeg(geometry.parameters.thetaStart ?? 0),
+	thetaLength: MathUtils.radToDeg(geometry.parameters.thetaLength ?? Math.PI * 2)
 })
 
 function onApply() {
 	const newGeometry = new THREE.CylinderGeometry(
-		data.value.radiusTop,
-		data.value.radiusBottom,
-		data.value.height,
-		data.value.radialSegments,
-		data.value.heightSegments,
-		data.value.openEnded,
-		data.value.thetaStart ? MathUtils.degToRad(data.value.thetaStart) : 0,
-		data.value.thetaLength ? MathUtils.degToRad(data.value.thetaLength) : Math.PI * 2
+		data.radiusTop,
+		data.radiusBottom,
+		data.height,
+		data.radialSegments,
+		data.heightSegments,
+		data.openEnded,
+		data.thetaStart ? MathUtils.degToRad(data.thetaStart) : 0,
+		data.thetaLength ? MathUtils.degToRad(data.thetaLength) : Math.PI * 2
 	)
 
 	emits('update:geometry', newGeometry)

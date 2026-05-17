@@ -7,42 +7,38 @@
 
 <script lang="ts" setup>
 import THREE from '@/shared/three'
-import { computed, ref } from 'vue'
+import { reactive } from 'vue'
 import type { GeometryField } from './utils/types'
 import { MathUtils } from 'three'
+import type { TorusGeometry } from 'three'
 
-const { mesh } = defineProps<{
-	mesh: THREE.Mesh
+const { geometry } = defineProps<{
+	geometry: TorusGeometry
 }>()
 
 const emits = defineEmits<{
 	'update:geometry': [geometry: THREE.TorusGeometry]
 }>()
 
-const geometryParameters = computed(() => {
-	if (mesh.geometry instanceof THREE.TorusGeometry) return mesh.geometry.parameters
-	return null
-})
-
-const data = ref<TorusGeometrySettings>({
-	radius: geometryParameters.value?.radius,
-	tube: geometryParameters.value?.tube,
-	radialSegments: geometryParameters.value?.radialSegments,
-	tubularSegments: geometryParameters.value?.tubularSegments,
-	arc: MathUtils.radToDeg(geometryParameters.value?.arc ?? Math.PI * 2),
-	thetaStart: MathUtils.radToDeg(geometryParameters.value?.thetaStart ?? 0),
-	thetaLength: MathUtils.radToDeg(geometryParameters.value?.thetaLength ?? Math.PI * 2)
+const data = reactive<TorusGeometrySettings>({
+	radius: geometry.parameters.radius,
+	tube: geometry.parameters.tube,
+	radialSegments: geometry.parameters.radialSegments,
+	tubularSegments: geometry.parameters.tubularSegments,
+	arc: MathUtils.radToDeg(geometry.parameters.arc ?? Math.PI * 2),
+	thetaStart: MathUtils.radToDeg(geometry.parameters.thetaStart ?? 0),
+	thetaLength: MathUtils.radToDeg(geometry.parameters.thetaLength ?? Math.PI * 2)
 })
 
 function onApply() {
 	const newGeometry = new THREE.TorusGeometry(
-		data.value.radius,
-		data.value.tube,
-		data.value.radialSegments,
-		data.value.tubularSegments,
-		data.value.arc ? MathUtils.degToRad(data.value.arc) : undefined,
-		data.value.thetaStart ? MathUtils.degToRad(data.value.thetaStart) : undefined,
-		data.value.thetaLength ? MathUtils.degToRad(data.value.thetaLength) : undefined
+		data.radius,
+		data.tube,
+		data.radialSegments,
+		data.tubularSegments,
+		data.arc ? MathUtils.degToRad(data.arc) : undefined,
+		data.thetaStart ? MathUtils.degToRad(data.thetaStart) : undefined,
+		data.thetaLength ? MathUtils.degToRad(data.thetaLength) : undefined
 	)
 
 	emits('update:geometry', newGeometry)

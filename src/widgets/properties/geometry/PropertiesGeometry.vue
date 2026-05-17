@@ -1,7 +1,13 @@
 <template>
 	<MxAccordionRoot type="multiple" :default-value="['geometry']">
-		<MxAccordionItem label="Geometry" :item="{ value: 'geometry' }">
-			<component :is="geometryComponent" :mesh="object" @update:geometry="onUpdateGeometry" />
+		<MxAccordionItem v-if="data" label="Geometry" :item="{ value: 'geometry' }">
+			<component
+				:is="data.component"
+				v-if="data.geometry"
+				:key="object.uuid"
+				:geometry="data.geometry"
+				@update:geometry="onUpdateGeometry"
+			/>
 		</MxAccordionItem>
 	</MxAccordionRoot>
 </template>
@@ -19,34 +25,50 @@ import PropertiesGeometryCylinder from './PropertiesGeometryCylinder.vue'
 import PropertiesGeometryCone from './PropertiesGeometryCone.vue'
 import PropertiesGeometryTorus from './PropertiesGeometryTorus.vue'
 import { enableBVH } from '@/shared/three/utils'
+import { storeToRefs } from 'pinia'
 
-const threeStore = useThreeStore()
+const { selectedObject } = storeToRefs(useThreeStore())
 
-const object = computed(() => threeStore.selectedObject as THREE.Mesh)
+const object = computed(() => selectedObject.value as THREE.Mesh)
 
-const geometryComponent = computed(() => {
+const data = computed(() => {
 	if (!object.value) return null
+
+	let component
 
 	switch (object.value.geometry.type) {
 		case 'BoxGeometry':
-			return PropertiesGeometryBox
+			component = PropertiesGeometryBox
+			break
 		case 'PlaneGeometry':
-			return PropertiesGeometryPlane
+			component = PropertiesGeometryPlane
+			break
 		case 'CircleGeometry':
-			return PropertiesGeometryCircle
+			component = PropertiesGeometryCircle
+			break
 		case 'SphereGeometry':
-			return PropertiesGeometrySphere
+			component = PropertiesGeometrySphere
+			break
 		case 'IcosahedronGeometry':
-			return PropertiesGeometryIcosahedron
+			component = PropertiesGeometryIcosahedron
+			break
 		case 'CylinderGeometry':
-			return PropertiesGeometryCylinder
+			component = PropertiesGeometryCylinder
+			break
 		case 'ConeGeometry':
-			return PropertiesGeometryCone
+			component = PropertiesGeometryCone
+			break
 		case 'TorusGeometry':
-			return PropertiesGeometryTorus
+			component = PropertiesGeometryTorus
+			break
 
 		default:
 			return null
+	}
+
+	return {
+		component,
+		geometry: object.value.geometry
 	}
 })
 

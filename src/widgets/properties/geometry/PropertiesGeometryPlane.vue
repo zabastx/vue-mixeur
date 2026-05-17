@@ -7,35 +7,26 @@
 
 <script lang="ts" setup>
 import THREE from '@/shared/three'
-import { computed, ref } from 'vue'
+import { reactive } from 'vue'
 import type { GeometryField } from './utils/types'
+import type { PlaneGeometry } from 'three'
 
-const { mesh } = defineProps<{
-	mesh: THREE.Mesh
+const { geometry } = defineProps<{
+	geometry: PlaneGeometry
 }>()
 
 const emits = defineEmits<{
 	'update:geometry': [geometry: THREE.PlaneGeometry]
 }>()
 
-const geometryParameters = computed(() => {
-	if (mesh.geometry instanceof THREE.PlaneGeometry) return mesh.geometry.parameters
-	return null
-})
-
-const data = ref<PlaneGeometrySettings>({
-	width: geometryParameters.value?.width ?? 1,
-	height: geometryParameters.value?.height ?? 1,
-	widthSegments: geometryParameters.value?.widthSegments ?? 1,
-	heightSegments: geometryParameters.value?.heightSegments ?? 1
-})
+const data = reactive<PlaneGeometrySettings>(structuredClone(geometry.parameters))
 
 function onApply() {
 	const newGeometry = new THREE.PlaneGeometry(
-		data.value.width,
-		data.value.height,
-		data.value.widthSegments,
-		data.value.heightSegments
+		data.width,
+		data.height,
+		data.widthSegments,
+		data.heightSegments
 	)
 
 	emits('update:geometry', newGeometry)

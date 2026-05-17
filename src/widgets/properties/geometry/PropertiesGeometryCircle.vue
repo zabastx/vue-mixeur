@@ -8,31 +8,27 @@
 <script lang="ts" setup>
 import THREE from '@/shared/three'
 import { MathUtils } from 'three'
-import { computed, ref } from 'vue'
+import { reactive } from 'vue'
 import type { GeometryField } from './utils/types'
+import type { CircleGeometry } from 'three'
 
-const { mesh } = defineProps<{
-	mesh: THREE.Mesh
+const { geometry } = defineProps<{
+	geometry: CircleGeometry
 }>()
 
 const emits = defineEmits<{
 	'update:geometry': [geometry: THREE.CircleGeometry]
 }>()
 
-const geometryParameters = computed(() => {
-	if (mesh.geometry instanceof THREE.CircleGeometry) return mesh.geometry.parameters
-	return null
-})
-
-const data = ref<CircleGeometrySettings>({
-	radius: geometryParameters.value?.radius ?? 1,
-	segments: geometryParameters.value?.segments ?? 32,
-	thetaStart: MathUtils.radToDeg(geometryParameters.value?.thetaStart ?? 0),
-	thetaLength: MathUtils.radToDeg(geometryParameters.value?.thetaLength ?? Math.PI * 2)
+const data = reactive<CircleGeometrySettings>({
+	radius: geometry.parameters.radius ?? 1,
+	segments: geometry.parameters.segments ?? 32,
+	thetaStart: MathUtils.radToDeg(geometry.parameters.thetaStart ?? 0),
+	thetaLength: MathUtils.radToDeg(geometry.parameters.thetaLength ?? Math.PI * 2)
 })
 
 function onApply() {
-	const { radius, segments, thetaLength, thetaStart } = data.value
+	const { radius, segments, thetaLength, thetaStart } = data
 	const newGeometry = new THREE.CircleGeometry(
 		radius,
 		segments,

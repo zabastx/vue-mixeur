@@ -7,42 +7,38 @@
 
 <script lang="ts" setup>
 import THREE from '@/shared/three'
-import { computed, ref } from 'vue'
+import { reactive } from 'vue'
 import type { GeometryField } from './utils/types'
 import { MathUtils } from 'three'
+import type { SphereGeometry } from 'three'
 
-const { mesh } = defineProps<{
-	mesh: THREE.Mesh
+const { geometry } = defineProps<{
+	geometry: SphereGeometry
 }>()
 
 const emits = defineEmits<{
 	'update:geometry': [geometry: THREE.SphereGeometry]
 }>()
 
-const geometryParameters = computed(() => {
-	if (mesh.geometry instanceof THREE.SphereGeometry) return mesh.geometry.parameters
-	return null
-})
-
-const data = ref<SphereGeometrySettings>({
-	radius: geometryParameters.value?.radius,
-	widthSegments: geometryParameters.value?.widthSegments,
-	heightSegments: geometryParameters.value?.heightSegments,
-	phiStart: MathUtils.radToDeg(geometryParameters.value?.phiStart ?? 0),
-	phiLength: MathUtils.radToDeg(geometryParameters.value?.phiLength ?? Math.PI * 2),
-	thetaStart: MathUtils.radToDeg(geometryParameters.value?.thetaStart ?? 0),
-	thetaLength: MathUtils.radToDeg(geometryParameters.value?.thetaLength ?? Math.PI)
+const data = reactive<SphereGeometrySettings>({
+	radius: geometry.parameters.radius,
+	widthSegments: geometry.parameters.widthSegments,
+	heightSegments: geometry.parameters.heightSegments,
+	phiStart: MathUtils.radToDeg(geometry.parameters.phiStart ?? 0),
+	phiLength: MathUtils.radToDeg(geometry.parameters.phiLength ?? Math.PI * 2),
+	thetaStart: MathUtils.radToDeg(geometry.parameters.thetaStart ?? 0),
+	thetaLength: MathUtils.radToDeg(geometry.parameters.thetaLength ?? Math.PI)
 })
 
 function onApply() {
 	const newGeometry = new THREE.SphereGeometry(
-		data.value.radius,
-		data.value.widthSegments,
-		data.value.heightSegments,
-		data.value.phiStart ? MathUtils.degToRad(data.value.phiStart) : undefined,
-		data.value.phiLength ? MathUtils.degToRad(data.value.phiLength) : undefined,
-		data.value.thetaStart ? MathUtils.degToRad(data.value.thetaStart) : undefined,
-		data.value.thetaLength ? MathUtils.degToRad(data.value.thetaLength) : undefined
+		data.radius,
+		data.widthSegments,
+		data.heightSegments,
+		data.phiStart ? MathUtils.degToRad(data.phiStart) : undefined,
+		data.phiLength ? MathUtils.degToRad(data.phiLength) : undefined,
+		data.thetaStart ? MathUtils.degToRad(data.thetaStart) : undefined,
+		data.thetaLength ? MathUtils.degToRad(data.thetaLength) : undefined
 	)
 
 	emits('update:geometry', newGeometry)

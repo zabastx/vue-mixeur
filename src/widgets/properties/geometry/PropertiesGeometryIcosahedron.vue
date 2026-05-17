@@ -7,29 +7,22 @@
 
 <script lang="ts" setup>
 import THREE from '@/shared/three'
-import { computed, ref } from 'vue'
+import { reactive } from 'vue'
 import type { GeometryField } from './utils/types'
+import type { IcosahedronGeometry } from 'three'
 
-const { mesh } = defineProps<{
-	mesh: THREE.Mesh
+const { geometry } = defineProps<{
+	geometry: IcosahedronGeometry
 }>()
 
 const emits = defineEmits<{
 	'update:geometry': [geometry: THREE.IcosahedronGeometry]
 }>()
 
-const geometryParameters = computed(() => {
-	if (mesh.geometry instanceof THREE.IcosahedronGeometry) return mesh.geometry.parameters
-	return null
-})
-
-const data = ref<IcosahedronGeometrySettings>({
-	radius: geometryParameters.value?.radius ?? 1,
-	detail: geometryParameters.value?.detail ?? 1
-})
+const data = reactive<IcosahedronGeometrySettings>(structuredClone(geometry.parameters))
 
 function onApply() {
-	const newGeometry = new THREE.IcosahedronGeometry(data.value.radius, data.value.detail)
+	const newGeometry = new THREE.IcosahedronGeometry(data.radius, data.detail)
 
 	emits('update:geometry', newGeometry)
 }

@@ -5,41 +5,37 @@
 	</div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup generic="T">
 import THREE from '@/shared/three'
-import { computed, ref } from 'vue'
+import { reactive } from 'vue'
 import type { GeometryField } from './utils/types'
+import type { BoxGeometry } from 'three'
 
-const { mesh } = defineProps<{
-	mesh: THREE.Mesh
+const { geometry } = defineProps<{
+	geometry: BoxGeometry
 }>()
 
 const emits = defineEmits<{
 	'update:geometry': [geometry: THREE.BoxGeometry]
 }>()
 
-const geometryParameters = computed(() => {
-	if (mesh.geometry instanceof THREE.BoxGeometry) return mesh.geometry.parameters
-	return null
-})
-
-const data = ref<BoxGeometrySettings>({
-	width: geometryParameters.value?.width ?? 1,
-	height: geometryParameters.value?.height ?? 1,
-	depth: geometryParameters.value?.depth ?? 1,
-	depthSegments: geometryParameters.value?.depthSegments ?? 1,
-	heightSegments: geometryParameters.value?.heightSegments ?? 1,
-	widthSegments: geometryParameters.value?.widthSegments ?? 1
+const data = reactive<BoxGeometrySettings>({
+	width: geometry.parameters.width ?? 1,
+	height: geometry.parameters.height ?? 1,
+	depth: geometry.parameters.depth ?? 1,
+	depthSegments: geometry.parameters.depthSegments ?? 1,
+	heightSegments: geometry.parameters.heightSegments ?? 1,
+	widthSegments: geometry.parameters.widthSegments ?? 1
 })
 
 function onApply() {
 	const newGeometry = new THREE.BoxGeometry(
-		data.value.width,
-		data.value.height,
-		data.value.depth,
-		data.value.widthSegments,
-		data.value.heightSegments,
-		data.value.depthSegments
+		data.width,
+		data.height,
+		data.depth,
+		data.widthSegments,
+		data.heightSegments,
+		data.depthSegments
 	)
 
 	emits('update:geometry', newGeometry)

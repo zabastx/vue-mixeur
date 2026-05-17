@@ -3,9 +3,10 @@
 </template>
 
 <script lang="ts" setup>
+import type THREE from '@/shared/three'
 import type { MaterialInputField, MeshMaterials } from '../utils/types'
 
-const fields: MaterialInputField<MeshMaterials>[] = [
+const fields: MaterialInputField<Exclude<MeshMaterials, THREE.MeshBasicMaterial>>[] = [
 	{ type: 'map', label: 'Map', prop: 'displacementMap' },
 	{
 		type: 'number',

@@ -13,6 +13,11 @@ import { useComposerStore } from './composer'
 import { useCameraStore } from './camera'
 import { useThreeStore } from './three'
 import { downloadFile } from '@/shared/lib/files'
+import { useFileDialog, useEventListener } from '@vueuse/core'
+import { encodeProject, decodeProject } from '@/shared/lib/project-file'
+import { useToast } from '@/shared/lib/toast'
+import { MxObjectLoader } from '@/shared/three/modules/loaders/object-loader/MxObjectLoader'
+import { TextGeometry } from 'three/examples/jsm/Addons.js'
 
 export const useSceneStore = defineStore('scene', () => {
 	const scene = shallowRef(new THREE.Scene())
@@ -22,6 +27,17 @@ export const useSceneStore = defineStore('scene', () => {
 	const grid = setGridHelper(scene.value)
 
 	const lightHelperObjects = shallowRef<LightHelper[]>([])
+
+	useEventListener(window, 'keydown', (e) => {
+		if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+			e.preventDefault()
+			saveProjectFile()
+		}
+		if ((e.ctrlKey || e.metaKey) && e.key === 'o') {
+			e.preventDefault()
+			openProjectFile()
+		}
+	})
 
 	const sceneChildren = computed(() => scene.value.children)
 
@@ -175,6 +191,10 @@ export const useSceneStore = defineStore('scene', () => {
 				removeFromOutline(helper.uuid)
 				removeFromRaycaster(helper.uuid)
 				disposeModel(helper)
+				const idx = lightHelperObjects.value.findIndex((item) => item.uuid === helperUUID)
+				if (idx >= 0) {
+					lightHelperObjects.value.splice(idx, 1)
+				}
 			}
 		}
 
@@ -229,6 +249,139 @@ export const useSceneStore = defineStore('scene', () => {
 		setMode(mode)
 	}
 
+	function saveProjectFile() {
+		const toast = useToast()
+		try {
+			const { getMaterialCache } = useShadingStore()
+			const cameraStore = useCameraStore()
+
+			const exportScene = new THREE.Scene()
+			scene.value.children.forEach((child) => {
+				if (getUserData(child).isHelper) return
+				if (!(child instanceof THREE.Mesh)) return exportScene.add(child.clone())
+				const cachedMaterials = getMaterialCache(child)
+
+				const childClone = child.clone()
+
+				if (childClone.geometry instanceof TextGeometry) {
+					childClone.geometry.userData = getUserData(child).text ?? {}
+				}
+
+				childClone.material = cachedMaterials?.original
+
+				exportScene.add(childClone)
+			})
+
+			const data = {
+				scene: exportScene.toJSON(),
+				renderCameraUUID: cameraStore.renderCamera?.uuid || null
+			}
+
+			const binaryData = encodeProject(data)
+			const buffer = binaryData.buffer.slice(
+				binaryData.byteOffset,
+				binaryData.byteOffset + binaryData.byteLength
+			) as ArrayBuffer
+			downloadFile(buffer, 'project.mixeur', { mimeType: 'application/octet-stream' })
+		} catch (err) {
+			const error = err as Error
+			toast.add({
+				type: 'error',
+				message: 'Failed to export project'
+			})
+			console.error('Export error:', error)
+		}
+	}
+
+	async function openProjectFile(): Promise<boolean> {
+		const toast = useToast()
+		const { open, onChange } = useFileDialog({
+			accept: '.mixeur',
+			multiple: false
+		})
+
+		return new Promise((resolve) => {
+			onChange(async (val) => {
+				if (!val) {
+					resolve(false)
+					return
+				}
+
+				try {
+					const file = Array.from(val)[0]
+					const buffer = await file.arrayBuffer()
+					const project = decodeProject(buffer)
+
+					const loader = new MxObjectLoader()
+					const loadedScene = await loader.parseAsync(project.data.scene)
+
+					if (!(loadedScene instanceof THREE.Scene)) {
+						throw new Error('Invalid scene data in project file')
+					}
+
+					clearScene()
+
+					loadedScene.traverse((obj) => {
+						const userData = getUserData(obj)
+						obj.visible = userData.userVisible ?? true
+						if (obj instanceof THREE.SpotLight || obj instanceof THREE.DirectionalLight) {
+							const target = obj.children.find((child) => getUserData(child).isLightTarget)
+							if (target) {
+								obj.target = target
+							}
+						}
+					})
+
+					loadedScene.children.forEach((item) => {
+						const clonedItem = item.clone()
+						clonedItem.uuid = item.uuid
+						addObjectToScene(clonedItem)
+					})
+
+					const { setRenderCamera } = useCameraStore()
+
+					if (project.data.renderCameraUUID) {
+						setRenderCamera(project.data.renderCameraUUID)
+					}
+
+					toast.add({
+						type: 'success',
+						message: 'Project loaded successfully'
+					})
+					resolve(true)
+				} catch (err) {
+					const error = err as Error
+					let message = 'Failed to load project'
+					if (error.message.includes('corrupted')) {
+						message = 'Failed to load project: file is corrupted'
+					} else if (error.message.includes('Incompatible')) {
+						message = error.message
+					} else if (error.message.includes('Invalid project file')) {
+						message = 'Invalid project file'
+					}
+					toast.add({
+						type: 'error',
+						message
+					})
+					console.error('Load error:', error)
+					resolve(false)
+				}
+			})
+			open()
+		})
+	}
+
+	function clearScene() {
+		const idsToDelete: string[] = []
+
+		scene.value.children.forEach((child) => {
+			if (getUserData(child).isSystemObj) return
+			idsToDelete.push(child.uuid)
+		})
+
+		idsToDelete.forEach((uuid) => deleteFromScene(uuid))
+	}
+
 	return {
 		scene,
 		helperScene,
@@ -244,7 +397,10 @@ export const useSceneStore = defineStore('scene', () => {
 		deleteFromScene,
 		objectVisibilityUpdate,
 		objectToJSON,
-		exportScene
+		exportScene,
+		clearScene,
+		saveProjectFile,
+		openProjectFile
 	}
 })
 

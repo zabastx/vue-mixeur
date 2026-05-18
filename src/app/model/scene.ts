@@ -326,17 +326,11 @@ export const useSceneStore = defineStore('scene', () => {
 						obj.visible = userData.userVisible ?? true
 						if (obj instanceof THREE.SpotLight || obj instanceof THREE.DirectionalLight) {
 							const target = obj.children.find((child) => getUserData(child).isLightTarget)
-							if (target) {
-								obj.target = target
-							}
+							if (target) obj.target = target
 						}
 					})
 
-					loadedScene.children.forEach((item) => {
-						const clonedItem = item.clone()
-						clonedItem.uuid = item.uuid
-						addObjectToScene(clonedItem)
-					})
+					loadedScene.children.map((child) => child).forEach((obj) => addObjectToScene(obj))
 
 					const { setRenderCamera } = useCameraStore()
 

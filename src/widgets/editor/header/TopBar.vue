@@ -64,6 +64,30 @@ const menuItems: IMenubarMenu[] = [
 		label: 'File',
 		items: [
 			{
+				type: 'item',
+				key: 'save_project',
+				label: 'Save',
+				shortcut: 'Ctrl+S',
+				icon: 'file/save',
+				onClick() {
+					sceneStore.saveProjectFile()
+				}
+			},
+			{
+				type: 'item',
+				key: 'open_project',
+				label: 'Open',
+				icon: 'file/folder',
+				shortcut: 'Ctrl+O',
+				onClick() {
+					sceneStore.openProjectFile()
+				}
+			},
+			{
+				type: 'separator',
+				key: 'sep_project'
+			},
+			{
 				type: 'sub',
 				key: 'import',
 				label: 'Import',

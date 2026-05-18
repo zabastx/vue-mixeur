@@ -222,7 +222,7 @@ describe('getProjectInfo', () => {
 		const info = getProjectInfo(encoded.buffer as ArrayBuffer)
 
 		expect(info).not.toBeNull()
-		expect(info?.version).toBe(PROJECT_VERSION.toString())
+		expect(info?.version).toBe(PROJECT_VERSION)
 		expect(info?.createdAt).toBeDefined()
 		expect(info?.appVersion).toBeDefined()
 	})
@@ -255,7 +255,7 @@ describe('getProjectInfo', () => {
 		const data = { scene: {}, renderCameraUUID: null }
 		const encoded = encodeProject(data)
 
-		const truncated = encoded.slice(0, encoded.length - 5)
+		const truncated = encoded.slice(0, encoded.length - 1)
 
 		const info = getProjectInfo(truncated.buffer)
 

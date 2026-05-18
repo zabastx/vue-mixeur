@@ -92,7 +92,7 @@ export function crc32(buffer: ArrayBuffer, offset = 0, length?: number): number 
  * Encodes project data into a binary .mixeur file format.
  *
  * The output format is:
- * [MessagePack encoded data][4-byte CRC32 checksum]
+ * [MAGIC(6)][VERSION(1)][META_LEN(4)][META_MSGPACK][DATA_MSGPACK][CRC32(4)]
  *
  * @param data - Project data to encode (scene + renderCameraUUID)
  * @returns Binary Uint8Array ready for file download
@@ -104,36 +104,54 @@ export function crc32(buffer: ArrayBuffer, offset = 0, length?: number): number 
  * ```
  */
 export function encodeProject(data: ProjectData): Uint8Array {
-	const project: MxProjectFile = {
-		magic: PROJECT_MAGIC,
-		version: PROJECT_VERSION,
-		metadata: {
-			createdAt: new Date().toISOString(),
-			appVersion: version
-		},
-		data
+	const metadata: ProjectMetadata = {
+		createdAt: new Date().toISOString(),
+		appVersion: version
 	}
 
-	const encoded = encode(project)
-	const uint8Array = encoded instanceof Uint8Array ? encoded : new Uint8Array(encoded)
+	const encodedMetadata = encode(metadata)
+	const metaBytes =
+		encodedMetadata instanceof Uint8Array ? encodedMetadata : new Uint8Array(encodedMetadata)
+	const encodedData = encode(data)
+	const dataBytes = encodedData instanceof Uint8Array ? encodedData : new Uint8Array(encodedData)
 
-	const result = new Uint8Array(uint8Array.length + 4)
-	result.set(uint8Array, 0)
+	const magicBytes = new TextEncoder().encode(PROJECT_MAGIC)
+	const versionByte = new Uint8Array([PROJECT_VERSION])
 
-	const checksum = crc32(result.buffer, 0, result.byteLength - 4)
-	const checksumView = new DataView(result.buffer, uint8Array.length, 4)
-	checksumView.setUint32(0, checksum, true)
+	const metaLenBuffer = new ArrayBuffer(META_LENGTH_BYTES)
+	const metaLenView = new DataView(metaLenBuffer)
+	metaLenView.setUint32(0, metaBytes.length, true)
+
+	const metaLenBytes = new Uint8Array(metaLenBuffer)
+
+	const headerPart = new Uint8Array(HEADER_SIZE)
+	headerPart.set(magicBytes, 0)
+	headerPart.set(versionByte, MAGIC_BYTES)
+	headerPart.set(metaLenBytes, MAGIC_BYTES + VERSION_BYTES)
+
+	const crcInput = new Uint8Array(headerPart.length + metaBytes.length + dataBytes.length)
+	crcInput.set(headerPart, 0)
+	crcInput.set(metaBytes, headerPart.length)
+	crcInput.set(dataBytes, headerPart.length + metaBytes.length)
+
+	const checksum = crc32(crcInput.buffer)
+	const checksumBytes = new Uint8Array(4)
+	new DataView(checksumBytes.buffer).setUint32(0, checksum, true)
+
+	const result = new Uint8Array(crcInput.length + 4)
+	result.set(crcInput, 0)
+	result.set(checksumBytes, crcInput.length)
 
 	return result
 }
 
 /**
  * Decodes a binary .mixeur file back into project data.
- * Validates checksum and magic bytes before returning data.
+ * Validates checksum, magic bytes, and data integrity before returning.
  *
  * @param buffer - Binary data from a .mixeur file
  * @returns Decoded project file structure
- * @throws Error if file is corrupted, invalid, or incompatible version
+ * @throws Error if file is corrupted, invalid, or truncated
  * @example
  * ```typescript
  * try {
@@ -154,20 +172,39 @@ export function decodeProject(buffer: ArrayBuffer): MxProjectFile {
 		)
 	}
 
-	const payload = buffer.slice(0, buffer.byteLength - 4)
-	const decoded = decode(payload) as MxProjectFile
-
-	if (decoded.magic !== PROJECT_MAGIC) {
+	if (readMagic(buffer) !== PROJECT_MAGIC) {
 		throw new Error('Invalid project file: not a .mixeur file')
 	}
 
-	if (!decoded.data?.scene) {
-		throw new Error('Invalid project file: missing scene data')
+	const metaLength = new DataView(buffer, MAGIC_BYTES + VERSION_BYTES, META_LENGTH_BYTES).getUint32(
+		0,
+		true
+	)
+	const metaStart = HEADER_SIZE
+	const dataStart = HEADER_SIZE + metaLength
+
+	if (dataStart > buffer.byteLength - 4) {
+		throw new Error('Invalid project file: truncated data')
 	}
 
-	return decoded
+	const metadata = decode(buffer.slice(metaStart, dataStart)) as ProjectMetadata
+	const data = decode(buffer.slice(dataStart, buffer.byteLength - 4)) as ProjectData
+
+	return {
+		magic: PROJECT_MAGIC,
+		version: PROJECT_VERSION,
+		metadata,
+		data
+	}
 }
 
+/**
+ * Extracts project metadata from a .mixeur file without full decoding.
+ * Validates header structure and attempts to decode metadata/data slices.
+ *
+ * @param buffer - Binary data from a .mixeur file
+ * @returns Object with version, createdAt, and appVersion, or null if invalid
+ */
 export function getProjectInfo(
 	buffer: ArrayBuffer
 ): { version: number; createdAt: string; appVersion: string } | null {
@@ -183,10 +220,17 @@ export function getProjectInfo(
 			META_LENGTH_BYTES
 		).getUint32(0, true)
 
-		if (HEADER_SIZE + metaLength + CRC_BYTES > buffer.byteLength) return null
+		if (metaLength === 0) return null
 
-		// Decode only the metadata slice — scene data never touched
-		const metadata = decode(buffer.slice(HEADER_SIZE, HEADER_SIZE + metaLength)) as ProjectMetadata
+		const dataStart = HEADER_SIZE + metaLength
+		const dataEnd = buffer.byteLength - CRC_BYTES
+		if (dataStart >= dataEnd) return null
+
+		const metadata = decode(buffer.slice(HEADER_SIZE, dataStart)) as ProjectMetadata
+		decode(buffer.slice(dataStart, dataEnd))
+
+		if (typeof metadata?.createdAt !== 'string' || typeof metadata?.appVersion !== 'string')
+			return null
 
 		return {
 			version: fileVersion,

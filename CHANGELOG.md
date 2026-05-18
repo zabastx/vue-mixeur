@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [0.27.0] - 2026-05-18
+
+### Added
+
+- Project save/load: New `.mixeur` file format with MessagePack serialization for efficient scene storage
+- Project file menu: Added Save and Open menu items to the header menu
+- Outliner context menu: Added export object to JSON option
+- Text geometry: Added `MxObjectLoader` for parsing TextGeometry in project files
+- Scene export: Added object-to-JSON export functionality
+
+### Changed
+
+- Blob utilities: Improved blob handling in downloadFile helper
+- Material management: Improved reactivity and simplified material management
+- Object metadata: Enhanced metadata system and system object identification
+- Object loading: Updated geometry inputs when switching objects
+- README: Updated documentation
+
+### Fixed
+
+- Light target: Fixed light target assignment in scene
+- Displacement properties: Disabled displacement properties for basic material
+
 ## [0.26.0] - 2026-05-11
 
 ### Added
@@ -150,7 +175,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Material Preview settings: fixed broken thumbnail url
 
-[Unreleased]: https://github.com/zabastx/mixeur/compare/v0.26.0...HEAD
+[Unreleased]: https://github.com/zabastx/mixeur/compare/v0.27.0...HEAD
+[0.27.0]: https://github.com/zabastx/mixeur/compare/v0.26.0...v0.27.0
 [0.26.0]: https://github.com/zabastx/mixeur/compare/v0.25.0...v0.26.0
 [0.25.0]: https://github.com/zabastx/mixeur/compare/v0.24.0...v0.25.0
 [0.24.0]: https://github.com/zabastx/mixeur/compare/v0.23.0...v0.24.0

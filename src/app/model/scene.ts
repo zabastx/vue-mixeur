@@ -254,29 +254,37 @@ export const useSceneStore = defineStore('scene', () => {
 	function saveProjectFile() {
 		const toast = useToast()
 		try {
-			const { getMaterialCache } = useShadingStore()
+			const { materialCache } = useShadingStore()
 			const cameraStore = useCameraStore()
 
+			let renderCameraUUID: string | null = null
+
 			const exportScene = new THREE.Scene()
+
 			scene.value.children.forEach((child) => {
 				if (getUserData(child).isHelper) return
-				if (!(child instanceof THREE.Mesh)) return exportScene.add(child.clone())
-				const cachedMaterials = getMaterialCache(child)
 
 				const childClone = child.clone()
 
-				if (childClone.geometry instanceof TextGeometry) {
-					childClone.geometry.userData = getUserData(child).text ?? {}
+				if (child.uuid === cameraStore.renderCamera?.uuid) {
+					renderCameraUUID = childClone.uuid
 				}
 
-				childClone.material = cachedMaterials?.original
+				if (childClone instanceof THREE.Mesh) {
+					const cachedMaterials = materialCache.get(child.uuid)
+					if (childClone.geometry instanceof TextGeometry) {
+						childClone.geometry.userData = getUserData(child).text ?? {}
+					}
+
+					childClone.material = cachedMaterials?.original
+				}
 
 				exportScene.add(childClone)
 			})
 
 			const data = {
 				scene: exportScene.toJSON(),
-				renderCameraUUID: cameraStore.renderCamera?.uuid || null
+				renderCameraUUID
 			}
 
 			const binaryData = encodeProject(data)

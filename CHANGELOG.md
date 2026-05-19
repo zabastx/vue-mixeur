@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed active render camera not being saved to .mixeur
+
 ## [0.27.0] - 2026-05-18
 
 ### Added

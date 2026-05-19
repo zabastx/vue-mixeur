@@ -327,6 +327,7 @@ export const useShadingStore = defineStore('shading', () => {
 		setEnvironmentMap,
 		setMode,
 		shadingMode,
+		materialCache,
 		getMaterialCache,
 		updateMaterial,
 		changeMaterial,

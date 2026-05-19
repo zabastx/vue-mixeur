@@ -230,15 +230,17 @@ export const useSceneStore = defineStore('scene', () => {
 		const object = scene.value.getObjectByProperty('uuid', uuid)
 		if (!object) return
 
-		if (object instanceof THREE.Mesh) {
-			const { getMaterialCache } = useShadingStore()
-			object.material = getMaterialCache(object)?.original
+		const newObj = object.clone()
+
+		if (newObj instanceof THREE.Mesh) {
+			const { materialCache } = useShadingStore()
+			newObj.material = materialCache.get(object.uuid)?.original
 		}
 
-		const json = object.toJSON()
+		const json = newObj.toJSON()
 		json.object.userData = {}
 		const blob = new Blob([JSON.stringify(json)], { type: 'application/json' })
-		downloadFile(blob, `${object.name}.json`)
+		downloadFile(blob, `${newObj.name || newObj.type}.json`)
 	}
 
 	function exportScene() {
